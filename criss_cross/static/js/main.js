@@ -1,22 +1,24 @@
-function createCells(rows, cols) {
-    cells = [];
-    for (row = 0; row < rows; row++) {
-        for (col = 0; col < cols; col++) {
-            cell = document.createElement("div");
+function createTableRows(num_rows, num_cols) {
+    rows = [];
+    for (r = 0; r < num_rows; r++) {
+        row = document.createElement("tr")
+        row.setAttribute("data-row", r);
+        
+        for (c = 0; c < num_cols; c++) {
+            cell = document.createElement("td");
+            cell.setAttribute("data-col", c);
+            cell.appendChild(document.createElement("div"))
 
-            cell.classList.add("cell");
-            cell.setAttribute("data-row", row);
-            cell.setAttribute("data-col", col);
-    
-            cells.push(cell);
+            row.appendChild(cell)
         }
+        rows.push(row)
     }
-    return cells;
+    return rows;
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
-    puzzle = document.getElementById("puzzle")
-    
-    cells = createCells(15, 15);
-    cells.forEach(cell => puzzle.appendChild(cell));
+    body = document.querySelector("#puzzle > tbody")
+
+    rows = createTableRows(15, 15);
+    rows.forEach(row => body.appendChild(row));
 });

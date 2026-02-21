@@ -22,29 +22,33 @@ body {
     height: 100%;
 }
 
+h1 {
+    text-align: center;
+}
+
 .puzzle-panel {
     display: flex;
     justify-content: center;
     align-items: flex-start;
 }
 
-.board {
-    display: grid;
-    border: 2px solid black;
-    grid-template-columns: repeat(15, 1fr);
-    grid-template-rows: repeat(15, 1fr);
+table.board {
+    table-layout: fixed;
     width: clamp(300px, 40vw, 800px);
     min-width: 300px;
-    aspect-ratio: 1;
-    gap: 1px;
+    border: 2px solid black;
+    border-collapse: collapse;
 }
 
-.cell {
-    outline: 1px solid black;
-    text-align: center;
-    aspect-ratio: 1;
+.board td {
+    border: 1px solid black;
+    padding: 0;
 }
 
-h1 {
-    text-align: center;
-  }
+.board td > div {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
