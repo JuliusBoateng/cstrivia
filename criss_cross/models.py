@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from unicodedata import normalize
 from re import sub
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -31,7 +32,10 @@ class Board(models.Model):
             ]
         )
     
+    title = models.CharField(max_length=50, unique=True)
     categories = models.ManyToManyField(Category, related_name="Boards")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True) # also updates with CluePlacement
     
     def clean(self):
         if self.rows != self.cols:
@@ -121,6 +125,11 @@ class CluePlacement(models.Model):
         self._bounds_check()
         self._across_direction_check()
         self._down_direction_check()
+
+    def save(self, *args, **kwargs):
+        self.board.updated_at = timezone.now()
+        self.board.save(update_fields=['updated_at'])
+        super().save(*args, **kwargs)
 
 '''
 Mapping between CluePlacement and Board cells

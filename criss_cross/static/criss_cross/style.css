@@ -30,16 +30,17 @@ body {
 
 .board {
     display: grid;
-    border: 1px solid black;
+    border: 2px solid black;
     grid-template-columns: repeat(15, 1fr);
     grid-template-rows: repeat(15, 1fr);
     width: clamp(300px, 40vw, 800px);
     min-width: 300px;
     aspect-ratio: 1;
+    gap: 1px;
 }
 
 .cell {
-    border: 1px solid black;
+    outline: 1px solid black;
     text-align: center;
     aspect-ratio: 1;
 }
