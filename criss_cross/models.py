@@ -54,22 +54,18 @@ Questions/Answers for puzzles
 '''
 class Clue(models.Model):
     question = models.CharField(max_length=150)
-    answer_raw = models.CharField(max_length=21)
-    answer_normalized = models.CharField(max_length=21)
+    answer = models.CharField(max_length=21)
     answer_length = models.PositiveIntegerField() # derived
     categories = models.ManyToManyField(Category, related_name="Clues")
 
-    @staticmethod
-    def _normalize_answer(s):
-        s = normalize("NFKD", s) # separates accents from chars
-        s = s.encode("ascii", "ignore").decode() # removes accents
-        s = sub(r"[^A-Z0-9]", "", s.upper()) # replace non-alphanumeric chars
-        return s
+    def clean(self):
+        self.answer = self.answer.upper()
+
+        if not self.answer.isalnum():
+            raise ValidationError({"answer": "Must only contain letters and numbers"})
 
     def save(self, *args, **kwargs):
-        self.answer_raw = self.answer_raw.strip()
-        self.answer_normalized = self._normalize_answer(self.answer_raw)
-        self.answer_length = len(self.answer_normalized)
+        self.answer_length = len(self.answer)
         super().save(*args, **kwargs)
 
 '''
