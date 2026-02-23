@@ -1,11 +1,8 @@
-from django.db import models
+from django.db import models, transaction
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from unicodedata import normalize
-from re import sub
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-# Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=16, unique=True)
 
@@ -35,11 +32,13 @@ class Board(models.Model):
     title = models.CharField(max_length=50, unique=True)
     categories = models.ManyToManyField(Category, related_name="Boards")
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True) # also updates with CluePlacement
+    updated_at = models.DateTimeField(auto_now=True) # also updates when saving CluePlacement
     
     def clean(self):
         if self.rows != self.cols:
-            raise ValidationError({"rows:" f"rows: {self.rows} and cols: {self.cols} must match"})
+            raise ValidationError(
+                {"rows:" f"rows {self.rows} and cols {self.cols} must match."}
+            )
         
     class Meta:
         constraints = [
@@ -62,7 +61,9 @@ class Clue(models.Model):
         self.answer = self.answer.upper()
 
         if not self.answer.isalnum():
-            raise ValidationError({"answer": "Must only contain letters and numbers"})
+            raise ValidationError(
+                {"answer": "Must only contain letters and numbers."}
+            )
 
     def save(self, *args, **kwargs):
         self.answer_length = len(self.answer)
@@ -98,34 +99,124 @@ class CluePlacement(models.Model):
 
     def _bounds_check(self):
         if self.start_col >= self.board.cols:
-            raise ValidationError({"start_col": f"{self.start_col} out of bounds: {self.board.cols}"})
+            raise ValidationError(
+                {"start_col": f"col {self.start_col} exceeds board width {self.board.cols}."}
+            )
 
         if self.start_row >= self.board.rows:
-            raise ValidationError({"start_row": f"{self.start_row} out of bounds: {self.board.rows}"})
+            raise ValidationError(
+                {"start_row": f"row {self.start_row} exceeds board height {self.board.rows}."}
+            )
 
     def _across_direction_check(self):
         if self.direction == "A":
-            across = self.start_col + self.clue.answer_length
+            col = self.start_col + self.clue.answer_length
             
-            if across > self.board.cols:
-                raise ValidationError({"start_col": f"Across answer placement: {across} out of bounds: {self.board.cols}"})
+            if col > self.board.cols:
+                raise ValidationError(
+                    {"start_col": f"col {col} exceeds board width {self.board.cols}."}
+                )
     
     def _down_direction_check(self):
         if self.direction == "D":
-            down = self.start_row + self.clue.answer_length
+            row = self.start_row + self.clue.answer_length
 
-            if down > self.board.rows:
-                raise ValidationError({"start_row": f"Down answer placement: {down} out of bounds: {self.board.rows}"})
+            if row > self.board.rows:
+                raise ValidationError(
+                    {"start_row": f"row {row} exceeds board height {self.board.rows}."}
+                )
 
     def clean(self):
         self._bounds_check()
         self._across_direction_check()
         self._down_direction_check()
 
+    def _create_cells(self):
+        cells = []
+        for i in range(self.clue.answer_length):
+            if self.direction == 'A':
+                row = self.start_row
+                col = self.start_col + i
+            else:
+                row = self.start_row + i
+                col = self.start_col
+
+            letter = self.clue.answer[i]
+            
+            cell = ClueCell(
+                clue_placement=self,
+                row_index=row,
+                col_index=col,
+                letter=letter
+            )
+            cells.append(cell)
+        
+        return cells
+
+    def _fetch_overlapping_cells(self):
+        qs = (ClueCell.objects
+                .select_related("clue_placement")
+                .filter(clue_placement__board=self.board) # get all cells of current board
+                .exclude(clue_placement=self) # excludes previous placement cells
+            )
+
+        length = self.clue.answer_length
+
+        if self.direction == 'A':
+            col_range = (self.start_col, self.start_col + length - 1)
+
+            qs = qs.filter(
+                row_index=self.start_row,
+                col_index__range=col_range,
+            )
+        else:
+            row_range = (self.start_row, self.start_row + length - 1)
+
+            qs = qs.filter(
+                col_index=self.start_col,
+                row_index__range=row_range,
+            )
+
+        return qs
+
+    def validate_cells(self, new_cells, overlapping_cells):
+        overlapping_by_coord = {
+            (c.row_index, c.col_index): c
+            for c in overlapping_cells
+        }
+        
+        for cell in new_cells:
+            coord = (cell.row_index, cell.col_index)
+            overlapping = overlapping_by_coord.get(coord)
+            if not overlapping:
+                continue
+            
+            # Rule 1: Cannot overlap same direction
+            if overlapping.clue_placement.direction == self.direction:
+                raise ValidationError(
+                    f"Overlapping clues cannot share direction: '{self.direction}'."
+                )
+
+            # Rule 2: Letters must match
+            if overlapping.letter != cell.letter:
+                raise ValidationError(
+                    f"Letter conflict at coords: '({cell.row_index}, {cell.col_index})'; '{cell.letter}' != '{overlapping.letter}'."
+                )
+
     def save(self, *args, **kwargs):
+        with transaction.atomic():
+            super().save(*args, **kwargs)
+            new_cells = self._create_cells()
+            overlapping_cells = self._fetch_overlapping_cells()
+            self.validate_cells(new_cells, overlapping_cells)
+            
+            # regenerate cells
+            self.cluecell_set.all().delete() # delete previous placement cells
+            ClueCell.objects.bulk_create(new_cells) # create new placement cells
+
         self.board.updated_at = timezone.now()
         self.board.save(update_fields=['updated_at'])
-        super().save(*args, **kwargs)
+
 
 '''
 Mapping between CluePlacement and Board cells
@@ -134,59 +225,72 @@ class ClueCell(models.Model):
     clue_placement = models.ForeignKey(CluePlacement, on_delete=models.CASCADE)
     row_index = models.PositiveIntegerField()
     col_index = models.PositiveIntegerField()
-    answer_index = models.PositiveIntegerField()
+    letter = models.CharField(max_length=1)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=["clue_placement", "row_index", "col_index"],
                 name='clue_cell_unique_placement_row_col'
-            ),
-            models.UniqueConstraint(
-                fields=["clue_placement", "answer_index"],
-                name="clue_cell_unique_index_per_placement"
-            ),
+            )
         ]
 
     def _bounds_check(self):
         board = self.clue_placement.board
 
         if self.col_index >= board.cols:
-            raise ValidationError({"col_index": f"{self.col_index} out of bounds: {board.cols}"})
+            raise ValidationError(
+                {"col_index": f"col {self.col_index} exceeds board width {board.cols}."}
+            )
 
         if self.row_index >= board.rows:
-            raise ValidationError({"row_index": f"{self.row_index} out of bounds: {board.rows}"})
-    
-    def _index_check(self):
-        clue = self.clue_placement.clue
-
-        if self.answer_index >= clue.answer_length:
-            raise ValidationError({"answer_index": f"{self.answer_index} exceeds answer_length: {clue.answer_length}"})
+            raise ValidationError(
+                {"row_index": f"row {self.row_index} exceeds board height {board.rows}."}
+            )
 
     def _across_direction_check(self):
         placement = self.clue_placement
+        clue = placement.clue
 
         if placement.direction == "A":
             if self.row_index != placement.start_row:
-                raise ValidationError({"row_index": f"Across {self.row_index} does not match start_row: {placement.start_row}"})
+                raise ValidationError(
+                    {"row_index": f"row {self.row_index} does not match placement start_row {placement.start_row}."}
+                )
             
-            expected_col_index = placement.start_col + self.answer_index
-            if self.col_index != expected_col_index:
-                raise ValidationError({"col_index": f"Down {self.col_index} does not match expected col_index: {expected_col_index}"})
+            index = self.col_index - placement.start_col          
+            if index >= clue.answer_length:
+                raise ValidationError(
+                    {"col_index": f"cell {index} extends beyond clue length."}
+                )
+            
+            if clue.answer[index] != self.letter:
+                raise ValidationError(
+                    {"letter": f"letter mismatch at index {index}: expected '{clue.answer[index]}', got '{self.letter}'."}
+                )
 
     def _down_direction_check(self):
         placement = self.clue_placement
+        clue = placement.clue
 
         if placement.direction == "D":
             if self.col_index != placement.start_col:
-                raise ValidationError({"col_index": f"Down {self.col_index} does not match start_col: {placement.start_col}"})
+                raise ValidationError(
+                    {"col_index": f"col {self.col_index} does not match placement start_col {placement.start_col}."}
+                )
             
-            expected_row_index = placement.start_row + self.answer_index
-            if self.row_index != expected_row_index:
-                raise ValidationError({"row_index": f"Down {self.row_index} does not match expected row_index: {expected_row_index}"})
+            index = self.row_index - placement.start_row  
+            if index >= clue.answer_length:
+                raise ValidationError(
+                    {"row_index": f"cell {index} extends beyond clue length."}
+                )
+            
+            if clue.answer[index] != self.letter:
+                raise ValidationError(
+                    {"letter": f"letter mismatch at index {index}: expected '{clue.answer[index]}', got '{self.letter}'."}
+                )
 
     def clean(self):
         self._bounds_check()
-        self._index_check()
         self._across_direction_check()
         self._down_direction_check()
