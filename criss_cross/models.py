@@ -34,12 +34,6 @@ class Board(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) # also updates when saving CluePlacement
     
-    def clean(self):
-        if self.rows != self.cols:
-            raise ValidationError(
-                {"rows:" f"rows {self.rows} and cols {self.cols} must match."}
-            )
-        
     class Meta:
         constraints = [
             models.CheckConstraint(
@@ -48,13 +42,23 @@ class Board(models.Model):
             )
         ]
 
+    def clean(self):
+        if self.rows != self.cols:
+            raise ValidationError(
+                {"rows:" f"rows {self.rows} and cols {self.cols} must match."}
+            )
+
+    def save(self, *args, **kwargs):
+        self.full_clean() # board check
+        super().save(*args, **kwargs)
+
+
 '''
 Questions/Answers for puzzles
 '''
 class Clue(models.Model):
     question = models.CharField(max_length=150)
     answer = models.CharField(max_length=21)
-    answer_length = models.PositiveIntegerField() # derived
     categories = models.ManyToManyField(Category, related_name="Clues")
 
     def clean(self):
@@ -66,11 +70,11 @@ class Clue(models.Model):
             )
 
     def save(self, *args, **kwargs):
-        self.answer_length = len(self.answer)
+        self.full_clean() # answer check
         super().save(*args, **kwargs)
 
 '''
-Mapping between Board and Clue
+Mapping between Board and Clue. Creates ClueCells. Aggregate root of ClueCell.
 '''
 class CluePlacement(models.Model):
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
@@ -110,7 +114,7 @@ class CluePlacement(models.Model):
 
     def _across_direction_check(self):
         if self.direction == "A":
-            col = self.start_col + self.clue.answer_length
+            col = self.start_col + len(self.clue.answer)
             
             if col > self.board.cols:
                 raise ValidationError(
@@ -119,7 +123,7 @@ class CluePlacement(models.Model):
     
     def _down_direction_check(self):
         if self.direction == "D":
-            row = self.start_row + self.clue.answer_length
+            row = self.start_row + len(self.clue.answer)
 
             if row > self.board.rows:
                 raise ValidationError(
@@ -133,7 +137,7 @@ class CluePlacement(models.Model):
 
     def _create_cells(self):
         cells = []
-        for i in range(self.clue.answer_length):
+        for i in range(len(self.clue.answer)):
             if self.direction == 'A':
                 row = self.start_row
                 col = self.start_col + i
@@ -160,7 +164,7 @@ class CluePlacement(models.Model):
                 .exclude(clue_placement=self) # excludes previous placement cells
             )
 
-        length = self.clue.answer_length
+        length = len(self.clue.answer)
 
         if self.direction == 'A':
             col_range = (self.start_col, self.start_col + length - 1)
@@ -200,18 +204,22 @@ class CluePlacement(models.Model):
             # Rule 2: Letters must match
             if overlapping.letter != cell.letter:
                 raise ValidationError(
-                    f"Letter conflict at coords: '({cell.row_index}, {cell.col_index})'; '{cell.letter}' != '{overlapping.letter}'."
+                    f"letter conflict at coord ({cell.row_index},{cell.col_index}); '{cell.letter}' != '{overlapping.letter}'."
                 )
 
     def save(self, *args, **kwargs):
+        self.full_clean() # bound checks
+
+        new_cells = self._create_cells()
+        overlapping_cells = self._fetch_overlapping_cells()
+        self.validate_cells(new_cells, overlapping_cells)
+        
         with transaction.atomic():
-            super().save(*args, **kwargs)
-            new_cells = self._create_cells()
-            overlapping_cells = self._fetch_overlapping_cells()
-            self.validate_cells(new_cells, overlapping_cells)
+            is_update = self.pk is not None
+            if is_update: # delete previous placement cells
+                self.cluecell_set.all().delete()
             
-            # regenerate cells
-            self.cluecell_set.all().delete() # delete previous placement cells
+            super().save(*args, **kwargs) # must save placement before creating cells
             ClueCell.objects.bulk_create(new_cells) # create new placement cells
 
         self.board.updated_at = timezone.now()
@@ -219,7 +227,7 @@ class CluePlacement(models.Model):
 
 
 '''
-Mapping between CluePlacement and Board cells
+Created through CluePlacement. Write-only materialized projection.
 '''
 class ClueCell(models.Model):
     clue_placement = models.ForeignKey(CluePlacement, on_delete=models.CASCADE)
@@ -233,64 +241,11 @@ class ClueCell(models.Model):
                 fields=["clue_placement", "row_index", "col_index"],
                 name='clue_cell_unique_placement_row_col'
             )
+        ],
+        indexes = [
+            models.Index(fields=["row_index", "col_index"])
         ]
 
-    def _bounds_check(self):
-        board = self.clue_placement.board
-
-        if self.col_index >= board.cols:
-            raise ValidationError(
-                {"col_index": f"col {self.col_index} exceeds board width {board.cols}."}
-            )
-
-        if self.row_index >= board.rows:
-            raise ValidationError(
-                {"row_index": f"row {self.row_index} exceeds board height {board.rows}."}
-            )
-
-    def _across_direction_check(self):
-        placement = self.clue_placement
-        clue = placement.clue
-
-        if placement.direction == "A":
-            if self.row_index != placement.start_row:
-                raise ValidationError(
-                    {"row_index": f"row {self.row_index} does not match placement start_row {placement.start_row}."}
-                )
-            
-            index = self.col_index - placement.start_col          
-            if index >= clue.answer_length:
-                raise ValidationError(
-                    {"col_index": f"cell {index} extends beyond clue length."}
-                )
-            
-            if clue.answer[index] != self.letter:
-                raise ValidationError(
-                    {"letter": f"letter mismatch at index {index}: expected '{clue.answer[index]}', got '{self.letter}'."}
-                )
-
-    def _down_direction_check(self):
-        placement = self.clue_placement
-        clue = placement.clue
-
-        if placement.direction == "D":
-            if self.col_index != placement.start_col:
-                raise ValidationError(
-                    {"col_index": f"col {self.col_index} does not match placement start_col {placement.start_col}."}
-                )
-            
-            index = self.row_index - placement.start_row  
-            if index >= clue.answer_length:
-                raise ValidationError(
-                    {"row_index": f"cell {index} extends beyond clue length."}
-                )
-            
-            if clue.answer[index] != self.letter:
-                raise ValidationError(
-                    {"letter": f"letter mismatch at index {index}: expected '{clue.answer[index]}', got '{self.letter}'."}
-                )
-
-    def clean(self):
-        self._bounds_check()
-        self._across_direction_check()
-        self._down_direction_check()
+    # CluePlacement calls bulk_create which bypasses save()
+    def save(self, *args, **kwargs):
+        raise ValueError("ClueCell is a projection and cannot be saved directly.")
