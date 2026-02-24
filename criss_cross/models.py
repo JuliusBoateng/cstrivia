@@ -74,7 +74,11 @@ class Clue(models.Model):
         super().save(*args, **kwargs)
 
 '''
+<<<<<<< HEAD
 Mapping between Board and Clue. Creates ClueCells. Aggregate root of ClueCell.
+=======
+Mapping between Board and Clue. Creates ClueCells.
+>>>>>>> 2380037 (More model updates)
 '''
 class CluePlacement(models.Model):
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
@@ -214,7 +218,11 @@ class CluePlacement(models.Model):
         overlapping_cells = self._fetch_overlapping_cells()
         self.validate_cells(new_cells, overlapping_cells)
         
+<<<<<<< HEAD
         with transaction.atomic():
+=======
+        with transaction.atomic(): # transactions automatically rollback in case of error
+>>>>>>> 2380037 (More model updates)
             is_update = self.pk is not None
             if is_update: # delete previous placement cells
                 self.cluecell_set.all().delete()
