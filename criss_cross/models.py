@@ -45,7 +45,7 @@ class Board(models.Model):
     def clean(self):
         if self.rows != self.cols:
             raise ValidationError(
-                {"rows:" f"rows {self.rows} and cols {self.cols} must match."}
+                {"rows": f"rows {self.rows} and cols {self.cols} must match."}
             )
 
     def save(self, *args, **kwargs):
@@ -241,7 +241,7 @@ class ClueCell(models.Model):
                 fields=["clue_placement", "row_index", "col_index"],
                 name='clue_cell_unique_placement_row_col'
             )
-        ],
+        ]
         indexes = [
             models.Index(fields=["row_index", "col_index"])
         ]
