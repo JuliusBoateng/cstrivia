@@ -2,12 +2,16 @@ from django.db import models, transaction
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
+from string import capwords
 
 class Category(models.Model):
     name = models.CharField(max_length=16, unique=True)
 
     class Meta:
         ordering = ["name"]
+
+    def clean(self):
+        self.name = capwords(self.name)
 
 class Board(models.Model):
     MIN_ROWS, MAX_ROWS = 5, 21
@@ -43,6 +47,8 @@ class Board(models.Model):
         ]
 
     def clean(self):
+        self.title = self.title.strip().title()
+
         if self.rows != self.cols:
             raise ValidationError(
                 {"rows": f"rows {self.rows} and cols {self.cols} must match."}
@@ -62,7 +68,8 @@ class Clue(models.Model):
     categories = models.ManyToManyField(Category, related_name="Clues")
 
     def clean(self):
-        self.answer = self.answer.upper()
+        self.question = self.question.strip().capitalize()
+        self.answer = self.answer.strip().upper()
 
         if not self.answer.isalnum():
             raise ValidationError(
@@ -161,8 +168,11 @@ class CluePlacement(models.Model):
         qs = (ClueCell.objects
                 .select_related("clue_placement")
                 .filter(clue_placement__board=self.board) # get all cells of current board
-                .exclude(clue_placement=self) # excludes previous placement cells
             )
+
+        is_update = self.pk is not None
+        if is_update:
+            qs = qs.exclude(clue_placement=self) # excludes previous clue placement cells
 
         length = len(self.clue.answer)
 
@@ -207,6 +217,11 @@ class CluePlacement(models.Model):
                     f"letter conflict at coord ({cell.row_index},{cell.col_index}); '{cell.letter}' != '{overlapping.letter}'."
                 )
 
+    def _delete_previous_clue_cells(self):
+        is_update = self.pk is not None
+        if is_update: # delete previous placement cells
+            self.cluecell_set.all().delete()
+
     def save(self, *args, **kwargs):
         self.full_clean() # bound checks
 
@@ -215,9 +230,7 @@ class CluePlacement(models.Model):
         self.validate_cells(new_cells, overlapping_cells)
         
         with transaction.atomic(): # transactions automatically rollback in case of error
-            is_update = self.pk is not None
-            if is_update: # delete previous placement cells
-                self.cluecell_set.all().delete()
+            self._delete_previous_clue_cells()
             
             super().save(*args, **kwargs) # must save placement before creating cells
             ClueCell.objects.bulk_create(new_cells) # create new placement cells
