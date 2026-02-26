@@ -41,8 +41,9 @@ class CellDTO(DTO):
     placements: dict = field(default_factory=lambda: {Direction.A: None, Direction.D: None})
 
 @dataclass
-class QuestionDTO(DTO):
+class ClueDTO(DTO):
     question: str
+    answer: str
     placement_id: str
     direction: Direction
 
@@ -57,10 +58,9 @@ def _map_to_board_dto(board: Board):
         )
 
 def _map_to_placement_dto(placement: CluePlacement):
-    placement_id = placement.id
     clue = placement.clue
 
-    return PlacementDTO(placement_id,
+    return PlacementDTO(placement.id,
             Direction(placement.direction),
             placement.start_row,
             placement.start_col,
@@ -70,6 +70,12 @@ def _map_to_placement_dto(placement: CluePlacement):
 
 def _map_to_cell_dto(c: ClueCell):
     return CellDTO(c.row_index, c.col_index, c.letter)
+
+def _map_to_clue_dto(placement: CluePlacement):
+    clue = placement.clue
+    direction = Direction(placement.direction)
+
+    return ClueDTO(clue.question, clue.answer, placement.id, direction)
 
 def _serialize_board(board: Board):
     return _map_to_board_dto(board).to_dict()
@@ -97,6 +103,13 @@ def _serialize_cells(placements: QuerySet[CluePlacement]):
 
     return [cell.to_dict() for cell in c_map.values()]
 
+def _serialize_clues(placements: QuerySet[CluePlacement]):
+    clues = []
+    for placement in placements:
+        clues.append(_map_to_clue_dto(placement).to_dict())
+
+    return clues
+
 def _fetch_board(board_id: int) -> Board:
     clue_placement_lookup = Prefetch("clue_placements",
                                     queryset=CluePlacement.objects
@@ -118,9 +131,10 @@ def get_board(board_id: int):
     serialized_board = _serialize_board(board)
     serialized_placements = _serialize_placements(placements_qs)
     serialized_cells = _serialize_cells(placements_qs)
+    serialized_clues = _serialize_clues(placements_qs)
 
     # print(serialized_board)
     # print(serialized_placements)
-    print(dumps(serialized_cells, cls=DjangoJSONEncoder))
+    print(dumps(serialized_clues, cls=DjangoJSONEncoder))
 
           
