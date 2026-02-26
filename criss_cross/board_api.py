@@ -133,8 +133,15 @@ def get_board(board_id: int):
     serialized_cells = _serialize_cells(placements_qs)
     serialized_clues = _serialize_clues(placements_qs)
 
-    # print(serialized_board)
-    # print(serialized_placements)
-    print(dumps(serialized_clues, cls=DjangoJSONEncoder))
+    return create_http_response_body(serialized_board, serialized_placements, serialized_cells, serialized_clues)
+
+def create_http_response_body(serialized_board, serialized_placements, serialized_cells, serialized_clues):
+    body = {"board": serialized_board,
+            "placements": serialized_placements,
+            "cells": serialized_cells,
+            "clues": serialized_clues
+            }
+
+    return dumps(body, cls=DjangoJSONEncoder)
 
           
