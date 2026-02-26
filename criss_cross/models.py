@@ -34,7 +34,7 @@ class Board(models.Model):
         )
     
     title = models.CharField(max_length=50, unique=True)
-    categories = models.ManyToManyField(Category, related_name="Boards")
+    categories = models.ManyToManyField(Category, related_name="boards")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) # also updates when saving CluePlacement
     
@@ -65,7 +65,7 @@ Questions/Answers for puzzles
 class Clue(models.Model):
     question = models.CharField(max_length=150)
     answer = models.CharField(max_length=21)
-    categories = models.ManyToManyField(Category, related_name="Clues")
+    categories = models.ManyToManyField(Category, related_name="clues")
 
     def clean(self):
         self.question = self.question.strip().capitalize()
@@ -84,7 +84,7 @@ class Clue(models.Model):
 Mapping between Board and Clue. Creates ClueCells.
 '''
 class CluePlacement(models.Model):
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="clue_placements")
     clue = models.ForeignKey(Clue, on_delete=models.CASCADE)
     start_row = models.PositiveIntegerField()
     start_col = models.PositiveIntegerField()
@@ -243,7 +243,7 @@ class CluePlacement(models.Model):
 Created through CluePlacement. Write-only materialized projection.
 '''
 class ClueCell(models.Model):
-    clue_placement = models.ForeignKey(CluePlacement, on_delete=models.CASCADE)
+    clue_placement = models.ForeignKey(CluePlacement, on_delete=models.CASCADE, related_name="clue_cells")
     row_index = models.PositiveIntegerField()
     col_index = models.PositiveIntegerField()
     letter = models.CharField(max_length=1)
