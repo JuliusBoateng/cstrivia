@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .puzzle_api import get_board
+from .board_api import get_board
 
 # Create your views here.
 def index(request):

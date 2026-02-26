@@ -1,12 +1,22 @@
-from .models import Board, CluePlacement
+from .models import Board, CluePlacement, ClueCell
 from django.db.models import Prefetch
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from django.db.models.query import QuerySet
 from enum import StrEnum
+from json import dumps
+from django.core.serializers.json import DjangoJSONEncoder
+
+class Direction(StrEnum):
+    A = 'A'
+    D = 'D'
+
+class DTO:
+    def to_dict(self) -> dict:
+        return asdict(self)
 
 @dataclass
-class BoardDTO:
+class BoardDTO(DTO):
     title: str
     rows: int
     cols: int
@@ -14,12 +24,8 @@ class BoardDTO:
     created_at: datetime
     updated_at: datetime
 
-class Direction(StrEnum):
-    A = 'A'
-    D = 'D'
-
 @dataclass
-class PlacementDTO:
+class PlacementDTO(DTO):
     id: int
     direction: Direction
     start_row: int
@@ -28,20 +34,19 @@ class PlacementDTO:
     answer: str
 
 @dataclass
-class CellDTO:
+class CellDTO(DTO):
     row: int
     col: int
     letter: str
     placements: dict = field(default_factory=lambda: {Direction.A: None, Direction.D: None})
 
 @dataclass
-class QuestionDTO:
+class QuestionDTO(DTO):
     question: str
     placement_id: str
     direction: Direction
 
-
-def _map_board_to_dto(board: Board):
+def _map_to_board_dto(board: Board):
     categories = [category.name for category in board.categories.all()]
     return BoardDTO(board.title,
             board.rows,
@@ -51,25 +56,32 @@ def _map_board_to_dto(board: Board):
             board.updated_at
         )
 
-def _map_placements_to_dto(placements: QuerySet[CluePlacement]):
+def _map_to_placement_dto(placement: CluePlacement):
+    placement_id = placement.id
+    clue = placement.clue
+
+    return PlacementDTO(placement_id,
+            Direction(placement.direction),
+            placement.start_row,
+            placement.start_col,
+            len(clue.answer),
+            clue.answer
+        )
+
+def _map_to_cell_dto(c: ClueCell):
+    return CellDTO(c.row_index, c.col_index, c.letter)
+
+def _serialize_board(board: Board):
+    return _map_to_board_dto(board).to_dict()
+
+def _serialize_placements(placements: QuerySet[CluePlacement]):
     p_map = {}
     for placement in placements:
-        placement_id = placement.id
-        clue = placement.clue
-        
-        p = PlacementDTO(placement_id,
-                Direction(placement.direction),
-                placement.start_row,
-                placement.start_col,
-                len(clue.answer),
-                clue.answer
-            )
-
-        p_map[placement_id] = p
+        p_map[placement.id] = _map_to_placement_dto(placement).to_dict()
     
     return p_map
 
-def _map_cells_to_dto(placements: QuerySet[CluePlacement]):
+def _serialize_cells(placements: QuerySet[CluePlacement]):
     c_map = {} # cells can have multiple placements along different directions
     
     for placement in placements:
@@ -79,13 +91,13 @@ def _map_cells_to_dto(placements: QuerySet[CluePlacement]):
             key = (c.row_index, c.col_index)
 
             if key not in c_map:
-                c_map[key] = CellDTO(c.row_index, c.col_index, c.letter)
+                c_map[key] = _map_to_cell_dto(c)
             
             c_map[key].placements[direction] = placement.id
-    
-    return list(c_map.values())
 
-def _fetch_board(board_id: int):
+    return [cell.to_dict() for cell in c_map.values()]
+
+def _fetch_board(board_id: int) -> Board:
     clue_placement_lookup = Prefetch("clue_placements",
                                     queryset=CluePlacement.objects
                                         .select_related("clue")
@@ -101,8 +113,14 @@ def _fetch_board(board_id: int):
 
 def get_board(board_id: int):
     board = _fetch_board(board_id)
-    
-    print(_map_board_to_dto(board))
-    placements = board.clue_placements.all()
-    print(_map_placements_to_dto(placements))
-    print(_map_cells_to_dto(placements))
+    placements_qs = board.clue_placements.all()
+
+    serialized_board = _serialize_board(board)
+    serialized_placements = _serialize_placements(placements_qs)
+    serialized_cells = _serialize_cells(placements_qs)
+
+    # print(serialized_board)
+    # print(serialized_placements)
+    print(dumps(serialized_cells, cls=DjangoJSONEncoder))
+
+          
