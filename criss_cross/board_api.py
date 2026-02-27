@@ -47,6 +47,33 @@ class ClueDTO(DTO):
     placement_id: str
     direction: Direction
 
+@dataclass
+class BoardResponseDTO(DTO):
+    board: dict
+    placements: dict
+    cells: list[dict]
+    clues: list[dict]
+
+def get_board(board_id: int):
+    board = _fetch_board(board_id)
+    placements_qs = board.clue_placements.all()
+
+    serialized_board = _serialize_board(board)
+    serialized_placements = _serialize_placements(placements_qs)
+    serialized_cells = _serialize_cells(placements_qs)
+    serialized_clues = _serialize_clues(placements_qs)
+
+    return _create_http_response_body(serialized_board, serialized_placements, serialized_cells, serialized_clues)
+
+def _create_http_response_body(serialized_board, serialized_placements, serialized_cells, serialized_clues):
+    body = {"board": serialized_board,
+            "placements": serialized_placements,
+            "cells": serialized_cells,
+            "clues": serialized_clues
+            }
+
+    return dumps(body, cls=DjangoJSONEncoder)
+
 def _map_to_board_dto(board: Board):
     categories = [category.name for category in board.categories.all()]
     return BoardDTO(board.title,
@@ -124,24 +151,5 @@ def _fetch_board(board_id: int) -> Board:
     
     return board
 
-def get_board(board_id: int):
-    board = _fetch_board(board_id)
-    placements_qs = board.clue_placements.all()
-
-    serialized_board = _serialize_board(board)
-    serialized_placements = _serialize_placements(placements_qs)
-    serialized_cells = _serialize_cells(placements_qs)
-    serialized_clues = _serialize_clues(placements_qs)
-
-    return create_http_response_body(serialized_board, serialized_placements, serialized_cells, serialized_clues)
-
-def create_http_response_body(serialized_board, serialized_placements, serialized_cells, serialized_clues):
-    body = {"board": serialized_board,
-            "placements": serialized_placements,
-            "cells": serialized_cells,
-            "clues": serialized_clues
-            }
-
-    return dumps(body, cls=DjangoJSONEncoder)
 
           
