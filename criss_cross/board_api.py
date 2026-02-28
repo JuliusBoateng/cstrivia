@@ -1,16 +1,18 @@
 from .models import Board, CluePlacement, ClueCell
 from django.db.models import Prefetch
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from django.db.models.query import QuerySet
 from enum import StrEnum
+from copy import deepcopy
 
 class Direction(StrEnum):
     A = 'A'
     D = 'D'
 
 class DTO:
-    pass
+    def to_dict(self):
+        return asdict(self)
 
 @dataclass
 class BoardDTO(DTO):
@@ -23,47 +25,70 @@ class BoardDTO(DTO):
 
 @dataclass
 class PlacementDTO(DTO):
-    id: int
+    id: int # integral as other DTOs are dependent 
     direction: Direction
     start_row: int
     start_col: int
     length: int
-    answer: str
 
 @dataclass
 class CellDTO(DTO):
     row: int
     col: int
     letter: str
-    placements: dict = field(default_factory=lambda: {Direction.A: None, Direction.D: None})
+
+    # Direction : placement_id
+    placements: dict = field(default_factory=lambda: {
+        Direction.A: None,
+        Direction.D: None
+    })
 
 @dataclass
 class ClueDTO(DTO):
     question: str
-    answer: str
-    placement_id: str
+    placement_id: int
     direction: Direction
+
+@dataclass
+class SolutionDTO(DTO):
+    placement_id: int
+    answer: str
 
 @dataclass
 class BoardResponseDTO(DTO):
     board: BoardDTO
-    placements: dict[int, PlacementDTO]
+    placements: list[PlacementDTO]
     cells: list[CellDTO]
     clues: list[ClueDTO]
+    solutions: list[SolutionDTO]
+
+    def _create_solutions_map(self): # Easier FE lookup
+        return {s.placement_id: s.answer for s in self.solutions}
+
+    def _create_placements_map(self): # Easier FE lookup
+        return { p.id: p for p in self.placements }
+
+    def to_dict(self):
+        data = deepcopy(self)
+        data.placements = data._create_placements_map()
+        data.solutions = data._create_solutions_map()
+        data = asdict(data)
+        return data
 
 def build_board_response_dto(board_id: int):
     board = _fetch_board(board_id)
-    placements_qs = board.clue_placements.all()
+    placements_qs = board.clue_placements.all() # clue_placement prefetch prevents N+1 query
 
     board_dto = _map_board_to_board_dto(board)
-    placements = _map_placements_to_placement_dto_map(placements_qs)
+    placements = _map_placements_to_placement_dtos(placements_qs)
     cells = _map_placements_to_cell_dtos(placements_qs)
     clues = _map_placements_to_clue_dtos(placements_qs)
+    solutions = _map_placements_to_solution_dtos(placements_qs)
 
-    return BoardResponseDTO(board_dto, placements, cells, clues)
+    return BoardResponseDTO(board_dto, placements, cells, clues, solutions)
 
 def _map_board_to_board_dto(board: Board) -> BoardDTO:
-    categories = [category.name for category in board.categories.all()]
+    categories = [category.name for category in board.categories.all()] # categories prefetch prevents N+1 query
     return BoardDTO(board.title,
             board.rows,
             board.cols,
@@ -73,31 +98,35 @@ def _map_board_to_board_dto(board: Board) -> BoardDTO:
         )
 
 def _map_placement_to_placement_dto(placement: CluePlacement) -> PlacementDTO:
-    clue = placement.clue
-
     return PlacementDTO(placement.id,
             Direction(placement.direction),
             placement.start_row,
             placement.start_col,
-            len(clue.answer),
-            clue.answer
+            len(placement.clue.answer),
         )
 
 def _map_cell_to_cell_dto(c: ClueCell) -> CellDTO:
     return CellDTO(c.row_index, c.col_index, c.letter)
 
-def _map_placement_to_clue_dto(placement: CluePlacement) -> CellDTO:
-    clue = placement.clue
-    direction = Direction(placement.direction)
+def _map_placement_to_clue_dto(placement: CluePlacement) -> ClueDTO:
+    return ClueDTO(placement.clue.question, placement.id, Direction(placement.direction))
 
-    return ClueDTO(clue.question, clue.answer, placement.id, direction)
+def _map_placement_to_solution_dto(placement: CluePlacement) -> SolutionDTO:
+    return SolutionDTO(placement.id, placement.clue.answer)
 
-def _map_placements_to_placement_dto_map(placements: QuerySet[CluePlacement]) -> dict[int, PlacementDTO]:
-    p_map = {}
+def _map_placements_to_solution_dtos(placements: QuerySet[CluePlacement]) -> list[SolutionDTO]:
+    solutions = []
     for placement in placements:
-        p_map[placement.id] = _map_placement_to_placement_dto(placement)
+        solutions.append(SolutionDTO(placement.id, placement.clue.answer))
     
-    return p_map
+    return solutions
+
+def _map_placements_to_placement_dtos(placements: QuerySet[CluePlacement]) -> list[PlacementDTO]:
+    p = []
+    for placement in placements:
+        p.append(_map_placement_to_placement_dto(placement))
+    
+    return p
 
 def _map_placements_to_cell_dtos(placements: QuerySet[CluePlacement]) -> list[CellDTO]:
     c_map = {} # cells can have multiple placements along different directions
@@ -105,7 +134,7 @@ def _map_placements_to_cell_dtos(placements: QuerySet[CluePlacement]) -> list[Ce
     for placement in placements:
         direction = Direction(placement.direction)
 
-        for c in placement.clue_cells.all():
+        for c in placement.clue_cells.all(): # clue_cells prefetch prevents N+1 query
             key = (c.row_index, c.col_index)
 
             if key not in c_map:
@@ -123,14 +152,13 @@ def _map_placements_to_clue_dtos(placements: QuerySet[CluePlacement]) -> list[Cl
     return clues
 
 def _fetch_board(board_id: int) -> Board:
-    clue_placement_lookup = Prefetch("clue_placements",
-                                    queryset=CluePlacement.objects
-                                        .select_related("clue")
-                                        .prefetch_related("clue_cells")
-                                    )
-
     board = (Board.objects
-                .prefetch_related("categories", clue_placement_lookup)
+                .prefetch_related("categories",
+                    Prefetch("clue_placements",
+                        queryset=CluePlacement.objects
+                            .select_related("clue")
+                            .prefetch_related("clue_cells")
+                    ))
                 .get(id=board_id)
             )
     
