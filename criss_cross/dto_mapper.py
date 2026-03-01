@@ -1,9 +1,31 @@
 from django.db.models.query import QuerySet
 
-from .dto import BoardDTO, CellDTO, ClueDTO, Direction, PlacementDTO, SolutionDTO
+from .dto import (
+    BoardDTO,
+    BoardViewDTO,
+    CellDTO,
+    ClueDTO,
+    Direction,
+    PlacementDTO,
+    SolutionDTO,
+)
 from .models import Board, ClueCell, CluePlacement
 
-def map_to_board_dto(board: Board) -> BoardDTO:
+'''
+Purpose of mappers is to provide a way to transform Django models into respective data objects.
+'''
+
+def map_to_board_view_dto(board: Board, placements_qs: QuerySet) -> BoardViewDTO:
+    board_dto: BoardDTO = _map_to_board_dto(board)
+    placements: list[PlacementDTO] = _map_to_placement_dtos(placements_qs)
+    cells: list[CellDTO] = _map_to_cell_dtos(placements_qs)
+    clues: list[ClueDTO] = _map_to_clue_dtos(placements_qs)
+    solutions: list[SolutionDTO] = _map_to_solution_dtos(placements_qs)
+
+    return BoardViewDTO(board_dto, placements, cells, clues, solutions)
+
+
+def _map_to_board_dto(board: Board) -> BoardDTO:
     categories = [category.name for category in board.categories.all()] # categories prefetch prevents N+1 query
     return BoardDTO(board.title,
             board.rows,
@@ -13,21 +35,21 @@ def map_to_board_dto(board: Board) -> BoardDTO:
             board.updated_at
         )
 
-def map_to_solution_dtos(placements: QuerySet[CluePlacement]) -> list[SolutionDTO]:
+def _map_to_solution_dtos(placements: QuerySet[CluePlacement]) -> list[SolutionDTO]:
     solutions = []
     for placement in placements:
         solutions.append(_map_to_solution_dto(placement))
     
     return solutions
 
-def map_to_placement_dtos(placements: QuerySet[CluePlacement]) -> list[PlacementDTO]:
+def _map_to_placement_dtos(placements: QuerySet[CluePlacement]) -> list[PlacementDTO]:
     p = []
     for placement in placements:
         p.append(_map_to_placement_dto(placement))
     
     return p
 
-def map_to_cell_dtos(placements: QuerySet[CluePlacement]) -> list[CellDTO]:
+def _map_to_cell_dtos(placements: QuerySet[CluePlacement]) -> list[CellDTO]:
     c_map = {} # cells can have multiple placements along different directions
     
     for placement in placements:
@@ -43,7 +65,7 @@ def map_to_cell_dtos(placements: QuerySet[CluePlacement]) -> list[CellDTO]:
 
     return list(c_map.values())
 
-def map_to_clue_dtos(placements: QuerySet[CluePlacement]) -> list[ClueDTO]:
+def _map_to_clue_dtos(placements: QuerySet[CluePlacement]) -> list[ClueDTO]:
     clues = []
     for placement in placements:
         clues.append(_map_to_clue_dto(placement))

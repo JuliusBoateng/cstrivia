@@ -2,6 +2,10 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import StrEnum
 
+'''
+Purpose of DTO objects is to decouple data from the underlying Django models. Separation of concerns.
+'''
+
 class Direction(StrEnum):
     A = 'A'
     D = 'D'
@@ -50,7 +54,7 @@ class SolutionDTO(DTO):
     answer: str
 
 @dataclass
-class BoardResponseDTO(DTO):
+class BoardViewDTO(DTO):
     board: BoardDTO
     placements: list[PlacementDTO]
     cells: list[CellDTO]

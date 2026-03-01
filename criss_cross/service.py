@@ -1,29 +1,16 @@
 from django.db.models import Model, Prefetch
 from django.db.models.query import QuerySet
 
-from .dto import BoardDTO, BoardResponseDTO, CellDTO, ClueDTO, PlacementDTO, SolutionDTO
-from .dto_mapper import (
-    map_to_board_dto,
-    map_to_cell_dtos,
-    map_to_clue_dtos,
-    map_to_placement_dtos,
-    map_to_solution_dtos,
-)
+from .dto_mapper import map_to_board_view_dto
 from .models import Board, CluePlacement
-from .serializer import serialize_board_response
+from .dto_serializer import serialize_board_view
 
-def build_board_response_dto(board_id: int):
+def get_board_view(board_id: int):
     board: Model = _fetch_board(board_id)
     placements_qs: QuerySet = board.clue_placements.all() # clue_placement prefetch prevents N+1 query
 
-    board_dto: BoardDTO = map_to_board_dto(board)
-    placements: list[PlacementDTO] = map_to_placement_dtos(placements_qs)
-    cells: list[CellDTO] = map_to_cell_dtos(placements_qs)
-    clues: list[ClueDTO] = map_to_clue_dtos(placements_qs)
-    solutions: list[SolutionDTO] = map_to_solution_dtos(placements_qs)
-
-    board_response = BoardResponseDTO(board_dto, placements, cells, clues, solutions)
-    serialized_board = serialize_board_response(board_response)
+    board_view = map_to_board_view_dto(board, placements_qs)
+    serialized_board = serialize_board_view(board_view)
     return serialized_board
 
 def _fetch_board(board_id: int) -> Board:

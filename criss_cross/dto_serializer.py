@@ -1,6 +1,10 @@
-from .dto import BoardDTO, BoardResponseDTO, CellDTO, ClueDTO, PlacementDTO, SolutionDTO
+from .dto import BoardDTO, BoardViewDTO, CellDTO, ClueDTO, PlacementDTO, SolutionDTO
 
-def serialize_board_response(dto: BoardResponseDTO) -> dict:
+'''
+Purpose of custom serializer is to control which fields are sent to the FE
+'''
+
+def serialize_board_view(dto: BoardViewDTO) -> dict:
     return {
         "board": _serialize_board(dto.board),
         "placements": _serialize_placements(dto.placements),
