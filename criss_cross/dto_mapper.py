@@ -12,7 +12,7 @@ from .dto import (
 from .models import Board, ClueCell, CluePlacement
 
 '''
-Purpose of mappers is to provide a way to transform Django models into respective data objects.
+Purpose of mappers is to provide a way to transform Django models into their respective data objects.
 '''
 
 def map_to_board_view_dto(board: Board, placements_qs: QuerySet) -> BoardViewDTO:
