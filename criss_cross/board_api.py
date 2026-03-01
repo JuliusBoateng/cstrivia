@@ -1,79 +1,9 @@
 from .models import Board, CluePlacement, ClueCell
 from django.db.models import Prefetch
-from dataclasses import dataclass, field, asdict
-from datetime import datetime
 from django.db.models.query import QuerySet
-from enum import StrEnum
-from copy import deepcopy
+from .dto_class import BoardDTO, BoardResponseDTO, PlacementDTO, ClueDTO, CellDTO, SolutionDTO, Direction
 
-class Direction(StrEnum):
-    A = 'A'
-    D = 'D'
-
-class DTO:
-    def to_dict(self):
-        return asdict(self)
-
-@dataclass
-class BoardDTO(DTO):
-    title: str
-    rows: int
-    cols: int
-    categories: list
-    created_at: datetime
-    updated_at: datetime
-
-@dataclass
-class PlacementDTO(DTO):
-    id: int # integral as other DTOs are dependent 
-    direction: Direction
-    start_row: int
-    start_col: int
-    length: int
-
-@dataclass
-class CellDTO(DTO):
-    row: int
-    col: int
-    letter: str
-
-    # Direction : placement_id
-    placements: dict = field(default_factory=lambda: {
-        Direction.A: None,
-        Direction.D: None
-    })
-
-@dataclass
-class ClueDTO(DTO):
-    question: str
-    placement_id: int
-    direction: Direction
-
-@dataclass
-class SolutionDTO(DTO):
-    placement_id: int
-    answer: str
-
-@dataclass
-class BoardResponseDTO(DTO):
-    board: BoardDTO
-    placements: list[PlacementDTO]
-    cells: list[CellDTO]
-    clues: list[ClueDTO]
-    solutions: list[SolutionDTO]
-
-    def _create_solutions_map(self): # Easier FE lookup
-        return {s.placement_id: s.answer for s in self.solutions}
-
-    def _create_placements_map(self): # Easier FE lookup
-        return { p.id: p for p in self.placements }
-
-    def to_dict(self):
-        data = deepcopy(self)
-        data.placements = data._create_placements_map()
-        data.solutions = data._create_solutions_map()
-        data = asdict(data)
-        return data
+# def serialize_board_response(dto: BoardResponseDTO) -> dict:
 
 def build_board_response_dto(board_id: int):
     board = _fetch_board(board_id)
@@ -117,7 +47,7 @@ def _map_placement_to_solution_dto(placement: CluePlacement) -> SolutionDTO:
 def _map_placements_to_solution_dtos(placements: QuerySet[CluePlacement]) -> list[SolutionDTO]:
     solutions = []
     for placement in placements:
-        solutions.append(SolutionDTO(placement.id, placement.clue.answer))
+        solutions.append(_map_placement_to_solution_dto(placement))
     
     return solutions
 
