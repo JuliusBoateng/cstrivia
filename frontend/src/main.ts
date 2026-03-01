@@ -1,5 +1,12 @@
 class Board {
-    constructor(title, rows, cols, categories, createdAt, updatedAt) {
+    title: string;
+    rows: number;
+    cols: number;
+    categories: string[];
+    createdAt: string;
+    updatedAt: string;
+
+    constructor(title: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
         this.title = title;
         this.rows = rows;
         this.cols = cols;
@@ -9,10 +16,10 @@ class Board {
     }
 }
 
-function createTableRows(num_rows, num_cols) {
-    rows = [];
+function createTableRows(num_rows: number, num_cols: number) {
+    const rows: HTMLTableRowElement[] = [];
     for (r = 0; r < num_rows; r++) {
-        row = document.createElement("tr")
+        const row: HTMLTableRowElement = document.createElement("tr")
         row.setAttribute("data-row", r);
         
         for (c = 0; c < num_cols; c++) {
