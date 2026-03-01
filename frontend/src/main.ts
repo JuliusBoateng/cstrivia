@@ -1,20 +1,4 @@
-class Board {
-    title: string;
-    rows: number;
-    cols: number;
-    categories: string[];
-    createdAt: string;
-    updatedAt: string;
-
-    constructor(title: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
-        this.title = title;
-        this.rows = rows;
-        this.cols = cols;
-        this.categories = categories;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-}
+import {Board, Placement, Cell, Clue, Direction} from "./model.js";
 
 function createTableRows(num_rows: number, num_cols: number) {
     const rows = [];
@@ -37,7 +21,6 @@ function createTableRows(num_rows: number, num_cols: number) {
 document.addEventListener("DOMContentLoaded", (event) => {
     let body = document.querySelector("#puzzle > tbody")
     if (body === null) {
-        console.log("NULLLL")
         return;
     }
 
