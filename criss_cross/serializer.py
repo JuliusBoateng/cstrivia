@@ -1,4 +1,4 @@
-from .dto import BoardDTO, BoardResponseDTO, PlacementDTO, ClueDTO, CellDTO, SolutionDTO
+from .dto import BoardDTO, BoardResponseDTO, CellDTO, ClueDTO, PlacementDTO, SolutionDTO
 
 def serialize_board_response(dto: BoardResponseDTO) -> dict:
     return {

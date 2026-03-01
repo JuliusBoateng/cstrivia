@@ -1,10 +1,16 @@
-from .models import Board, CluePlacement
-from django.db.models import Prefetch
-from django.db.models import Model
+from django.db.models import Model, Prefetch
 from django.db.models.query import QuerySet
-from .dto import BoardDTO, BoardResponseDTO, PlacementDTO, ClueDTO, CellDTO, SolutionDTO
+
+from .dto import BoardDTO, BoardResponseDTO, CellDTO, ClueDTO, PlacementDTO, SolutionDTO
+from .dto_mapper import (
+    map_to_board_dto,
+    map_to_cell_dtos,
+    map_to_clue_dtos,
+    map_to_placement_dtos,
+    map_to_solution_dtos,
+)
+from .models import Board, CluePlacement
 from .serializer import serialize_board_response
-from .dto_mapper import map_to_board_dto, map_to_placement_dtos, map_to_cell_dtos, map_to_clue_dtos, map_to_solution_dtos
 
 def build_board_response_dto(board_id: int):
     board: Model = _fetch_board(board_id)

@@ -1,9 +1,6 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-from .board_api import build_board_response_dto
-from django.core.serializers.json import DjangoJSONEncoder
-from dataclasses import asdict
-from json import dumps
+
+from .service import build_board_response_dto
 
 # Create your views here.
 def index(request):

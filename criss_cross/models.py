@@ -1,8 +1,9 @@
-from django.db import models, transaction
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from django.core.validators import MaxValueValidator, MinValueValidator
 from string import capwords
+
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models, transaction
+from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=16, unique=True)
