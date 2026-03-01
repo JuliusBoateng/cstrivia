@@ -17,14 +17,14 @@ class Board {
 }
 
 function createTableRows(num_rows: number, num_cols: number) {
-    const rows: HTMLTableRowElement[] = [];
-    for (r = 0; r < num_rows; r++) {
-        const row: HTMLTableRowElement = document.createElement("tr")
-        row.setAttribute("data-row", r);
+    const rows = [];
+    for (let r = 0; r < num_rows; r++) {
+        let row = document.createElement("tr")
+        row.setAttribute("data-row", r.toString());
         
-        for (c = 0; c < num_cols; c++) {
-            cell = document.createElement("td");
-            cell.setAttribute("data-col", c);
+        for (let c = 0; c < num_cols; c++) {
+            let cell = document.createElement("td");
+            cell.setAttribute("data-col", c.toString());
             cell.appendChild(document.createElement("div"))
 
             row.appendChild(cell)
@@ -35,11 +35,15 @@ function createTableRows(num_rows: number, num_cols: number) {
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
-    body = document.querySelector("#puzzle > tbody")
+    let body = document.querySelector("#puzzle > tbody")
+    if (body === null) {
+        console.log("NULLLL")
+        return;
+    }
 
-    boardView = document.getElementById('board-view');
+    let boardView = document.getElementById('board-view');
     console.log(boardView)
 
-    rows = createTableRows(15, 15);
+    let rows = createTableRows(15, 15);
     rows.forEach(row => body.appendChild(row));
 });
