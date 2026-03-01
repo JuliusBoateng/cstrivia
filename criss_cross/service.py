@@ -1,14 +1,14 @@
-from .models import Board, CluePlacement, ClueCell
+from .models import Board, CluePlacement
 from django.db.models import Prefetch
+from django.db.models import Model
 from django.db.models.query import QuerySet
-from .dto_classes import BoardDTO, BoardResponseDTO, PlacementDTO, ClueDTO, CellDTO, SolutionDTO
-from .dto_mappers import map_to_board_dto, map_to_placement_dtos, map_to_cell_dtos, map_to_clue_dtos, map_to_solution_dtos
-
-# def serialize_board_response(dto: BoardResponseDTO) -> dict:
+from .dto import BoardDTO, BoardResponseDTO, PlacementDTO, ClueDTO, CellDTO, SolutionDTO
+from .serializer import serialize_board_response
+from .dto_mapper import map_to_board_dto, map_to_placement_dtos, map_to_cell_dtos, map_to_clue_dtos, map_to_solution_dtos
 
 def build_board_response_dto(board_id: int):
-    board = _fetch_board(board_id)
-    placements_qs = board.clue_placements.all() # clue_placement prefetch prevents N+1 query
+    board: Model = _fetch_board(board_id)
+    placements_qs: QuerySet = board.clue_placements.all() # clue_placement prefetch prevents N+1 query
 
     board_dto: BoardDTO = map_to_board_dto(board)
     placements: list[PlacementDTO] = map_to_placement_dtos(placements_qs)
@@ -16,7 +16,9 @@ def build_board_response_dto(board_id: int):
     clues: list[ClueDTO] = map_to_clue_dtos(placements_qs)
     solutions: list[SolutionDTO] = map_to_solution_dtos(placements_qs)
 
-    return BoardResponseDTO(board_dto, placements, cells, clues, solutions)
+    board_response = BoardResponseDTO(board_dto, placements, cells, clues, solutions)
+    serialized_board = serialize_board_response(board_response)
+    return serialized_board
 
 def _fetch_board(board_id: int) -> Board:
     board = (Board.objects

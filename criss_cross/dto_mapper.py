@@ -1,6 +1,6 @@
 from .models import Board, CluePlacement, ClueCell
 from django.db.models.query import QuerySet
-from .dto_classes import BoardDTO, PlacementDTO, ClueDTO, CellDTO, SolutionDTO, Direction
+from .dto import BoardDTO, PlacementDTO, ClueDTO, CellDTO, SolutionDTO, Direction
 
 def map_to_board_dto(board: Board) -> BoardDTO:
     categories = [category.name for category in board.categories.all()] # categories prefetch prevents N+1 query

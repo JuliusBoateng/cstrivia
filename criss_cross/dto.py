@@ -58,15 +58,3 @@ class BoardResponseDTO(DTO):
     clues: list[ClueDTO]
     solutions: list[SolutionDTO]
 
-    def _create_solutions_map(self): # Easier FE lookup
-        return {s.placement_id: s.answer for s in self.solutions}
-
-    def _create_placements_map(self): # Easier FE lookup
-        return { p.id: p for p in self.placements }
-
-    def to_dict(self):
-        data = deepcopy(self)
-        data.placements = data._create_placements_map()
-        data.solutions = data._create_solutions_map()
-        data = asdict(data)
-        return data

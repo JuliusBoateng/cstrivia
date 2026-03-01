@@ -8,7 +8,6 @@ from json import dumps
 # Create your views here.
 def index(request):
     board_response_dto = build_board_response_dto(1)
-    data = {"board_data": board_response_dto.to_dict()}
-    response = JsonResponse(data, encoder=DjangoJSONEncoder)
-    print(response.content)
+    data = {"board_data": board_response_dto}
+    print(data)
     return render(request, "criss_cross/index.html", data)
