@@ -77,7 +77,7 @@ def _map_to_placement_dto(placement: CluePlacement) -> PlacementDTO:
             Direction(placement.direction),
             placement.start_row,
             placement.start_col,
-            len(placement.clue.answer),
+            len(placement.clue.normalized_answer),
         )
 
 def _map_to_cell_dto(c: ClueCell) -> CellDTO:
@@ -87,4 +87,4 @@ def _map_to_clue_dto(placement: CluePlacement) -> ClueDTO:
     return ClueDTO(placement.clue.question, placement.id, Direction(placement.direction))
 
 def _map_to_solution_dto(placement: CluePlacement) -> SolutionDTO:
-    return SolutionDTO(placement.id, placement.clue.answer)
+    return SolutionDTO(placement.id, placement.clue.display_answer, placement.clue.normalized_answer)

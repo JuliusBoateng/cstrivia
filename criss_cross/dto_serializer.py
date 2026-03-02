@@ -3,7 +3,6 @@ from .dto import BoardDTO, BoardViewDTO, CellDTO, ClueDTO, PlacementDTO, Solutio
 '''
 Purpose of custom serializer is to control which fields are sent to the FE
 '''
-
 def serialize_board_view(dto: BoardViewDTO) -> dict:
     return {
         "board": _serialize_board(dto.board),
@@ -25,7 +24,7 @@ def _serialize_board(b: BoardDTO) -> dict:
 
 # Converts list to map for efficient FE lookup
 def _serialize_solutions(solutions: list[SolutionDTO]):
-    return {s.placement_id: s.answer for s in solutions}
+    return {s.placement_id: _serialize_solution(s) for s in solutions}
 
  # Converts list to map for efficient FE lookup
 def _serialize_placements(placements: list[PlacementDTO]):
@@ -38,6 +37,13 @@ def _serialize_placement(p: PlacementDTO) -> dict:
         "start_row": p.start_row,
         "start_col": p.start_col,
         "length": p.length,
+    }
+
+def _serialize_solution(solution: SolutionDTO) -> dict:
+    return {
+        "placement_id": solution.placement_id,
+        "display_answer": solution.display_answer,
+        "normalize_answer": solution.normalized_answer
     }
 
 def _serialize_clue(c: ClueDTO) -> dict:

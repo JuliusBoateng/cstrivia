@@ -51,7 +51,8 @@ class ClueDTO(DTO):
 @dataclass
 class SolutionDTO(DTO):
     placement_id: int
-    answer: str
+    display_answer: str
+    normalized_answer: str
 
 @dataclass
 class BoardViewDTO(DTO):

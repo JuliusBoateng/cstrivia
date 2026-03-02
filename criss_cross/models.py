@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models, transaction
 from django.utils import timezone
+from unicodedata import category, normalize, combining
 
 class Category(models.Model):
     name = models.CharField(max_length=16, unique=True)
@@ -65,16 +66,47 @@ Questions/Answers for puzzles
 '''
 class Clue(models.Model):
     question = models.CharField(max_length=150)
-    answer = models.CharField(max_length=21)
+    display_answer = models.CharField(max_length=21) # Keep diacritics
+    normalized_answer = models.CharField(max_length=21) # derived field. diacritics removed
     categories = models.ManyToManyField(Category, related_name="clues")
+    
+    '''
+    Filters allowed chars
+    '''
+    def _clean_answer(raw_answer: str) -> str:
+        # keep unicode letters and standard 0-9 digits.
+        # remove all spaces and punctuations.
+        # preserve diacritics
+        letters = "".join(
+            c for c in raw_answer
+            if category(c).startswith("L")
+            or category(c) == "Nd"
+        )
+        
+        return letters.upper()
+    
+    '''
+    Canonical answer removes diacritics
+    '''
+    def _normalize_cleaned_answer(cleaned_answer: str) -> str:
+        # NFD decomposes chars into base + diacritic/accent.
+        # Unlike NFKD, chars like ﬁ remain unchanged.
+        normalized = normalize("NFD", cleaned_answer)
+        stripped = "".join(
+            c for c in normalized
+            if not combining(c)
+        ) # removes diacritics
+        
+        return stripped.upper()
 
     def clean(self):
         self.question = self.question.strip().capitalize()
-        self.answer = self.answer.strip().upper()
+        self.display_answer = self._clean_answer(self.display_answer) 
+        self.normalized_answer = self._normalize_cleaned_answer(self.display_answer)
 
-        if not self.answer.isalnum():
+        if len(self.display_answer) != len(self.normalized_answer):
             raise ValidationError(
-                {"answer": "Must only contain letters and numbers."}
+                {"display_answer": "length mismatch with normalized answer."}
             )
 
     def save(self, *args, **kwargs):
@@ -122,7 +154,7 @@ class CluePlacement(models.Model):
 
     def _across_direction_check(self):
         if self.direction == "A":
-            col = self.start_col + len(self.clue.answer)
+            col = self.start_col + len(self.clue.normalized_answer)
             
             if col > self.board.cols:
                 raise ValidationError(
@@ -131,7 +163,7 @@ class CluePlacement(models.Model):
     
     def _down_direction_check(self):
         if self.direction == "D":
-            row = self.start_row + len(self.clue.answer)
+            row = self.start_row + len(self.clue.normalized_answer)
 
             if row > self.board.rows:
                 raise ValidationError(
@@ -145,7 +177,7 @@ class CluePlacement(models.Model):
 
     def _create_cells(self):
         cells = []
-        for i in range(len(self.clue.answer)):
+        for i in range(len(self.clue.normalized_answer)):
             if self.direction == 'A':
                 row = self.start_row
                 col = self.start_col + i
@@ -153,7 +185,7 @@ class CluePlacement(models.Model):
                 row = self.start_row + i
                 col = self.start_col
 
-            letter = self.clue.answer[i]
+            letter = self.clue.normalized_answer[i]
             
             cell = ClueCell(
                 clue_placement=self,
@@ -175,7 +207,7 @@ class CluePlacement(models.Model):
         if is_update:
             qs = qs.exclude(clue_placement=self) # excludes previous clue placement cells
 
-        length = len(self.clue.answer)
+        length = len(self.clue.normalized_answer)
 
         if self.direction == 'A':
             col_range = (self.start_col, self.start_col + length - 1)
