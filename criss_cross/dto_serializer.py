@@ -43,7 +43,7 @@ def _serialize_solution(solution: SolutionDTO) -> dict:
     return {
         "placement_id": solution.placement_id,
         "display_answer": solution.display_answer,
-        "normalize_answer": solution.normalized_answer
+        "normalized_answer": solution.normalized_answer
     }
 
 def _serialize_clue(c: ClueDTO) -> dict:
