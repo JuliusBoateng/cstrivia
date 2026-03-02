@@ -45,6 +45,10 @@ table.board td {
     padding: 0;
 }
 
+.dark-grey {
+    background-color: #343a40;
+}
+
 table.board td > div {
     width: 100%;
     aspect-ratio: 1;

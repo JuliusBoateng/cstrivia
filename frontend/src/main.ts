@@ -1,6 +1,6 @@
-import {Board, Placement, Cell, Clue, Direction, BoardView, BoardViewDTO} from "./model.js";
+import {BoardView, BoardViewDTO} from "./model.js";
 
-function createTableRows(num_rows: number, num_cols: number) {
+function createTableRows(num_rows: number, num_cols: number): HTMLTableRowElement[] {
     const rows = [];
     for (let r = 0; r < num_rows; r++) {
         const row = document.createElement("tr")
@@ -8,6 +8,7 @@ function createTableRows(num_rows: number, num_cols: number) {
         
         for (let c = 0; c < num_cols; c++) {
             const cell = document.createElement("td");
+            cell.classList.add("dark-grey")
             cell.setAttribute("data-col", c.toString());
             cell.appendChild(document.createElement("div"))
 
@@ -19,9 +20,9 @@ function createTableRows(num_rows: number, num_cols: number) {
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
-    const tbodyElement = document.querySelector("#puzzle > tbody")
-    if (!tbodyElement) {
-        throw new Error("Table body is not available");
+    const tableElement = document.querySelector("#puzzle")
+    if (!tableElement) {
+        throw new Error("Table is not available");
     }
 
     const boardViewDTOElement = document.getElementById('board-view-dto');
@@ -33,8 +34,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const boardView = BoardView.fromDTO(boardViewDTO)
     console.log(boardView)
 
-    const rows = boardView.board.rows;
-    const cols = boardView.board.cols;
+    const board = boardView.board
+
+    const captionElement = document.createElement("caption")
+    captionElement.textContent = board.title
+    console.log(captionElement.textContent)
+
+    const rows = board.rows;
+    const cols = board.cols;
     const rowElements = createTableRows(rows, cols);
+
+    const tbodyElement = document.createElement("tbody")
     rowElements.forEach(r => tbodyElement.appendChild(r));
+
+    tableElement.appendChild(captionElement)
+    tableElement.appendChild(tbodyElement)
 });
