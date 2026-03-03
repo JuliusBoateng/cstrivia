@@ -7,19 +7,21 @@ function createTableRows(boardRows: number, boardCols: number, cellMap: Record<s
         row.setAttribute("data-row", r.toString());
         
         for (let c = 0; c < boardCols; c++) {
-            const cell = document.createElement("td") as HTMLTableCellElement;
-            cell.classList.add("cell")
-            cell.setAttribute("data-col", c.toString());
-            cell.appendChild(document.createElement("div"))
+            const cellElement = document.createElement("td") as HTMLTableCellElement;
+            const divElement = document.createElement("div")
+
+            cellElement.classList.add("cell")
+            cellElement.setAttribute("data-col", c.toString());
             
             let coord = `(${r},${c})`;
             if (coord in cellMap) {
-                cell.setAttribute("contenteditable", "true")
+                divElement.setAttribute("contenteditable", "true")
             } else {
-                cell.classList.add("block")
+                cellElement.classList.add("block")
             }
             
-            row.appendChild(cell)
+            cellElement.appendChild(divElement)
+            row.appendChild(cellElement)
         }
         rows.push(row)
     }

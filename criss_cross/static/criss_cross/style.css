@@ -55,12 +55,13 @@ h1 {
 }
 
 .board-card caption {
+    font-weight: 500;
+    letter-spacing: 0.02em;
     padding-bottom: 12px;
-    font-weight: bold;
   }
 
 .board-card .cell {
-    border: 1px solid gainsboro;
+    border: 1px solid #d1d5db;;
     background: white;
     padding: 0;
 }
