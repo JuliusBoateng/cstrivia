@@ -8,7 +8,7 @@ function createTableRows(num_rows: number, num_cols: number): HTMLTableRowElemen
         
         for (let c = 0; c < num_cols; c++) {
             const cell = document.createElement("td");
-            cell.classList.add("dark-grey")
+            cell.classList.add("block")
             cell.setAttribute("data-col", c.toString());
             cell.appendChild(document.createElement("div"))
 

@@ -36,17 +36,23 @@ table.board {
     table-layout: fixed;
     width: clamp(300px, 40vw, 800px);
     min-width: 300px;
-    border: 2px solid black;
+    border: 2px solid #1a1a1a;
     border-collapse: collapse;
 }
 
 table.board td {
-    border: 1px solid black;
+    border: 1px solid gainsboro;
+    background: white;
     padding: 0;
 }
 
-.dark-grey {
-    background-color: #343a40;
+.off-white {
+    background: whitesmoke;
+}
+
+table.board td.block {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
 }
 
 table.board td > div {
