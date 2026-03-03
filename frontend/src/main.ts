@@ -8,6 +8,7 @@ function createTableRows(boardRows: number, boardCols: number, cellMap: Record<s
         
         for (let c = 0; c < boardCols; c++) {
             const cell = document.createElement("td") as HTMLTableCellElement;
+            cell.classList.add("cell")
             cell.setAttribute("data-col", c.toString());
             cell.appendChild(document.createElement("div"))
             
