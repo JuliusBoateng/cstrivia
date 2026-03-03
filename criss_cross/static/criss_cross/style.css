@@ -32,6 +32,16 @@ h1 {
     align-items: flex-start;
 }
 
+.board-wrapper {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
 table.board {
     table-layout: fixed;
     width: clamp(300px, 40vw, 800px);
@@ -39,6 +49,11 @@ table.board {
     border: 2px solid #1a1a1a;
     border-collapse: collapse;
 }
+
+table.board caption {
+    padding-bottom: 8px;
+    font-weight: bold;
+  }
 
 table.board td {
     border: 1px solid gainsboro;
