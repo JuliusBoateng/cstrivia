@@ -36,6 +36,7 @@ class Board(models.Model):
         )
     
     title = models.CharField(max_length=50, unique=True)
+    description = models.CharField(max_length=200)
     categories = models.ManyToManyField(Category, related_name="boards")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) # also updates when saving CluePlacement

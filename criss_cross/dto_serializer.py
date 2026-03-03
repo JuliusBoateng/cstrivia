@@ -15,6 +15,7 @@ def serialize_board_view(dto: BoardViewDTO) -> dict:
 def _serialize_board(b: BoardDTO) -> dict:
     return {
         "title": b.title,
+        "description": b.description,
         "rows": b.rows,
         "cols": b.cols,
         "categories": b.categories,

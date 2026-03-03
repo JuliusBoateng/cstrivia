@@ -28,6 +28,7 @@ def map_to_board_view_dto(board: Board, placements_qs: QuerySet) -> BoardViewDTO
 def _map_to_board_dto(board: Board) -> BoardDTO:
     categories = [category.name for category in board.categories.all()] # categories prefetch prevents N+1 query
     return BoardDTO(board.title,
+            board.description,
             board.rows,
             board.cols,
             categories,

@@ -16,6 +16,7 @@ class DTO:
 @dataclass
 class BoardDTO(DTO):
     title: str
+    description: str
     rows: int
     cols: int
     categories: list

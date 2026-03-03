@@ -57,14 +57,16 @@ class BoardView {
 
 class Board {
     readonly title: string;
+    readonly description: string;
     readonly rows: number;
     readonly cols: number;
     readonly categories: string[];
     readonly createdAt: string;
     readonly updatedAt: string;
 
-    constructor(title: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
+    constructor(title: string, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
         this.title = title;
+        this.description = description;
         this.rows = rows;
         this.cols = cols;
         this.categories = categories;

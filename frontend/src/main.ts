@@ -19,20 +19,29 @@ function createTableRows(num_rows: number, num_cols: number): HTMLTableRowElemen
     return rows;
 }
 
-document.addEventListener("DOMContentLoaded", (event) => {
-    const tableElement = document.querySelector("#puzzle")
+function getBoardTableElement(): HTMLTableElement {
+    const tableElement = document.querySelector("#board") as HTMLTableElement;
     if (!tableElement) {
         throw new Error("Table is not available");
     }
 
+    return tableElement;
+}
+
+function getBoardView(): BoardView {
     const boardViewDTOElement = document.getElementById('board-view-dto');
     if (!boardViewDTOElement?.textContent) {
         throw new Error("BoardViewDTO missing content");
     }
 
     const boardViewDTO = JSON.parse(boardViewDTOElement.textContent) as BoardViewDTO;
-    const boardView = BoardView.fromDTO(boardViewDTO)
-    console.log(boardView)
+    return BoardView.fromDTO(boardViewDTO)
+}
+
+document.addEventListener("DOMContentLoaded", (event) => {
+    const tableElement = getBoardTableElement();
+    const boardView = getBoardView();
+    console.log(boardView);
 
     const board = boardView.board
 

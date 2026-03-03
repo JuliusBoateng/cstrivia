@@ -26,7 +26,11 @@ h1 {
     text-align: center;
 }
 
-.puzzle-panel {
+.off-white {
+    background: whitesmoke;
+}
+
+.board-panel {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -42,7 +46,7 @@ h1 {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   }
 
-table.board {
+.board-card {
     table-layout: fixed;
     width: clamp(300px, 40vw, 800px);
     min-width: 300px;
@@ -50,27 +54,23 @@ table.board {
     border-collapse: collapse;
 }
 
-table.board caption {
+.board-card caption {
     padding-bottom: 8px;
     font-weight: bold;
   }
 
-table.board td {
+.board-card td {
     border: 1px solid gainsboro;
     background: white;
     padding: 0;
 }
 
-.off-white {
-    background: whitesmoke;
-}
-
-table.board td.block {
+.board-card td.block {
     background: #1a1a1a;
     border-color: #1a1a1a;
 }
 
-table.board td > div {
+.board-card td > div {
     width: 100%;
     aspect-ratio: 1;
     display: flex;
