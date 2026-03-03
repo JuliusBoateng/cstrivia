@@ -42,7 +42,7 @@ class BoardView {
         );
     }
 
-    getPlacements(): Placement[] {
+    getPlacementsArray(): Placement[] {
         return Object.values(this.placements);
     }
 
