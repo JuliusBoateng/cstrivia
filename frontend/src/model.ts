@@ -11,6 +11,7 @@ class BoardView {
     readonly board: Board;
     readonly placements: Record<number, Placement>;
     readonly cells: Cell[];
+    readonly cellMap: Record<string, Cell>; // derived field. (row,col) as key
     readonly clues: Clue[];
     readonly solutions: Record<number, Solution>;
 
@@ -23,7 +24,10 @@ class BoardView {
     ) {
         this.board = board;
         this.placements = placements;
-        this.cells = cells;
+        this.cells = cells;        
+        this.cellMap = Object.fromEntries(
+            cells.map(cell => [`(${cell.row},${cell.col})`, cell])
+        );
         this.clues = clues;
         this.solutions = solutions;
     }

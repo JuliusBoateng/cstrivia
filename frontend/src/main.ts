@@ -1,17 +1,23 @@
-import {BoardView, BoardViewDTO} from "./model.js";
+import {Cell, BoardView, BoardViewDTO} from "./model.js";
 
-function createTableRows(num_rows: number, num_cols: number): HTMLTableRowElement[] {
+function createTableRows(boardRows: number, boardCols: number, cellMap: Record<string, Cell>): HTMLTableRowElement[] {
     const rows = [];
-    for (let r = 0; r < num_rows; r++) {
+    for (let r = 0; r < boardRows; r++) {
         const row = document.createElement("tr")
         row.setAttribute("data-row", r.toString());
         
-        for (let c = 0; c < num_cols; c++) {
-            const cell = document.createElement("td");
-            cell.classList.add("block")
+        for (let c = 0; c < boardCols; c++) {
+            const cell = document.createElement("td") as HTMLTableCellElement;
             cell.setAttribute("data-col", c.toString());
             cell.appendChild(document.createElement("div"))
-
+            
+            let coord = `(${r},${c})`;
+            if (coord in cellMap) {
+                cell.setAttribute("contenteditable", "true")
+            } else {
+                cell.classList.add("block")
+            }
+            
             row.appendChild(cell)
         }
         rows.push(row)
@@ -41,17 +47,13 @@ function getBoardView(): BoardView {
 document.addEventListener("DOMContentLoaded", (event) => {
     const tableElement = getBoardTableElement();
     const boardView = getBoardView();
-    console.log(boardView);
 
     const board = boardView.board
 
     const captionElement = document.createElement("caption")
     captionElement.textContent = board.title
-    console.log(captionElement.textContent)
 
-    const rows = board.rows;
-    const cols = board.cols;
-    const rowElements = createTableRows(rows, cols);
+    const rowElements = createTableRows(board.rows, board.cols, boardView.cellMap);
 
     const tbodyElement = document.createElement("tbody")
     rowElements.forEach(r => tbodyElement.appendChild(r));
