@@ -6,14 +6,17 @@ interface BoardViewDTO {
     solutions: Record<number, Solution>;
 }
 
+type Coord = [row: number, col: number];
+
 // Board models should be immutable. Backend authoritative
 class BoardView {
     readonly board: Board;
     readonly placements: Record<number, Placement>;
     readonly cells: Cell[];
-    readonly cellMap: Record<string, Cell>; // derived field. (row,col) as key
+    private readonly coordCellMap: Map<string, Cell>; // derived field. JSON.stringify(Coord) : Cell
+    private readonly placementStartCoord: Set<string>; // derived field. JSON.stringify([Placement.start_row, Placement.start_col])
     readonly clues: Clue[];
-    readonly solutions: Record<number, Solution>;
+    readonly solutions: Record<number, Solution>; // placement_id : solution
 
     private constructor(
         board: Board,
@@ -24,10 +27,9 @@ class BoardView {
     ) {
         this.board = board;
         this.placements = placements;
+        this.placementStartCoord = this.createPlacementCellCoord(placements);
         this.cells = cells;        
-        this.cellMap = Object.fromEntries(
-            cells.map(cell => [`(${cell.row},${cell.col})`, cell])
-        );
+        this.coordCellMap = this.createCoordCellMap(cells);
         this.clues = clues;
         this.solutions = solutions;
     }
@@ -42,21 +44,40 @@ class BoardView {
         );
     }
 
-    getPlacementsArray(): Placement[] {
-        return Object.values(this.placements);
+    private createPlacementCellCoord(placements: Record<number, Placement>): Set<string> {
+        return new Set(
+            Object.values(placements).map(placement =>
+                JSON.stringify([placement.start_row, placement.start_col] as Coord)
+            )
+        );
     }
 
-    getPlacement(id: number): Placement {
-        return this.placements[id];
+    private createCoordCellMap(cells: Cell[]) {
+        return new Map(
+            cells.map(cell => [JSON.stringify([cell.row, cell.col] as Coord), cell])
+        );
     }
 
-    getSolutions(): Solution[] {
-        return Object.values(this.solutions);
+    getCellFromCoord(coord: Coord) {
+        const key = JSON.stringify(coord)
+        return this.coordCellMap.get(key)
     }
 
-    getSolution(id: number): Solution {
-        return this.solutions[id];
+    isCoordPlacementStart(coord: Coord): Boolean {
+        return this.placementStartCoord.has(JSON.stringify(coord))
     }
+
+    // getPlacement(id: number): Placement {
+    //     return this.placements[id];
+    // }
+
+    // getSolutions(): Solution[] {
+    //     return Object.values(this.solutions);
+    // }
+
+    // getSolution(id: number): Solution {
+    //     return this.solutions[id];
+    // }
 }
 
 class Board {
@@ -138,4 +159,4 @@ class Solution {
     }
 }
 
-export {Board, Placement, Cell, Clue, Direction, BoardView, BoardViewDTO};
+export {Board, Placement, Cell, Clue, Direction, BoardView, BoardViewDTO, Coord};

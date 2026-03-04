@@ -89,6 +89,8 @@ h1 {
     position: absolute;
     top: 2px;
     left: 2px;    
-    font-size: 0.5em;
+    font-size: clamp(8px, 0.8vw, 12px);
     pointer-events: none;
+    color: #6b7280;
+    font-weight: 500;
 }
