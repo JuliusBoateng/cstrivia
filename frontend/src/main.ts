@@ -29,7 +29,14 @@ function createTableRows(boardView: BoardView): HTMLTableRowElement[] {
                     labelNumber += 1;
                 }
 
-                divElement.setAttribute("contenteditable", "true");                
+                const inputElement = document.createElement("input") as HTMLInputElement;
+                inputElement.maxLength = 1;
+                inputElement.autocomplete = "off";
+                inputElement.spellcheck = false;
+                inputElement.autocapitalize = "characters";
+                inputElement.classList.add("letter");
+
+                divElement.appendChild(inputElement);                
             } else {
                 cellElement.classList.add("block");
             }
