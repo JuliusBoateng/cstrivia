@@ -66,18 +66,6 @@ class BoardView {
     isCoordPlacementStart(coord: Coord): Boolean {
         return this.placementStartCoord.has(JSON.stringify(coord))
     }
-
-    // getPlacement(id: number): Placement {
-    //     return this.placements[id];
-    // }
-
-    // getSolutions(): Solution[] {
-    //     return Object.values(this.solutions);
-    // }
-
-    // getSolution(id: number): Solution {
-    //     return this.solutions[id];
-    // }
 }
 
 class Board {

@@ -1,49 +1,77 @@
 import {BoardView, BoardViewDTO, Coord} from "./model.js";
 
-function createTableRows(boardView: BoardView): HTMLTableRowElement[] {
+function createCellElement(row: number, col: number, boardView: BoardView, labelNumberRef: {value : number}) {
+    const cellElement = document.createElement("td") as HTMLTableCellElement;
+    cellElement.classList.add("cell")
+    cellElement.setAttribute("data-col", col.toString());
+    cellElement.setAttribute("data-row", row.toString());
+
+    const coord = [row, col] as Coord;
+    const cell = boardView.getCellFromCoord(coord)
+    
+    if (!cell) {
+        cellElement.classList.add("block");
+        return cellElement;
+    }
+
+    const innerDiv = createInnerDivElement(coord, boardView, labelNumberRef);
+    cellElement.appendChild(innerDiv);
+    
+    return cellElement;
+}
+
+function createInnerDivElement(coord: Coord, boardView: BoardView, labelNumberRef: {value : number}) {
+    const divElement = document.createElement("div");
+    divElement.classList.add("fill")
+
+    const isPlacementStart = boardView.isCoordPlacementStart(coord)
+    if (isPlacementStart) {
+        const spanElement = createInnerSpanElement(labelNumberRef.value)
+        divElement.appendChild(spanElement);
+
+        labelNumberRef.value += 1;
+    }
+
+    const inputElement = createInnerInputElement()
+    divElement.appendChild(inputElement);
+
+    return divElement;
+}
+
+function createInnerSpanElement(labelNumber: number): HTMLSpanElement {
+    const spanElement = document.createElement("span");
+    spanElement.classList.add("label");
+
+    spanElement.textContent = labelNumber.toString();
+    return spanElement
+}
+
+function createInnerInputElement(): HTMLInputElement {
+    const inputElement = document.createElement("input") as HTMLInputElement;
+    inputElement.maxLength = 1;
+    inputElement.autocomplete = "off";
+    inputElement.spellcheck = false;
+    inputElement.autocapitalize = "characters";
+    inputElement.classList.add("letter");
+
+    return inputElement;
+}
+
+function createRowElements(boardView: BoardView): HTMLTableRowElement[] {
     const rows = boardView.board.rows;
     const cols = boardView.board.cols;
 
-    let labelNumber = 1;
     const rowElements = [];
+    const labelNumberRef = {"value" : 1};
     for (let row = 0; row < rows; row++) {
         const rowElement = document.createElement("tr")
         rowElement.setAttribute("data-row", row.toString());
         
-        
         for (let col = 0; col < cols; col++) {
-            const cellElement = document.createElement("td") as HTMLTableCellElement;
-            const divElement = document.createElement("div");
-            divElement.classList.add("fill")
-            cellElement.classList.add("cell")
-            cellElement.setAttribute("data-col", col.toString());
-            
-            const coord = [row, col] as Coord;
-            if (boardView.getCellFromCoord(coord)) {
-                const spanElement = document.createElement("span");
-                spanElement.classList.add("label");
-
-                if (boardView.isCoordPlacementStart(coord)) {
-                    spanElement.textContent = labelNumber.toString();
-                    divElement.appendChild(spanElement);
-                    labelNumber += 1;
-                }
-
-                const inputElement = document.createElement("input") as HTMLInputElement;
-                inputElement.maxLength = 1;
-                inputElement.autocomplete = "off";
-                inputElement.spellcheck = false;
-                inputElement.autocapitalize = "characters";
-                inputElement.classList.add("letter");
-
-                divElement.appendChild(inputElement);                
-            } else {
-                cellElement.classList.add("block");
-            }
-            
-            cellElement.appendChild(divElement);
+            const cellElement =  createCellElement(row, col, boardView, labelNumberRef)
             rowElement.appendChild(cellElement);
         }
+        
         rowElements.push(rowElement);
     }
     return rowElements;
@@ -77,7 +105,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const captionElement = document.createElement("caption")
     captionElement.textContent = board.title
 
-    const rowElements = createTableRows(boardView);
+    const rowElements = createRowElements(boardView);
 
     const tbodyElement = document.createElement("tbody")
     rowElements.forEach(r => tbodyElement.appendChild(r));
