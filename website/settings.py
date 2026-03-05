@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crossword.apps.CrosswordConfig',
-    'django_rename_app'
+    'crossword.apps.CrosswordConfig'
 ]
 
 MIDDLEWARE = [

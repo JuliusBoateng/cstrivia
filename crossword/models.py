@@ -290,7 +290,8 @@ class ClueCell(models.Model):
             )
         ]
         indexes = [
-            models.Index(fields=["row_index", "col_index"])
+            models.Index(fields=["row_index", "col_index"],
+                         name="cluecell_row_col_idx")
         ]
 
     # CluePlacement calls bulk_create which bypasses save()
