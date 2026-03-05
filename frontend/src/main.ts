@@ -1,7 +1,7 @@
 import {BoardView, BoardViewDTO} from "./model.js";
-import {createTableBodyElement} from "./dom.js";
+import {createTableBodyElement, createCaptionElement} from "./table_dom.js";
 
-function getBoardTableElement(): HTMLTableElement {
+function getTableElement(): HTMLTableElement {
     const tableElement = document.querySelector("#board") as HTMLTableElement;
     if (!tableElement) {
         throw new Error("Table is not available");
@@ -21,15 +21,16 @@ function getBoardView(): BoardView {
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
-    const tableElement = getBoardTableElement();
+    const tableElement = getTableElement();
     const boardView = getBoardView();
 
-    const board = boardView.board
-
-    const captionElement = document.createElement("caption")
-    captionElement.textContent = board.title
-
-    const tbodyElement = createTableBodyElement(boardView);
-    tableElement.appendChild(captionElement)
-    tableElement.appendChild(tbodyElement)
+   renderBoard(tableElement, boardView);
 });
+
+
+function renderBoard(tableElement: HTMLTableElement, boardView: BoardView) {  
+    const tbody = createTableBodyElement(boardView);
+    const caption = createCaptionElement(boardView);
+    tableElement.appendChild(caption);
+    tableElement.appendChild(tbody);
+  }
