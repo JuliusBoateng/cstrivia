@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('rows', models.PositiveIntegerField(default=15, validators=[django.core.validators.MinValueValidator(5), django.core.validators.MaxValueValidator(21)])),
                 ('cols', models.PositiveIntegerField(default=15, validators=[django.core.validators.MinValueValidator(5), django.core.validators.MaxValueValidator(21)])),
-                ('categories', models.ManyToManyField(null=True, related_name='Boards', to='criss_cross.category')),
+                ('categories', models.ManyToManyField(null=True, related_name='Boards', to='crossword.category')),
             ],
         ),
         migrations.CreateModel(
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('answer_raw', models.CharField(max_length=21)),
                 ('answer_normalized', models.CharField(max_length=21)),
                 ('answer_length', models.PositiveIntegerField()),
-                ('categories', models.ManyToManyField(null=True, related_name='Clues', to='criss_cross.category')),
+                ('categories', models.ManyToManyField(null=True, related_name='Clues', to='crossword.category')),
             ],
         ),
         migrations.CreateModel(
@@ -50,8 +50,8 @@ class Migration(migrations.Migration):
                 ('start_row', models.PositiveIntegerField()),
                 ('start_col', models.PositiveIntegerField()),
                 ('direction', models.CharField(choices=[('A', 'Across'), ('D', 'Down')], max_length=1)),
-                ('board', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='criss_cross.board')),
-                ('clue', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='criss_cross.clue')),
+                ('board', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='crossword.board')),
+                ('clue', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='crossword.clue')),
             ],
         ),
         migrations.CreateModel(
@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                 ('row_index', models.PositiveIntegerField()),
                 ('col_index', models.PositiveIntegerField()),
                 ('answer_index', models.PositiveIntegerField()),
-                ('clue_placement', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='criss_cross.clueplacement')),
+                ('clue_placement', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='crossword.clueplacement')),
             ],
         ),
         migrations.AddConstraint(

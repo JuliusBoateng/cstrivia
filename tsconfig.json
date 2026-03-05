@@ -4,7 +4,7 @@
     "target": "ES2020",
     "module": "ES2020",
     "rootDir": "./frontend/src",
-    "outDir": "./criss_cross/static/criss_cross/dist",
+    "outDir": "crossword/static/crossword/dist",
     "strict": true
   }
 }

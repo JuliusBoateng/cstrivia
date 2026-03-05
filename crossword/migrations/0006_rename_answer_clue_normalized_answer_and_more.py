@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('criss_cross', '0005_remove_cluecell_clue_cell_unique_index_per_placement_and_more'),
+        ('crossword', '0005_remove_cluecell_clue_cell_unique_index_per_placement_and_more'),
     ]
 
     operations = [
@@ -25,21 +25,21 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='board',
             name='categories',
-            field=models.ManyToManyField(related_name='boards', to='criss_cross.category'),
+            field=models.ManyToManyField(related_name='boards', to='crossword.category'),
         ),
         migrations.AlterField(
             model_name='clue',
             name='categories',
-            field=models.ManyToManyField(related_name='clues', to='criss_cross.category'),
+            field=models.ManyToManyField(related_name='clues', to='crossword.category'),
         ),
         migrations.AlterField(
             model_name='cluecell',
             name='clue_placement',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='clue_cells', to='criss_cross.clueplacement'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='clue_cells', to='crossword.clueplacement'),
         ),
         migrations.AlterField(
             model_name='clueplacement',
             name='board',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='clue_placements', to='criss_cross.board'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='clue_placements', to='crossword.board'),
         ),
     ]

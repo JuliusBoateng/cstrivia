@@ -1,5 +1,5 @@
 from django.contrib import admin
-from criss_cross import models
+from crossword import models
 
 # Register your models here.
 admin.site.register(models.Category)

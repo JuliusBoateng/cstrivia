@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('criss_cross', '0003_board_created_at_board_title_board_updated_at'),
+        ('crossword', '0003_board_created_at_board_title_board_updated_at'),
     ]
 
     operations = [

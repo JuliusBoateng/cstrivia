@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('criss_cross', '0004_rename_answer_normalized_clue_answer_and_more'),
+        ('crossword', '0004_rename_answer_normalized_clue_answer_and_more'),
     ]
 
     operations = [
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name='cluecell',
-            index=models.Index(fields=['row_index', 'col_index'], name='criss_cross_row_ind_e8f009_idx'),
+            index=models.Index(fields=['row_index', 'col_index'], name='crossword_row_ind_e8f009_idx'),
         ),
         migrations.RemoveField(
             model_name='cluecell',

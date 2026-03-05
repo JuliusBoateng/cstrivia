@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('criss_cross', '0002_alter_board_categories_alter_clue_categories'),
+        ('crossword', '0002_alter_board_categories_alter_clue_categories'),
     ]
 
     operations = [

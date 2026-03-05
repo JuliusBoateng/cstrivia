@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'criss_cross.apps.CrissCrossConfig'
+    'crossword.apps.CrosswordConfig',
+    'django_rename_app'
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CrissCrossConfig(AppConfig):
+class CrosswordConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'criss_cross'
+    name = 'crossword'
