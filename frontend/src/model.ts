@@ -6,6 +6,8 @@ interface BoardViewDTO {
     solutions: Solution[];
 }
 
+type CoordKey = string;
+
 // Board models should be immutable. Backend authoritative
 class BoardView {
     readonly board: Board;
@@ -15,10 +17,10 @@ class BoardView {
     readonly solutions: Solution[];
 
     // derived
-    readonly cellMap: Map<string, Cell>
+    readonly cellMap: Map<CoordKey, Cell>
     readonly placementMap: Map<number, Placement>
-    readonly placementStartSet: Set<string>
-
+    readonly placementStartSet: Set<CoordKey>
+    readonly solutionMap: Map<number, Solution> 
 
     private constructor(
         board: Board,
@@ -32,9 +34,11 @@ class BoardView {
         this.cells = cells;
         this.clues = clues;
         this.solutions = solutions;
-        this.cellMap = this.createCellMap(cells)
-        this.placementMap = this.createPlacementMap(placements)
+
+        this.cellMap = this.createCellMap(cells);
+        this.placementMap = this.createPlacementMap(placements);
         this.placementStartSet = this.createPlacementStartSet(placements);
+        this.solutionMap = this.createSolutionMap(solutions);
     }
 
     static fromDTO(dto: BoardViewDTO): BoardView {
@@ -47,13 +51,24 @@ class BoardView {
         );
     }
 
-    private createCoordKey(row: number, col: number): string {
+    static createCoordKey(row: number, col: number): CoordKey {
         return `${row},${col}`;
+    }
+
+    getCell(row: number, col: number) {
+        const key = BoardView.createCoordKey(row, col)
+        return this.cellMap.get(key)
+    }
+
+    isPlacementStart(row: number, col: number): boolean {
+        const key = BoardView.createCoordKey(row, col)
+        return this.placementStartSet.has(key)
     }
 
     private createCellMap(cells: Cell[]) {
         return new Map(
-            cells.map(cell => [this.createCoordKey(cell.row, cell.col), cell])
+            cells.map(c => 
+                [BoardView.createCoordKey(c.row, c.col), c])
         );
     }
 
@@ -63,22 +78,16 @@ class BoardView {
         );
     }
 
-    private createPlacementStartSet(placements: Record<number, Placement>): Set<string> {
+    private createPlacementStartSet(placements: Placement[]): Set<CoordKey> {
         return new Set(
-            Object.values(placements).map(placement =>
-                this.createCoordKey(placement.start_row, placement.start_col)
+            Object.values(placements).map(p => 
+                BoardView.createCoordKey(p.start_row, p.start_col)
             )
         );
     }
 
-    getCell(row: number, col: number) {
-        const key = this.createCoordKey(row, col)
-        return this.cellMap.get(key)
-    }
-
-    isPlacementStart(row: number, col: number): boolean {
-        const key = this.createCoordKey(row, col)
-        return this.placementStartSet.has(key)
+    private createSolutionMap(solutions: Solution[]) {
+        return new Map(solutions.map(s => [s.placement_id, s]));
     }
 }
 

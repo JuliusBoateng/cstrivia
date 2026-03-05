@@ -38,10 +38,8 @@ function createCellElement(row: number, col: number, boardView: BoardView, label
     cellElement.classList.add("cell")
     cellElement.setAttribute("data-col", col.toString());
     cellElement.setAttribute("data-row", row.toString());
-
-    const cell = boardView.getCell(row, col)
     
-    if (!cell) {
+    if (!boardView.getCell(row, col)) {
         cellElement.classList.add("block");
         return cellElement;
     }
@@ -56,8 +54,7 @@ function createInnerDivElement(row: number, col: number, boardView: BoardView, l
     const divElement = document.createElement("div");
     divElement.classList.add("fill")
 
-    const isPlacementStart = boardView.isPlacementStart(row, col)
-    if (isPlacementStart) {
+    if (boardView.isPlacementStart(row, col)) {
         const spanElement = createInnerSpanElement(labelNumberRef.value)
         divElement.appendChild(spanElement);
 
