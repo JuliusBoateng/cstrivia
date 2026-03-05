@@ -1,5 +1,5 @@
 import {BoardView, BoardViewDTO} from "./model.js";
-import {createTableBodyElement, createCaptionElement} from "./table_dom.js";
+import {createTableBody, createCaption} from "./dom.js";
 
 function getTableElement(): HTMLTableElement {
     const tableElement = document.querySelector("#board") as HTMLTableElement;
@@ -29,8 +29,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 function renderBoard(tableElement: HTMLTableElement, boardView: BoardView) {  
-    const tbody = createTableBodyElement(boardView);
-    const caption = createCaptionElement(boardView);
+    const tbody = createTableBody(boardView);
+    const caption = createCaption(boardView);
     tableElement.appendChild(caption);
     tableElement.appendChild(tbody);
   }
