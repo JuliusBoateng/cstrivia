@@ -1,4 +1,11 @@
-import {BoardView} from "./model.js";
+import {BoardView} from "../models/boardView.js";
+
+function renderBoard(tableElement: HTMLTableElement, boardView: BoardView) {  
+    const tbody = createTableBody(boardView);
+    const caption = createCaption(boardView);
+    tableElement.appendChild(caption);
+    tableElement.appendChild(tbody);
+  }
 
 function createTableBody(boardView: BoardView): HTMLTableSectionElement {
     const rows = boardView.board.rows;
@@ -84,4 +91,4 @@ function createCaption(boardView: BoardView): HTMLTableCaptionElement {
     return caption;
 }
 
-export {createTableBody, createCaption};
+export {renderBoard};
