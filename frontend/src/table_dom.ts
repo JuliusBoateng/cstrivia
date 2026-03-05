@@ -4,22 +4,21 @@ function createTableBodyElement(boardView: BoardView): HTMLTableSectionElement {
     const rows = boardView.board.rows;
     const cols = boardView.board.cols;
 
-    const labelNumberRef = {value : 1};
     const tbody = document.createElement("tbody");
     for (let row = 0; row < rows; row++) {
-        const rowElement = createRowElement(row, cols, boardView, labelNumberRef)
+        const rowElement = createRowElement(row, cols, boardView)
         tbody.appendChild(rowElement);
     }
 
     return tbody;
 }
 
-function createRowElement(row: number, cols: number, boardView: BoardView, labelNumberRef: {value : number}): HTMLTableRowElement {
+function createRowElement(row: number, cols: number, boardView: BoardView): HTMLTableRowElement {
     const rowElement = document.createElement("tr")
     rowElement.setAttribute("data-row", row.toString());
     
     for (let col = 0; col < cols; col++) {
-        const cellElement =  createCellElement(row, col, boardView, labelNumberRef)
+        const cellElement =  createCellElement(row, col, boardView)
         rowElement.appendChild(cellElement);
     }
 
@@ -33,7 +32,7 @@ function createCaptionElement(boardView: BoardView): HTMLTableCaptionElement {
     return caption;
 }
 
-function createCellElement(row: number, col: number, boardView: BoardView, labelNumberRef: {value : number}) {
+function createCellElement(row: number, col: number, boardView: BoardView) {
     const cellElement = document.createElement("td") as HTMLTableCellElement;
     cellElement.classList.add("cell")
     cellElement.setAttribute("data-col", col.toString());
@@ -44,21 +43,20 @@ function createCellElement(row: number, col: number, boardView: BoardView, label
         return cellElement;
     }
 
-    const innerDiv = createInnerDivElement(row, col, boardView, labelNumberRef);
+    const innerDiv = createInnerDivElement(row, col, boardView);
     cellElement.appendChild(innerDiv);
     
     return cellElement;
 }
 
-function createInnerDivElement(row: number, col: number, boardView: BoardView, labelNumberRef: {value : number}) {
+function createInnerDivElement(row: number, col: number, boardView: BoardView) {
     const divElement = document.createElement("div");
     divElement.classList.add("fill")
 
-    if (boardView.isPlacementStart(row, col)) {
-        const spanElement = createInnerSpanElement(labelNumberRef.value)
+    const labelNumber = boardView.getLabel(row, col);
+    if (boardView.isPlacementStart(row, col) && labelNumber) {
+        const spanElement = createInnerSpanElement(labelNumber)
         divElement.appendChild(spanElement);
-
-        labelNumberRef.value += 1;
     }
 
     const inputElement = createInnerInputElement()

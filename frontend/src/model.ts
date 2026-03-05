@@ -20,7 +20,8 @@ class BoardView {
     readonly cellMap: Map<CoordKey, Cell>
     readonly placementMap: Map<number, Placement>
     readonly placementStartSet: Set<CoordKey>
-    readonly solutionMap: Map<number, Solution> 
+    readonly solutionMap: Map<number, Solution>
+    readonly labelMap: Map<CoordKey, number>
 
     private constructor(
         board: Board,
@@ -39,6 +40,7 @@ class BoardView {
         this.placementMap = this.createPlacementMap(placements);
         this.placementStartSet = this.createPlacementStartSet(placements);
         this.solutionMap = this.createSolutionMap(solutions);
+        this.labelMap = this.createLabelMap(placements);
     }
 
     static fromDTO(dto: BoardViewDTO): BoardView {
@@ -55,7 +57,7 @@ class BoardView {
         return `${row},${col}`;
     }
 
-    getCell(row: number, col: number) {
+    getCell(row: number, col: number): Cell | undefined {
         const key = BoardView.createCoordKey(row, col)
         return this.cellMap.get(key)
     }
@@ -63,6 +65,11 @@ class BoardView {
     isPlacementStart(row: number, col: number): boolean {
         const key = BoardView.createCoordKey(row, col)
         return this.placementStartSet.has(key)
+    }
+
+    getLabel(row: number, col: number): number | undefined {
+        const key = BoardView.createCoordKey(row, col)
+        return this.labelMap.get(key)
     }
 
     private createCellMap(cells: Cell[]) {
@@ -88,6 +95,25 @@ class BoardView {
 
     private createSolutionMap(solutions: Solution[]) {
         return new Map(solutions.map(s => [s.placement_id, s]));
+    }
+
+    private createLabelMap(placements: Placement[]): Map<CoordKey, number> {
+        const sortedPlacements = [...placements].sort((a, b) => 
+                a.start_row - b.start_row || a.start_col - b.start_col
+        );
+    
+        let label = 1;
+        const labelMap = new Map<CoordKey, number>();    
+        for (const placement of sortedPlacements) {
+            const key = BoardView.createCoordKey(placement.start_row, placement.start_col);
+    
+            // Across + Down share the same label if they start on the same square
+            if (!labelMap.has(key)) {
+                labelMap.set(key, label++);
+            }
+        }
+    
+        return labelMap;
     }
 }
 
