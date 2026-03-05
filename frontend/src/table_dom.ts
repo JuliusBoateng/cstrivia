@@ -1,4 +1,4 @@
-import {BoardView, Coord} from "./model.js";
+import {BoardView} from "./model.js";
 
 function createTableBodyElement(boardView: BoardView): HTMLTableSectionElement {
     const rows = boardView.board.rows;
@@ -39,25 +39,24 @@ function createCellElement(row: number, col: number, boardView: BoardView, label
     cellElement.setAttribute("data-col", col.toString());
     cellElement.setAttribute("data-row", row.toString());
 
-    const coord = [row, col] as Coord;
-    const cell = boardView.getCellFromCoord(coord)
+    const cell = boardView.getCell(row, col)
     
     if (!cell) {
         cellElement.classList.add("block");
         return cellElement;
     }
 
-    const innerDiv = createInnerDivElement(coord, boardView, labelNumberRef);
+    const innerDiv = createInnerDivElement(row, col, boardView, labelNumberRef);
     cellElement.appendChild(innerDiv);
     
     return cellElement;
 }
 
-function createInnerDivElement(coord: Coord, boardView: BoardView, labelNumberRef: {value : number}) {
+function createInnerDivElement(row: number, col: number, boardView: BoardView, labelNumberRef: {value : number}) {
     const divElement = document.createElement("div");
     divElement.classList.add("fill")
 
-    const isPlacementStart = boardView.isCoordPlacementStart(coord)
+    const isPlacementStart = boardView.isPlacementStart(row, col)
     if (isPlacementStart) {
         const spanElement = createInnerSpanElement(labelNumberRef.value)
         divElement.appendChild(spanElement);

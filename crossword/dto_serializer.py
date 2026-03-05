@@ -6,10 +6,10 @@ Purpose of custom serializer is to control which fields are sent to the FE
 def serialize_board_view(dto: BoardViewDTO) -> dict:
     return {
         "board": _serialize_board(dto.board),
-        "placements": _serialize_placements(dto.placements),
+        "placements": [_serialize_placement(p) for p in dto.placements],
         "cells": [_serialize_cell(c) for c in dto.cells],
         "clues": [_serialize_clue(c) for c in dto.clues],
-        "solutions": _serialize_solutions(dto.solutions),
+        "solutions": [_serialize_solution(s) for s in dto.solutions],
     }
 
 def _serialize_board(b: BoardDTO) -> dict:
@@ -22,14 +22,6 @@ def _serialize_board(b: BoardDTO) -> dict:
         "created_at": b.created_at.isoformat(),
         "updated_at": b.updated_at.isoformat(),
     }
-
-# Converts list to map for efficient FE lookup
-def _serialize_solutions(solutions: list[SolutionDTO]):
-    return {s.placement_id: _serialize_solution(s) for s in solutions}
-
- # Converts list to map for efficient FE lookup
-def _serialize_placements(placements: list[PlacementDTO]):
-    return {p.id: _serialize_placement(p) for p in placements}
 
 def _serialize_placement(p: PlacementDTO) -> dict:
     return {

@@ -1,37 +1,40 @@
 interface BoardViewDTO {
     board: Board;
-    placements: Record<number, Placement>;
+    placements: Placement[];
     cells: Cell[];
     clues: Clue[];
-    solutions: Record<number, Solution>;
+    solutions: Solution[];
 }
-
-type Coord = [row: number, col: number];
 
 // Board models should be immutable. Backend authoritative
 class BoardView {
     readonly board: Board;
-    readonly placements: Record<number, Placement>;
+    readonly placements: Placement[];
     readonly cells: Cell[];
-    private readonly coordCellMap: Map<string, Cell>; // derived field. JSON.stringify(Coord) : Cell
-    private readonly placementStartCoord: Set<string>; // derived field. JSON.stringify([Placement.start_row, Placement.start_col])
     readonly clues: Clue[];
-    readonly solutions: Record<number, Solution>; // placement_id : solution
+    readonly solutions: Solution[];
+
+    // derived
+    readonly cellMap: Map<string, Cell>
+    readonly placementMap: Map<number, Placement>
+    readonly placementStartSet: Set<string>
+
 
     private constructor(
         board: Board,
-        placements: Record<number, Placement>,
+        placements: Placement[],
         cells: Cell[],
         clues: Clue[],
-        solutions: Record<number, Solution>
+        solutions: Solution[]
     ) {
         this.board = board;
         this.placements = placements;
-        this.placementStartCoord = this.createPlacementCellCoord(placements);
-        this.cells = cells;        
-        this.coordCellMap = this.createCoordCellMap(cells);
+        this.cells = cells;
         this.clues = clues;
         this.solutions = solutions;
+        this.cellMap = this.createCellMap(cells)
+        this.placementMap = this.createPlacementMap(placements)
+        this.placementStartSet = this.createPlacementStartSet(placements);
     }
 
     static fromDTO(dto: BoardViewDTO): BoardView {
@@ -44,27 +47,38 @@ class BoardView {
         );
     }
 
-    private createPlacementCellCoord(placements: Record<number, Placement>): Set<string> {
+    private createCoordKey(row: number, col: number): string {
+        return `${row},${col}`;
+    }
+
+    private createCellMap(cells: Cell[]) {
+        return new Map(
+            cells.map(cell => [this.createCoordKey(cell.row, cell.col), cell])
+        );
+    }
+
+    private createPlacementMap(placements: Placement[]) {
+        return new Map(
+            placements.map(placement => [placement.id, placement])
+        );
+    }
+
+    private createPlacementStartSet(placements: Record<number, Placement>): Set<string> {
         return new Set(
             Object.values(placements).map(placement =>
-                JSON.stringify([placement.start_row, placement.start_col] as Coord)
+                this.createCoordKey(placement.start_row, placement.start_col)
             )
         );
     }
 
-    private createCoordCellMap(cells: Cell[]) {
-        return new Map(
-            cells.map(cell => [JSON.stringify([cell.row, cell.col] as Coord), cell])
-        );
+    getCell(row: number, col: number) {
+        const key = this.createCoordKey(row, col)
+        return this.cellMap.get(key)
     }
 
-    getCellFromCoord(coord: Coord) {
-        const key = JSON.stringify(coord)
-        return this.coordCellMap.get(key)
-    }
-
-    isCoordPlacementStart(coord: Coord): Boolean {
-        return this.placementStartCoord.has(JSON.stringify(coord))
+    isPlacementStart(row: number, col: number): boolean {
+        const key = this.createCoordKey(row, col)
+        return this.placementStartSet.has(key)
     }
 }
 
@@ -147,4 +161,4 @@ class Solution {
     }
 }
 
-export {Board, Placement, Cell, Clue, Direction, BoardView, BoardViewDTO, Coord};
+export {Board, Placement, Cell, Clue, Direction, BoardView, BoardViewDTO};
