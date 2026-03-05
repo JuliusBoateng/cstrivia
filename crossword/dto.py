@@ -56,10 +56,19 @@ class SolutionDTO(DTO):
     normalized_answer: str
 
 @dataclass
+class LetterDTO:
+    row: int
+    col: int
+    letter: str
+
+@dataclass
 class BoardViewDTO(DTO):
     board: BoardDTO
     placements: list[PlacementDTO]
     cells: list[CellDTO]
     clues: list[ClueDTO]
-    solutions: list[SolutionDTO]
 
+@dataclass
+class SolutionViewDTO(DTO):
+    solutions: list[SolutionDTO]
+    letters: list[LetterDTO]

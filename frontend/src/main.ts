@@ -1,4 +1,4 @@
-import {BoardView, BoardViewDTO} from "./model.js";
+import {BoardView, SolutionView} from "./model.js";
 import {createTableBody, createCaption} from "./dom.js";
 
 function getTableElement(): HTMLTableElement {
@@ -16,17 +16,28 @@ function getBoardView(): BoardView {
         throw new Error("BoardViewDTO missing content");
     }
 
-    const boardViewDTO = JSON.parse(boardViewDTOElement.textContent) as BoardViewDTO;
+    const boardViewDTO = JSON.parse(boardViewDTOElement.textContent);
     return BoardView.fromDTO(boardViewDTO)
+}
+
+function getSolutionView(): SolutionView {
+    const solutionViewDTOElement = document.getElementById('solution-view-dto');
+    if (!solutionViewDTOElement?.textContent) {
+        throw new Error("SolutionViewDTO missing content");
+    }
+
+    const solutionViewDTO = JSON.parse(solutionViewDTOElement.textContent);
+    return SolutionView.fromDTO(solutionViewDTO)
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
     const tableElement = getTableElement();
     const boardView = getBoardView();
+    const solutionView = getSolutionView();
+    console.log(solutionView)
 
    renderBoard(tableElement, boardView);
 });
-
 
 function renderBoard(tableElement: HTMLTableElement, boardView: BoardView) {  
     const tbody = createTableBody(boardView);

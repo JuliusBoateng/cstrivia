@@ -3,7 +3,11 @@ interface BoardViewDTO {
     placements: Placement[];
     cells: Cell[];
     clues: Clue[];
+}
+
+interface SolutionViewDTO {
     solutions: Solution[];
+    letters: Letter[];
 }
 
 type CoordKey = string;
@@ -14,32 +18,27 @@ class BoardView {
     readonly placements: Placement[];
     readonly cells: Cell[];
     readonly clues: Clue[];
-    readonly solutions: Solution[];
 
     // derived
     readonly cellMap: Map<CoordKey, Cell>
     readonly placementMap: Map<number, Placement>
     readonly placementStartSet: Set<CoordKey>
-    readonly solutionMap: Map<number, Solution>
     readonly labelMap: Map<CoordKey, number>
 
     private constructor(
         board: Board,
         placements: Placement[],
         cells: Cell[],
-        clues: Clue[],
-        solutions: Solution[]
+        clues: Clue[]
     ) {
         this.board = board;
         this.placements = placements;
         this.cells = cells;
         this.clues = clues;
-        this.solutions = solutions;
-
+        
         this.cellMap = this.createCellMap(cells);
         this.placementMap = this.createPlacementMap(placements);
         this.placementStartSet = this.createPlacementStartSet(placements);
-        this.solutionMap = this.createSolutionMap(solutions);
         this.labelMap = this.createLabelMap(placements);
     }
 
@@ -48,8 +47,7 @@ class BoardView {
             dto.board,
             dto.placements,
             dto.cells,
-            dto.clues,
-            dto.solutions
+            dto.clues
         );
     }
 
@@ -86,15 +84,10 @@ class BoardView {
     }
 
     private createPlacementStartSet(placements: Placement[]): Set<CoordKey> {
-        return new Set(
-            Object.values(placements).map(p => 
+        return new Set(placements.map(p => 
                 BoardView.createCoordKey(p.start_row, p.start_col)
             )
         );
-    }
-
-    private createSolutionMap(solutions: Solution[]) {
-        return new Map(solutions.map(s => [s.placement_id, s]));
     }
 
     private createLabelMap(placements: Placement[]): Map<CoordKey, number> {
@@ -114,6 +107,39 @@ class BoardView {
         }
     
         return labelMap;
+    }
+}
+
+class SolutionView {
+    readonly solutions: Solution[];
+    readonly letters: Letter[];
+
+    // derived
+    readonly solutionMap: Map<number, Solution>
+    readonly letterMap: Map<CoordKey, Letter>
+
+    private constructor(solutions: Solution[], letters: Letter[]) {
+        this.solutions = solutions;
+        this.solutionMap = this.createSolutionMap(solutions);
+        this.letters = letters;
+        this.letterMap = this.createLetterMap(letters);
+    }
+
+    static fromDTO(dto: SolutionViewDTO): SolutionView {
+        return new SolutionView(
+            dto.solutions,
+            dto.letters
+        );
+    }
+
+    private createSolutionMap(solutions: Solution[]) {
+        return new Map(solutions.map(s => [s.placement_id, s]));
+    }
+
+    private createLetterMap(letters: Letter[]): Map<CoordKey, Letter> {
+        return new Map(letters.map(l => 
+            [BoardView.createCoordKey(l.row, l.col), l])
+        );
     }
 }
 
@@ -196,4 +222,16 @@ class Solution {
     }
 }
 
-export {Board, Placement, Cell, Clue, Direction, BoardView, BoardViewDTO};
+class Letter {
+    readonly row: number;
+    readonly col: number;
+    readonly letter: string;
+
+    constructor(row: number, col: number, letter: string) {
+        this.row = row;
+        this.col = col;
+        this.letter = letter;
+    }
+}
+
+export {Board, Placement, Cell, Clue, Direction, BoardView, BoardViewDTO, SolutionView};

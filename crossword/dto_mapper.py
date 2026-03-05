@@ -7,7 +7,9 @@ from .dto import (
     ClueDTO,
     Direction,
     PlacementDTO,
+    LetterDTO,
     SolutionDTO,
+    SolutionViewDTO
 )
 from .models import Board, ClueCell, CluePlacement
 
@@ -20,10 +22,15 @@ def map_to_board_view_dto(board: Board, placements_qs: QuerySet) -> BoardViewDTO
     placements: list[PlacementDTO] = _map_to_placement_dtos(placements_qs)
     cells: list[CellDTO] = _map_to_cell_dtos(placements_qs)
     clues: list[ClueDTO] = _map_to_clue_dtos(placements_qs)
+
+    return BoardViewDTO(board_dto, placements, cells, clues)
+
+
+def map_to_solution_view_dto(placements_qs: QuerySet) -> SolutionDTO:
     solutions: list[SolutionDTO] = _map_to_solution_dtos(placements_qs)
-
-    return BoardViewDTO(board_dto, placements, cells, clues, solutions)
-
+    letters: list[LetterDTO] = _map_to_letter_dtos(placements_qs)
+        
+    return SolutionViewDTO(solutions, letters)
 
 def _map_to_board_dto(board: Board) -> BoardDTO:
     categories = [category.name for category in board.categories.all()] # categories prefetch prevents N+1 query
@@ -42,6 +49,14 @@ def _map_to_solution_dtos(placements: QuerySet[CluePlacement]) -> list[SolutionD
         solutions.append(_map_to_solution_dto(placement))
     
     return solutions
+
+def _map_to_letter_dtos(placements: QuerySet[CluePlacement]) -> list[LetterDTO]:
+    letters = []
+    for placement in placements:
+        for c in placement.clue_cells.all(): # clue_cells prefetch prevents N+1 query
+            letters.append(_map_to_letter_dto(c))
+    
+    return letters
 
 def _map_to_placement_dtos(placements: QuerySet[CluePlacement]) -> list[PlacementDTO]:
     p = []
@@ -89,3 +104,6 @@ def _map_to_clue_dto(placement: CluePlacement) -> ClueDTO:
 
 def _map_to_solution_dto(placement: CluePlacement) -> SolutionDTO:
     return SolutionDTO(placement.id, placement.clue.display_answer, placement.clue.normalized_answer)
+
+def _map_to_letter_dto(c: ClueCell) -> LetterDTO:
+    return LetterDTO(c.row_index, c.col_index, c.letter)

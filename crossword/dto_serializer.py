@@ -1,4 +1,4 @@
-from .dto import BoardDTO, BoardViewDTO, CellDTO, ClueDTO, PlacementDTO, SolutionDTO
+from .dto import BoardDTO, BoardViewDTO, CellDTO, ClueDTO, PlacementDTO, LetterDTO, SolutionDTO, SolutionViewDTO
 
 '''
 Purpose of custom serializer is to control which fields are sent to the FE
@@ -8,8 +8,13 @@ def serialize_board_view(dto: BoardViewDTO) -> dict:
         "board": _serialize_board(dto.board),
         "placements": [_serialize_placement(p) for p in dto.placements],
         "cells": [_serialize_cell(c) for c in dto.cells],
-        "clues": [_serialize_clue(c) for c in dto.clues],
+        "clues": [_serialize_clue(c) for c in dto.clues]
+    }
+
+def serialize_solution_view(dto: SolutionViewDTO) -> dict:
+    return {
         "solutions": [_serialize_solution(s) for s in dto.solutions],
+        "letters": [_serialize_letter(l) for l in dto.letters]
     }
 
 def _serialize_board(b: BoardDTO) -> dict:
@@ -32,13 +37,6 @@ def _serialize_placement(p: PlacementDTO) -> dict:
         "length": p.length,
     }
 
-def _serialize_solution(solution: SolutionDTO) -> dict:
-    return {
-        "placement_id": solution.placement_id,
-        "display_answer": solution.display_answer,
-        "normalized_answer": solution.normalized_answer
-    }
-
 def _serialize_clue(c: ClueDTO) -> dict:
     return {
         "question": c.question,
@@ -52,4 +50,18 @@ def _serialize_cell(c: CellDTO) -> dict:
         "col": c.col,
         "letter": c.letter,
         "placements": {k.value: v for k, v in c.placements.items()}, # Convert Direction enum to str
+    }
+
+def _serialize_letter(letter: LetterDTO) -> dict:
+    return {
+        "row": letter.row,
+        "col": letter.col,
+        "letter": letter.letter
+    }
+
+def _serialize_solution(solution: SolutionDTO) -> dict:
+    return {
+        "placement_id": solution.placement_id,
+        "display_answer": solution.display_answer,
+        "normalized_answer": solution.normalized_answer
     }

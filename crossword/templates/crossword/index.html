@@ -3,6 +3,7 @@
 <html lang="en-US">
   <head>
     {{board_view_dto|json_script:"board-view-dto" }}
+    {{solution_view_dto|json_script:"solution-view-dto" }}
     <link rel="stylesheet" href="{% static 'crossword/style.css' %}">
     <script type="module" src="{% static 'crossword/dist/main.js' %}"></script>
     <meta charset="utf-8" />
