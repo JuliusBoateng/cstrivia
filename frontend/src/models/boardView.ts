@@ -172,4 +172,4 @@ class Clue {
     }
 }
 
-export {BoardView, CoordKey};
+export {BoardView, CoordKey, Direction};
