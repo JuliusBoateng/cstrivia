@@ -2,8 +2,9 @@ import {BoardView} from "./models/boardView.js";
 import {SolutionView} from "./models/solutionView.js";
 
 function getTableElement(): HTMLTableElement {
-    const tableElement = document.querySelector("#board") as HTMLTableElement;
-    if (!tableElement) {
+    const tableElement = document.querySelector("#board");
+
+    if (!(tableElement instanceof HTMLTableElement) || !tableElement) {
         throw new Error("Table is not available");
     }
 

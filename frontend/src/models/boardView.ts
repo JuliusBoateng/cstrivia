@@ -15,7 +15,7 @@ class BoardView {
     readonly clues: Clue[];
 
     // derived
-    readonly cellMap: Map<CoordKey, Cell>
+    readonly cellMap: Map<CoordKey, Cell> // sparse. only contains cells that have letters
     readonly placementMap: Map<number, Placement>
     readonly placementStartSet: Set<CoordKey>
     readonly labelMap: Map<CoordKey, number>

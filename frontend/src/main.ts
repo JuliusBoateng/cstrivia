@@ -1,6 +1,6 @@
 import {getTableElement, getBoardView, getSolutionView} from "./domLoader.js";
 import {BoardDomBuilder} from "./render/boardDomBuilder.js";
-import {Direction, BoardView} from "./models/boardView.js";
+import {Direction, BoardView, CoordKey} from "./models/boardView.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
     const tableElement = getTableElement();
@@ -13,31 +13,38 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 class InputHandler {
-    constructor(
-        private session: PuzzleSession,
-        private renderer: BoardRenderer,
-        private boardView: BoardView
-    ) {}
+    tableElement: HTMLTableElement
+    session: PuzzleSession;
+    renderer: BoardRenderer;
+    boardView: BoardView;
 
-    // handleCellClick(row: number, col: number) {
-    //     this.session.moveTo(row, col)
+    constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: BoardRenderer, boardView: BoardView) {
+        this.tableElement = tableElement;
+        this.session = session;
+        this.renderer = renderer;
+        this.boardView = boardView;
 
-    //     this.renderer.highlightCursor(row, col)
-    // }
-}
+        tableElement.addEventListener("click", this.handleCellClick);
+    }
 
+    handleCellClick(onclick: MouseEvent) {
+        const target = onclick.target;
+   
+        if (!(target instanceof HTMLElement)) {
+            return;
+        }
 
-function handleEvents(tableElement: HTMLTableElement) {
-    const tbody = tableElement.tBodies[0];
-
-    tbody.addEventListener("click", handleCellClick);
-    function handleCellClick(onclick: MouseEvent) {
-        const target = onclick.target as HTMLElement
         const tdElement = target.closest("td");
 
         if (!tdElement || tdElement.classList.contains("block")) {
             return;
         }
+
+        const row = Number(tdElement.dataset.row);
+        const col = Number(tdElement.dataset.col);
+
+        // this.session.moveTo(row, col)
+        // this.renderer.highlightCursor(row, col)
     }
 }
 
@@ -45,17 +52,17 @@ class PuzzleSession {
     row: number
     col: number
     direction: Direction
-    letters: Map<string,string>
+    letters: Map<CoordKey, string> // sparse. only contains cells that are editable
 
-    constructor(startRow: number, startCol: number) {
-        this.row = startRow
-        this.col = startCol
+    constructor(row: number, col: number) {
+        this.row = row
+        this.col = col
         
         this.direction = Direction.A
         this.letters = new Map();
     }
 
-    moveTo(row: number, col: number) {
+    moveCell(row: number, col: number) {
         this.row = row
         this.col = col
     }
@@ -64,14 +71,47 @@ class PuzzleSession {
         this.direction = this.direction === Direction.A ? Direction.D : Direction.A;
     }
 
-    setLetter(row: number, col: number, letter: string){
-        this.letters.set(BoardView.createCoordKey(row, col), letter)
+    setLetter(row: number, col: number, letter: string) {
+        const key = BoardView.createCoordKey(row, col)
+        this.letters.set(key, letter)
     }
 }
 
 class BoardRenderer {
-    // highlightCell
-    // moveCursor
-    // fillLetter
-    // highlightPlacement
+    private table: HTMLTableElement
+    private cellMap: Map<string, HTMLInputElement> // dense. contain all cells including cells that are not-editable.
+
+    constructor(table: HTMLTableElement) {
+        this.table = table
+        this.cellMap = new Map()
+    }
+
+    moveCell(row: number, col: number) {
+        // move cell
+    }
+
+    highlightPlacement(placementId: number) {
+        // highlight the word
+    }
+
+    setLetter(row: number, col: number, letter: string) {
+        const cell = this.cellMap.get(`${row},${col}`)
+        if (cell) cell.value = letter
+    }
+
+    highlightCell(row:number, col:number) {
+        const cell = this.cellMap.get(`${row},${col}`)
+        cell?.classList.add("active")
+    }
+
+    highlightCursor(row: number, col: number) {
+        this.clearCursor();
+        const input = this.cellMap.get(`${row},${col}`);
+        input?.classList.add("cursor");
+    }
+    
+    highlightPlacement(placementId: number) {
+        const cells = this.placementCells.get(placementId);
+        cells?.forEach(cell => cell.classList.add("active"));
+    }
 }
