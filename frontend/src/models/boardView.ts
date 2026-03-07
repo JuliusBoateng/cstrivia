@@ -15,10 +15,9 @@ class BoardView {
     readonly clues: Clue[];
 
     // derived
-    readonly cellMap: Map<CoordKey, Cell> // sparse. only contains cells that have letters
-    readonly placementMap: Map<number, Placement>
-    readonly placementStartSet: Set<CoordKey>
-    readonly labelMap: Map<CoordKey, number>
+    readonly cellGrid: Cell[][];
+    readonly labelGrid: number[][];
+    readonly placementMap: Map<number, Placement>;
 
     private constructor(
         board: Board,
@@ -31,10 +30,9 @@ class BoardView {
         this.cells = cells;
         this.clues = clues;
         
-        this.cellMap = this.createCellMap(cells);
+        this.cellGrid = this.createCellGrid(cells);
+        this.labelGrid = this.createLabelGrid(placements);
         this.placementMap = this.createPlacementMap(placements);
-        this.placementStartSet = this.createPlacementStartSet(placements);
-        this.labelMap = this.createLabelMap(placements);
     }
 
     static fromDTO(dto: BoardViewDTO): BoardView {
@@ -50,26 +48,29 @@ class BoardView {
         return `${row},${col}`;
     }
 
-    getCell(row: number, col: number): Cell | undefined {
-        const key = BoardView.createCoordKey(row, col)
-        return this.cellMap.get(key)
+    getCell(row: number, col: number): Cell | null {
+        return this.cellGrid[row][col]
     }
 
-    isPlacementStart(row: number, col: number): boolean {
-        const key = BoardView.createCoordKey(row, col)
-        return this.placementStartSet.has(key)
+    isStartingCell(row: number, col: number): boolean {
+        return this.labelGrid[row][col] > 0;
     }
 
-    getLabel(row: number, col: number): number | undefined {
-        const key = BoardView.createCoordKey(row, col)
-        return this.labelMap.get(key)
+    getLabel(row: number, col: number): number {
+        return this.labelGrid[row][col]
     }
 
-    private createCellMap(cells: Cell[]) {
-        return new Map(
-            cells.map(c => 
-                [BoardView.createCoordKey(c.row, c.col), c])
-        );
+    private createCellGrid(cells: Cell[]) {
+        const rows = this.board.rows;
+        const cols = this.board.cols;
+
+        const cellGrid = Array.from({ length: rows }, () => Array(cols).fill(null))
+
+        for (const cell of cells) {
+            cellGrid[cell.row][cell.col] = cell;
+        }
+
+        return cellGrid;
     }
 
     private createPlacementMap(placements: Placement[]) {
@@ -78,34 +79,34 @@ class BoardView {
         );
     }
 
-    private createPlacementStartSet(placements: Placement[]): Set<CoordKey> {
-        return new Set(placements.map(p => 
-                BoardView.createCoordKey(p.start_row, p.start_col)
-            )
-        );
-    }
+    private createLabelGrid(placements: Placement[]): number[][] {
+        const rows = this.board.rows;
+        const cols = this.board.cols;
+        const labelGrid = Array.from({ length: rows }, () => Array(cols).fill(0));
 
-    private createLabelMap(placements: Placement[]): Map<CoordKey, number> {
-        const sortedPlacements = [...placements].sort((a, b) => 
-                a.start_row - b.start_row || a.start_col - b.start_col
-        );
-    
+        // sort placements by row, col
+        const sortedPlacements = [...placements]
+                                    .sort((a, b) => a.start_row - b.start_row || a.start_col - b.start_col);
+        
         let label = 1;
-        const labelMap = new Map<CoordKey, number>();    
-        for (const placement of sortedPlacements) {
-            const key = BoardView.createCoordKey(placement.start_row, placement.start_col);
-    
-            // Across + Down share the same label if they start on the same square
-            if (!labelMap.has(key)) {
-                labelMap.set(key, label++);
+        for (const p of sortedPlacements) {
+            const r = p.start_row;
+            const c = p.start_col;
+
+            // placements can have the same start coords accross directions
+            if (labelGrid[r][c] !== 0) {
+                continue;
             }
+
+            labelGrid[r][c] = label++;
         }
-    
-        return labelMap;
+
+        return labelGrid;
     }
 }
 
 class Board {
+    readonly id: number;
     readonly title: string;
     readonly description: string;
     readonly rows: number;
@@ -114,7 +115,8 @@ class Board {
     readonly createdAt: string;
     readonly updatedAt: string;
 
-    constructor(title: string, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
+    constructor(id: number, title: string, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.rows = rows;
@@ -149,13 +151,11 @@ class Placement {
 class Cell {
     readonly row: number;
     readonly col: number;
-    readonly letter: string;
     readonly placements: Record<Direction, number>
 
-    constructor(row: number, col: number, letter: string, placements: Record<Direction, number>) {
+    constructor(row: number, col: number, placements: Record<Direction, number>) {
         this.row = row;
         this.col = col;
-        this.letter = letter;
         this.placements = placements
     }
 }

@@ -1,12 +1,14 @@
 import {BoardView, CoordKey} from "./boardView.js";
 
 interface SolutionViewDTO {
+    board_id: number;
     solutions: Solution[];
     letters: Letter[];
 }
 
 // Solution models should be immutable. Backend authoritative
 class SolutionView {
+    readonly board_id: number;
     readonly solutions: Solution[];
     readonly letters: Letter[];
 
@@ -14,7 +16,8 @@ class SolutionView {
     readonly solutionMap: Map<number, Solution>
     readonly letterMap: Map<CoordKey, Letter>
 
-    private constructor(solutions: Solution[], letters: Letter[]) {
+    private constructor(board_id: number, solutions: Solution[], letters: Letter[]) {
+        this.board_id = board_id;
         this.solutions = solutions;
         this.solutionMap = this.createSolutionMap(solutions);
         this.letters = letters;
@@ -23,6 +26,7 @@ class SolutionView {
 
     static fromDTO(dto: SolutionViewDTO): SolutionView {
         return new SolutionView(
+            dto.board_id,
             dto.solutions,
             dto.letters
         );

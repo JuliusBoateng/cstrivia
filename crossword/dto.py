@@ -15,6 +15,7 @@ class DTO:
 
 @dataclass
 class BoardDTO(DTO):
+    id: int
     title: str
     description: str
     rows: int
@@ -70,5 +71,6 @@ class BoardViewDTO(DTO):
 
 @dataclass
 class SolutionViewDTO(DTO):
+    board_id: int
     solutions: list[SolutionDTO]
     letters: list[LetterDTO]

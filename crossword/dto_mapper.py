@@ -17,7 +17,9 @@ from .models import Board, ClueCell, CluePlacement
 Purpose of mappers is to provide a way to transform Django models into their respective data objects.
 '''
 
-def map_to_board_view_dto(board: Board, placements_qs: QuerySet) -> BoardViewDTO:
+def map_to_board_view_dto(board: Board) -> BoardViewDTO:
+    placements_qs: QuerySet = board.clue_placements.all() # clue_placement prefetch prevents N+1 query
+
     board_dto: BoardDTO = _map_to_board_dto(board)
     placements: list[PlacementDTO] = _map_to_placement_dtos(placements_qs)
     cells: list[CellDTO] = _map_to_cell_dtos(placements_qs)
@@ -26,15 +28,20 @@ def map_to_board_view_dto(board: Board, placements_qs: QuerySet) -> BoardViewDTO
     return BoardViewDTO(board_dto, placements, cells, clues)
 
 
-def map_to_solution_view_dto(placements_qs: QuerySet) -> SolutionDTO:
+def map_to_solution_view_dto(board: Board) -> SolutionViewDTO:
+    placements_qs: QuerySet = board.clue_placements.all() # clue_placement prefetch prevents N+1 query
+
+    board_id: int = board.id
     solutions: list[SolutionDTO] = _map_to_solution_dtos(placements_qs)
     letters: list[LetterDTO] = _map_to_letter_dtos(placements_qs)
         
-    return SolutionViewDTO(solutions, letters)
+    return SolutionViewDTO(board_id, solutions, letters)
 
 def _map_to_board_dto(board: Board) -> BoardDTO:
     categories = [category.name for category in board.categories.all()] # categories prefetch prevents N+1 query
-    return BoardDTO(board.title,
+    return BoardDTO(
+            board.id,
+            board.title,
             board.description,
             board.rows,
             board.cols,

@@ -62,8 +62,10 @@ class BoardDomBuilder {
         const divElement = document.createElement("div");
         divElement.classList.add("fill")
 
-        const labelNumber = this.boardView.getLabel(row, col);
-        if (this.boardView.isPlacementStart(row, col) && labelNumber) {
+        const startingCell = this.boardView.isStartingCell(row, col);
+        if (startingCell) {
+            const labelNumber = this.boardView.getLabel(row, col);
+
             const spanElement = this.createSpan(labelNumber)
             divElement.appendChild(spanElement);
         }

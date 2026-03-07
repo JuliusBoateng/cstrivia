@@ -13,12 +13,14 @@ def serialize_board_view(dto: BoardViewDTO) -> dict:
 
 def serialize_solution_view(dto: SolutionViewDTO) -> dict:
     return {
+        "board_id": dto.board_id,
         "solutions": [_serialize_solution(s) for s in dto.solutions],
         "letters": [_serialize_letter(l) for l in dto.letters]
     }
 
 def _serialize_board(b: BoardDTO) -> dict:
     return {
+        "id": b.id,
         "title": b.title,
         "description": b.description,
         "rows": b.rows,
