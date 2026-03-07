@@ -1,8 +1,8 @@
 from django.db.models import Model, Prefetch
 
-from .dto_mapper import map_to_board_view_dto, map_to_solution_view_dto
+from .dto.mappers import map_to_board_view_dto, map_to_solution_view_dto
 from .models import Board, CluePlacement
-from .dto_serializer import serialize_board_view, serialize_solution_view
+from .dto.serializers import serialize_board_view, serialize_solution_view
 from typing import NamedTuple
 
 class views(NamedTuple):

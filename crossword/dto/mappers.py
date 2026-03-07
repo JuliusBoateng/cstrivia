@@ -1,6 +1,6 @@
 from django.db.models.query import QuerySet
 
-from .dto import (
+from .dto_classes import (
     BoardDTO,
     BoardViewDTO,
     CellDTO,
@@ -11,7 +11,7 @@ from .dto import (
     SolutionDTO,
     SolutionViewDTO
 )
-from .models import Board, ClueCell, CluePlacement
+from ..models import Board, ClueCell, CluePlacement
 
 '''
 Purpose of mappers is to provide a way to transform Django models into their respective data objects.

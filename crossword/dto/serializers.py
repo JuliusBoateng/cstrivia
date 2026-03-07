@@ -1,4 +1,4 @@
-from .dto import BoardDTO, BoardViewDTO, CellDTO, ClueDTO, PlacementDTO, LetterDTO, SolutionDTO, SolutionViewDTO
+from .dto_classes import BoardDTO, BoardViewDTO, CellDTO, ClueDTO, PlacementDTO, LetterDTO, SolutionDTO, SolutionViewDTO
 
 '''
 Purpose of custom serializer is to control which fields are sent to the FE
