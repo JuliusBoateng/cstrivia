@@ -30,7 +30,7 @@ h1 {
     background: whitesmoke;
 }
 
-.board-panel {
+.panel {
     display: flex;
     justify-content: center;
     align-items: flex-start;

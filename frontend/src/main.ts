@@ -1,5 +1,5 @@
 import {getTableElement, getBoardView, getSolutionView} from "./domLoader.js";
-import {BoardDomBuilder} from "./render/boardDomBuilder.js";
+import {createBoard, BoardDom} from "./render/boardDomBuilder.js";
 import {Direction, BoardView, CoordKey} from "./models/boardView.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -10,64 +10,85 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (boardView.board.id != solutionView.board_id) {
         throw new Error("SolutionView does not match BoardView")
     }
-    console.log(boardView)
-    console.log(solutionView)
 
-    new BoardDomBuilder(boardView, tableElement).buildTable();
-    // handleEvents(tableElement);
+    const boardDom: BoardDom = createBoard(boardView, tableElement);
 });
 
-// class InputHandler {
-//     tableElement: HTMLTableElement
-//     session: PuzzleSession;
-//     renderer: BoardRenderer;
-//     boardView: BoardView;
+class PuzzleController {
+    session: PuzzleSession;
+    renderer: BoardRenderer;
+    boardView: BoardView;
+    boardDom: BoardDom;
 
-//     constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: BoardRenderer, boardView: BoardView) {
-//         this.tableElement = tableElement;
-//         this.session = session;
-//         this.renderer = renderer;
-//         this.boardView = boardView;
+    constructor(session: PuzzleSession, renderer: BoardRenderer, boardView: BoardView, boardDom: BoardDom) {
+        this.session = session;
+        this.renderer = renderer;
+        this.boardView = boardView;
+        this.boardDom = boardDom;
 
-//         tableElement.addEventListener("click", this.handleCellClick);
-//     }
+        // tableElement.addEventListener("click", this.handleCellClick);
+    }
 
-//     handleCellClick(onclick: MouseEvent) {
-//         const target = onclick.target;
+    handleClick(onclick: MouseEvent) {
+        const target = onclick.target;
    
-//         if (!(target instanceof HTMLElement)) {
-//             return;
-//         }
+        if (!(target instanceof HTMLElement)) {
+            return;
+        }
 
-//         const tdElement = target.closest("td");
+        const tdElement = target.closest("td");
 
-//         if (!tdElement || tdElement.classList.contains("block")) {
-//             return;
-//         }
+        if (!tdElement || tdElement.classList.contains("block")) {
+            return;
+        }
 
-//         const row = Number(tdElement.dataset.row);
-//         const col = Number(tdElement.dataset.col);
+        const row = Number(tdElement.dataset.row);
+        const col = Number(tdElement.dataset.col);
 
-//         // this.session.moveTo(row, col)
-//         // this.renderer.highlightCursor(row, col)
-//     }
-// }
+        // this.session.moveTo(row, col)
+        // this.renderer.highlightCursor(row, col)
+    }
+
+    handleDoubleClick() {
+        //
+    }
+
+    handleLetterInput() {
+        //
+    }
+
+    handleArrowKey() {
+        //
+    }
+
+    handleBackspace() {
+        //
+    }
+}
 
 class PuzzleSession {
     row: number
     col: number
     direction: Direction
-    letters: Map<CoordKey, string> // sparse. only contains cells that are editable
+    letterGrid: string[][]
+    boardView: BoardView
 
-    constructor(row: number, col: number) {
-        this.row = row
-        this.col = col
-        
+    constructor(boardView: BoardView) {
+        this.boardView = boardView;
+        this.row = 0;
+        this.col = 0;
         this.direction = Direction.A
-        this.letters = new Map();
+        this.letterGrid = this.createLetterGrid();
     }
 
-    moveCell(row: number, col: number) {
+    private createLetterGrid() {
+        const rows = this.boardView.board.rows;
+        const cols = this.boardView.board.cols;
+        const letterGrid = Array.from({ length: rows }, () => Array(cols).fill(null))
+        return letterGrid;
+    }
+
+    moveCursor(row: number, col: number) {
         this.row = row
         this.col = col
     }
@@ -76,47 +97,63 @@ class PuzzleSession {
         this.direction = this.direction === Direction.A ? Direction.D : Direction.A;
     }
 
+    isBlock(row: number, col: number): boolean {
+        return !this.boardView.cellGrid[row][col]
+    }
+
+    getNextCell() {
+        //
+    }
+
+    getPlacementCells(placementId: number){
+        //
+    }
+
+
     setLetter(row: number, col: number, letter: string) {
-        const key = BoardView.createCoordKey(row, col)
-        this.letters.set(key, letter)
+        if (this.isBlock(row, col)) {
+            throw Error("Unable to write to block cell.")
+        }
+        
+        this.letterGrid[row][col] = letter;
+    }
+
+    getLetter(row: number, col: number) {
+        return this.letterGrid[row][col]
     }
 }
 
-// class BoardRenderer {
-//     private table: HTMLTableElement
-//     private cellMap: Map<string, HTMLInputElement> // dense. contain all cells including cells that are not-editable.
+class BoardRenderer {
+    private readonly boardView: BoardView
+    private cellGrid: HTMLTableCellElement[][]
 
-//     constructor(table: HTMLTableElement) {
-//         this.table = table
-//         this.cellMap = new Map()
-//     }
+    constructor(boardView: BoardView) {
+        this.boardView = boardView;
+        this.cellGrid = this.initializeCellGrid();
+    }
 
-//     moveCell(row: number, col: number) {
-//         // move cell
-//     }
+    initializeCellGrid(): HTMLTableCellElement[][] {
+        const rows = this.boardView.board.rows;
+        const cols = this.boardView.board.cols;
+        return Array.from({ length: rows }, () => Array(cols).fill(null))
+    }
 
-//     highlightPlacement(placementId: number) {
-//         // highlight the word
-//     }
 
-//     setLetter(row: number, col: number, letter: string) {
-//         const cell = this.cellMap.get(`${row},${col}`)
-//         if (cell) cell.value = letter
-//     }
+    renderLetter(row: number, col: number, letter: string | null) {
+        const input = this.cellGrid[row][col].querySelector("input")!
+        input.value = letter ?? ""
+    }
 
-//     highlightCell(row:number, col:number) {
-//         const cell = this.cellMap.get(`${row},${col}`)
-//         cell?.classList.add("active")
-//     }
+    focusCell(row: number, col: number) {
+        const input = this.cellGrid[row][col].querySelector("input")!
+        input.focus()
+    }
 
-//     highlightCursor(row: number, col: number) {
-//         this.clearCursor();
-//         const input = this.cellMap.get(`${row},${col}`);
-//         input?.classList.add("cursor");
-//     }
-    
-//     highlightPlacement(placementId: number) {
-//         const cells = this.placementCells.get(placementId);
-//         cells?.forEach(cell => cell.classList.add("active"));
-//     }
-// }
+    highlightCell(row:number, col:number) {
+        //
+    }
+
+    highlightPlacement(placementId: number) {
+        // highlight the word
+    }
+}

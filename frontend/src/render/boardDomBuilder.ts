@@ -1,82 +1,101 @@
 import {BoardView} from "../models/boardView.js";
 
-class BoardDomBuilder {
-    boardView: BoardView;
-    tableElement: HTMLTableElement
+interface BoardDom {
+    tableElement: HTMLTableElement;
+    cellGrid: HTMLTableCellElement[][];
+    inputGrid: HTMLInputElement[][];
+}
 
-    constructor(boardView: BoardView, tableElement: HTMLTableElement) {
-        this.boardView = boardView;
-        this.tableElement = tableElement;
-    }
+function createBoard(boardView: BoardView, tableElement: HTMLTableElement): BoardDom {
+    const cellGrid = initializeGrid()
+    const inputGrid = initializeGrid()
 
-    buildTable() {  
-        const tbody = this.createTableBody();
-        const caption = this.createCaption();
-        this.tableElement.appendChild(caption);
-        this.tableElement.appendChild(tbody);
-    }
+    const captionElement = createCaptionElement();
+    tableElement.appendChild(captionElement);
 
-    createTableBody(): HTMLTableSectionElement {
-        const rows = this.boardView.board.rows;
-        const cols = this.boardView.board.cols;
+    const tbodyElement = createTableBodyElement();
+    tableElement.appendChild(tbodyElement);
     
-        const tbody = document.createElement("tbody");
+    const dom: BoardDom = {
+        tableElement: tableElement,
+        cellGrid: cellGrid as HTMLTableCellElement[][],
+        inputGrid: inputGrid as HTMLInputElement[][]
+    }
+    
+    return dom;
+    
+
+    function initializeGrid(): HTMLElement[][] {
+        const rows = boardView.board.rows;
+        const cols = boardView.board.cols;
+
+        return Array.from({ length: rows }, () => Array(cols).fill(null))
+    }
+
+    function createTableBodyElement(): HTMLTableSectionElement {
+        const rows = boardView.board.rows;
+        const cols = boardView.board.cols;
+    
+        const tbodyElement = document.createElement("tbody");
         for (let row = 0; row < rows; row++) {
-            const rowElement = this.createRow(row, cols)
-            tbody.appendChild(rowElement);
+            const rowElement = createTableRowElement(row, cols)
+            tbodyElement.appendChild(rowElement);
         }
     
-        return tbody;
+        return tbodyElement;
     }
-    
-    private createRow(row: number, cols: number): HTMLTableRowElement {
+
+    function createTableRowElement(row: number, cols: number): HTMLTableRowElement {
         const rowElement = document.createElement("tr")
         rowElement.dataset.row = row.toString();
         
         for (let col = 0; col < cols; col++) {
-            const cellElement =  this.createCell(row, col)
+            const cellElement =  createTableCellElement(row, col)
+
+            cellGrid[row][col] = cellElement;
             rowElement.appendChild(cellElement);
         }
 
         return rowElement;
     }
 
-    private createCell(row: number, col: number): HTMLTableCellElement {
+    function createTableCellElement(row: number, col: number): HTMLTableCellElement {
         const cellElement = document.createElement("td");
         cellElement.classList.add("cell")
         cellElement.dataset.col = col.toString();
         cellElement.dataset.row = row.toString();
         
-        if (!this.boardView.getCell(row, col)) {
+        if (!boardView.getCell(row, col)) {
             cellElement.classList.add("block");
             return cellElement;
         }
 
-        const innerDiv = this.createDiv(row, col);
-        cellElement.appendChild(innerDiv);
+        const fillContainer = createFillContainer(row, col);
+        cellElement.appendChild(fillContainer);
         
         return cellElement;
     }
 
-    private createDiv(row: number, col: number): HTMLDivElement {
+    function createFillContainer(row: number, col: number): HTMLDivElement {
         const divElement = document.createElement("div");
         divElement.classList.add("fill")
 
-        const startingCell = this.boardView.isStartingCell(row, col);
+        const startingCell = boardView.isStartingCell(row, col);
         if (startingCell) {
-            const labelNumber = this.boardView.getLabel(row, col);
+            const labelNumber = boardView.getLabel(row, col);
 
-            const spanElement = this.createSpan(labelNumber)
+            const spanElement = createSpanElement(labelNumber)
             divElement.appendChild(spanElement);
         }
 
-        const inputElement = this.createLabel()
+        const inputElement = createInputElement();
+        inputGrid[row][col] = inputElement;
         divElement.appendChild(inputElement);
 
         return divElement;
     }
 
-    private createSpan(labelNumber: number): HTMLSpanElement {
+    function createSpanElement(labelNumber: number): HTMLSpanElement {
         const spanElement = document.createElement("span");
         spanElement.classList.add("label");
 
@@ -84,7 +103,7 @@ class BoardDomBuilder {
         return spanElement
     }
 
-    private createLabel(): HTMLInputElement {
+    function createInputElement(): HTMLInputElement {
         const inputElement = document.createElement("input");
         inputElement.maxLength = 1;
         inputElement.autocomplete = "off";
@@ -95,12 +114,12 @@ class BoardDomBuilder {
         return inputElement;
     }
 
-    private createCaption(): HTMLTableCaptionElement {
+    function createCaptionElement(): HTMLTableCaptionElement {
         const caption = document.createElement("caption");
-        caption.textContent = this.boardView.board.title;
+        caption.textContent = boardView.board.title;
 
         return caption;
     }
 }
 
-export {BoardDomBuilder};
+export {createBoard, BoardDom};

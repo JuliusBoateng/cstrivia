@@ -13,9 +13,35 @@
   <body class="off-white">
     <div class="main">
       <h1>Crossword</h1>
-        <div class = "board-panel">
+        <div class = "panel">
           <div class="board-wrapper">
             <table id="board" class="board-card"></table>
+          </div>
+          <div id="clues" class="clue-wrapper">
+            <details open>
+              <summary>To Do</summary>
+          
+              <details open>
+                <summary>Across</summary>
+                <ol id="across-clues"></ol>
+              </details>
+          
+              <details open>
+                <summary>Down</summary>
+                <ol id="down-clues"></ol>
+              </details>
+            </details>
+            <details>
+              <summary>Solved</summary>
+                <details open>
+                  <summary>Across</summary>
+                  <ol id="solved-across-clues"></ol>
+                </details>
+                <details open>
+                  <summary>Down</summary>
+                  <ol id="solved-down-clues"></ol>
+                </details>
+            </details>
           </div>
         </div>
     </div>
