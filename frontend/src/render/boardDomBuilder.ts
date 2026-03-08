@@ -1,7 +1,6 @@
 import {BoardView} from "../models/boardView.js";
 
 interface BoardDom {
-    tableElement: HTMLTableElement;
     cellGrid: HTMLTableCellElement[][];
     inputGrid: HTMLInputElement[][];
 }
@@ -17,7 +16,6 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     tableElement.appendChild(tbodyElement);
     
     const dom: BoardDom = {
-        tableElement: tableElement,
         cellGrid: cellGrid as HTMLTableCellElement[][],
         inputGrid: inputGrid as HTMLInputElement[][]
     }
@@ -65,11 +63,20 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         cellElement.dataset.col = col.toString();
         cellElement.dataset.row = row.toString();
         
-        if (!boardView.getCell(row, col)) {
+        const cell = boardView.getCell(row, col)
+        if (!cell) {
             cellElement.classList.add("block");
             return cellElement;
         }
 
+        if (cell.placements.A != null) {
+            cellElement.dataset.acrossPlacementId = cell.placements.A.toString();
+        }
+
+        if (cell.placements.D != null) {
+            cellElement.dataset.downPlacementId = cell.placements.D.toString();
+        }
+        
         const fillContainer = createFillContainer(row, col);
         cellElement.appendChild(fillContainer);
         

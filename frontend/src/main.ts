@@ -45,8 +45,8 @@ class PuzzleController {
         const row = Number(tdElement.dataset.row);
         const col = Number(tdElement.dataset.col);
 
-        // this.session.moveTo(row, col)
-        // this.renderer.highlightCursor(row, col)
+        this.session.moveCursor(row, col)
+        this.renderer.highlightCell(row, col)
     }
 
     handleDoubleClick() {
@@ -105,7 +105,7 @@ class PuzzleSession {
         //
     }
 
-    getPlacementCells(placementId: number){
+    getPlacementCells(placement_id: number){
         //
     }
 
@@ -124,36 +124,42 @@ class PuzzleSession {
 }
 
 class BoardRenderer {
-    private readonly boardView: BoardView
-    private cellGrid: HTMLTableCellElement[][]
+    cellGrid: HTMLTableCellElement[][];
+    inputGrid: HTMLInputElement[][];
 
-    constructor(boardView: BoardView) {
-        this.boardView = boardView;
-        this.cellGrid = this.initializeCellGrid();
+    constructor(boardDom: BoardDom) {
+        this.cellGrid = boardDom.cellGrid;
+        this.inputGrid = boardDom.inputGrid;
     }
-
-    initializeCellGrid(): HTMLTableCellElement[][] {
-        const rows = this.boardView.board.rows;
-        const cols = this.boardView.board.cols;
-        return Array.from({ length: rows }, () => Array(cols).fill(null))
-    }
-
 
     renderLetter(row: number, col: number, letter: string | null) {
-        const input = this.cellGrid[row][col].querySelector("input")!
-        input.value = letter ?? ""
+        const inputElement: HTMLInputElement = this.inputGrid[row][col];
+        if (!inputElement) {
+            throw Error("Unable to write to cell.")
+        }
+
+        inputElement.value = letter ?? ""
     }
 
     focusCell(row: number, col: number) {
-        const input = this.cellGrid[row][col].querySelector("input")!
-        input.focus()
+        const inputElement: HTMLInputElement = this.inputGrid[row][col];
+        if (!inputElement) {
+            throw Error("Unable to write to focus cell.")
+        }
+
+        inputElement.focus()
     }
 
-    highlightCell(row:number, col:number) {
-        //
+    highlightCell(row: number, col: number) {
+        const inputElement: HTMLInputElement = this.inputGrid[row][col];
+        if (!inputElement) {
+            throw Error("Unable to highlight cell.")
+        }
+
+        inputElement.classList.add("highlight");
     }
 
-    highlightPlacement(placementId: number) {
+    highlightPlacement(placement_id: number) {
         // highlight the word
     }
 }

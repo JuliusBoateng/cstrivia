@@ -18,6 +18,7 @@ class BoardView {
     readonly cellGrid: Cell[][];
     readonly labelGrid: number[][];
     readonly placementMap: Map<number, Placement>;
+    readonly placementCellMap: Map<number, CoordKey[]>;
 
     private constructor(
         board: Board,
@@ -33,6 +34,7 @@ class BoardView {
         this.cellGrid = this.createCellGrid(cells);
         this.labelGrid = this.createLabelGrid(placements);
         this.placementMap = this.createPlacementMap(placements);
+        this.placementCellMap = this.createPlacementCellMap(cells);
     }
 
     static fromDTO(dto: BoardViewDTO): BoardView {
@@ -48,6 +50,11 @@ class BoardView {
         return `${row},${col}`;
     }
 
+    static parseCoordKey(key: CoordKey): { row: number; col: number } {
+        const [row, col] = key.split(",").map(Number);
+        return { row, col };
+    }
+
     getCell(row: number, col: number): Cell | null {
         return this.cellGrid[row][col]
     }
@@ -58,6 +65,10 @@ class BoardView {
 
     getLabel(row: number, col: number): number {
         return this.labelGrid[row][col]
+    }
+
+    getCellsWithPlacementId(placement_id: number): CoordKey[] | undefined {
+        return this.placementCellMap.get(placement_id);
     }
 
     private createCellGrid(cells: Cell[]) {
@@ -102,6 +113,29 @@ class BoardView {
         }
 
         return labelGrid;
+    }
+    
+    private createPlacementCellMap(cells: Cell[]): Map<number, CoordKey[]> {
+        const map = new Map<number, CoordKey[]>();
+    
+        for (const {row, col, placements} of cells) {
+            const coordKey = BoardView.createCoordKey(row, col);
+            const placement_ids = Object.values(placements)
+            
+            for (const placement_id of placement_ids) {
+                if (placement_id == null) {
+                    continue;
+                }
+                    
+                if (!map.has(placement_id)) {
+                    map.set(placement_id, []);
+                }
+    
+                map.get(placement_id)!.push(coordKey);
+            }
+        }
+    
+        return map;
     }
 }
 
