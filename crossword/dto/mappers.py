@@ -9,7 +9,8 @@ from .dto_classes import (
     PlacementDTO,
     LetterDTO,
     SolutionDTO,
-    SolutionViewDTO
+    SolutionViewDTO,
+    PlacementPositionDTO
 )
 from ..models import Board, ClueCell, CluePlacement
 
@@ -84,7 +85,8 @@ def _map_to_cell_dtos(placements: QuerySet[CluePlacement]) -> list[CellDTO]:
             if key not in c_map:
                 c_map[key] = _map_to_cell_dto(c)
             
-            c_map[key].placements[direction] = placement.id
+            placement_position = _map_to_placement_position(placement.id, c_map[key].placement_index)
+            c_map[key].placement_positions[direction] = placement_position
 
     return list(c_map.values())
 
@@ -105,6 +107,9 @@ def _map_to_placement_dto(placement: CluePlacement) -> PlacementDTO:
 
 def _map_to_cell_dto(c: ClueCell) -> CellDTO:
     return CellDTO(c.row_index, c.col_index, c.letter)
+
+def _map_to_placement_position(placement_id: int, placement_index: int) -> PlacementPositionDTO:
+    return PlacementPositionDTO(placement_id, placement_index)
 
 def _map_to_clue_dto(placement: CluePlacement) -> ClueDTO:
     return ClueDTO(placement.clue.question, placement.id, Direction(placement.direction))

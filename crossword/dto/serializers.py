@@ -1,4 +1,4 @@
-from .dto_classes import BoardDTO, BoardViewDTO, CellDTO, ClueDTO, PlacementDTO, LetterDTO, SolutionDTO, SolutionViewDTO
+from .dto_classes import BoardDTO, BoardViewDTO, CellDTO, ClueDTO, PlacementDTO, LetterDTO, SolutionDTO, SolutionViewDTO, PlacementPositionDTO
 
 '''
 Purpose of custom serializer is to control which fields are sent to the FE
@@ -51,7 +51,7 @@ def _serialize_cell(c: CellDTO) -> dict:
         "row": c.row,
         "col": c.col,
         "letter": c.letter,
-        "placements": {k.value: v for k, v in c.placements.items()}, # Convert Direction enum to str
+        "placement_positions": {k.value: _serialize_placement_position(v) for k, v in c.placement_positions.items()}
     }
 
 def _serialize_letter(letter: LetterDTO) -> dict:
@@ -59,6 +59,12 @@ def _serialize_letter(letter: LetterDTO) -> dict:
         "row": letter.row,
         "col": letter.col,
         "letter": letter.letter
+    }
+
+def _serialize_placement_position(p: PlacementPositionDTO) -> dict:
+    return {
+        "placement_id": p.placement_id,
+        "placement_index": p.placement_index
     }
 
 def _serialize_solution(solution: SolutionDTO) -> dict:

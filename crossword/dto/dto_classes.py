@@ -33,13 +33,17 @@ class PlacementDTO(DTO):
     length: int
 
 @dataclass
+class PlacementPositionDTO(DTO):
+    placement_id: str
+    placement_index: int
+
+@dataclass
 class CellDTO(DTO):
     row: int
     col: int
     letter: str
 
-    # Direction : placement_id
-    placements: dict = field(default_factory=lambda: {
+    placement_positions: dict[Direction, PlacementPositionDTO | None] = field(default_factory=lambda: {
         Direction.A: None,
         Direction.D: None
     })

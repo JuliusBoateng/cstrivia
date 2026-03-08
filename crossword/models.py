@@ -182,9 +182,11 @@ class CluePlacement(models.Model):
             if self.direction == 'A':
                 row = self.start_row
                 col = self.start_col + i
+                index = i
             else:
                 row = self.start_row + i
                 col = self.start_col
+                index = i
 
             letter = self.clue.normalized_answer[i]
             
@@ -192,6 +194,7 @@ class CluePlacement(models.Model):
                 clue_placement=self,
                 row_index=row,
                 col_index=col,
+                placement_index = index,
                 letter=letter
             )
             cells.append(cell)
@@ -280,13 +283,19 @@ class ClueCell(models.Model):
     clue_placement = models.ForeignKey(CluePlacement, on_delete=models.CASCADE, related_name="clue_cells")
     row_index = models.PositiveIntegerField()
     col_index = models.PositiveIntegerField()
+    placement_index = models.PositiveIntegerField()
     letter = models.CharField(max_length=1)
 
     class Meta:
+        ordering = ["placement_index"]
         constraints = [
             models.UniqueConstraint(
                 fields=["clue_placement", "row_index", "col_index"],
                 name='clue_cell_unique_placement_row_col'
+            ),
+            models.UniqueConstraint(
+                fields=["clue_placement", "placement_index"],
+                name='clue_cell_unique_placement_placement_index'
             )
         ]
         indexes = [
