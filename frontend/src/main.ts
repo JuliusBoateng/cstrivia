@@ -1,6 +1,6 @@
 import {getTableElement, getBoardView, getSolutionView} from "./domLoader.js";
 import {createBoard, BoardDom} from "./render/boardDomBuilder.js";
-import {Direction, BoardView, CoordKey} from "./models/boardView.js";
+import {Direction, Placement, BoardView, CoordKey} from "./models/boardView.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
     const tableElement = getTableElement();
@@ -69,15 +69,20 @@ class PuzzleController {
 class PuzzleSession {
     row: number
     col: number
-    direction: Direction
+    activePlacement: Placement
+    activePlacementIndex: number;
     letterGrid: string[][]
     boardView: BoardView
 
     constructor(boardView: BoardView) {
         this.boardView = boardView;
-        this.row = 0;
-        this.col = 0;
-        this.direction = Direction.A
+
+        // start cursor on first placement
+        this.activePlacement = this.boardView.getPlacements()[0];
+        this.activePlacementIndex = 0;
+        this.row = this.activePlacement.start_row;
+        this.col = this.activePlacement.start_col;
+
         this.letterGrid = this.createLetterGrid();
     }
 
@@ -88,27 +93,66 @@ class PuzzleSession {
         return letterGrid;
     }
 
+    // TODO review more closely
     moveCursor(row: number, col: number) {
-        this.row = row
-        this.col = col
+        const cell = this.boardView.getCell(row, col);
+        if (!cell) return;
+    
+        this.row = row;
+        this.col = col;
+    
+        let direction = this.activePlacement.direction;
+        let placementId = cell.placements[direction];
+    
+        // if no placement in current direction, switch
+        if (placementId == null) {
+            direction = direction === Direction.A ? Direction.D : Direction.A;
+            placementId = cell.placements[direction];
+        }
+    
+        if (placementId == null) return;
+    
+        const placement = this.boardView.getPlacement(placementId);
+        if (!placement) return;
+    
+        this.activePlacement = placement;
+    
+        const cells = this.boardView.getCellsWithPlacementId(placementId);
+        if (!cells) return;
+    
+        this.activePlacementIndex = cells.findIndex(c => c === cell);
     }
 
     toggleDirection() {
-        this.direction = this.direction === Direction.A ? Direction.D : Direction.A;
+        const newDirection: Direction = this.activePlacement.direction === Direction.A ? Direction.D : Direction.A;
+        const currentCell = this.boardView.getCell(this.row, this.col)
+        if (!currentCell) return;
+
+        const placement_id = currentCell.placements[newDirection];
+        if (placement_id == null) return;
+
+        const placement = this.boardView.getPlacement(placement_id);
+        if (!placement) return;
+
+        this.activePlacement = placement;
     }
 
     isBlock(row: number, col: number): boolean {
         return !this.boardView.cellGrid[row][col]
     }
 
-    getNextCell() {
-        //
+    getNextCell(): {row: number, col: number} | null {
+        const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
+        if (!cells) return null;
+    
+        const nextIndex = this.activePlacementIndex + 1;
+    
+        if (nextIndex >= cells.length) return null;
+    
+        const nextCell = cells[nextIndex]; // cells are sorted
+    
+        return { row: nextCell.row, col: nextCell.col };
     }
-
-    getPlacementCells(placement_id: number){
-        //
-    }
-
 
     setLetter(row: number, col: number, letter: string) {
         if (this.isBlock(row, col)) {
@@ -151,15 +195,17 @@ class BoardRenderer {
     }
 
     highlightCell(row: number, col: number) {
-        const inputElement: HTMLInputElement = this.inputGrid[row][col];
-        if (!inputElement) {
+        const cellElement: HTMLTableCellElement = this.cellGrid[row][col];
+        if (cellElement.classList.contains("block")) {
             throw Error("Unable to highlight cell.")
         }
 
-        inputElement.classList.add("highlight");
+        cellElement.classList.add("highlight");
     }
 
-    highlightPlacement(placement_id: number) {
-        // highlight the word
+    highlightPlacement(cellElements: HTMLTableCellElement[]) {
+       for (const cellElement of cellElements) {
+            cellElement.classList.add("highlight");
+       }
     }
 }

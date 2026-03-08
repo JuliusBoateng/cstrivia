@@ -18,7 +18,7 @@ class BoardView {
     readonly cellGrid: Cell[][];
     readonly labelGrid: number[][];
     readonly placementMap: Map<number, Placement>;
-    readonly placementCellMap: Map<number, CoordKey[]>;
+    readonly placementCellMap: Map<number, Cell[]>;
 
     private constructor(
         board: Board,
@@ -27,14 +27,17 @@ class BoardView {
         clues: Clue[]
     ) {
         this.board = board;
-        this.placements = placements;
-        this.cells = cells;
+
+        // Invariant:
+        // cells sorted by (row, col)
+        // placements sorted by (start_row, start_col, direction)
+        this.placements = this.sortPlacements(placements);
+        this.cells = this.sortCells(cells);
         this.clues = clues;
-        
-        this.cellGrid = this.createCellGrid(cells);
-        this.labelGrid = this.createLabelGrid(placements);
-        this.placementMap = this.createPlacementMap(placements);
-        this.placementCellMap = this.createPlacementCellMap(cells);
+        this.cellGrid = this.createCellGrid();
+        this.labelGrid = this.createLabelGrid();
+        this.placementMap = this.createPlacementMap();
+        this.placementCellMap = this.createPlacementCellMap();
     }
 
     static fromDTO(dto: BoardViewDTO): BoardView {
@@ -67,40 +70,58 @@ class BoardView {
         return this.labelGrid[row][col]
     }
 
-    getCellsWithPlacementId(placement_id: number): CoordKey[] | undefined {
+    getCellsWithPlacementId(placement_id: number): Cell[] | undefined {
         return this.placementCellMap.get(placement_id);
     }
 
-    private createCellGrid(cells: Cell[]) {
+    getPlacements(): Placement[] {
+        return this.placements;
+    }
+
+    getPlacement(placement_id: number): Placement | undefined {
+        return this.placementMap.get(placement_id);
+    }
+
+    private createCellGrid() {
         const rows = this.board.rows;
         const cols = this.board.cols;
 
         const cellGrid = Array.from({ length: rows }, () => Array(cols).fill(null))
 
-        for (const cell of cells) {
+        for (const cell of this.cells) {
             cellGrid[cell.row][cell.col] = cell;
         }
 
         return cellGrid;
     }
 
-    private createPlacementMap(placements: Placement[]) {
-        return new Map(
-            placements.map(placement => [placement.id, placement])
+    private sortCells(cells: Cell[]): Cell[] {
+        const sortedCells = [...cells]
+                                    .sort((a, b) => a.row - b.row || a.col - b.col);
+        return sortedCells;
+    }
+
+    private sortPlacements(placements: Placement[]): Placement[] {
+        return [...placements].sort((a, b) =>
+            a.start_row - b.start_row ||
+            a.start_col - b.start_col ||
+            a.direction === Direction.A ? -1 : 1 // Sort by direction
         );
     }
 
-    private createLabelGrid(placements: Placement[]): number[][] {
+    private createPlacementMap() {
+        return new Map(
+            this.placements.map(placement => [placement.id, placement])
+        );
+    }
+
+    private createLabelGrid(): number[][] {
         const rows = this.board.rows;
         const cols = this.board.cols;
         const labelGrid = Array.from({ length: rows }, () => Array(cols).fill(0));
-
-        // sort placements by row, col
-        const sortedPlacements = [...placements]
-                                    .sort((a, b) => a.start_row - b.start_row || a.start_col - b.start_col);
         
         let label = 1;
-        for (const p of sortedPlacements) {
+        for (const p of this.placements) {
             const r = p.start_row;
             const c = p.start_col;
 
@@ -115,12 +136,11 @@ class BoardView {
         return labelGrid;
     }
     
-    private createPlacementCellMap(cells: Cell[]): Map<number, CoordKey[]> {
-        const map = new Map<number, CoordKey[]>();
+    private createPlacementCellMap(): Map<number, Cell[]> {
+        const map = new Map<number, Cell[]>();
     
-        for (const {row, col, placements} of cells) {
-            const coordKey = BoardView.createCoordKey(row, col);
-            const placement_ids = Object.values(placements)
+        for (const cell of this.cells) {
+            const placement_ids = Object.values(cell.placements)
             
             for (const placement_id of placement_ids) {
                 if (placement_id == null) {
@@ -130,8 +150,8 @@ class BoardView {
                 if (!map.has(placement_id)) {
                     map.set(placement_id, []);
                 }
-    
-                map.get(placement_id)!.push(coordKey);
+                
+                map.get(placement_id)!.push(cell);
             }
         }
     
@@ -206,4 +226,4 @@ class Clue {
     }
 }
 
-export {BoardView, CoordKey, Direction};
+export {BoardView, CoordKey, Placement, Direction};
