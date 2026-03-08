@@ -93,6 +93,20 @@ class PuzzleSession {
         return letterGrid;
     }
 
+    advanceCursor() {
+        const next = this.getNextCell();
+        if (!next) return;
+    
+        this.moveCursor(next.row, next.col);
+    }
+
+    reverseCursor() {
+        const previous = this.getPreviousCell();
+        if (!previous) return;
+    
+        this.moveCursor(previous.row, previous.col);
+    }
+
     // TODO review more closely
     moveCursor(row: number, col: number) {
         const cell = this.boardView.getCell(row, col);
@@ -123,6 +137,7 @@ class PuzzleSession {
         this.activePlacementIndex = cells.findIndex(c => c === cell);
     }
 
+    // TODO Look more closely
     toggleDirection() {
         const newDirection: Direction = this.activePlacement.direction === Direction.A ? Direction.D : Direction.A;
         const currentCell = this.boardView.getCell(this.row, this.col)
@@ -135,13 +150,19 @@ class PuzzleSession {
         if (!placement) return;
 
         this.activePlacement = placement;
+
+        const cells = this.boardView.getCellsWithPlacementId(placement_id);
+        if (!cells) return;
+    
+        this.activePlacementIndex = cells.findIndex(c => c === currentCell);
     }
 
     isBlock(row: number, col: number): boolean {
-        return !this.boardView.cellGrid[row][col]
+        return this.boardView.getCell(row, col) == null;
     }
 
-    getNextCell(): {row: number, col: number} | null {
+    // TODO Look more closely
+    private getNextCell(): {row: number, col: number} | null {
         const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
         if (!cells) return null;
     
@@ -152,6 +173,20 @@ class PuzzleSession {
         const nextCell = cells[nextIndex]; // cells are sorted
     
         return { row: nextCell.row, col: nextCell.col };
+    }
+
+    // TODO Look more closely
+    private getPreviousCell(): {row: number, col: number} | null {
+        const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
+        if (!cells) return null;
+    
+        const previousIndex = this.activePlacementIndex - 1;
+    
+        if (previousIndex < 0) return null;
+    
+        const previousCell = cells[previousIndex]; // cells are sorted
+    
+        return {row: previousCell.row, col: previousCell.col};
     }
 
     setLetter(row: number, col: number, letter: string) {
