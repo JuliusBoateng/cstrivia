@@ -87,7 +87,7 @@ def _map_to_cell_dtos(placements: QuerySet[CluePlacement]) -> list[CellDTO]:
             if key not in c_map:
                 c_map[key] = _map_to_cell_dto(c)
             
-            placement_position = _map_to_placement_position(placement.id, c_map[key].placement_index)
+            placement_position = _map_to_placement_position(placement.id, c.placement_index)
             c_map[key].placement_positions[direction] = placement_position
 
     return list(c_map.values())
