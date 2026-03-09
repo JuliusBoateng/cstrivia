@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const solutionView = getSolutionView();
 
     if (boardView.board.id != solutionView.board_id) {
-        throw new Error("SolutionView does not match BoardView")
+        throw Error("SolutionView does not match BoardView")
     }
 
     const boardDom: BoardDom = createBoard(boardView, tableElement);
@@ -69,13 +69,18 @@ class PuzzleController {
 class PuzzleSession {
     row: number
     col: number
+    rows: number
+    cols: number
     activePlacement: Placement
     activePlacementIndex: number;
-    letterGrid: string[][]
+    letterGrid: (string | null)[][]
     boardView: BoardView
+
 
     constructor(boardView: BoardView) {
         this.boardView = boardView;
+        this.rows = this.boardView.board.rows;
+        this.cols = this.boardView.board.cols;
 
         // start cursor on first placement
         this.activePlacement = this.boardView.getPlacements()[0];
@@ -85,14 +90,6 @@ class PuzzleSession {
 
         this.letterGrid = this.createLetterGrid();
     }
-
-    private createLetterGrid() {
-        const rows = this.boardView.board.rows;
-        const cols = this.boardView.board.cols;
-        const letterGrid = Array.from({ length: rows }, () => Array(cols).fill(null))
-        return letterGrid;
-    }
-
     advanceCursor() {
         const next = this.getNextCell();
         if (!next) return;
@@ -107,7 +104,6 @@ class PuzzleSession {
         this.moveCursor(previous.row, previous.col);
     }
 
-    // TODO review more closely
     moveCursor(row: number, col: number) {
         const cell = this.boardView.getCell(row, col);
         if (!cell) return;
@@ -116,88 +112,103 @@ class PuzzleSession {
         this.col = col;
     
         let direction = this.activePlacement.direction;
+        let position = cell.placement_positions[direction];
 
-        // if direction is not available in current position switch
-        if (!(direction in cell.placement_positions)) {
+        if (!position) {
             direction = direction === Direction.A ? Direction.D : Direction.A;
+            position = cell.placement_positions[direction];
         }
 
-        const placementId = cell.placement_positions[direction].placement_id;
-        const placement = this.boardView.getPlacement(placementId);
+        if (!position) return;
+
+        const placement = this.boardView.getPlacement(position.placement_id);
         if (!placement) return;
     
-        this.activePlacement = placement;
-    
-        const cells = this.boardView.getCellsWithPlacementId(placementId);
-        if (!cells) return;
-    
-        this.activePlacementIndex = cells.findIndex(c => c === cell);
+        this.activePlacement = placement;    
+        this.activePlacementIndex = position.placement_index;
     }
 
-    // TODO Look more closely
     toggleDirection() {
-        const newDirection: Direction = this.activePlacement.direction === Direction.A ? Direction.D : Direction.A;
-        const currentCell = this.boardView.getCell(this.row, this.col)
-        if (!currentCell) return;
+        const cell = this.boardView.getCell(this.row, this.col)
+        if (!cell) return;
 
-        if (!(newDirection in currentCell.placement_positions)) {
-            return
-        }
+        const currentDirection = this.activePlacement.direction;
+        const newDirection: Direction = currentDirection === Direction.A ? Direction.D : Direction.A;
         
-        const placement_id = currentCell.placement_positions[newDirection].placement_id;
-        const placement = this.boardView.getPlacement(placement_id);
+        const position = cell.placement_positions[newDirection];
+        if (!position) return; // no crossing word
+
+        const placement = this.boardView.getPlacement(position.placement_id);
         if (!placement) return;
 
         this.activePlacement = placement;
-
-        const cells = this.boardView.getCellsWithPlacementId(placement_id);
-        if (!cells) return;
-    
-        this.activePlacementIndex = cells.findIndex(c => c === currentCell);
+        this.activePlacementIndex = position.placement_index;
     }
 
-    isBlock(row: number, col: number): boolean {
-        return this.boardView.getCell(row, col) == null;
-    }
+    setLetter(row: number, col: number, letter: string | null) {
+        if (!this.isInBounds(row, col)) {
+            throw Error("Cell out of bounds.");
+        }
 
-    // TODO Look more closely
-    private getNextCell(): {row: number, col: number} | null {
-        const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
-        if (!cells) return null;
-    
-        const nextIndex = this.activePlacementIndex + 1;
-    
-        if (nextIndex >= cells.length) return null;
-    
-        const nextCell = cells[nextIndex]; // cells are sorted
-    
-        return { row: nextCell.row, col: nextCell.col };
-    }
-
-    // TODO Look more closely
-    private getPreviousCell(): {row: number, col: number} | null {
-        const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
-        if (!cells) return null;
-    
-        const previousIndex = this.activePlacementIndex - 1;
-    
-        if (previousIndex < 0) return null;
-    
-        const previousCell = cells[previousIndex]; // cells are sorted
-    
-        return {row: previousCell.row, col: previousCell.col};
-    }
-
-    setLetter(row: number, col: number, letter: string) {
         if (this.isBlock(row, col)) {
             throw Error("Unable to write to block cell.")
         }
         
-        this.letterGrid[row][col] = letter;
+        if (letter !== null) {
+            if (letter.length !== 1) {
+                throw new Error("Letter must be a single character.");
+            }
+            letter = letter.toUpperCase();
+        }
+
+        this.letterGrid[row][col] = letter
     }
 
-    getLetter(row: number, col: number) {
+    getLetter(row: number, col: number): string | null {
+        if (!this.isInBounds(row, col)) {
+            throw Error("Cell out of bounds.");
+        }
+
         return this.letterGrid[row][col]
+    }
+
+    isFilled(row: number, col: number): boolean {
+        return this.getLetter(row, col) !== null;
+    }
+
+    private createLetterGrid() {
+        const letterGrid = Array.from({length: this.rows}, () => Array(this.cols).fill(null))
+        return letterGrid;
+    }
+
+    private getNextCell(): {row: number; col: number} | null {
+        const nextIndex = this.activePlacementIndex + 1;
+        if (nextIndex >= this.activePlacement.length) return null;
+    
+        const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
+        if (!cells) return null;
+
+        const nextCell = cells[nextIndex]; // cells are sorted
+        return {row: nextCell.row, col: nextCell.col};
+    }
+
+    private getPreviousCell(): {row: number; col: number} | null {
+        const previousIndex = this.activePlacementIndex - 1;
+        if (previousIndex < 0) return null;
+    
+        const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
+        if (!cells) return null;
+
+        const previousCell = cells[previousIndex]; // cells are sorted
+        return {row: previousCell.row, col: previousCell.col};
+    }
+
+    private isBlock(row: number, col: number): boolean {
+        return this.boardView.getCell(row, col) == null;
+    }
+
+    private isInBounds(row: number, col: number): boolean {
+        return (0 <= row && row < this.rows) && (0 <= col && col < this.cols)
     }
 }
 
