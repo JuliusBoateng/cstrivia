@@ -17,6 +17,8 @@ class DTO:
 class BoardDTO(DTO):
     id: int
     title: str
+    puzzle_number: int
+    published: bool
     description: str
     rows: int
     cols: int
@@ -41,6 +43,7 @@ class PlacementPositionDTO(DTO):
 class CellDTO(DTO):
     row: int
     col: int
+    placement_index: int
     letter: str
 
     placement_positions: dict[Direction, PlacementPositionDTO | None] = field(default_factory=lambda: {

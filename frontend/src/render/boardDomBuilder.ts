@@ -1,4 +1,4 @@
-import {BoardView} from "../models/boardView.js";
+import {BoardView, Direction} from "../models/boardView.js";
 
 interface BoardDom {
     cellGrid: HTMLTableCellElement[][];
@@ -69,12 +69,14 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
             return cellElement;
         }
 
-        if (cell.placements.A != null) {
-            cellElement.dataset.acrossPlacementId = cell.placements.A.toString();
+        if (Direction.A in cell.placement_positions) {
+            let placement_id = cell.placement_positions[Direction.A].placement_id
+            cellElement.dataset.acrossPlacementId = placement_id.toString();
         }
 
-        if (cell.placements.D != null) {
-            cellElement.dataset.downPlacementId = cell.placements.D.toString();
+        if (Direction.D in cell.placement_positions) {
+            let placement_id = cell.placement_positions[Direction.D].placement_id
+            cellElement.dataset.downPlacementId = placement_id.toString();
         }
         
         const fillContainer = createFillContainer(row, col);

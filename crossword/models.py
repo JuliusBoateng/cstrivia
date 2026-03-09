@@ -36,12 +36,15 @@ class Board(models.Model):
         )
     
     title = models.CharField(max_length=50, unique=True)
+    puzzle_number = models.PositiveIntegerField(unique=True, blank=True) # user visible puzzle number
+    published = models.BooleanField(default=False)
     description = models.CharField(max_length=200)
     categories = models.ManyToManyField(Category, related_name="boards")
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True) # also updates when saving CluePlacement
+    updated_at = models.DateTimeField(auto_now=True, editable=False) # also updates when saving CluePlacement
     
     class Meta:
+        ordering = ["puzzle_number"]
         constraints = [
             models.CheckConstraint(
                 condition=models.Q(cols=models.F("rows")),
@@ -59,6 +62,15 @@ class Board(models.Model):
 
     def save(self, *args, **kwargs):
         self.full_clean() # board check
+
+        if self.puzzle_number is None:
+            with transaction.atomic():
+                current_puzzle_number = Board.objects.aggregate(
+                    max_num=models.Max('puzzle_number', default=0)
+                    )['max_num']
+                
+                self.puzzle_number = current_puzzle_number + 1
+
         super().save(*args, **kwargs)
 
 
@@ -68,13 +80,13 @@ Questions/Answers for puzzles
 class Clue(models.Model):
     question = models.CharField(max_length=150)
     display_answer = models.CharField(max_length=21) # Keep diacritics
-    normalized_answer = models.CharField(max_length=21) # derived field. diacritics removed
-    categories = models.ManyToManyField(Category, related_name="clues")
+    normalized_answer = models.CharField(max_length=21, editable=False) # derived field. diacritics removed
+    categories = models.ManyToManyField(Category, related_name="clues", null=True, blank=True)
     
     '''
     Filters allowed chars
     '''
-    def _clean_answer(raw_answer: str) -> str:
+    def _clean_answer(self, raw_answer: str) -> str:
         # keep unicode letters and standard 0-9 digits.
         # remove all spaces and punctuations.
         # preserve diacritics
@@ -89,7 +101,7 @@ class Clue(models.Model):
     '''
     Canonical answer removes diacritics
     '''
-    def _normalize_cleaned_answer(cleaned_answer: str) -> str:
+    def _normalize_cleaned_answer(self, cleaned_answer: str) -> str:
         # NFD decomposes chars into base + diacritic/accent.
         # Unlike NFKD, chars like ﬁ remain unchanged.
         normalized = normalize("NFD", cleaned_answer)
@@ -230,7 +242,7 @@ class CluePlacement(models.Model):
 
         return qs
 
-    def validate_cells(self, new_cells, overlapping_cells):
+    def _validate_cells(self, new_cells, overlapping_cells):
         overlapping_by_coord = {
             (c.row_index, c.col_index): c
             for c in overlapping_cells
@@ -264,7 +276,7 @@ class CluePlacement(models.Model):
 
         new_cells = self._create_cells()
         overlapping_cells = self._fetch_overlapping_cells()
-        self.validate_cells(new_cells, overlapping_cells)
+        self._validate_cells(new_cells, overlapping_cells)
         
         with transaction.atomic(): # transactions automatically rollback in case of error
             self._delete_previous_clue_cells()

@@ -116,16 +116,13 @@ class PuzzleSession {
         this.col = col;
     
         let direction = this.activePlacement.direction;
-        let placementId = cell.placements[direction];
-    
-        // if no placement in current direction, switch
-        if (placementId == null) {
+
+        // if direction is not available in current position switch
+        if (!(direction in cell.placement_positions)) {
             direction = direction === Direction.A ? Direction.D : Direction.A;
-            placementId = cell.placements[direction];
         }
-    
-        if (placementId == null) return;
-    
+
+        const placementId = cell.placement_positions[direction].placement_id;
         const placement = this.boardView.getPlacement(placementId);
         if (!placement) return;
     
@@ -143,9 +140,11 @@ class PuzzleSession {
         const currentCell = this.boardView.getCell(this.row, this.col)
         if (!currentCell) return;
 
-        const placement_id = currentCell.placements[newDirection];
-        if (placement_id == null) return;
-
+        if (!(newDirection in currentCell.placement_positions)) {
+            return
+        }
+        
+        const placement_id = currentCell.placement_positions[newDirection].placement_id;
         const placement = this.boardView.getPlacement(placement_id);
         if (!placement) return;
 

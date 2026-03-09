@@ -22,6 +22,8 @@ def _serialize_board(b: BoardDTO) -> dict:
     return {
         "id": b.id,
         "title": b.title,
+        "puzzle_number": b.puzzle_number,
+        "published": b.published,
         "description": b.description,
         "rows": b.rows,
         "cols": b.cols,
@@ -51,7 +53,9 @@ def _serialize_cell(c: CellDTO) -> dict:
         "row": c.row,
         "col": c.col,
         "letter": c.letter,
-        "placement_positions": {k.value: _serialize_placement_position(v) for k, v in c.placement_positions.items()}
+        "placement_positions": {k.value: _serialize_placement_position(v)
+                                for k, v in c.placement_positions.items()
+                                if v is not None}
     }
 
 def _serialize_letter(letter: LetterDTO) -> dict:

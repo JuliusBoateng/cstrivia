@@ -96,16 +96,15 @@ class BoardView {
     }
 
     private sortCells(cells: Cell[]): Cell[] {
-        const sortedCells = [...cells]
-                                    .sort((a, b) => a.row - b.row || a.col - b.col);
+        const sortedCells = [...cells].sort((a, b) => a.row - b.row || a.col - b.col);
         return sortedCells;
     }
 
     private sortPlacements(placements: Placement[]): Placement[] {
         return [...placements].sort((a, b) =>
-            a.start_row - b.start_row ||
-            a.start_col - b.start_col ||
-            a.direction === Direction.A ? -1 : 1 // Sort by direction
+            (a.start_row - b.start_row) ||
+            (a.start_col - b.start_col) ||
+            (a.direction.localeCompare(b.direction)) // Sort by direction
         );
     }
 
@@ -140,18 +139,14 @@ class BoardView {
         const map = new Map<number, Cell[]>();
     
         for (const cell of this.cells) {
-            const placement_ids = Object.values(cell.placements)
+            const placement_positions = Object.values(cell.placement_positions)
             
-            for (const placement_id of placement_ids) {
-                if (placement_id == null) {
-                    continue;
-                }
-                    
-                if (!map.has(placement_id)) {
-                    map.set(placement_id, []);
+            for (const position of placement_positions) {
+                if (!map.has(position.placement_id)) {
+                    map.set(position.placement_id, []);
                 }
                 
-                map.get(placement_id)!.push(cell);
+                map.get(position.placement_id)!.push(cell);
             }
         }
     
@@ -162,6 +157,8 @@ class BoardView {
 class Board {
     readonly id: number;
     readonly title: string;
+    readonly puzzle_number: number;
+    readonly published: boolean;
     readonly description: string;
     readonly rows: number;
     readonly cols: number;
@@ -169,9 +166,11 @@ class Board {
     readonly createdAt: string;
     readonly updatedAt: string;
 
-    constructor(id: number, title: string, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
+    constructor(id: number, title: string, puzzle_number: number, published: boolean, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
         this.id = id;
         this.title = title;
+        this.puzzle_number = puzzle_number;
+        this.published = published;
         this.description = description;
         this.rows = rows;
         this.cols = cols;
@@ -202,15 +201,25 @@ class Placement {
     }
 }
 
+class PlacementPositions {
+    placement_id: number;
+    placement_index: number;
+
+    constructor(placement_id: number, placement_index: number){
+        this.placement_id = placement_id;
+        this.placement_index = placement_index;
+    }
+}
+
 class Cell {
     readonly row: number;
     readonly col: number;
-    readonly placements: Record<Direction, number>
+    readonly placement_positions: Record<Direction, PlacementPositions>
 
-    constructor(row: number, col: number, placements: Record<Direction, number>) {
+    constructor(row: number, col: number, placement_positions: Record<Direction, PlacementPositions>) {
         this.row = row;
         this.col = col;
-        this.placements = placements
+        this.placement_positions = placement_positions;
     }
 }
 
