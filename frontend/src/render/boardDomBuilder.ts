@@ -1,6 +1,7 @@
 import {BoardView, Direction} from "../models/boardView.js";
 
 interface BoardDom {
+    tableElement: HTMLTableElement;
     cellGrid: HTMLTableCellElement[][];
     inputGrid: HTMLInputElement[][];
 }
@@ -16,6 +17,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     tableElement.appendChild(tbodyElement);
     
     const dom: BoardDom = {
+        tableElement: tableElement,
         cellGrid: cellGrid as HTMLTableCellElement[][],
         inputGrid: inputGrid as HTMLInputElement[][]
     }
@@ -26,7 +28,6 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     function initializeGrid(): HTMLElement[][] {
         const rows = boardView.board.rows;
         const cols = boardView.board.cols;
-
         return Array.from({ length: rows }, () => Array(cols).fill(null))
     }
 
@@ -66,6 +67,9 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         const cell = boardView.getCell(row, col)
         if (!cell) {
             cellElement.classList.add("block");
+            const fillContainer = createEmptyFillContainer()
+            cellElement.appendChild(fillContainer)
+            
             return cellElement;
         }
 
@@ -85,9 +89,14 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         return cellElement;
     }
 
-    function createFillContainer(row: number, col: number): HTMLDivElement {
+    function createEmptyFillContainer(): HTMLDivElement {
         const divElement = document.createElement("div");
         divElement.classList.add("fill")
+        return divElement
+    }
+
+    function createFillContainer(row: number, col: number): HTMLDivElement {
+        const divElement = createEmptyFillContainer();
 
         const startingCell = boardView.isStartingCell(row, col);
         if (startingCell) {

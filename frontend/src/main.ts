@@ -26,42 +26,82 @@ class PuzzleController {
         this.boardView = boardView;
         this.boardDom = boardDom;
 
-        // tableElement.addEventListener("click", this.handleCellClick);
+        boardDom.tableElement.addEventListener("click", this.handleClick);
+        boardDom.tableElement.addEventListener("keydown", this.handleKeydown);
+
     }
 
-    handleClick(onclick: MouseEvent) {
-        const target = onclick.target;
+    handleClick(event: MouseEvent) {
+        const target = event.target;
    
         if (!(target instanceof HTMLElement)) {
             return;
         }
 
         const tdElement = target.closest("td");
+        if (!(tdElement instanceof HTMLTableCellElement)) return;
 
-        if (!tdElement || tdElement.classList.contains("block")) {
+        if (tdElement.classList.contains("block")) {
             return;
         }
 
         const row = Number(tdElement.dataset.row);
         const col = Number(tdElement.dataset.col);
 
+        if (Number.isNaN(row) || Number.isNaN(col)) {
+            return;
+        }
+
+        if (this.session.row === row && this.session.col === col) {
+            this.session.toggleDirection();
+        }
+
         this.session.moveCursor(row, col)
         this.renderer.highlightCell(row, col)
     }
 
-    handleDoubleClick() {
+    handleKeydown(event: KeyboardEvent) {
+        const key = event.key;
+
+        // ignore modifier keys
+        if (event.ctrlKey || event.metaKey || event.altKey) return;
+        
+        // Handle char inputs
+        if (key.length === 1) {
+            this.handleLetter(key);
+            return;
+        }
+
+        if (key === "Backspace") {
+            // this.handleBackspace();
+            return;
+        }
+    
+        if (key === "Delete") {
+            // this.handleDelete();
+            return;
+        }
+    
+        if (key === "ArrowLeft") {
+            // this.handleArrowLeft();
+            return;
+        }
+    
+        if (key === "ArrowRight") {
+            // this.handleArrowRight();
+            return;
+        }
+    }
+
+    private handleLetter(key: string) {
+        this.session.setLetter()
+    }
+
+    private handleArrowKey() {
         //
     }
 
-    handleLetterInput() {
-        //
-    }
-
-    handleArrowKey() {
-        //
-    }
-
-    handleBackspace() {
+    private handleBackspace() {
         //
     }
 }
@@ -73,6 +113,7 @@ class PuzzleSession {
     cols: number
     activePlacement: Placement
     activePlacementIndex: number;
+    // currentWordLength: Map<Placement, number>,
     letterGrid: (string | null)[][]
     boardView: BoardView
 
@@ -87,6 +128,7 @@ class PuzzleSession {
         this.activePlacementIndex = 0;
         this.row = this.activePlacement.start_row;
         this.col = this.activePlacement.start_col;
+        // this.currentWordLength = 
 
         this.letterGrid = this.createLetterGrid();
     }
@@ -145,12 +187,8 @@ class PuzzleSession {
         this.activePlacementIndex = position.placement_index;
     }
 
-    setLetter(row: number, col: number, letter: string | null) {
-        if (!this.isInBounds(row, col)) {
-            throw Error("Cell out of bounds.");
-        }
-
-        if (this.isBlock(row, col)) {
+    setLetter(letter: string | null) {
+        if (this.isBlock()) {
             throw Error("Unable to write to block cell.")
         }
         
@@ -161,20 +199,17 @@ class PuzzleSession {
             letter = letter.toUpperCase();
         }
 
-        this.letterGrid[row][col] = letter
+        this.letterGrid[this.row][this.col] = letter
     }
 
-    getLetter(row: number, col: number): string | null {
-        if (!this.isInBounds(row, col)) {
-            throw Error("Cell out of bounds.");
-        }
-
-        return this.letterGrid[row][col]
+    getLetter(): string | null {
+        return this.letterGrid[this.row][this.col]
     }
 
-    isFilled(row: number, col: number): boolean {
-        return this.getLetter(row, col) !== null;
-    }
+    // isWordComplete(): boolean {
+    //     const placement = this.activePlacement;
+
+    // }
 
     private createLetterGrid() {
         const letterGrid = Array.from({length: this.rows}, () => Array(this.cols).fill(null))
@@ -203,12 +238,8 @@ class PuzzleSession {
         return {row: previousCell.row, col: previousCell.col};
     }
 
-    private isBlock(row: number, col: number): boolean {
-        return this.boardView.getCell(row, col) == null;
-    }
-
-    private isInBounds(row: number, col: number): boolean {
-        return (0 <= row && row < this.rows) && (0 <= col && col < this.cols)
+    private isBlock(): boolean {
+        return this.boardView.getCell(this.row, this.col) == null;
     }
 }
 
