@@ -1,7 +1,7 @@
 import {Direction, Placement, BoardView} from "../models/boardView.js";
 
 type PlacementId = number;
-type WordLength = number;
+type letterCount = number;
 
 class PuzzleSession {
     private row: number;
@@ -10,7 +10,7 @@ class PuzzleSession {
     private cols: number;
     private activePlacement: Placement;
     private activePlacementIndex: number;
-    private currentWordLength: Map<PlacementId, WordLength>;
+    private filledLetterCount: Map<PlacementId, letterCount>;
     private letterGrid: (string | null)[][];
     private boardView: BoardView;
 
@@ -24,7 +24,7 @@ class PuzzleSession {
         this.activePlacementIndex = 0;
         this.row = this.activePlacement.start_row;
         this.col = this.activePlacement.start_col;
-        this.currentWordLength = this.createWordLengthMap();
+        this.filledLetterCount = this.createFilledLetterCount();
 
         this.letterGrid = this.createLetterGrid();
     }
@@ -96,8 +96,8 @@ class PuzzleSession {
     
         this.letterGrid[this.row][this.col] = letter;
     
-        if (prev === null && letter !== null) this.adjustWordLengths(1);
-        if (prev !== null && letter === null) this.adjustWordLengths(-1);
+        if (prev === null && letter !== null) this.adjustLetterCount(1);
+        if (prev !== null && letter === null) this.adjustLetterCount(-1);
     }
 
     getLetter(): string | null {
@@ -106,8 +106,8 @@ class PuzzleSession {
 
     isWordComplete(): boolean {
         const placement = this.activePlacement;
-        const length = this.currentWordLength.get(placement.id) ?? -1
-        return length == placement.length
+        const length = this.filledLetterCount.get(placement.id) ?? -1
+        return length === placement.length
     }
 
     getActivePlacement(): Placement {
@@ -159,7 +159,7 @@ class PuzzleSession {
         return char;
     }
 
-    private adjustWordLengths(delta: number) {
+    private adjustLetterCount(delta: number) {
         const cell = this.boardView.getCell(this.row, this.col);
         if (!cell) return;
     
@@ -167,14 +167,14 @@ class PuzzleSession {
     
         if (positions.A) {
             const id = positions.A.placement_id;
-            const value = this.currentWordLength.get(id) ?? 0;
-            this.currentWordLength.set(id, value + delta);
+            const value = this.filledLetterCount.get(id) ?? 0;
+            this.filledLetterCount.set(id, value + delta);
         }
     
         if (positions.D) {
             const id = positions.D.placement_id;
-            const value = this.currentWordLength.get(id) ?? 0;
-            this.currentWordLength.set(id, value + delta);
+            const value = this.filledLetterCount.get(id) ?? 0;
+            this.filledLetterCount.set(id, value + delta);
         }
     }
     
@@ -183,7 +183,7 @@ class PuzzleSession {
         return letterGrid;
     }
 
-    private createWordLengthMap(): Map<PlacementId, WordLength> {
+    private createFilledLetterCount(): Map<PlacementId, letterCount> {
         const map = new Map();
         const placements = this.boardView.getPlacements()
         for (const placement of placements) {
@@ -207,7 +207,7 @@ class PuzzleSession {
     }
 
     private isBlock(): boolean {
-        return this.boardView.getCell(this.row, this.col) == null;
+        return this.boardView.getCell(this.row, this.col) === null;
     }
 }
 

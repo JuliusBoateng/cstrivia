@@ -108,8 +108,9 @@ class PuzzleController {
     }
 
     private updateCursorVisuals() {
+        const placement = this.session.getActivePlacement();
         const placementCoords = this.session.getActivePlacementCoords();    
-        this.renderer.setPlacementHighlight(placementCoords);
+        this.renderer.setPlacementHighlight(placement.id, placementCoords);
 
         const coords = this.session.getCoords();
         this.renderer.setCursorHighlight(coords.row, coords.col);
@@ -120,13 +121,15 @@ class PuzzleController {
 class BoardRenderer {
     cellGrid: HTMLTableCellElement[][];
     inputGrid: HTMLInputElement[][];
-    highlightedPlacement: HTMLTableCellElement[];
+    highlightedPlacementId: number;
+    highlightedPlacementCells: HTMLTableCellElement[];
     highlightedCursor: HTMLTableCellElement | null = null;
 
     constructor(boardDom: BoardDom) {
         this.cellGrid = boardDom.cellGrid;
         this.inputGrid = boardDom.inputGrid;
-        this.highlightedPlacement = [];
+        this.highlightedPlacementId = -1;
+        this.highlightedPlacementCells = [];
         this.highlightedCursor = null;
     }
 
@@ -149,13 +152,14 @@ class BoardRenderer {
     }
 
     setCursorHighlight(row: number, col: number) {
-        this.clearCursorHighlight();
-
         const cell = this.cellGrid[row][col];
         if (cell.classList.contains("block")) {
             throw Error("Unable to highlight cursor.");
         }
     
+        if (this.highlightedCursor === cell) return;
+
+        this.clearCursorHighlight();
         cell.classList.add("highlight-cursor");
         this.highlightedCursor = cell;
     }
@@ -167,9 +171,10 @@ class BoardRenderer {
         this.highlightedCursor = null;
     }
 
-    setPlacementHighlight(coords: { row: number; col: number }[]) {
+    setPlacementHighlight(placementId: number, coords: { row: number; col: number }[]) {
+        if (this.highlightedPlacementId === placementId) return;
+        
         this.clearPlacementHighlight();
-    
         for (const { row, col } of coords) {
             const cell = this.cellGrid[row][col];
     
@@ -178,14 +183,16 @@ class BoardRenderer {
             }
     
             cell.classList.add("highlight-word");
-            this.highlightedPlacement.push(cell);
+            this.highlightedPlacementCells.push(cell);
         }
+        this.highlightedPlacementId = placementId;
     }
 
     clearPlacementHighlight() {
-        for (const cell of this.highlightedPlacement) {
+        for (const cell of this.highlightedPlacementCells) {
             cell.classList.remove("highlight-word");
         }
-        this.highlightedPlacement = [];
+        this.highlightedPlacementId = -1;
+        this.highlightedPlacementCells = [];
     }
 }
