@@ -114,7 +114,7 @@ class PuzzleSession {
         return this.activePlacement;
     }
 
-    getActivePlacementCells(): { row: number; col: number }[] {
+    getActivePlacementCoords(): { row: number; col: number }[] {
         const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
         if (!cells) return [];
 

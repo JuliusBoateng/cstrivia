@@ -43,85 +43,91 @@ class PuzzleController {
 
         if (Number.isNaN(row) || Number.isNaN(col)) return;
 
-        const session_coords = this.session.getCoords();
-        if (session_coords.row === row && session_coords.col === col) {
+        const coords = this.session.getCoords();
+        if (coords.row === row && coords.col === col) {
             this.session.toggleDirection();
         }
 
         this.session.moveCursor(row, col)
-        this.renderer.highlightCell(row, col)
+        this.updateCursorVisuals()
     }
 
     handleKeydown(event: KeyboardEvent) {
         const key = event.key;
         if (event.ctrlKey || event.metaKey || event.altKey) return; // ignore modifier keys
-        const session_coords = this.session.getCoords();
 
         // Handle char inputs
         if (key.length === 1 && !event.repeat) {
             event.preventDefault();
             this.session.setLetter(key);
-            this.renderer.renderLetter(session_coords.row, session_coords.col, this.session.getLetter())
+
+            const coords = this.session.getCoords();
+            this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter())
+            this.session.advanceCursor();
+            this.updateCursorVisuals()
             return;
         }
     
         if (key === "Delete" || key === "Backspace") {
             event.preventDefault();
             this.session.setLetter(null);
-            this.renderer.renderLetter(session_coords.row, session_coords.col, this.session.getLetter());
-            return;
-        }
-    
-        if (key === "ArrowLeft") {
-            event.preventDefault();
-            this.session.reverseCursor();
-            this.renderer.focusCell(session_coords.row, session_coords.col);
-            this.renderer.highlightCell(session_coords.row, session_coords.col)
-            return;
-        }
-    
-        if (key === "ArrowRight") {
-            event.preventDefault();
-            this.session.advanceCursor();
-            this.renderer.focusCell(session_coords.row, session_coords.col);
-            this.renderer.highlightCell(session_coords.row, session_coords.col)
-            return;
-        }
 
-        if (key === "ArrowDown") {
+            const coords = this.session.getCoords();
+            this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
+            return;
+        }
+    
+        if (key === "ArrowLeft" || key === "ArrowRight") {
             event.preventDefault();
-            const sessionActivePlacement = this.session.getActivePlacement();
-            if (sessionActivePlacement.direction == Direction.D) {
-                this.session.advanceCursor();
-                this.renderer.focusCell(session_coords.row, session_coords.col);
-                this.renderer.highlightCell(session_coords.row, session_coords.col)
+
+            if (key === "ArrowLeft") {
+                this.session.reverseCursor();
             } else {
-                this.session.toggleDirection();
+                this.session.advanceCursor();
             }
 
+            this.updateCursorVisuals();
+            return;
+        }
+
+        if (key === "ArrowUp" || key === "ArrowDown") {
+            event.preventDefault();
+
+            const sessionActivePlacement = this.session.getActivePlacement();
+            if (sessionActivePlacement.direction !== Direction.D) {
+                this.session.toggleDirection();
+            } else if (key === "ArrowUp") {
+                this.session.reverseCursor();
+            } else {
+                this.session.advanceCursor();
+            }
+        
+            this.updateCursorVisuals();
             return;
         }
     }
 
-    private render() {
-        const session_coords = this.session.getCoords();
-    
-        this.renderer.focusCell(session_coords.row, session_coords.col);
-        this.renderer.highlightCell(session_coords.row, session_coords.col);
-        
-        const activePlacement = this.session.getActivePlacement();
-        const coords = this.session.getActivePlacementCoords();    
-        this.renderer.highlightPlacement(coords);
+    private updateCursorVisuals() {
+        const placementCoords = this.session.getActivePlacementCoords();    
+        this.renderer.setPlacementHighlight(placementCoords);
+
+        const coords = this.session.getCoords();
+        this.renderer.setCursorHighlight(coords.row, coords.col);
+        this.renderer.focusCell(coords.row, coords.col);
     }
 }
 
 class BoardRenderer {
     cellGrid: HTMLTableCellElement[][];
     inputGrid: HTMLInputElement[][];
+    highlightedPlacement: HTMLTableCellElement[];
+    highlightedCursor: HTMLTableCellElement | null = null;
 
     constructor(boardDom: BoardDom) {
         this.cellGrid = boardDom.cellGrid;
         this.inputGrid = boardDom.inputGrid;
+        this.highlightedPlacement = [];
+        this.highlightedCursor = null;
     }
 
     renderLetter(row: number, col: number, letter: string | null) {
@@ -142,18 +148,44 @@ class BoardRenderer {
         inputElement.focus()
     }
 
-    highlightCell(row: number, col: number) {
-        const cellElement: HTMLTableCellElement = this.cellGrid[row][col];
-        if (cellElement.classList.contains("block")) {
-            throw Error("Unable to highlight cell.")
-        }
+    setCursorHighlight(row: number, col: number) {
+        this.clearCursorHighlight();
 
-        cellElement.classList.add("highlight");
+        const cell = this.cellGrid[row][col];
+        if (cell.classList.contains("block")) {
+            throw Error("Unable to highlight cursor.");
+        }
+    
+        cell.classList.add("highlight-cursor");
+        this.highlightedCursor = cell;
     }
 
-    highlightPlacement(coords: { row: number; col: number }[]) {
-       for (const {row, col} of coords) {
-            this.highlightCell(row, col)
-       }
+    clearCursorHighlight() {
+        if (!this.highlightedCursor) return;
+
+        this.highlightedCursor.classList.remove("highlight-cursor");
+        this.highlightedCursor = null;
+    }
+
+    setPlacementHighlight(coords: { row: number; col: number }[]) {
+        this.clearPlacementHighlight();
+    
+        for (const { row, col } of coords) {
+            const cell = this.cellGrid[row][col];
+    
+            if (cell.classList.contains("block")) {
+                throw Error("Unable to highlight placement.");
+            }
+    
+            cell.classList.add("highlight-word");
+            this.highlightedPlacement.push(cell);
+        }
+    }
+
+    clearPlacementHighlight() {
+        for (const cell of this.highlightedPlacement) {
+            cell.classList.remove("highlight-word");
+        }
+        this.highlightedPlacement = [];
     }
 }
