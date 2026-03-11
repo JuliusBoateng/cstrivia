@@ -1,7 +1,7 @@
 import {getTableElement, getBoardView, getSolutionView} from "./domLoader.js";
 import {createBoard, BoardDom} from "./render/boardDomBuilder.js";
-import {BoardView} from "./models/boardView.js";
-import { PuzzleSession } from "./puzzle/PuzzleSession.js";
+import {BoardView, Direction} from "./models/boardView.js";
+import {PuzzleSession} from "./puzzle/puzzleSession.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
     const tableElement = getTableElement();
@@ -18,42 +18,33 @@ document.addEventListener("DOMContentLoaded", (event) => {
 class PuzzleController {
     session: PuzzleSession;
     renderer: BoardRenderer;
-    boardView: BoardView;
     boardDom: BoardDom;
 
-    constructor(session: PuzzleSession, renderer: BoardRenderer, boardView: BoardView, boardDom: BoardDom) {
+    constructor(session: PuzzleSession, renderer: BoardRenderer, boardDom: BoardDom) {
         this.session = session;
         this.renderer = renderer;
-        this.boardView = boardView;
         this.boardDom = boardDom;
 
-        boardDom.tableElement.addEventListener("click", this.handleClick);
-        boardDom.tableElement.addEventListener("keydown", this.handleKeydown);
+        boardDom.tableElement.addEventListener("click", this.handleClick.bind(this));
+        boardDom.tableElement.addEventListener("keydown", this.handleKeydown.bind(this));
 
     }
 
     handleClick(event: MouseEvent) {
         const target = event.target;
-   
-        if (!(target instanceof HTMLElement)) {
-            return;
-        }
+        if (!(target instanceof HTMLElement)) return;
 
         const tdElement = target.closest("td");
         if (!(tdElement instanceof HTMLTableCellElement)) return;
-
-        if (tdElement.classList.contains("block")) {
-            return;
-        }
+        if (tdElement.classList.contains("block")) return;
 
         const row = Number(tdElement.dataset.row);
         const col = Number(tdElement.dataset.col);
 
-        if (Number.isNaN(row) || Number.isNaN(col)) {
-            return;
-        }
+        if (Number.isNaN(row) || Number.isNaN(col)) return;
 
-        if (this.session.row === row && this.session.col === col) {
+        const session_coords = this.session.getCoords();
+        if (session_coords.row === row && session_coords.col === col) {
             this.session.toggleDirection();
         }
 
@@ -63,50 +54,64 @@ class PuzzleController {
 
     handleKeydown(event: KeyboardEvent) {
         const key = event.key;
+        if (event.ctrlKey || event.metaKey || event.altKey) return; // ignore modifier keys
+        const session_coords = this.session.getCoords();
 
-        // ignore modifier keys
-        if (event.ctrlKey || event.metaKey || event.altKey) return;
-        
         // Handle char inputs
-        if (key.length === 1) {
-            this.handleLetter(key);
-            return;
-        }
-
-        if (key === "Backspace") {
-            // this.handleBackspace();
+        if (key.length === 1 && !event.repeat) {
+            event.preventDefault();
+            this.session.setLetter(key);
+            this.renderer.renderLetter(session_coords.row, session_coords.col, this.session.getLetter())
             return;
         }
     
-        if (key === "Delete") {
-            // this.handleDelete();
+        if (key === "Delete" || key === "Backspace") {
+            event.preventDefault();
+            this.session.setLetter(null);
+            this.renderer.renderLetter(session_coords.row, session_coords.col, this.session.getLetter());
             return;
         }
     
         if (key === "ArrowLeft") {
-            // this.handleArrowLeft();
+            event.preventDefault();
+            this.session.reverseCursor();
+            this.renderer.focusCell(session_coords.row, session_coords.col);
+            this.renderer.highlightCell(session_coords.row, session_coords.col)
             return;
         }
     
         if (key === "ArrowRight") {
-            // this.handleArrowRight();
+            event.preventDefault();
+            this.session.advanceCursor();
+            this.renderer.focusCell(session_coords.row, session_coords.col);
+            this.renderer.highlightCell(session_coords.row, session_coords.col)
+            return;
+        }
+
+        if (key === "ArrowDown") {
+            event.preventDefault();
+            const sessionActivePlacement = this.session.getActivePlacement();
+            if (sessionActivePlacement.direction == Direction.D) {
+                this.session.advanceCursor();
+                this.renderer.focusCell(session_coords.row, session_coords.col);
+                this.renderer.highlightCell(session_coords.row, session_coords.col)
+            } else {
+                this.session.toggleDirection();
+            }
+
             return;
         }
     }
 
-    private handleLetter(key: string) {
-        // const value = input.value;
-        // this.setLetter(value === "" ? null : value);
-
-        // this.session.setLetter()
-    }
-
-    private handleArrowKey() {
-        //
-    }
-
-    private handleBackspace() {
-        //
+    private render() {
+        const session_coords = this.session.getCoords();
+    
+        this.renderer.focusCell(session_coords.row, session_coords.col);
+        this.renderer.highlightCell(session_coords.row, session_coords.col);
+        
+        const activePlacement = this.session.getActivePlacement();
+        const coords = this.session.getActivePlacementCoords();    
+        this.renderer.highlightPlacement(coords);
     }
 }
 
@@ -131,7 +136,7 @@ class BoardRenderer {
     focusCell(row: number, col: number) {
         const inputElement: HTMLInputElement = this.inputGrid[row][col];
         if (!inputElement) {
-            throw Error("Unable to write to focus cell.")
+            throw Error("Unable to focus cell.")
         }
 
         inputElement.focus()
@@ -146,9 +151,9 @@ class BoardRenderer {
         cellElement.classList.add("highlight");
     }
 
-    highlightPlacement(cellElements: HTMLTableCellElement[]) {
-       for (const cellElement of cellElements) {
-            cellElement.classList.add("highlight");
+    highlightPlacement(coords: { row: number; col: number }[]) {
+       for (const {row, col} of coords) {
+            this.highlightCell(row, col)
        }
     }
 }

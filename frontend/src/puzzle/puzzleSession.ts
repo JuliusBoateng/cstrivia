@@ -4,16 +4,15 @@ type PlacementId = number;
 type WordLength = number;
 
 class PuzzleSession {
-    row: number;
-    col: number;
-    rows: number;
-    cols: number;
-    activePlacement: Placement;
-    activePlacementIndex: number;
-    currentWordLength: Map<PlacementId, WordLength>;
-    letterGrid: (string | null)[][];
-    boardView: BoardView;
-
+    private row: number;
+    private col: number;
+    private rows: number;
+    private cols: number;
+    private activePlacement: Placement;
+    private activePlacementIndex: number;
+    private currentWordLength: Map<PlacementId, WordLength>;
+    private letterGrid: (string | null)[][];
+    private boardView: BoardView;
 
     constructor(boardView: BoardView) {
         this.boardView = boardView;
@@ -55,7 +54,7 @@ class PuzzleSession {
         let position = cell.placement_positions[direction];
 
         if (!position) {
-            direction = direction === Direction.A ? Direction.D : Direction.A;
+            direction = (direction === Direction.A ? Direction.D : Direction.A);
             position = cell.placement_positions[direction];
         }
 
@@ -73,7 +72,7 @@ class PuzzleSession {
         if (!cell) return;
 
         const currentDirection = this.activePlacement.direction;
-        const newDirection: Direction = currentDirection === Direction.A ? Direction.D : Direction.A;
+        const newDirection: Direction = (currentDirection === Direction.A ? Direction.D : Direction.A);
         
         const position = cell.placement_positions[newDirection];
         if (!position) return; // no crossing word
@@ -109,6 +108,25 @@ class PuzzleSession {
         const placement = this.activePlacement;
         const length = this.currentWordLength.get(placement.id) ?? -1
         return length == placement.length
+    }
+
+    getActivePlacement(): Placement {
+        return this.activePlacement;
+    }
+
+    getActivePlacementCells(): { row: number; col: number }[] {
+        const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
+        if (!cells) return [];
+
+        const coords = []
+        for (const cell of cells) {
+            coords.push({row: cell.row, col: cell.col});
+        }
+        return coords;
+    }
+
+    getCoords(): {row: number, col: number} {
+        return {row: this.row, col: this.col};
     }
 
     private getInitialPlacement(): Placement {
