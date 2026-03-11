@@ -94,7 +94,6 @@ class PuzzleSession {
         if (prev === letter) return;
     
         this.letterGrid[this.row][this.col] = letter;
-    
         if (prev === null && letter !== null) this.adjustLetterCount(1);
         if (prev !== null && letter === null) this.adjustLetterCount(-1);
     }
@@ -107,6 +106,10 @@ class PuzzleSession {
         const placement = this.activePlacement;
         const length = this.filledLetterCount.get(placement.id) ?? -1
         return length === placement.length
+    }
+
+    isCellEmpty(): boolean {
+        return this.letterGrid[this.row][this.col] === null;
     }
 
     getActivePlacement(): Placement {

@@ -22,7 +22,7 @@ class PuzzleController {
         if (!(target instanceof HTMLElement)) return;
 
         const tdElement = target.closest("td");
-        
+
         if (!(tdElement instanceof HTMLTableCellElement)) return;
         if (tdElement.classList.contains("block")) return;
 
@@ -95,8 +95,14 @@ class PuzzleController {
     
     private handleDelete(event: KeyboardEvent) {
         event.preventDefault();
+
+        if (this.session.isCellEmpty()) {
+            this.session.reverseCursor();
+            this.updateCursorVisuals();
+            return;
+        }
+        
         this.session.setLetter(null);
-    
         const coords = this.session.getCoords();
         this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
     }
