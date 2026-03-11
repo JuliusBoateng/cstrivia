@@ -14,10 +14,11 @@ class PuzzleController {
         this.boardDom = boardDom;
 
         boardDom.tableElement.addEventListener("click", this.handleClick.bind(this));
+        boardDom.tableElement.addEventListener("beforeinput", this.handleBeforeInput.bind(this));
         boardDom.tableElement.addEventListener("keydown", this.handleKeydown.bind(this));
     }
 
-    handleClick(event: MouseEvent) {
+    private handleClick(event: MouseEvent) {
         const target = event.target;
         if (!(target instanceof HTMLElement)) return;
 
@@ -40,13 +41,15 @@ class PuzzleController {
         this.updateCursorVisuals()
     }
 
-    handleKeydown(event: KeyboardEvent) {        
+    private handleBeforeInput(event: InputEvent) {
+        if (this.isCharacterKey(event)) {
+            this.handleCharacterInput(event);
+        }
+    }
+
+    private handleKeydown(event: KeyboardEvent) {        
         if (this.isModifierKey(event)) {
             return;
-        }
-        
-        else if (this.isCharacterKey(event)) {
-            this.handleCharacterInput(event);
         }
         
         else if (this.isEnterKey(event)) {
@@ -70,8 +73,8 @@ class PuzzleController {
         return (event.ctrlKey || event.metaKey || event.altKey);
     }
 
-    private isCharacterKey(event: KeyboardEvent) {
-        return event.key.length === 1 && !event.repeat;
+    private isCharacterKey(event: InputEvent) {
+        return (event.data) && (event.data.length === 1);
     }
 
     private isEnterKey(event: KeyboardEvent) {
@@ -90,9 +93,9 @@ class PuzzleController {
         return event.key === "ArrowUp" || event.key === "ArrowDown";
     }
 
-    private handleCharacterInput(event: KeyboardEvent) {
+    private handleCharacterInput(event: InputEvent) {
         event.preventDefault();
-        this.session.setLetter(event.key);
+        this.session.setLetter(event.data);
     
         const coords = this.session.getCoords();
         this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
