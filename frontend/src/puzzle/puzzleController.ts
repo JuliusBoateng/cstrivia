@@ -49,16 +49,20 @@ class PuzzleController {
             this.handleCharacterInput(event);
         }
         
+        else if (this.isEnterKey(event)) {
+            this.handleEnterInput(event);
+        }
+
         else if (this.isDeleteKey(event)) {
-            this.handleDelete(event);
+            this.handleDeleteInput(event);
         }
         
         else if (this.isHorizontalArrow(event)) {
-            this.handleHorizontalArrow(event);
+            this.handleHorizontalArrowInput(event);
         }
         
         else if (this.isVerticalArrow(event)) {
-            this.handleVerticalArrow(event);
+            this.handleVerticalArrowInput(event);
         }
     }
 
@@ -68,6 +72,10 @@ class PuzzleController {
 
     private isCharacterKey(event: KeyboardEvent) {
         return event.key.length === 1 && !event.repeat;
+    }
+
+    private isEnterKey(event: KeyboardEvent) {
+        return event.key === "Enter";
     }
     
     private isDeleteKey(event: KeyboardEvent) {
@@ -92,8 +100,13 @@ class PuzzleController {
         this.session.advanceCursor();
         this.updateCursorVisuals();
     }
+
+    private handleEnterInput(event: KeyboardEvent) {
+        this.session.advanceCursor();
+        this.updateCursorVisuals();
+    }
     
-    private handleDelete(event: KeyboardEvent) {
+    private handleDeleteInput(event: KeyboardEvent) {
         event.preventDefault();
 
         if (this.session.isCellEmpty()) {
@@ -107,7 +120,7 @@ class PuzzleController {
         this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
     }
 
-    private handleHorizontalArrow(event: KeyboardEvent) {
+    private handleHorizontalArrowInput(event: KeyboardEvent) {
         event.preventDefault();
     
         const delta = event.key === "ArrowLeft" ? -1 : 1;
@@ -117,7 +130,7 @@ class PuzzleController {
         this.updateCursorVisuals();
     }
     
-    private handleVerticalArrow(event: KeyboardEvent) {
+    private handleVerticalArrowInput(event: KeyboardEvent) {
         event.preventDefault();
 
         const delta = event.key === "ArrowUp" ? -1 : 1;
