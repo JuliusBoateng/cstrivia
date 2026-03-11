@@ -15,7 +15,6 @@ class PuzzleController {
 
         boardDom.tableElement.addEventListener("click", this.handleClick.bind(this));
         boardDom.tableElement.addEventListener("keydown", this.handleKeydown.bind(this));
-
     }
 
     handleClick(event: MouseEvent) {
@@ -23,6 +22,7 @@ class PuzzleController {
         if (!(target instanceof HTMLElement)) return;
 
         const tdElement = target.closest("td");
+        
         if (!(tdElement instanceof HTMLTableCellElement)) return;
         if (tdElement.classList.contains("block")) return;
 
@@ -40,59 +40,92 @@ class PuzzleController {
         this.updateCursorVisuals()
     }
 
-    handleKeydown(event: KeyboardEvent) {
-        const key = event.key;
-        if (event.ctrlKey || event.metaKey || event.altKey) return; // ignore modifier keys
-
-        // Handle char inputs
-        if (key.length === 1 && !event.repeat) {
-            event.preventDefault();
-            this.session.setLetter(key);
-
-            const coords = this.session.getCoords();
-            this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter())
-            this.session.advanceCursor();
-            this.updateCursorVisuals()
+    handleKeydown(event: KeyboardEvent) {        
+        if (this.isModifierKey(event)) {
             return;
         }
-    
-        if (key === "Delete" || key === "Backspace") {
-            event.preventDefault();
-            this.session.setLetter(null);
-
-            const coords = this.session.getCoords();
-            this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
-            return;
-        }
-    
-        if (key === "ArrowLeft" || key === "ArrowRight") {
-            event.preventDefault();
-
-            if (key === "ArrowLeft") {
-                this.session.reverseCursor();
-            } else {
-                this.session.advanceCursor();
-            }
-
-            this.updateCursorVisuals();
-            return;
-        }
-
-        if (key === "ArrowUp" || key === "ArrowDown") {
-            event.preventDefault();
-
-            const sessionActivePlacement = this.session.getActivePlacement();
-            if (sessionActivePlacement.direction !== Direction.D) {
-                this.session.toggleDirection();
-            } else if (key === "ArrowUp") {
-                this.session.reverseCursor();
-            } else {
-                this.session.advanceCursor();
-            }
         
-            this.updateCursorVisuals();
-            return;
+        else if (this.isCharacterKey(event)) {
+            this.handleCharacterInput(event);
         }
+        
+        else if (this.isDeleteKey(event)) {
+            this.handleDelete(event);
+        }
+        
+        else if (this.isHorizontalArrow(event)) {
+            this.handleHorizontalArrow(event);
+        }
+        
+        else if (this.isVerticalArrow(event)) {
+            this.handleVerticalArrow(event);
+        }
+    }
+
+    private isModifierKey(event: KeyboardEvent) {
+        return (event.ctrlKey || event.metaKey || event.altKey);
+    }
+
+    private isCharacterKey(event: KeyboardEvent) {
+        return event.key.length === 1 && !event.repeat;
+    }
+    
+    private isDeleteKey(event: KeyboardEvent) {
+        return event.key === "Delete" || event.key === "Backspace";
+    }
+    
+    private isHorizontalArrow(event: KeyboardEvent) {
+        return event.key === "ArrowLeft" || event.key === "ArrowRight";
+    }
+    
+    private isVerticalArrow(event: KeyboardEvent) {
+        return event.key === "ArrowUp" || event.key === "ArrowDown";
+    }
+
+    private handleCharacterInput(event: KeyboardEvent) {
+        event.preventDefault();
+        this.session.setLetter(event.key);
+    
+        const coords = this.session.getCoords();
+        this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
+    
+        this.session.advanceCursor();
+        this.updateCursorVisuals();
+    }
+    
+    private handleDelete(event: KeyboardEvent) {
+        event.preventDefault();
+        this.session.setLetter(null);
+    
+        const coords = this.session.getCoords();
+        this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
+    }
+
+    private handleHorizontalArrow(event: KeyboardEvent) {
+        event.preventDefault();
+    
+        if (event.key === "ArrowLeft") {
+            this.session.reverseCursor();
+        } else {
+            this.session.advanceCursor();
+        }
+    
+        this.updateCursorVisuals();
+    }
+    
+    private handleVerticalArrow(event: KeyboardEvent) {
+        event.preventDefault();
+    
+        const activePlacement = this.session.getActivePlacement();
+        if (activePlacement.direction !== Direction.D) {
+            this.session.toggleDirection();
+        } else if (event.key === "ArrowUp") {
+            this.session.reverseCursor();
+        } else {
+            this.session.advanceCursor();
+        }
+    
+        this.updateCursorVisuals();
     }
 
     private updateCursorVisuals() {
