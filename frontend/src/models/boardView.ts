@@ -6,6 +6,7 @@ interface BoardViewDTO {
 }
 
 type CoordKey = string;
+type PlacementId = number;
 
 // Board models should be immutable. Backend authoritative
 class BoardView {
@@ -15,10 +16,10 @@ class BoardView {
     readonly clues: Clue[];
 
     // derived
-    readonly cellGrid: Cell[][];
+    readonly cellGrid: (Cell | null)[][];;
     readonly labelGrid: number[][];
-    readonly placementMap: Map<number, Placement>;
-    readonly placementCellMap: Map<number, Cell[]>;
+    readonly placementMap: Map<PlacementId, Placement>;
+    readonly placementCellMap: Map<PlacementId, Cell[]>;
 
     private constructor(
         board: Board,
@@ -70,7 +71,7 @@ class BoardView {
         return this.labelGrid[row][col]
     }
 
-    getCellsWithPlacementId(placement_id: number): Cell[] | undefined {
+    getCellsWithPlacementId(placement_id: PlacementId): Cell[] | undefined {
         return this.placementCellMap.get(placement_id);
     }
 
@@ -78,7 +79,7 @@ class BoardView {
         return this.placements;
     }
 
-    getPlacement(placement_id: number): Placement | undefined {
+    getPlacement(placement_id: PlacementId): Placement | undefined {
         return this.placementMap.get(placement_id);
     }
 
@@ -108,7 +109,7 @@ class BoardView {
         );
     }
 
-    private createPlacementMap() {
+    private createPlacementMap(): Map<PlacementId, Placement> {
         return new Map(
             this.placements.map(placement => [placement.id, placement])
         );
@@ -135,7 +136,7 @@ class BoardView {
         return labelGrid;
     }
     
-    private createPlacementCellMap(): Map<number, Cell[]> {
+    private createPlacementCellMap(): Map<PlacementId, Cell[]> {
         const map = new Map<number, Cell[]>();
     
         for (const cell of this.cells) {
@@ -202,10 +203,10 @@ class Placement {
 }
 
 class PlacementPositions {
-    placement_id: number;
+    placement_id: PlacementId;
     placement_index: number;
 
-    constructor(placement_id: number, placement_index: number){
+    constructor(placement_id: PlacementId, placement_index: number){
         this.placement_id = placement_id;
         this.placement_index = placement_index;
     }
@@ -225,14 +226,14 @@ class Cell {
 
 class Clue {
     readonly question: string;
-    readonly placement_id: number;
+    readonly placement_id: PlacementId;
     readonly direction: Direction
 
-    constructor(question: string, placement_id: number, direction: Direction) {
+    constructor(question: string, placement_id: PlacementId, direction: Direction) {
         this.question = question;
         this.placement_id = placement_id;
         this.direction = direction;
     }
 }
 
-export {BoardView, CoordKey, Placement, Direction};
+export {BoardView, CoordKey, Placement, Direction, PlacementId};

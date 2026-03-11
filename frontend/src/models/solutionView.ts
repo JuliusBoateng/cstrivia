@@ -1,4 +1,4 @@
-import {BoardView, CoordKey} from "./boardView.js";
+import {BoardView, PlacementId, CoordKey} from "./boardView.js";
 
 interface SolutionViewDTO {
     board_id: number;
@@ -13,7 +13,7 @@ class SolutionView {
     readonly letters: Letter[];
 
     // derived
-    readonly solutionMap: Map<number, Solution>
+    readonly solutionMap: Map<PlacementId, Solution>
     readonly letterMap: Map<CoordKey, Letter>
 
     private constructor(board_id: number, solutions: Solution[], letters: Letter[]) {
@@ -44,11 +44,11 @@ class SolutionView {
 }
 
 class Solution {
-    readonly placement_id: number;
+    readonly placement_id: PlacementId;
     readonly display_answer: string;
     readonly normalized_answer: string;
 
-    constructor(placement_id: number, display_answer: string, normalized_answer: string) {
+    constructor(placement_id: PlacementId, display_answer: string, normalized_answer: string) {
         this.placement_id = placement_id;
         this.display_answer = display_answer;
         this.normalized_answer = normalized_answer;

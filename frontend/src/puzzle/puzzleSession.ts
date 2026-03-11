@@ -1,6 +1,5 @@
-import {Direction, Placement, BoardView} from "../models/boardView.js";
+import {Direction, Placement, BoardView, PlacementId} from "../models/boardView.js";
 
-type PlacementId = number;
 type letterCount = number;
 
 class PuzzleSession {
