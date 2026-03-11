@@ -110,26 +110,19 @@ class PuzzleController {
     private handleHorizontalArrow(event: KeyboardEvent) {
         event.preventDefault();
     
-        if (event.key === "ArrowLeft") {
-            this.session.reverseCursor();
-        } else {
-            this.session.advanceCursor();
-        }
+        const delta = event.key === "ArrowLeft" ? -1 : 1;
+        this.session.moveCursorRelative(0, delta);
+        this.session.setDirection(Direction.A);
     
         this.updateCursorVisuals();
     }
     
     private handleVerticalArrow(event: KeyboardEvent) {
         event.preventDefault();
-    
-        const activePlacement = this.session.getActivePlacement();
-        if (activePlacement.direction !== Direction.D) {
-            this.session.toggleDirection();
-        } else if (event.key === "ArrowUp") {
-            this.session.reverseCursor();
-        } else {
-            this.session.advanceCursor();
-        }
+
+        const delta = event.key === "ArrowUp" ? -1 : 1;
+        this.session.moveCursorRelative(delta, 0);
+        this.session.setDirection(Direction.D);
     
         this.updateCursorVisuals();
     }

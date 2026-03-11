@@ -42,6 +42,11 @@ class PuzzleSession {
         this.moveCursor(previous.row, previous.col);
     }
 
+    moveCursorRelative(rowDelta: number, colDelata: number) {
+        const coords = this.getCoords();
+        this.moveCursor(coords.row + rowDelta, coords.col + colDelata);
+    }
+
     moveCursor(row: number, col: number) {
         const cell = this.boardView.getCell(row, col);
         if (!cell) return;
@@ -64,6 +69,16 @@ class PuzzleSession {
     
         this.activePlacement = placement;    
         this.activePlacementIndex = position.placement_index;
+    }
+
+    setDirection(desired: Direction) {
+        const cell = this.boardView.getCell(this.row, this.col);
+        if (!cell) return;
+    
+        // Already in the desired direction.
+        if (this.activePlacement.direction === desired) return;
+    
+        this.toggleDirection();
     }
 
     toggleDirection() {
