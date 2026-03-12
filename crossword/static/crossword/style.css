@@ -113,11 +113,11 @@ h1 {
 }
 
 .board-card .cell.highlight-word {
-    background: #eef0f6;
+    background: #e4e7f1;
 }
 
 .board-card .cell.highlight-cursor {
-    background: #d9dced;
+    background: #cfd3e8;
     box-shadow: inset 0 0 0 2px #6A6D8F;
 }
 
