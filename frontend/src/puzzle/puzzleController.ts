@@ -101,6 +101,11 @@ class PuzzleController {
 
         this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
         this.renderPlacementFeedback(coords.row, coords.col);
+        
+        if (this.session.isPuzzleComplete()) {
+            const playableCells = this.session.getPlayableCells();
+            this.renderer.markPuzzleComplete(playableCells);
+        }
 
         this.session.advanceCursor();
         this.updateCursorVisuals();

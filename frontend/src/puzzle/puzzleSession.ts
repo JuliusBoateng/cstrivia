@@ -19,6 +19,7 @@ class PuzzleSession {
     private letterGrid: (string | null)[][];
     private boardView: BoardView;
     private puzzleValidator: PuzzleValidator;
+    private solvedPlacements: Set<PlacementId>;
 
     constructor(boardView: BoardView, puzzleValidator: PuzzleValidator) {
         this.boardView = boardView;
@@ -35,6 +36,7 @@ class PuzzleSession {
         this.filledLetterCount = this.createFilledLetterCount();
 
         this.letterGrid = this.createLetterGrid();
+        this.solvedPlacements = new Set();
     }
     
     advanceCursor() {
@@ -136,13 +138,19 @@ class PuzzleSession {
             
             const correct = this.puzzleValidator.checkPlacement(this.letterGrid, placement);
             if (correct) {
+                this.solvedPlacements.add(placement.id);
                 solved.push(placement.id);
             } else {
+                this.solvedPlacements.delete(placement.id);
                 incorrect.push(placement.id)
             }
         }
 
         return {solved, incorrect} as PlacementCheckResult;
+    }
+
+    isPuzzleComplete() {
+        return this.solvedPlacements.size === this.boardView.getPlacements().length;
     }
 
     isCellEmpty(): boolean {
@@ -174,6 +182,11 @@ class PuzzleSession {
 
         const coords = cells.map(cell => ({row: cell.row, col: cell.col} as Coord))
         return coords;
+    }
+
+    getPlayableCells(): Coord[] {
+        return this.boardView.getCells()
+            .map(cell => ({ row: cell.row, col: cell.col } as Coord));
     }
 
     private isPlacementComplete(placement: Placement): boolean {

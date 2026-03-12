@@ -68,7 +68,6 @@ h1 {
     border: 1px solid #18181b;
     background: white;
     padding: 0;
-    transition: background 0.08s ease;
 }
 
 .board-card .cell.block {
@@ -123,43 +122,25 @@ h1 {
 }
 
 @keyframes success-pulse {
-    0% {
-      transform: scale(1);
-      background-color: var(--cell-bg);
-    }
-  
-    40% {
-      transform: scale(1.05);
-      background-color: #d6c7ff; /* purple flash */
-    }
-  
-    100% {
-      transform: scale(1);
-      background-color: var(--cell-bg);
-    }
+    0% {transform: scale(1); background-color: var(--cell-bg);}
+    30% {transform: scale(1.04); background-color: #d6c7ff;}
+    60% {transform: scale(1.02); background-color: #d6c7ff;}
+    100% {transform: scale(1); background-color: var(--cell-bg);}
 }
-  
+
 .placement-success-pulse {
-    animation: success-pulse 200ms ease-in-out;
+    transform-origin: center;
+    animation: success-pulse 220ms ease-in-out;
 }
 
 @keyframes error-pulse {
-    0% {
-      transform: scale(1);
-      background-color: var(--cell-bg);
-    }
-  
-    40% {
-      transform: scale(1.03);
-      background-color: #ffd1dc;
-    }
-  
-    100% {
-      transform: scale(1);
-      background-color: var(--cell-bg);
-    }
+    0% {transform: scale(1); background-color: var(--cell-bg);}
+    30% {transform: scale(1.04); background-color: #ffd1dc;}
+    60% {transform: scale(1.02); background-color: #ffd1dc;}
+    100% {transform: scale(1); background-color: var(--cell-bg);}
 }
   
 .placement-error-pulse {
-    animation: error-pulse 260ms ease-in-out;
+    transform-origin: center;
+    animation: error-pulse 220ms ease-in-out;
 }

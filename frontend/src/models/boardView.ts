@@ -13,7 +13,7 @@ type PlacementId = number;
 class BoardView {
     readonly board: Board;
     readonly placements: Placement[];
-    readonly cells: Cell[];
+    readonly cells: Cell[]; // does not contain block cells
     readonly clues: Clue[];
 
     // derived
@@ -62,6 +62,10 @@ class BoardView {
 
     getCell(row: number, col: number): Cell | null {
         return this.cellGrid[row][col]
+    }
+
+    getCells(): Cell[] {
+        return this.cells;
     }
 
     isStartingCell(row: number, col: number): boolean {

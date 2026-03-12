@@ -47,13 +47,6 @@ class PuzzleRenderer {
         this.highlightedCursor = cell;
     }
 
-    clearCursorHighlight() {
-        if (!this.highlightedCursor) return;
-
-        this.highlightedCursor.classList.remove("highlight-cursor");
-        this.highlightedCursor = null;
-    }
-
     setPlacementHighlight(placementId: number, coords: { row: number; col: number }[]) {
         if (this.highlightedPlacementId === placementId) return;
         
@@ -71,7 +64,24 @@ class PuzzleRenderer {
         this.highlightedPlacementId = placementId;
     }
 
-    clearPlacementHighlight() {
+    markPlacementSolved(coords: Coord[]) {
+        const className = "placement-success-pulse";
+        const cells = coords.map(coord => this.cellGrid[coord.row][coord.col])
+        this.pulse(cells, className);
+    }
+
+    markPlacementIncorrect(coords: Coord[]) {
+        const className = "placement-error-pulse";
+        const cells = coords.map(coord => this.cellGrid[coord.row][coord.col])
+        this.pulse(cells, className);
+    }
+
+    markPuzzleComplete(playableCells: Coord[]) {
+        const cells = playableCells.map(playableCell => this.cellGrid[playableCell.row][playableCell.col])
+        this.pulse(cells, "placement-success-pulse");
+    }
+
+    private clearPlacementHighlight() {
         for (const cell of this.highlightedPlacementCells) {
             cell.classList.remove("highlight-word");
         }
@@ -79,25 +89,28 @@ class PuzzleRenderer {
         this.highlightedPlacementCells = [];
     }
 
-    markPlacementSolved(coords: Coord[]) {
-        const cells = coords.map(coord => this.cellGrid[coord.row][coord.col])
-        this.pulse(cells, "placement-success-pulse");
-    }
+    private clearCursorHighlight() {
+        if (!this.highlightedCursor) return;
 
-    markPlacementIncorrect(coords: Coord[]) {
-        const cells = coords.map(coord => this.cellGrid[coord.row][coord.col])
-        this.pulse(cells, "placement-error-pulse");
+        this.highlightedCursor.classList.remove("highlight-cursor");
+        this.highlightedCursor = null;
     }
 
     private pulse(cells: HTMLElement[], className: string) {
-        cells.forEach(cell => cell.classList.remove("placement-success-pulse", "placement-error-pulse"));
+        this.clearAnimation(cells);
 
-        // TODO re-evaluate
+        // Double requestAnimationFrame ensures the browser processes the class
+        // removal in a separate frame before re-adding it. Otherwise the DOM
+        // changes may be batched together and the animation will not restart.
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 cells.forEach(cell => cell.classList.add(className));
             });
         });
+    }
+    
+    private clearAnimation(cells: HTMLElement[]) {
+        cells.forEach(cell => cell.classList.remove("placement-success-pulse", "placement-error-pulse"));
     }
 }
 
