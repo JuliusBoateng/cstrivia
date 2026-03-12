@@ -32,8 +32,8 @@ class PuzzleController {
 
         if (Number.isNaN(row) || Number.isNaN(col)) return;
 
-        const coords = this.session.getCoords();
-        if (coords.row === row && coords.col === col) {
+        const coord = this.session.getCoord();
+        if (coord.row === row && coord.col === col) {
             this.session.toggleDirection();
         }
 
@@ -103,12 +103,12 @@ class PuzzleController {
 
     private handleCharacterInput(event: InputEvent) {
         event.preventDefault();    
-        const coords = this.session.getCoords();
+        const coord = this.session.getCoord();
 
         this.session.setLetter(event.data);
 
-        this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
-        this.renderPlacementFeedback(coords.row, coords.col);
+        this.renderer.renderLetter(coord.row, coord.col, this.session.getLetter());
+        this.renderPlacementFeedback(coord.row, coord.col);
         
         if (this.session.isPuzzleComplete()) {
             const playableCells = this.session.getPlayableCells();
@@ -129,8 +129,13 @@ class PuzzleController {
     }
 
     private handleEnterInput(event: KeyboardEvent) {
-        this.session.advanceCursor();
-        this.updateCursorVisuals();
+        if (this.session.isEndOfPlacement()) {
+            const current = this.session.getCoord();
+            this.renderPlacementFeedback(current.row, current.col)
+        } else {
+            this.session.advanceCursor();
+            this.updateCursorVisuals();
+        }
     }
     
     private handleDeleteInput(event: KeyboardEvent) {
@@ -143,7 +148,7 @@ class PuzzleController {
         }
         
         this.session.setLetter(null);
-        const coords = this.session.getCoords();
+        const coords = this.session.getCoord();
         this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
     }
 
@@ -172,7 +177,7 @@ class PuzzleController {
         const placementCoords = this.session.getActivePlacementCoords();    
         this.renderer.setPlacementHighlight(placement.id, placementCoords);
 
-        const coords = this.session.getCoords();
+        const coords = this.session.getCoord();
         this.renderer.setCursorHighlight(coords.row, coords.col);
         this.renderer.focusCell(coords.row, coords.col);
     }

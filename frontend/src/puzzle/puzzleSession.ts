@@ -54,8 +54,8 @@ class PuzzleSession {
     }
 
     moveCursorRelative(rowDelta: number, colDelata: number) {
-        const coords = this.getCoords();
-        this.moveCursor(coords.row + rowDelta, coords.col + colDelata);
+        const coord = this.getCoord();
+        this.moveCursor(coord.row + rowDelta, coord.col + colDelata);
     }
 
     moveCursor(row: number, col: number) {
@@ -132,6 +132,8 @@ class PuzzleSession {
         this.letterGrid[this.row][this.col] = letter;
         if (prev === null && letter !== null) this.adjustLetterCount(1);
         if (prev !== null && letter === null) this.adjustLetterCount(-1);
+        
+        this.invalidateSolvedPlacement(this.row, this.col);
     }
 
     getLetter(): string | null {
@@ -159,6 +161,14 @@ class PuzzleSession {
         return {solved, incorrect} as PlacementCheckResult;
     }
 
+    private invalidateSolvedPlacement(row: number, col: number) {
+        const placements = this.boardView.getCellPlacements(row, col);
+    
+        for (const placement of placements) {
+            this.solvedPlacements.delete(placement.id);
+        }
+    }
+
     isPuzzleComplete() {
         return this.solvedPlacements.size === this.boardView.getPlacements().length;
     }
@@ -182,7 +192,7 @@ class PuzzleSession {
         return coords;
     }
 
-    getCoords(): Coord {
+    getCoord(): Coord {
         return {row: this.row, col: this.col} as Coord;
     }
 
@@ -197,6 +207,11 @@ class PuzzleSession {
     getPlayableCells(): Coord[] {
         return this.boardView.getCells()
             .map(cell => ({ row: cell.row, col: cell.col } as Coord));
+    }
+
+    isEndOfPlacement(): boolean {
+        const next = this.getCellInActivePlacement(1);
+        return !next;
     }
 
     private isPlacementComplete(placement: Placement): boolean {
@@ -265,12 +280,11 @@ class PuzzleSession {
 
     // positive offset provides next cell in placement. negative offset provides previous cell.
     private getCellInActivePlacement(offset: number): {row: number; col: number} | null {
-        const relativeIndex = this.activePlacementIndex + offset;
-    
-        if (relativeIndex < 0 || relativeIndex >= this.activePlacement.length) return null;
-    
         const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
         if (!cells) return null;
+
+        const relativeIndex = this.activePlacementIndex + offset;
+        if (relativeIndex < 0 || relativeIndex >= this.activePlacement.length) return null;
     
         const cell = cells[relativeIndex]; // cells are sorted
         return {row: cell.row, col: cell.col};
