@@ -94,14 +94,28 @@ class PuzzleController {
     }
 
     private handleCharacterInput(event: InputEvent) {
-        event.preventDefault();
-        this.session.setLetter(event.data);
-    
+        event.preventDefault();    
         const coords = this.session.getCoords();
+
+        this.session.setLetter(event.data);
+
         this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
-    
+        this.renderPlacementFeedback(coords.row, coords.col);
+
         this.session.advanceCursor();
         this.updateCursorVisuals();
+    }
+    
+    private renderPlacementFeedback(row: number, col: number) {
+        const result = this.session.evaluateCellPlacements(row, col);
+
+        for (const id of result.solved) {
+            this.renderer.markPlacementSolved(id);
+        }
+        
+        for (const id of result.incorrect) {
+            this.renderer.markPlacementIncorrect(id);
+        }
     }
 
     private handleEnterInput(event: KeyboardEvent) {

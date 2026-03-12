@@ -3,6 +3,11 @@ import {PuzzleValidator} from "./puzzleValidator.js";
 
 type letterCount = number;
 
+type PlacementCheckResult = {
+    solved: Placement[];
+    incorrect: Placement[];
+}
+
 class PuzzleSession {
     private row: number;
     private col: number;
@@ -13,7 +18,7 @@ class PuzzleSession {
     private filledLetterCount: Map<PlacementId, letterCount>;
     private letterGrid: (string | null)[][];
     private boardView: BoardView;
-    puzzleValidator: PuzzleValidator;
+    private puzzleValidator: PuzzleValidator;
 
     constructor(boardView: BoardView, puzzleValidator: PuzzleValidator) {
         this.boardView = boardView;
@@ -121,18 +126,23 @@ class PuzzleSession {
         return this.letterGrid[this.row][this.col]
     }
 
-    getSolvedPlacements(row: number, col: number): Placement[] {
+    evaluateCellPlacements(row: number, col: number): PlacementCheckResult {
         const solved = [];
+        const incorrect = [];
+
         const placements = this.boardView.getCellPlacements(row, col);
         for (const placement of placements) {
             if (!this.isPlacementComplete(placement)) continue;
             
-            if (this.puzzleValidator.checkPlacement(this.letterGrid, placement)) {
+            const correct = this.puzzleValidator.checkPlacement(this.letterGrid, placement);
+            if (correct) {
                 solved.push(placement);
+            } else {
+                incorrect.push(placement)
             }
         }
-    
-        return solved;
+
+        return {solved, incorrect} as PlacementCheckResult;
     }
 
     isCellEmpty(): boolean {
@@ -159,7 +169,7 @@ class PuzzleSession {
     }
 
     private isPlacementComplete(placement: Placement): boolean {
-        const length = this.filledLetterCount.get(placement.id) ?? -1
+        const length = this.filledLetterCount.get(placement.id) ?? 0
         return length === placement.length
     }
 
