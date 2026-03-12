@@ -56,6 +56,10 @@ class PuzzleController {
             this.handleEnterInput(event);
         }
 
+        else if (this.isTabKey(event)) {
+            this.handleTabInput(event);
+        }
+
         else if (this.isDeleteKey(event)) {
             this.handleDeleteInput(event);
         }
@@ -93,6 +97,10 @@ class PuzzleController {
         return event.key === "ArrowUp" || event.key === "ArrowDown";
     }
 
+    private isTabKey(event: KeyboardEvent) {
+        return event.key === "Tab";
+    }
+
     private handleCharacterInput(event: InputEvent) {
         event.preventDefault();    
         const coords = this.session.getCoords();
@@ -110,19 +118,14 @@ class PuzzleController {
         this.session.advanceCursor();
         this.updateCursorVisuals();
     }
-    
-    private renderPlacementFeedback(row: number, col: number) {
-        const result = this.session.evaluateCellPlacements(row, col);
 
-        for (const placementId of result.solved) {
-            const coords = this.session.getPlacementCells(placementId);
-            this.renderer.markPlacementSolved(coords);
-        }
-        
-        for (const placementId of result.incorrect) {
-            const coords = this.session.getPlacementCells(placementId);
-            this.renderer.markPlacementIncorrect(coords);
-        }
+    handleTabInput(event: KeyboardEvent) {
+        event.preventDefault();
+
+        const offset = event.shiftKey ? -1 : 1;
+        this.session.movePlacementBy(offset);
+    
+        this.updateCursorVisuals();
     }
 
     private handleEnterInput(event: KeyboardEvent) {
@@ -172,6 +175,20 @@ class PuzzleController {
         const coords = this.session.getCoords();
         this.renderer.setCursorHighlight(coords.row, coords.col);
         this.renderer.focusCell(coords.row, coords.col);
+    }
+
+    private renderPlacementFeedback(row: number, col: number) {
+        const result = this.session.evaluateCellPlacements(row, col);
+
+        for (const placementId of result.solved) {
+            const coords = this.session.getPlacementCells(placementId);
+            this.renderer.markPlacementSolved(coords);
+        }
+        
+        for (const placementId of result.incorrect) {
+            const coords = this.session.getPlacementCells(placementId);
+            this.renderer.markPlacementIncorrect(coords);
+        }
     }
 }
 

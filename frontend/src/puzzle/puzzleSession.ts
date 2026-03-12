@@ -40,14 +40,14 @@ class PuzzleSession {
     }
     
     advanceCursor() {
-        const next = this.getCellInActiveWord(1);
+        const next = this.getCellInActivePlacement(1);
         if (!next) return;
     
         this.moveCursor(next.row, next.col);
     }
 
     reverseCursor() {
-        const previous = this.getCellInActiveWord(-1);
+        const previous = this.getCellInActivePlacement(-1);
         if (!previous) return;
     
         this.moveCursor(previous.row, previous.col);
@@ -80,6 +80,16 @@ class PuzzleSession {
     
         this.activePlacement = placement;    
         this.activePlacementIndex = position.placement_index;
+    }
+
+    movePlacementBy(offset: number) {
+        const placements = this.boardView.getPlacements();
+        const index = placements.findIndex(placement => placement.id === this.activePlacement.id);
+        const nextIndex = (index + offset) % placements.length
+        const nextPlacement = placements[nextIndex];
+
+        this.activePlacement = nextPlacement;
+        this.moveCursor(this.activePlacement.start_row, this.activePlacement.start_col);
     }
 
     setDirection(desired: Direction) {
@@ -254,7 +264,7 @@ class PuzzleSession {
     }
 
     // positive offset provides next cell in placement. negative offset provides previous cell.
-    private getCellInActiveWord(offset: number): {row: number; col: number} | null {
+    private getCellInActivePlacement(offset: number): {row: number; col: number} | null {
         const relativeIndex = this.activePlacementIndex + offset;
     
         if (relativeIndex < 0 || relativeIndex >= this.activePlacement.length) return null;
