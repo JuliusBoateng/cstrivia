@@ -2,16 +2,20 @@ import {BoardDom} from "../render/boardDomBuilder.js";
 import {Direction} from "../models/boardView.js";
 import {PuzzleSession} from "../puzzle/puzzleSession.js";
 import {PuzzleRenderer} from "../puzzle/puzzleRenderer.js";
+import {PuzzleValidator} from "../puzzle/puzzleValidator.js";
+
 
 class PuzzleController {
     session: PuzzleSession;
     renderer: PuzzleRenderer;
     boardDom: BoardDom;
+    puzzleValidator: PuzzleValidator;
 
-    constructor(session: PuzzleSession, renderer: PuzzleRenderer, boardDom: BoardDom) {
+    constructor(session: PuzzleSession, renderer: PuzzleRenderer, boardDom: BoardDom, puzzleValidator: PuzzleValidator) {
         this.session = session;
         this.renderer = renderer;
         this.boardDom = boardDom;
+        this.puzzleValidator = puzzleValidator;
 
         boardDom.tableElement.addEventListener("click", this.handleClick.bind(this));
         boardDom.tableElement.addEventListener("beforeinput", this.handleBeforeInput.bind(this));

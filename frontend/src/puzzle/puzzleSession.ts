@@ -1,4 +1,5 @@
 import {Direction, Placement, BoardView, PlacementId} from "../models/boardView.js";
+import {PuzzleValidator} from "./puzzleValidator.js";
 
 type letterCount = number;
 
@@ -155,11 +156,6 @@ class PuzzleSession {
         return placements[0];
     }
 
-    // Regex expression that checks if a character is a Unicode or Arabic character
-    private isLetterOrDigit(char: string): boolean {
-        return /[\p{L}\p{Nd}]/u.test(char);
-    }
-
     private validateLetter(letter: string | null): string | null {
         if (letter === null) return null;
 
@@ -169,7 +165,7 @@ class PuzzleSession {
 
         const char = letter.toUpperCase();
 
-        if (!this.isLetterOrDigit(char)) {
+        if (!PuzzleValidator.isLetterOrDigit(char)) {
             throw new Error("Invalid character.");
         }
 

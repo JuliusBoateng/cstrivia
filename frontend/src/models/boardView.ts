@@ -142,7 +142,7 @@ class BoardView {
         for (const cell of this.cells) {
             const placement_positions = Object.values(cell.placement_positions)
             
-            for (const position of placement_positions) {
+            for (const position of placement_positions) { // cells sorted by (row, col)
                 if (!map.has(position.placement_id)) {
                     map.set(position.placement_id, []);
                 }

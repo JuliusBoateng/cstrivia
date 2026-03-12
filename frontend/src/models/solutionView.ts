@@ -32,6 +32,15 @@ class SolutionView {
         );
     }
 
+    getSolution(placement_id: PlacementId): Solution | undefined {
+        return this.solutionMap.get(placement_id);
+    }
+
+    getLetter(row: number, col: number): Letter | undefined {
+        const key = BoardView.createCoordKey(row, col)
+        return this.letterMap.get(key);
+    }
+
     private createSolutionMap(solutions: Solution[]) {
         return new Map(solutions.map(s => [s.placement_id, s]));
     }
