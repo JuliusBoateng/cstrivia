@@ -21,10 +21,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function createPuzzleController(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
-    const boardDom: BoardDom = createBoard(boardView, tableElement);
-    const puzzleSession: PuzzleSession = new PuzzleSession(boardView)
-    const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardDom)
     const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);
+    const boardDom: BoardDom = createBoard(boardView, tableElement);
+    const puzzleSession: PuzzleSession = new PuzzleSession(boardView, puzzleValidator)
+    const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardDom)
 
-    new PuzzleController(puzzleSession, puzzleRenderer, boardDom, puzzleValidator);
+    new PuzzleController(puzzleSession, puzzleRenderer, boardDom);
 }

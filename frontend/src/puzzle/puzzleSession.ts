@@ -13,11 +13,14 @@ class PuzzleSession {
     private filledLetterCount: Map<PlacementId, letterCount>;
     private letterGrid: (string | null)[][];
     private boardView: BoardView;
+    puzzleValidator: PuzzleValidator;
 
-    constructor(boardView: BoardView) {
+    constructor(boardView: BoardView, puzzleValidator: PuzzleValidator) {
         this.boardView = boardView;
         this.rows = this.boardView.board.rows;
         this.cols = this.boardView.board.cols;
+
+        this.puzzleValidator = puzzleValidator;
 
         // start cursor on first placement
         this.activePlacement = this.getInitialPlacement();
@@ -118,10 +121,18 @@ class PuzzleSession {
         return this.letterGrid[this.row][this.col]
     }
 
-    isWordComplete(): boolean {
-        const placement = this.activePlacement;
-        const length = this.filledLetterCount.get(placement.id) ?? -1
-        return length === placement.length
+    getSolvedPlacements(row: number, col: number): Placement[] {
+        const solved = [];
+        const placements = this.boardView.getCellPlacements(row, col);
+        for (const placement of placements) {
+            if (!this.isPlacementComplete(placement)) continue;
+            
+            if (this.puzzleValidator.checkPlacement(this.letterGrid, placement)) {
+                solved.push(placement);
+            }
+        }
+    
+        return solved;
     }
 
     isCellEmpty(): boolean {
@@ -145,6 +156,11 @@ class PuzzleSession {
 
     getCoords(): {row: number, col: number} {
         return {row: this.row, col: this.col};
+    }
+
+    private isPlacementComplete(placement: Placement): boolean {
+        const length = this.filledLetterCount.get(placement.id) ?? -1
+        return length === placement.length
     }
 
     private getInitialPlacement(): Placement {

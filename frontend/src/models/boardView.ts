@@ -83,6 +83,20 @@ class BoardView {
         return this.placementMap.get(placement_id);
     }
 
+    getCellPlacements(row: number, col: number): Placement[] {
+        const cell = this.getCell(row, col);
+        if (!cell) return [];
+    
+        const placements = [];
+        const positions = Object.values(cell.placement_positions);
+        for (const position of positions) {
+            const placement = this.getPlacement(position.placement_id);
+            if (placement) placements.push(placement);
+        }
+    
+        return placements;
+    }
+
     private createCellGrid() {
         const rows = this.board.rows;
         const cols = this.board.cols;
@@ -202,7 +216,7 @@ class Placement {
     }
 }
 
-class PlacementPositions {
+class PlacementPosition {
     placement_id: PlacementId;
     placement_index: number;
 
@@ -215,9 +229,9 @@ class PlacementPositions {
 class Cell {
     readonly row: number;
     readonly col: number;
-    readonly placement_positions: Record<Direction, PlacementPositions>
+    readonly placement_positions: Record<Direction, PlacementPosition>
 
-    constructor(row: number, col: number, placement_positions: Record<Direction, PlacementPositions>) {
+    constructor(row: number, col: number, placement_positions: Record<Direction, PlacementPosition>) {
         this.row = row;
         this.col = col;
         this.placement_positions = placement_positions;
