@@ -5,6 +5,7 @@ interface BoardViewDTO {
     clues: Clue[];
 }
 
+type Coord = {row: number, col: number}
 type CoordKey = string;
 type PlacementId = number;
 
@@ -54,9 +55,9 @@ class BoardView {
         return `${row},${col}`;
     }
 
-    static parseCoordKey(key: CoordKey): { row: number; col: number } {
+    static parseCoordKey(key: CoordKey): Coord {
         const [row, col] = key.split(",").map(Number);
-        return { row, col };
+        return { row, col } as Coord;
     }
 
     getCell(row: number, col: number): Cell | null {
@@ -250,4 +251,4 @@ class Clue {
     }
 }
 
-export {BoardView, CoordKey, Placement, Direction, PlacementId};
+export {BoardView, CoordKey, Placement, Direction, PlacementId, Coord};

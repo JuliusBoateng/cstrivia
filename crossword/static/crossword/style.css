@@ -121,3 +121,45 @@ h1 {
     background: #d9dced;
     box-shadow: inset 0 0 0 2px #6A6D8F;
 }
+
+@keyframes success-pulse {
+    0% {
+      transform: scale(1);
+      background-color: var(--cell-bg);
+    }
+  
+    40% {
+      transform: scale(1.05);
+      background-color: #d6c7ff; /* purple flash */
+    }
+  
+    100% {
+      transform: scale(1);
+      background-color: var(--cell-bg);
+    }
+}
+  
+.placement-success-pulse {
+    animation: success-pulse 200ms ease-in-out;
+}
+
+@keyframes error-pulse {
+    0% {
+      transform: scale(1);
+      background-color: var(--cell-bg);
+    }
+  
+    40% {
+      transform: scale(1.03);
+      background-color: #ffd1dc;
+    }
+  
+    100% {
+      transform: scale(1);
+      background-color: var(--cell-bg);
+    }
+}
+  
+.placement-error-pulse {
+    animation: error-pulse 260ms ease-in-out;
+}

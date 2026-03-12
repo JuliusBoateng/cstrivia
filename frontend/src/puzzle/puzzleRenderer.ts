@@ -1,4 +1,5 @@
 import {BoardDom} from "../render/boardDomBuilder.js";
+import {Coord} from "../models/boardView.js";
 
 class PuzzleRenderer {
     cellGrid: HTMLTableCellElement[][];
@@ -76,6 +77,27 @@ class PuzzleRenderer {
         }
         this.highlightedPlacementId = -1;
         this.highlightedPlacementCells = [];
+    }
+
+    markPlacementSolved(coords: Coord[]) {
+        const cells = coords.map(coord => this.cellGrid[coord.row][coord.col])
+        this.pulse(cells, "placement-success-pulse");
+    }
+
+    markPlacementIncorrect(coords: Coord[]) {
+        const cells = coords.map(coord => this.cellGrid[coord.row][coord.col])
+        this.pulse(cells, "placement-error-pulse");
+    }
+
+    private pulse(cells: HTMLElement[], className: string) {
+        cells.forEach(cell => cell.classList.remove("placement-success-pulse", "placement-error-pulse"));
+
+        // TODO re-evaluate
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                cells.forEach(cell => cell.classList.add(className));
+            });
+        });
     }
 }
 

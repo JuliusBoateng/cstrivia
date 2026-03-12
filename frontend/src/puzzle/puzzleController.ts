@@ -1,5 +1,5 @@
 import {BoardDom} from "../render/boardDomBuilder.js";
-import {Direction} from "../models/boardView.js";
+import {Direction, Coord} from "../models/boardView.js";
 import {PuzzleSession} from "../puzzle/puzzleSession.js";
 import {PuzzleRenderer} from "../puzzle/puzzleRenderer.js";
 
@@ -109,12 +109,14 @@ class PuzzleController {
     private renderPlacementFeedback(row: number, col: number) {
         const result = this.session.evaluateCellPlacements(row, col);
 
-        for (const id of result.solved) {
-            this.renderer.markPlacementSolved(id);
+        for (const placementId of result.solved) {
+            const coords = this.session.getPlacementCells(placementId);
+            this.renderer.markPlacementSolved(coords);
         }
         
-        for (const id of result.incorrect) {
-            this.renderer.markPlacementIncorrect(id);
+        for (const placementId of result.incorrect) {
+            const coords = this.session.getPlacementCells(placementId);
+            this.renderer.markPlacementIncorrect(coords);
         }
     }
 

@@ -1,11 +1,11 @@
-import {Direction, Placement, BoardView, PlacementId} from "../models/boardView.js";
+import {Direction, Placement, BoardView, PlacementId, Coord} from "../models/boardView.js";
 import {PuzzleValidator} from "./puzzleValidator.js";
 
 type letterCount = number;
 
 type PlacementCheckResult = {
-    solved: Placement[];
-    incorrect: Placement[];
+    solved: PlacementId[];
+    incorrect: PlacementId[];
 }
 
 class PuzzleSession {
@@ -136,9 +136,9 @@ class PuzzleSession {
             
             const correct = this.puzzleValidator.checkPlacement(this.letterGrid, placement);
             if (correct) {
-                solved.push(placement);
+                solved.push(placement.id);
             } else {
-                incorrect.push(placement)
+                incorrect.push(placement.id)
             }
         }
 
@@ -164,8 +164,16 @@ class PuzzleSession {
         return coords;
     }
 
-    getCoords(): {row: number, col: number} {
-        return {row: this.row, col: this.col};
+    getCoords(): Coord {
+        return {row: this.row, col: this.col} as Coord;
+    }
+
+    getPlacementCells(placementId: PlacementId): Coord[] {
+        const cells = this.boardView.getCellsWithPlacementId(placementId);
+        if (!cells) return [];
+
+        const coords = cells.map(cell => ({row: cell.row, col: cell.col} as Coord))
+        return coords;
     }
 
     private isPlacementComplete(placement: Placement): boolean {
