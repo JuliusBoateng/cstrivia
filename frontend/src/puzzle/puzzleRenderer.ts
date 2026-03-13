@@ -66,15 +66,14 @@ class PuzzleRenderer {
 
     markPlacementSolved(coords: Coord[]) {
         const className = "placement-success";
-        const cells = coords.map(coord => this.cellGrid[coord.row][coord.col])
-        this.animateElements(cells, className);
+        const fillElements = this.getFillElements(coords);
+        this.animateElements(fillElements, className);
     }
 
     markPlacementIncorrect(coords: Coord[]) {
         const className = "placement-error";
-        const fills = coords.map(coord => this.cellGrid[coord.row][coord.col].querySelector(".fill"))
-                            .filter((fill): fill is HTMLElement => (fill !== null));
-        this.animateElements(fills, className);
+        const fillElements = this.getFillElements(coords);
+        this.animateElements(fillElements, className);
     }
 
     markPuzzleComplete(playableCells: Coord[]) {
@@ -95,6 +94,12 @@ class PuzzleRenderer {
 
         this.highlightedCursor.classList.remove("highlight-cursor");
         this.highlightedCursor = null;
+    }
+
+    private getFillElements(coords: Coord[]): HTMLElement[] {
+        const fills = coords.map(coord => this.cellGrid[coord.row][coord.col].querySelector(".fill"))
+                        .filter((fill): fill is HTMLElement => (fill !== null));
+        return fills;
     }
 
     private animateElements(elements: HTMLElement[], className: string) {
