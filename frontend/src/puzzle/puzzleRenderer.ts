@@ -65,20 +65,21 @@ class PuzzleRenderer {
     }
 
     markPlacementSolved(coords: Coord[]) {
-        const className = "placement-success-pulse";
+        const className = "placement-success";
         const cells = coords.map(coord => this.cellGrid[coord.row][coord.col])
-        this.pulse(cells, className);
+        this.animateElements(cells, className);
     }
 
     markPlacementIncorrect(coords: Coord[]) {
-        const className = "placement-error-pulse";
-        const cells = coords.map(coord => this.cellGrid[coord.row][coord.col])
-        this.pulse(cells, className);
+        const className = "placement-error";
+        const fills = coords.map(coord => this.cellGrid[coord.row][coord.col].querySelector(".fill"))
+                            .filter((fill): fill is HTMLElement => (fill !== null));
+        this.animateElements(fills, className);
     }
 
     markPuzzleComplete(playableCells: Coord[]) {
         const cells = playableCells.map(playableCell => this.cellGrid[playableCell.row][playableCell.col])
-        this.pulse(cells, "placement-success-pulse");
+        this.animateElements(cells, "placement-success");
     }
 
     private clearPlacementHighlight() {
@@ -96,21 +97,21 @@ class PuzzleRenderer {
         this.highlightedCursor = null;
     }
 
-    private pulse(cells: HTMLElement[], className: string) {
-        this.clearAnimation(cells);
+    private animateElements(elements: HTMLElement[], className: string) {
+        this.clearAnimation(elements);
 
         // Double requestAnimationFrame ensures the browser processes the class
         // removal in a separate frame before re-adding it. Otherwise the DOM
         // changes may be batched together and the animation will not restart.
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                cells.forEach(cell => cell.classList.add(className));
+                elements.forEach(element => element.classList.add(className));
             });
         });
     }
     
-    private clearAnimation(cells: HTMLElement[]) {
-        cells.forEach(cell => cell.classList.remove("placement-success-pulse", "placement-error-pulse"));
+    private clearAnimation(elements: HTMLElement[]) {
+        elements.forEach(element => element.classList.remove("placement-success", "placement-error"));
     }
 }
 

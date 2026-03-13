@@ -128,19 +128,20 @@ h1 {
     100% {transform: scale(1); background-color: var(--cell-bg);}
 }
 
-.placement-success-pulse {
+.placement-success {
     transform-origin: center;
     animation: success-pulse 220ms ease-in-out;
 }
 
-@keyframes error-pulse {
-    0% {transform: scale(1); background-color: var(--cell-bg);}
-    30% {transform: scale(1.04); background-color: #ffd1dc;}
-    60% {transform: scale(1.02); background-color: #ffd1dc;}
-    100% {transform: scale(1); background-color: var(--cell-bg);}
+@keyframes error-shake {
+    0%   { transform: translateX(0); }
+    25%  { transform: translateX(-2px); }
+    50%  { transform: translateX(2px); }
+    75%  { transform: translateX(-1px); }
+    100% { transform: translateX(0); }
 }
   
-.placement-error-pulse {
+.placement-error {
     transform-origin: center;
-    animation: error-pulse 220ms ease-in-out;
+    animation: error-shake 180ms ease-out;
 }
