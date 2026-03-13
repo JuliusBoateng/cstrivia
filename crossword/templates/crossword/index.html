@@ -18,30 +18,44 @@
             <table id="board" class="board-card"></table>
           </div>
           <div id="clues" class="clue-wrapper">
-            <details open>
-              <summary>To Do</summary>
-          
-              <details open>
-                <summary>Across</summary>
-                <ol id="across-clues"></ol>
-              </details>
-          
-              <details open>
-                <summary>Down</summary>
-                <ol id="down-clues"></ol>
-              </details>
-            </details>
-            <details>
-              <summary>Solved</summary>
-                <details open>
-                  <summary>Across</summary>
-                  <ol id="solved-across-clues"></ol>
-                </details>
-                <details open>
-                  <summary>Down</summary>
-                  <ol id="solved-down-clues"></ol>
-                </details>
-            </details>
+            <h2>
+              <button id="todo-toggle" type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-section">
+                To Do
+              </button>
+            </h2>
+            <div id="todo-section" class="clue-section-body">
+              <h3>
+                <button type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-across-clues">
+                  Across
+                </button>
+              </h3>
+              <ol class="clue-list" id="todo-across-clues"></ol>
+              <h3>
+                <button type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-down-clues">
+                  Down
+                </button>
+              </h3>
+              <ol class="clue-list" id="todo-down-clues"></ol>
+            </div>
+            <h2>
+              <button id="solved-toggle" type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-section">
+                Solved
+              </button>
+            </h2>
+            <div id="solved-section" class="clue-section-body" hidden>
+              <h3>
+                <button type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-across-clues">
+                  Across
+                </button>
+              </h3>
+              <ol class="clue-list" id="solved-across-clues" hidden></ol>
+              <h3>
+                <button type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-down-clues">
+                  Down
+                </button>
+              </h3>
+              <ol class="clue-list" id="solved-down-clues" hidden></ol>
+            </div>
           </div>
         </div>
     </div>

@@ -20,6 +20,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
     createPuzzleController(tableElement, boardView, solutionView);
 });
 
+function createClueDom(boardView: BoardView) {
+    const clues = boardView.clues;
+}
+
+function getClueDom(): HTMLTableElement {
+    const clueDom = document.getElementById("clue");
+
+    if (!(clueDom instanceof HTMLTableElement) || !clueDom) {
+        throw Error("Clue is not available");
+    }
+
+    return clueDom;
+}
+
 function createPuzzleController(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
     const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);
     const boardDom: BoardDom = createBoard(boardView, tableElement);
