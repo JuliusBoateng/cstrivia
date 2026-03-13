@@ -13,12 +13,15 @@ class PuzzleController {
         this.renderer = renderer;
         this.boardDom = boardDom;
 
-        boardDom.tableElement.addEventListener("click", this.handleClick.bind(this));
+        boardDom.tableElement.addEventListener("pointerdown", this.handlePointerInput.bind(this));
         boardDom.tableElement.addEventListener("beforeinput", this.handleBeforeInput.bind(this));
         boardDom.tableElement.addEventListener("keydown", this.handleKeydown.bind(this));
     }
 
-    private handleClick(event: MouseEvent) {
+    private handlePointerInput(event: PointerEvent) {
+        if (!event.isPrimary) return; // ignore multi-touch / secondary stylus
+        if (event.button !== 0) return; // ignore right/middle clicks
+
         const target = event.target;
         if (!(target instanceof HTMLElement)) return;
 
@@ -129,7 +132,7 @@ class PuzzleController {
     }
 
     private handleEnterInput(event: KeyboardEvent) {
-        if (this.session.isEndOfPlacement()) {
+        if (this.session.isEndOfPlacement() && !event.repeat) {
             const current = this.session.getCoord();
             this.renderPlacementFeedback(current.row, current.col)
         } else {

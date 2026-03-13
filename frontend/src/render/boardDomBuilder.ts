@@ -127,6 +127,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         inputElement.autocomplete = "off";
         inputElement.spellcheck = false;
         inputElement.autocapitalize = "characters";
+        inputElement.inputMode="text";
         inputElement.classList.add("letter");
 
         return inputElement;

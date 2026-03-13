@@ -55,6 +55,9 @@ h1 {
     min-width: 300px;
     border: 2px solid #18181b;
     border-collapse: collapse;
+    touch-action: manipulation;
+    user-select: none;
+    contain: layout style paint;
 }
 
 .board-card caption {
@@ -68,6 +71,7 @@ h1 {
     border: 1px solid #18181b;
     background: white;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .board-card .cell.block {
