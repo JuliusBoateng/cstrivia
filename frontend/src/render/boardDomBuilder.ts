@@ -7,8 +7,8 @@ interface BoardDom {
 }
 
 function createBoard(boardView: BoardView, tableElement: HTMLTableElement): BoardDom {
-    const cellGrid = initializeGrid()
-    const inputGrid = initializeGrid()
+    const cellGrid: (HTMLTableCellElement | null)[][] = initializeGrid()
+    const inputGrid: (HTMLInputElement | null)[][] = initializeGrid()
 
     const captionElement = createCaptionElement();
     tableElement.appendChild(captionElement);
@@ -24,8 +24,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     
     return dom;
     
-
-    function initializeGrid(): HTMLElement[][] {
+    function initializeGrid<T>(): (T | null)[][] {
         const rows = boardView.board.rows;
         const cols = boardView.board.cols;
         return Array.from({ length: rows }, () => Array(cols).fill(null))

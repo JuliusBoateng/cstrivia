@@ -21,6 +21,7 @@ class BoardView {
     readonly labelGrid: number[][];
     readonly placementMap: Map<PlacementId, Placement>;
     readonly placementCellMap: Map<PlacementId, Cell[]>;
+    readonly clueMap: Map<PlacementId, Clue>;
 
     private constructor(
         board: Board,
@@ -40,6 +41,7 @@ class BoardView {
         this.labelGrid = this.createLabelGrid();
         this.placementMap = this.createPlacementMap();
         this.placementCellMap = this.createPlacementCellMap();
+        this.clueMap = this.createClueMap(clues);
     }
 
     static fromDTO(dto: BoardViewDTO): BoardView {
@@ -102,6 +104,14 @@ class BoardView {
         return placements;
     }
 
+    getClueMap(): Map<PlacementId, Clue> {
+        return this.clueMap;
+    }
+
+    private createClueMap(clues: Clue[]): Map<PlacementId, Clue> {
+        return new Map(clues.map(clue => [clue.placement_id, clue]));
+     }
+
     private createCellGrid() {
         const rows = this.board.rows;
         const cols = this.board.cols;
@@ -144,7 +154,7 @@ class BoardView {
             const r = p.start_row;
             const c = p.start_col;
 
-            // placements can have the same start coords accross directions
+            // placements can have the same start coords across directions
             if (labelGrid[r][c] !== 0) {
                 continue;
             }
@@ -255,4 +265,4 @@ class Clue {
     }
 }
 
-export {BoardView, CoordKey, Placement, Direction, PlacementId, Coord};
+export {BoardView, CoordKey, Placement, Direction, PlacementId, Coord, Clue};
