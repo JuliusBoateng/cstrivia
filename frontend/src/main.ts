@@ -29,7 +29,9 @@ function createClueDom(boardView: BoardView, clueDom: HTMLDivElement) {
     const placements = boardView.getPlacements();
 
     const {acrossNodes, downNodes} = createDirectionElements();
+    renderClues(acrossNodes, downNodes);
 
+    // TODO Add counts to each section so that users can know how many items are in each section.
     function createDirectionElements(): {acrossNodes: HTMLLIElement[], downNodes: HTMLLIElement[]} {
         const acrossNodes: HTMLLIElement[] = [];
         const downNodes: HTMLLIElement[] = [];
@@ -83,27 +85,26 @@ function createClueDom(boardView: BoardView, clueDom: HTMLDivElement) {
         return labelSpan;
     }
 
-    // function() {
-    //     const acrossList = clueDom.querySelector("#todo-across-clues")!;
-    //     const downList = clueDom.querySelector("#todo-down-clues")!;
+    function renderClues(acrossNodes: HTMLLIElement[], downNodes: HTMLLIElement[]) {
+        const acrossList = clueDom.querySelector("#todo-across-clues") as HTMLLinkElement;
+        const downList = clueDom.querySelector("#todo-down-clues") as HTMLLinkElement;
         
-    //     const acrossFragment = document.createDocumentFragment();
-    //     acrossNodes.forEach(n => acrossFragment.appendChild(n));
+        const acrossFragment = document.createDocumentFragment();
+        acrossNodes.forEach(n => acrossFragment.appendChild(n));
         
-    //     const downFragment = document.createDocumentFragment();
-    //     downNodes.forEach(n => downFragment.appendChild(n));
+        const downFragment = document.createDocumentFragment();
+        downNodes.forEach(n => downFragment.appendChild(n));
         
-    //     acrossList.appendChild(acrossFragment);
-    //     downList.appendChild(downFragment);
-    // }
-    // Add to dom.
+        acrossList.appendChild(acrossFragment);
+        downList.appendChild(downFragment);
+    }
 }
 
 function getClueDom(): HTMLDivElement {
-    const clueDom = document.getElementById("clue");
+    const clueDom = document.getElementById("clues");
 
-    if (!(clueDom instanceof HTMLTableElement) || !clueDom) {
-        throw Error("Clue is not available");
+    if (!(clueDom instanceof HTMLDivElement) || !clueDom) {
+        throw Error("Clue dom is not available");
     }
 
     return clueDom;

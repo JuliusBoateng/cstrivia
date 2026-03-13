@@ -51,8 +51,7 @@ h1 {
 
 .board-card {
     table-layout: fixed;
-    width: clamp(300px, 40vw, 800px);
-    min-width: 300px;
+    width: clamp(320px, 45vw, 720px);
     border: 2px solid #18181b;
     border-collapse: collapse;
     touch-action: manipulation;
@@ -148,4 +147,57 @@ h1 {
 .placement-error {
     transform-origin: center;
     animation: error-shake 180ms ease-out;
+}
+
+.clue-wrapper h2 {
+    margin: 0 0 0.4rem 0;
+    padding: 0;
+}
+
+.clue-wrapper h3 {
+    margin: 0.6rem 0 0.25rem 0;
+    padding: 0;
+}
+
+.clue-wrapper {
+    font-family: system-ui, sans-serif;;
+    font-size: 14px;
+    line-height: 1.35;
+    width: clamp(320px, 30vw, 460px);
+    overflow-y: auto;
+}
+ 
+.clue-toggle {
+    font: inherit;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.clue-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.75rem 0;
+}
+
+.clue + .clue {
+    margin-top: 0.45rem;
+  }
+  
+.clue {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.5rem;
+}
+
+.clue-label {
+    font-weight: 500;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.clue-text {
+    word-break: break-word;
 }
