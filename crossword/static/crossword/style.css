@@ -34,6 +34,8 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    gap: clamp(14px, 2.5vw, 28px);
+    flex-wrap: wrap; 
 }
 
 .board-wrapper {
@@ -47,11 +49,13 @@ h1 {
     box-shadow:
         0 1px 2px rgba(0,0,0,0.04),
         0 8px 24px rgba(0,0,0,0.06);
+    
+    flex: 0 0 clamp(360px, 45vw, 720px);
 }
 
 .board-card {
     table-layout: fixed;
-    width: clamp(320px, 45vw, 720px);
+    width: 100%;
     border: 2px solid #18181b;
     border-collapse: collapse;
     touch-action: manipulation;
@@ -163,7 +167,7 @@ h1 {
     font-family: system-ui, sans-serif;;
     font-size: 14px;
     line-height: 1.35;
-    width: clamp(320px, 30vw, 460px);
+    flex: 0 0 clamp(340px, 30vw, 460px);
     overflow-y: auto;
 }
  
