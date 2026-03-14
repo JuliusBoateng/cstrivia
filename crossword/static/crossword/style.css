@@ -66,9 +66,6 @@ h1 {
     box-shadow:
         0 1px 2px rgba(0,0,0,0.04),
         0 8px 24px rgba(0,0,0,0.06);
-    
-    position: sticky;
-    top: 20px;
 }
 
 .board-card {
@@ -183,17 +180,11 @@ h1 {
     width: var(--clue-width);
     max-width: 100%;
     font-size: 14px;
-    line-height: 1.35;
-    overflow-y: auto;
+    line-height: 1.4;
 }
 
-.clue-card h2 {
-    margin: 0 0 0.4rem 0;
-    padding: 0;
-}
-
-.clue-card h3 {
-    margin: 0.6rem 0 0.25rem 0;
+.clue-card :is(h2, h3) {
+    margin: 0;
     padding: 0;
 }
  
@@ -206,10 +197,15 @@ h1 {
     margin: 0;
 }
 
-.clue-list {
+.clue-section-body:not([hidden]) {
+    margin-top: 0.75rem;
+}
+
+.clue-list:not([hidden]) {
     list-style: none;
     padding: 0;
-    margin: 0 0 0.75rem 0;
+    padding-left: 1rem;
+    margin: 0.5rem;
 }
 
 .clue + .clue {
@@ -218,22 +214,26 @@ h1 {
   
 .clue {
     display: grid;
-    grid-template-columns: 2rem 1fr;
+    grid-template-columns: auto 1fr;
     gap: 0.5rem;
 }
 
 .clue-label {
-    font-weight: 500;
-    text-align: right;
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
 }
 
 .clue-text {
-    word-break: break-word;
+    max-width: 55ch;
+    overflow-wrap: break-word;
 }
 
 /*  min-width: --clue-width  max-width: --clue-width */
 @media (max-width: 1000px) {
+    .board-wrapper {
+        position: sticky;
+        top: 20px;
+    }
     .panel {
       flex-direction: column;
       align-items: center;
