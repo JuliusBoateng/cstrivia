@@ -4,6 +4,16 @@
   box-sizing: border-box;
 }
 
+:root {
+    /* Board sizing */
+    --board-min: 320px;
+    --board-max: 720px;
+  
+    /* Clue sizing */
+    --clue-width: 420px;
+    --clue-min: 320px;
+  }
+
 html {
     font-family: system-ui, "Segoe UI", Roboto, sans-serif;
 }
@@ -33,22 +43,22 @@ h1 {
 .panel {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     gap: clamp(14px, 2.5vw, 28px);
     margin: 0 auto;
 }
 
 .board-wrapper {
-    width: clamp(320px, 45vw, 720px);
+    width: clamp(var(--board-min), 45vw, var(--board-max));
     max-width: 100%;
-    min-width: 320px;
+    min-width: var(--board-min);
     flex: 0 0 auto;
 
     background: white;
 
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 20px;
-    
+
     padding:clamp(8px, 1vw, 12px)
             clamp(16px, 2vw, 24px)
             clamp(16px, 2vw, 24px);
@@ -170,7 +180,7 @@ h1 {
 }
 
 .clue-card {
-    width: 420px;
+    width: var(--clue-width);
     max-width: 100%;
     font-size: 14px;
     line-height: 1.35;
@@ -222,6 +232,7 @@ h1 {
     word-break: break-word;
 }
 
+/*  min-width: --clue-width  max-width: --clue-width */
 @media (max-width: 1000px) {
     .panel {
       flex-direction: column;
@@ -231,5 +242,14 @@ h1 {
         width: 100%;
         max-width: 420px;
         min-width: 320px;
+    }
+  }
+
+/* max-width: --board-min 
+reason for this query is to prevent unreachable 
+horizontal scroll after overflow */
+  @media (max-width: 320px) {
+    .panel {
+      align-items: flex-start;
     }
   }
