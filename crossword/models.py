@@ -113,7 +113,7 @@ class Clue(models.Model):
         return stripped.upper()
 
     def clean(self):
-        self.question = self.question.strip().capitalize()
+        self.question = self.question.strip()
         self.display_answer = self._clean_answer(self.display_answer) 
         self.normalized_answer = self._normalize_cleaned_answer(self.display_answer)
 

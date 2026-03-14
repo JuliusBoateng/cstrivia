@@ -197,6 +197,12 @@ h1 {
     margin: 0;
 }
 
+.clue-count {
+    color: #555;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
 .clue-section-body:not([hidden]) {
     margin-top: 0.75rem;
 }

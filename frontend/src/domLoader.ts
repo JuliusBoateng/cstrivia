@@ -31,4 +31,15 @@ function getSolutionView(): SolutionView {
     return SolutionView.fromDTO(solutionViewDTO)
 }
 
-export {getTableElement, getBoardView, getSolutionView};
+
+function getClueContainer(): HTMLDivElement {
+    const clueContainer = document.getElementById("clues");
+
+    if (!(clueContainer instanceof HTMLDivElement) || !clueContainer) {
+        throw Error("Clue dom is not available");
+    }
+
+    return clueContainer;
+}
+
+export {getTableElement, getBoardView, getSolutionView, getClueContainer};

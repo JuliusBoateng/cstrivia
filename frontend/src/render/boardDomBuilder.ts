@@ -1,7 +1,6 @@
 import {BoardView, Direction} from "../models/boardView.js";
 
 interface BoardDom {
-    tableElement: HTMLTableElement;
     cellGrid: HTMLTableCellElement[][];
     inputGrid: HTMLInputElement[][];
 }
@@ -17,7 +16,6 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     tableElement.appendChild(tbodyElement);
     
     const dom: BoardDom = {
-        tableElement: tableElement,
         cellGrid: cellGrid as HTMLTableCellElement[][],
         inputGrid: inputGrid as HTMLInputElement[][]
     }

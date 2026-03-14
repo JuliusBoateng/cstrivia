@@ -8,14 +8,14 @@ class PuzzleController {
     renderer: PuzzleRenderer;
     boardDom: BoardDom;
 
-    constructor(session: PuzzleSession, renderer: PuzzleRenderer, boardDom: BoardDom) {
+    constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardDom: BoardDom) {
         this.session = session;
         this.renderer = renderer;
         this.boardDom = boardDom;
 
-        boardDom.tableElement.addEventListener("pointerdown", this.handlePointerInput.bind(this));
-        boardDom.tableElement.addEventListener("beforeinput", this.handleBeforeInput.bind(this));
-        boardDom.tableElement.addEventListener("keydown", this.handleKeydown.bind(this));
+        tableElement.addEventListener("pointerdown", this.handlePointerInput.bind(this));
+        tableElement.addEventListener("beforeinput", this.handleBeforeInput.bind(this));
+        tableElement.addEventListener("keydown", this.handleKeydown.bind(this));
     }
 
     private handlePointerInput(event: PointerEvent) {
