@@ -58,6 +58,19 @@ class PuzzleSession {
         this.moveCursor(coord.row + rowDelta, coord.col + colDelata);
     }
 
+    setCursorByPlacement(placementId: PlacementId) {
+        const placement = this.boardView.getPlacement(placementId);
+        if (!placement) return;
+
+        const cell = this.boardView.getCell(placement.start_row, placement.start_col);
+        if (!cell) return;
+
+        this.row = placement.start_row;
+        this.col = placement.start_col;
+        this.activePlacement = placement;
+        this.activePlacementIndex = 0;
+    }
+
     moveCursor(row: number, col: number) {
         const cell = this.boardView.getCell(row, col);
         if (!cell) return;

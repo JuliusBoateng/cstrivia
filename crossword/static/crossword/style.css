@@ -197,6 +197,10 @@ h1 {
     margin: 0;
 }
 
+.clue-section-body:empty {
+    display: none;
+}
+
 .clue-count {
     color: #555;
     font-weight: 500;
@@ -208,6 +212,10 @@ h1 {
     padding: 0;
     padding-left: 1rem;
     margin: 0.5rem;
+}
+
+.clue-list:empty {
+    display: none;
 }
 
 .clue + .clue {

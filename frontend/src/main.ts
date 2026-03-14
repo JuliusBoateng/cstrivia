@@ -20,11 +20,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
         throw Error("SolutionView does not match BoardView")
     }
 
-    createPuzzleController(tableElement, boardView, solutionView);
+    const puzzleController = createPuzzleController(tableElement, boardView, solutionView);
 
     const clueContainer: HTMLDivElement = getClueContainer();
     createClue(boardView, clueContainer);
-    const clueRenderer = new ClueRenderer(clueContainer);
+
+    const clueRenderer = new ClueRenderer(clueContainer, puzzleController);
 });
 
 
@@ -34,5 +35,5 @@ function createPuzzleController(tableElement: HTMLTableElement, boardView: Board
     const puzzleSession: PuzzleSession = new PuzzleSession(boardView, puzzleValidator)
     const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardDom)
 
-    new PuzzleController(tableElement, puzzleSession, puzzleRenderer, boardDom);
+    return new PuzzleController(tableElement, puzzleSession, puzzleRenderer, boardDom);
 }

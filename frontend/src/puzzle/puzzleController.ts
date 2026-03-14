@@ -1,9 +1,13 @@
 import {BoardDom} from "../render/boardDomBuilder.js";
-import {Direction, Coord} from "../models/boardView.js";
+import {Direction, PlacementId} from "../models/boardView.js";
 import {PuzzleSession} from "../puzzle/puzzleSession.js";
 import {PuzzleRenderer} from "../puzzle/puzzleRenderer.js";
 
-class PuzzleController {
+interface CursorController {
+    setCursorByPlacement(placementId: PlacementId): void;
+  }
+
+class PuzzleController implements CursorController {
     session: PuzzleSession;
     renderer: PuzzleRenderer;
     boardDom: BoardDom;
@@ -18,6 +22,11 @@ class PuzzleController {
         tableElement.addEventListener("keydown", this.handleKeydown.bind(this));
     }
 
+    setCursorByPlacement(placementId: PlacementId): void {
+        this.session.setCursorByPlacement(placementId);
+        this.updateCursorVisuals();
+    }
+ 
     private handlePointerInput(event: PointerEvent) {
         if (!event.isPrimary) return; // ignore multi-touch / secondary stylus
         if (event.button !== 0) return; // ignore right/middle clicks
@@ -200,4 +209,4 @@ class PuzzleController {
     }
 }
 
-export {PuzzleController};
+export {PuzzleController, CursorController};
