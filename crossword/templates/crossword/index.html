@@ -17,44 +17,46 @@
           <div class="board-wrapper">
             <table id="board" class="board-card"></table>
           </div>
-          <div id="clues" class="clue-wrapper">
-            <h2>
-              <button id="todo-toggle" type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-section">
-                To Do
-              </button>
-            </h2>
-            <div id="todo-section" class="clue-section-body">
-              <h3>
-                <button type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-across-clues">
-                  Across
+          <div class="clue-wrapper">
+            <div id="clues" class="clue-card">
+              <h2>
+                <button id="todo-toggle" type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-section">
+                  To Do
                 </button>
-              </h3>
-              <ol class="clue-list" id="todo-across-clues"></ol>
-              <h3>
-                <button type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-down-clues">
-                  Down
+              </h2>
+              <div id="todo-section" class="clue-section-body">
+                <h3>
+                  <button type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-across-clues">
+                    Across
+                  </button>
+                </h3>
+                <ol class="clue-list" id="todo-across-clues"></ol>
+                <h3>
+                  <button type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-down-clues">
+                    Down
+                  </button>
+                </h3>
+                <ol class="clue-list" id="todo-down-clues"></ol>
+              </div>
+              <h2>
+                <button id="solved-toggle" type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-section">
+                  Solved
                 </button>
-              </h3>
-              <ol class="clue-list" id="todo-down-clues"></ol>
-            </div>
-            <h2>
-              <button id="solved-toggle" type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-section">
-                Solved
-              </button>
-            </h2>
-            <div id="solved-section" class="clue-section-body" hidden>
-              <h3>
-                <button type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-across-clues">
-                  Across
-                </button>
-              </h3>
-              <ol class="clue-list" id="solved-across-clues" hidden></ol>
-              <h3>
-                <button type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-down-clues">
-                  Down
-                </button>
-              </h3>
-              <ol class="clue-list" id="solved-down-clues" hidden></ol>
+              </h2>
+              <div id="solved-section" class="clue-section-body" hidden>
+                <h3>
+                  <button type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-across-clues">
+                    Across
+                  </button>
+                </h3>
+                <ol class="clue-list" id="solved-across-clues" hidden></ol>
+                <h3>
+                  <button type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-down-clues">
+                    Down
+                  </button>
+                </h3>
+                <ol class="clue-list" id="solved-down-clues" hidden></ol>
+              </div>
             </div>
           </div>
         </div>
