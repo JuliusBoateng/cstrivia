@@ -43,7 +43,7 @@ h1 {
 .panel {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: clamp(14px, 2.5vw, 28px);
     margin: 0 auto;
 }
@@ -201,10 +201,6 @@ h1 {
     color: #555;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
-}
-
-.clue-section-body:not([hidden]) {
-    margin-top: 0.75rem;
 }
 
 .clue-list:not([hidden]) {

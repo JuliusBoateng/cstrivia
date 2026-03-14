@@ -3,19 +3,12 @@ import { BoardView, Clue, Direction, Placement, PlacementId} from "../models/boa
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
     const placements = boardView.getPlacements();
+    const {acrossNodes, downNodes} = createLiElements();
 
-    const {acrossNodes, downNodes} = createDirectionElements();
+    renderClues("#todo-across-clues", "#todo-across-toggle", acrossNodes);
+    renderClues("#todo-down-clues", "#todo-down-toggle", downNodes);
 
-    const acrossToggle = clueContainer.querySelector("#todo-across-toggle") as HTMLButtonElement;
-    const downToggle = clueContainer.querySelector("#todo-down-toggle") as HTMLButtonElement;
-
-    setToggleCount(acrossToggle, acrossNodes.length);
-    setToggleCount(downToggle, downNodes.length);
-
-    renderClues(acrossNodes, downNodes);
-
-    // TODO Add counts to each section so that users can know how many items are in each section.
-    function createDirectionElements(): {acrossNodes: HTMLLIElement[], downNodes: HTMLLIElement[]} {
+    function createLiElements(): {acrossNodes: HTMLLIElement[], downNodes: HTMLLIElement[]} {
         const acrossNodes: HTMLLIElement[] = [];
         const downNodes: HTMLLIElement[] = [];
 
@@ -74,18 +67,24 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         span.textContent = `(${count})`;
     }
 
-    function renderClues(acrossNodes: HTMLLIElement[], downNodes: HTMLLIElement[]) {
-        const acrossClues = clueContainer.querySelector("#todo-across-clues") as HTMLLinkElement;
-        const downClues = clueContainer.querySelector("#todo-down-clues") as HTMLLinkElement;
-        
-        const acrossFragment = document.createDocumentFragment();
-        acrossNodes.forEach(n => acrossFragment.appendChild(n));
-        
-        const downFragment = document.createDocumentFragment();
-        downNodes.forEach(n => downFragment.appendChild(n));
-        
-        acrossClues.appendChild(acrossFragment);
-        downClues.appendChild(downFragment);
+    function renderClues(listSelector: string, toggleSelector: string, nodes: HTMLLIElement[]) {
+        const list = clueContainer.querySelector(listSelector) as HTMLOListElement;
+        const toggle = clueContainer.querySelector(toggleSelector) as HTMLButtonElement;
+    
+        const hasItems = nodes.length > 0;
+    
+        list.hidden = !hasItems;
+        toggle.setAttribute("aria-expanded", String(hasItems));
+        setToggleCount(toggle, nodes.length);
+
+        renderClueList(list, nodes);
+    }
+
+    function renderClueList(list: HTMLOListElement, nodes: HTMLLIElement[]) {
+        const fragment = document.createDocumentFragment();
+        nodes.forEach(node => fragment.appendChild(node));
+    
+        list.replaceChildren(fragment);
     }
 }
 

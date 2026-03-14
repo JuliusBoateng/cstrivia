@@ -4,9 +4,9 @@ class ClueRenderer {
     constructor(clueContainer: HTMLDivElement) {
         this.clueContainer = clueContainer;
 
-        clueContainer.querySelectorAll(".clue-toggle")
-        .forEach(button => {
-          button.addEventListener("click", this.handleToggle);
+        const buttons: NodeListOf<HTMLButtonElement> = clueContainer.querySelectorAll(".clue-toggle");
+        buttons.forEach(button => {
+          button.addEventListener("pointerdown", this.handleToggle);
         });
     }
   
@@ -19,7 +19,7 @@ class ClueRenderer {
       const section = document.getElementById(sectionId);
       if (!section) return;
   
-      const expanded = button.getAttribute("aria-expanded") === "true";
+      const expanded = (button.getAttribute("aria-expanded") === "true");
   
       button.setAttribute("aria-expanded", String(!expanded));
       section.toggleAttribute("hidden", expanded);
