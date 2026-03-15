@@ -1,4 +1,5 @@
 import {CursorController} from "./puzzleController.js"
+import {Placement, PlacementId} from "../models/boardView.js";
 
 const CLUE_TOGGLE = ".clue-toggle";
 const CLUE = ".clue";
@@ -6,24 +7,49 @@ const ARIA_CONTROLS = "aria-controls";
 const ARIA_EXPANDED = "aria-expanded";
 const HIDDEN = "hidden";
 const NAV_SELECTOR = ".clue-toggle, .clue";
+const HIGHLIGHT = "highlight";
+
+interface ClueView {
+  highlightClue(placementId: PlacementId): void;
+}
+
+const NullCursorController: CursorController = {
+  setCursorByPlacement(_placementId: PlacementId): void {}
+};
 
 class ClueRenderer {
     private clueContainer: HTMLDivElement;
     private cursorController: CursorController;
     private navItems: HTMLElement[] = [];
     private navIndexMap = new Map<HTMLElement, number>();
+    private placementClueMap = new Map<PlacementId, HTMLLIElement>();
+    private activeClue: HTMLElement | null = null; 
 
-    constructor(clueContainer: HTMLDivElement, cursorController: CursorController) {
+    constructor(clueContainer: HTMLDivElement) {
         this.clueContainer = clueContainer;
-        this.cursorController = cursorController;
+        this.cursorController = NullCursorController;
         
-        this.navItems = Array.from(this.clueContainer.querySelectorAll<HTMLElement>(NAV_SELECTOR));
-        this.navItems.forEach(
-          (element, index) => {this.navIndexMap.set(element, index)}
-        );
+        this.navItems = this.createNavItems();
+        this.navIndexMap = this.createNavIndexMap(this.navItems);
+        this.placementClueMap = this.createPlacementClueMap(this.navItems);
 
         clueContainer.addEventListener("click", this.handleContainerClick);
         clueContainer.addEventListener("keydown", this.handleContainerKeydown);
+    }
+
+    setCursorController(cursorController: CursorController) {
+      this.cursorController = cursorController;
+    }
+
+    highlightClue(placementId: PlacementId): void {
+      const clue = this.placementClueMap.get(placementId);
+      if (!clue) return;
+
+      if (this.activeClue) this.activeClue.classList.remove(HIGHLIGHT)
+
+      this.activeClue = clue;
+      clue.classList.add(HIGHLIGHT);
+      // clue.scrollIntoView({ block: "nearest" }); Evaluate this along with overflow-y:
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {
@@ -115,6 +141,30 @@ class ClueRenderer {
       if (!clue || !this.clueContainer.contains(clue)) return null;
       return clue;
     }
+
+    private createNavItems() {
+      return Array.from(this.clueContainer.querySelectorAll<HTMLElement>(NAV_SELECTOR));
+    }
+
+    private createNavIndexMap(navItems: HTMLElement[]) {
+      const navIndexMap = new Map<HTMLElement, number>();
+      navItems.forEach((element, index) => {navIndexMap.set(element, index)});
+      return navIndexMap;
+    }
+
+    private createPlacementClueMap(navItems: HTMLElement[]): Map<PlacementId, HTMLLIElement> {
+      const placementClueMap = new Map<PlacementId, HTMLLIElement>();
+      for (const element of navItems) {
+        if (!(element.tagName === "LI" && element.classList.contains("clue"))) continue;
+
+        const placementId = element.dataset.placementId;
+        if (!placementId) continue;
+    
+        placementClueMap.set(Number(placementId), element as HTMLLIElement);
+      }
+
+      return placementClueMap;
+    }
 }
 
-export {ClueRenderer};
+export {ClueRenderer, ClueView};

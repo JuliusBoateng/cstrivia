@@ -15,19 +15,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const tableElement: HTMLTableElement = getTableElement();
     const boardView: BoardView = getBoardView();
     const solutionView: SolutionView = getSolutionView();
+    const clueContainer: HTMLDivElement = getClueContainer();
 
     if (boardView.board.id != solutionView.board_id) {
         throw Error("SolutionView does not match BoardView")
     }
 
     const puzzleController = createPuzzleController(tableElement, boardView, solutionView);
+    const clueRenderer = createClueRenderer(boardView, clueContainer);
+    puzzleController.setClueView(clueRenderer);
+    clueRenderer.setCursorController(puzzleController);
 
-    const clueContainer: HTMLDivElement = getClueContainer();
-    createClue(boardView, clueContainer);
-
-    const clueRenderer = new ClueRenderer(clueContainer, puzzleController);
 });
 
+function createClueRenderer(boardView: BoardView, clueContainer: HTMLDivElement) {
+    createClue(boardView, clueContainer);
+    return new ClueRenderer(clueContainer);
+}
 
 function createPuzzleController(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
     const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);

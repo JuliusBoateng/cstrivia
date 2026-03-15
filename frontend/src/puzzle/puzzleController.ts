@@ -1,7 +1,8 @@
 import {BoardDom} from "../render/boardDomBuilder.js";
 import {Direction, PlacementId} from "../models/boardView.js";
-import {PuzzleSession} from "../puzzle/puzzleSession.js";
-import {PuzzleRenderer} from "../puzzle/puzzleRenderer.js";
+import {PuzzleSession} from "./puzzleSession.js";
+import {PuzzleRenderer} from "./puzzleRenderer.js";
+import {ClueView} from "./clueRenderer.js";
 import {Coord} from "../models/boardView.js";
 
 interface CursorController {
@@ -9,21 +10,30 @@ interface CursorController {
   }
 
 const BLOCK = "block";
-
+const NullClueView: ClueView = {
+    highlightClue(_placementId: PlacementId) {}
+};
+  
 class PuzzleController implements CursorController {
-    session: PuzzleSession;
-    renderer: PuzzleRenderer;
-    boardDom: BoardDom;
+    private session: PuzzleSession;
+    private renderer: PuzzleRenderer;
+    private boardDom: BoardDom;
+    private clueView: ClueView;
 
     constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardDom: BoardDom) {
         this.session = session;
         this.renderer = renderer;
         this.boardDom = boardDom;
+        this.clueView = NullClueView;
 
         tableElement.addEventListener("pointerdown", this.handlePointerInput);
         tableElement.addEventListener("beforeinput", this.handleBeforeInput);
         tableElement.addEventListener("keydown", this.handleKeydown);
     }
+
+    setClueView(clueView: ClueView) {
+        this.clueView = clueView;
+      }
 
     setCursorByPlacement(placementId: PlacementId): void {
         this.session.setCursorByPlacement(placementId);
@@ -194,6 +204,7 @@ class PuzzleController implements CursorController {
 
         const coord = this.session.getCoord();
         this.renderer.setCursorHighlight(coord);
+        this.clueView.highlightClue(placement.id);
         this.renderer.focusCell(coord);
     }
 

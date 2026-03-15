@@ -1,7 +1,7 @@
 import {BoardView, Placement, PlacementId} from "../models/boardView.js";
 import { SolutionView } from "../models/solutionView.js";
 
-const NFD = "NFD";
+const NFD_NORMALIZATION = "NFD";
 
 class PuzzleValidator {
     private boardView: BoardView;
@@ -59,7 +59,7 @@ class PuzzleValidator {
             .filter(c => PuzzleValidator.isLetterOrDigit(c))
             .join(""); // removes non-letters/digits
     
-        const normalized = letters.normalize(NFD);
+        const normalized = letters.normalize(NFD_NORMALIZATION);
         const stripped = [...normalized]
             .filter(c => !PuzzleValidator.isDiacriticChar(c)) // strip diacritics
             .join("");

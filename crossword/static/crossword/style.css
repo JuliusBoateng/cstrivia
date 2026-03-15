@@ -207,6 +207,12 @@ h1 {
     font-variant-numeric: tabular-nums;
 }
 
+/* Evaluate overflow-y */
+/* .clue-list {
+    max-height: 100%;
+    overflow-y: auto;
+  } */
+
 .clue-list:not([hidden]) {
     list-style: none;
     padding: 0;
@@ -235,10 +241,9 @@ h1 {
     background: #eef0f7;
 }
 
-.clue.active {
+.clue.highlight {
     background: #e4e7f1;
-    font-weight: 500;
-  }
+}
 
 .clue:active {
     background: #d6daf0;
