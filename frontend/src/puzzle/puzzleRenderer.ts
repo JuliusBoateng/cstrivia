@@ -1,12 +1,18 @@
 import {BoardDom} from "../render/boardDomBuilder.js";
 import {Coord} from "../models/boardView.js";
 
+const ANIMATION_SUCCESS = "placement-success";
+const ANIMATION_ERROR = "placement-error";
+const HIGHLIGHT_CURSOR = "highlight-cursor";
+const HIGHLIGHT_WORD = "highlight-word";
+const BLOCK = "block";
+
 class PuzzleRenderer {
-    cellGrid: HTMLTableCellElement[][];
-    inputGrid: HTMLInputElement[][];
-    highlightedPlacementId: number;
-    highlightedPlacementCells: HTMLTableCellElement[];
-    highlightedCursor: HTMLTableCellElement | null = null;
+    private cellGrid: HTMLTableCellElement[][];
+    private inputGrid: HTMLInputElement[][];
+    private highlightedPlacementId: number;
+    private highlightedPlacementCells: HTMLTableCellElement[];
+    private highlightedCursor: HTMLTableCellElement | null = null;
 
     constructor(boardDom: BoardDom) {
         this.cellGrid = boardDom.cellGrid;
@@ -32,11 +38,11 @@ class PuzzleRenderer {
 
     setCursorHighlight(coord: Coord) {
         const cell = this.cellGrid[coord.row][coord.col];
-        if (cell.classList.contains("block")) return;
+        if (cell.classList.contains(BLOCK)) return;
         if (this.highlightedCursor === cell) return;
 
         this.clearCursorHighlight();
-        cell.classList.add("highlight-cursor");
+        cell.classList.add(HIGHLIGHT_CURSOR);
         this.highlightedCursor = cell;
     }
 
@@ -47,9 +53,9 @@ class PuzzleRenderer {
         const cells: HTMLTableCellElement[] = [];
         for (const { row, col } of coords) {
             const cell = this.cellGrid[row][col];
-            if (cell.classList.contains("block")) return;
+            if (cell.classList.contains(BLOCK)) return;
     
-            cell.classList.add("highlight-word");
+            cell.classList.add(HIGHLIGHT_WORD);
             cells.push(cell);
         }
         this.highlightedPlacementCells = cells
@@ -57,25 +63,25 @@ class PuzzleRenderer {
     }
 
     markPlacementSolved(coords: Coord[]) {
-        const className = "placement-success";
+        const className = ANIMATION_SUCCESS;
         const fillElements = this.getFillElements(coords);
         this.animateElements(fillElements, className);
     }
 
     markPlacementIncorrect(coords: Coord[]) {
-        const className = "placement-error";
+        const className = ANIMATION_ERROR;
         const fillElements = this.getFillElements(coords);
         this.animateElements(fillElements, className);
     }
 
     markPuzzleComplete(playableCells: Coord[]) {
         const fillElements = this.getFillElements(playableCells);
-        this.animateElements(fillElements, "placement-success");
+        this.animateElements(fillElements, ANIMATION_SUCCESS);
     }
 
     private clearPlacementHighlight() {
         for (const cell of this.highlightedPlacementCells) {
-            cell.classList.remove("highlight-word");
+            cell.classList.remove(HIGHLIGHT_WORD);
         }
         this.highlightedPlacementId = -1;
         this.highlightedPlacementCells = [];
@@ -84,7 +90,7 @@ class PuzzleRenderer {
     private clearCursorHighlight() {
         if (!this.highlightedCursor) return;
 
-        this.highlightedCursor.classList.remove("highlight-cursor");
+        this.highlightedCursor.classList.remove(HIGHLIGHT_CURSOR);
         this.highlightedCursor = null;
     }
 
@@ -108,7 +114,7 @@ class PuzzleRenderer {
     }
     
     private clearAnimation(elements: HTMLElement[]) {
-        elements.forEach(element => element.classList.remove("placement-success", "placement-error"));
+        elements.forEach(element => element.classList.remove(ANIMATION_SUCCESS, ANIMATION_ERROR));
     }
 }
 

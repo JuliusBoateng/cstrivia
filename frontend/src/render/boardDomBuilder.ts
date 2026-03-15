@@ -6,6 +6,10 @@ interface BoardDom {
     inputGrid: HTMLInputElement[][];
 }
 
+const BLOCK = "block";
+const CELL = "cell";
+const FILL = "fill";
+
 function createBoard(boardView: BoardView, tableElement: HTMLTableElement): BoardDom {
     const cellGrid: (HTMLTableCellElement | null)[][] = initializeGrid()
     const inputGrid: (HTMLInputElement | null)[][] = initializeGrid()
@@ -59,13 +63,13 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
 
     function createTableCellElement(coord: Coord): HTMLTableCellElement {
         const cellElement = document.createElement("td");
-        cellElement.classList.add("cell")
+        cellElement.classList.add(CELL)
         cellElement.dataset.col = coord.col.toString();
         cellElement.dataset.row = coord.row.toString();
         
         const cell = boardView.getCell(coord)
         if (!cell) {
-            cellElement.classList.add("block");
+            cellElement.classList.add(BLOCK);
             const fillContainer = createEmptyFillContainer()
             cellElement.appendChild(fillContainer)
             
@@ -90,7 +94,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
 
     function createEmptyFillContainer(): HTMLDivElement {
         const divElement = document.createElement("div");
-        divElement.classList.add("fill")
+        divElement.classList.add(FILL)
         return divElement
     }
 

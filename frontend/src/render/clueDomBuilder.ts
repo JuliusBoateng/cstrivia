@@ -1,5 +1,15 @@
 import { BoardView, Clue, Direction, Placement, PlacementId} from "../models/boardView.js";
 
+const CLUE = "clue";
+const CLUE_TEXT = "clue-text";
+const CLUE_LABEL = "clue-label";
+const CLUE_COUNT = ".clue-count";
+const ARIA_EXPANDED = "aria-expanded";
+const TODO_ACROSS_CLUES = "#todo-across-clues";
+const TODO_ACROSS_TOGGLE = "#todo-across-toggle";
+const TODO_DOWN_CLUES = "#todo-down-clues";
+const TODO_DOWN_TOGGLE = "#todo-down-toggle";
+
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
     const placements = boardView.getPlacements();
@@ -34,7 +44,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
 
     function createLiElement(placement: Placement, clue: Clue): HTMLLIElement {
         const liElement = document.createElement("li");
-        liElement.classList.add("clue");
+        liElement.classList.add(CLUE);
 
         liElement.dataset.placementId = placement.id.toString();
         liElement.dataset.direction = placement.direction;
@@ -48,7 +58,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
 
     function createLiText(clue: Clue): HTMLSpanElement {
         const textSpan = document.createElement("span");
-        textSpan.classList.add("clue-text");
+        textSpan.classList.add(CLUE_TEXT);
 
         textSpan.textContent = clue.question;
 
@@ -57,7 +67,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
 
     function createLabel(placement: Placement): HTMLSpanElement {
         const labelSpan = document.createElement("span");
-        labelSpan.classList.add("clue-label");
+        labelSpan.classList.add(CLUE_LABEL);
 
         const coord = {row: placement.start_row, col: placement.start_col}
         const label = boardView.getLabel(coord);
@@ -67,7 +77,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     }
 
     function setToggleCount(button: HTMLButtonElement, count: number) {
-        let span = button.querySelector(".clue-count");
+        let span = button.querySelector(CLUE_COUNT);
         if (!span) return;
         span.textContent = `(${count})`;
     }
@@ -76,7 +86,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const hasItems = nodes.length > 0;
     
         list.hidden = !hasItems;
-        toggle.setAttribute("aria-expanded", String(hasItems));
+        toggle.setAttribute(ARIA_EXPANDED, String(hasItems));
         setToggleCount(toggle, nodes.length);
 
         renderClueList(list, nodes);
@@ -90,15 +100,15 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     }
 
     function queryAcrossElements(): {acrossList: HTMLOListElement, acrossToggle: HTMLButtonElement} {
-        const acrossList = clueContainer.querySelector("#todo-across-clues") as HTMLOListElement;
-        const acrossToggle = clueContainer.querySelector("#todo-across-toggle") as HTMLButtonElement;
+        const acrossList = clueContainer.querySelector(TODO_ACROSS_CLUES) as HTMLOListElement;
+        const acrossToggle = clueContainer.querySelector(TODO_ACROSS_TOGGLE) as HTMLButtonElement;
 
         return {acrossList, acrossToggle};
     }
     
     function queryDownElements(): {downList: HTMLOListElement, downToggle: HTMLButtonElement} {
-        const downList = clueContainer.querySelector("#todo-down-clues") as HTMLOListElement;
-        const downToggle = clueContainer.querySelector("#todo-down-toggle") as HTMLButtonElement;
+        const downList = clueContainer.querySelector(TODO_DOWN_CLUES) as HTMLOListElement;
+        const downToggle = clueContainer.querySelector(TODO_DOWN_TOGGLE) as HTMLButtonElement;
 
         return {downList, downToggle};
     }

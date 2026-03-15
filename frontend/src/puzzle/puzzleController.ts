@@ -8,6 +8,8 @@ interface CursorController {
     setCursorByPlacement(placementId: PlacementId): void;
   }
 
+const BLOCK = "block";
+
 class PuzzleController implements CursorController {
     session: PuzzleSession;
     renderer: PuzzleRenderer;
@@ -38,7 +40,7 @@ class PuzzleController implements CursorController {
         const tdElement = target.closest("td");
 
         if (!(tdElement instanceof HTMLTableCellElement)) return;
-        if (tdElement.classList.contains("block")) return;
+        if (tdElement.classList.contains(BLOCK)) return;
 
         const row = Number(tdElement.dataset.row);
         const col = Number(tdElement.dataset.col);

@@ -1,5 +1,11 @@
 import {CursorController} from "./puzzleController.js"
 
+const CLUE_TOGGLE = ".clue-toggle";
+const CLUE = ".clue";
+const ARIA_CONTROLS = "aria-controls";
+const ARIA_EXPANDED = "aria-expanded";
+const HIDDEN = "hidden";
+
 class ClueRenderer {
     private clueContainer: HTMLDivElement;
     private cursorController: CursorController;
@@ -27,28 +33,28 @@ class ClueRenderer {
     };
 
     private getButtonToggleClick(target: HTMLElement): HTMLButtonElement | null {
-      const toggle = target.closest(".clue-toggle") as HTMLButtonElement | null;
+      const toggle = target.closest(CLUE_TOGGLE) as HTMLButtonElement | null;
       if (!toggle || !this.clueContainer.contains(toggle)) return null;
       return toggle;
     }
 
     private getClueClick(target: HTMLElement): HTMLLIElement | null {
-      const clue = target.closest(".clue") as HTMLLIElement | null;
+      const clue = target.closest(CLUE) as HTMLLIElement | null;
       if (!clue || !this.clueContainer.contains(clue)) return null;
       return clue;
     }
 
     private handleToggle(button: HTMLButtonElement) {
-      const sectionId = button.getAttribute("aria-controls");
+      const sectionId = button.getAttribute(ARIA_CONTROLS);
       if (!sectionId) return;
     
       const section = document.getElementById(sectionId);
       if (!section) return;
     
-      const expanded = (button.getAttribute("aria-expanded") === "true");
+      const expanded = (button.getAttribute(ARIA_EXPANDED) === "true");
     
-      button.setAttribute("aria-expanded", String(!expanded));
-      section.toggleAttribute("hidden", expanded);
+      button.setAttribute(ARIA_EXPANDED, String(!expanded));
+      section.toggleAttribute(HIDDEN, expanded);
     }
 
     private handleClueClick(li: HTMLLIElement) {

@@ -1,8 +1,13 @@
 import {BoardView} from "./models/boardView.js";
 import {SolutionView} from "./models/solutionView.js";
 
+const BOARD = "board";
+const BOARD_VIEW_DTO = "board-view-dto";
+const SOLUTION_VIEW_DTO = "solution-view-dto";
+const CLUES = "clues";
+
 function getTableElement(): HTMLTableElement {
-    const tableElement = document.getElementById("board");
+    const tableElement = document.getElementById(BOARD);
 
     if (!(tableElement instanceof HTMLTableElement) || !tableElement) {
         throw Error("Table is not available");
@@ -12,7 +17,7 @@ function getTableElement(): HTMLTableElement {
 }
 
 function getBoardView(): BoardView {
-    const boardViewDTOElement = document.getElementById('board-view-dto');
+    const boardViewDTOElement = document.getElementById(BOARD_VIEW_DTO);
     if (!boardViewDTOElement?.textContent) {
         throw Error("BoardViewDTO missing content");
     }
@@ -22,7 +27,7 @@ function getBoardView(): BoardView {
 }
 
 function getSolutionView(): SolutionView {
-    const solutionViewDTOElement = document.getElementById('solution-view-dto');
+    const solutionViewDTOElement = document.getElementById(SOLUTION_VIEW_DTO);
     if (!solutionViewDTOElement?.textContent) {
         throw Error("SolutionViewDTO missing content");
     }
@@ -33,7 +38,7 @@ function getSolutionView(): SolutionView {
 
 
 function getClueContainer(): HTMLDivElement {
-    const clueContainer = document.getElementById("clues");
+    const clueContainer = document.getElementById(CLUES);
 
     if (!(clueContainer instanceof HTMLDivElement) || !clueContainer) {
         throw Error("Clue dom is not available");
