@@ -174,7 +174,6 @@ h1 {
     border-radius: 20px;
     border: 1px solid rgba(0,0,0,0.04);
     box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
-    padding: clamp(8px, 1vw, 12px)
 }
 
 .clue-card {
@@ -182,7 +181,13 @@ h1 {
     max-width: 100%;
     height: min(80vh, var(--clue-max-height));
     min-height: var(--clue-min);
+
     overflow-y: auto;
+    scrollbar-gutter: stable;
+    /* provides separation from scrollbar and also makes text more scannable */
+    padding: clamp(10px, 1vw, 14px)
+             clamp(16px, 1.6vw, 20px);
+
     font-size: 14px;
     line-height: 1.4;
 }
@@ -211,34 +216,29 @@ h1 {
     font-variant-numeric: tabular-nums;
 }
 
-/* Evaluate overflow-y */
-/* .clue-list {
-    max-height: 100%;
-    overflow-y: auto;
-  } */
-
 .clue-list:not([hidden]) {
     list-style: none;
     padding: 0;
-    padding-left: 1rem;
-    margin: 0.5rem;
+    margin: 0.5rem 0;
 }
 
 .clue-list:empty {
     display: none;
 }
 
+/* vertical spacing between clues */
 .clue + .clue {
-    margin-top: 0.45rem;
+    margin-top: 0.5rem;
   }
   
 .clue {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.5rem;
+    grid-template-columns: 2ch 1fr; /* */
+    gap: 0.5rem; /* gap between clue number and text */
     cursor: pointer;
-    padding: 0 4px;
+    padding: 0 4px; /* create click hitbox */
     border-radius: 4px;
+    align-items: start;
 }
   
 .clue:hover {
@@ -259,6 +259,7 @@ h1 {
   }
 
 .clue-label {
+    text-align: right;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
 }
