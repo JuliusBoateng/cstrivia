@@ -8,6 +8,7 @@ const ARIA_EXPANDED = "aria-expanded";
 const HIDDEN = "hidden";
 const NAV_SELECTOR = ".clue-toggle, .clue";
 const HIGHLIGHT = "highlight";
+const CLUE_CARD = ".clue-card";
 
 interface ClueView {
   highlightClue(placementId: PlacementId): void;
@@ -49,7 +50,26 @@ class ClueRenderer {
 
       this.activeClue = clue;
       clue.classList.add(HIGHLIGHT);
-      // clue.scrollIntoView({ block: "nearest" }); Evaluate this along with overflow-y:
+      this.scrollClue(clue);
+    }
+
+    // In single column view, clue_card is no longer scrollable.
+    // Ensures the page does not scroll when clue is clicked.
+    scrollClue(clue: HTMLLIElement) {
+      const clue_card = document.querySelector(CLUE_CARD) as HTMLDivElement | null;
+      if (!clue_card) return;
+    
+      // Check if clue_card is scrollable
+      const isScrollable = (clue_card.scrollHeight > clue_card.clientHeight) &&
+                            (getComputedStyle(clue_card).overflowY !== "visible");
+    
+      if (!isScrollable) {
+        // Mobile / page-scroll mode → do nothing
+        return;
+      }
+    
+      // Desktop / internal-scroll mode
+      clue.scrollIntoView({block: "nearest"});
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {

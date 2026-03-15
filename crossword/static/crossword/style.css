@@ -228,7 +228,7 @@ h1 {
 
 /* vertical spacing between clues */
 .clue + .clue {
-    margin-top: 0.5rem;
+    margin-top: 0.3rem;
   }
   
 .clue {
@@ -236,7 +236,7 @@ h1 {
     grid-template-columns: 2ch 1fr; /* */
     gap: 0.5rem; /* gap between clue number and text */
     cursor: pointer;
-    padding: 0 4px; /* create click hitbox */
+    padding: 2px 4px; /* click area */
     border-radius: 4px;
     align-items: start;
 }
