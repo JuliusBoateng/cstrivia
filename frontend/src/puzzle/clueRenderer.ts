@@ -1,4 +1,3 @@
-import {BoardView, Placement, PlacementId} from "../models/boardView.js";
 import {CursorController} from "./puzzleController.js"
 
 class ClueRenderer {
@@ -8,15 +7,11 @@ class ClueRenderer {
     constructor(clueContainer: HTMLDivElement, cursorController: CursorController) {
         this.clueContainer = clueContainer;
         this.cursorController = cursorController;
-        clueContainer.addEventListener("pointerdown", this.handlePointerInput.bind(this))
+        clueContainer.addEventListener("click", this.handleContainerClick);
     }
 
-    private handlePointerInput = (event: PointerEvent) => {
-      if (!event.isPrimary) return; // ignore multi-touch / secondary stylus
-      if (event.button !== 0) return; // ignore right/middle clicks
-
+    private handleContainerClick = (event: Event) => {
       const target = event.target as HTMLElement;
-      if (!target) return;
     
       const toggle = this.getButtonToggleClick(target);
       if (toggle) {
@@ -33,13 +28,13 @@ class ClueRenderer {
 
     private getButtonToggleClick(target: HTMLElement): HTMLButtonElement | null {
       const toggle = target.closest(".clue-toggle") as HTMLButtonElement | null;
-      if (!this.clueContainer.contains(toggle)) return null;
+      if (!toggle || !this.clueContainer.contains(toggle)) return null;
       return toggle;
     }
 
     private getClueClick(target: HTMLElement): HTMLLIElement | null {
       const clue = target.closest(".clue") as HTMLLIElement | null;
-      if (!this.clueContainer.contains(clue)) return null;
+      if (!clue || !this.clueContainer.contains(clue)) return null;
       return clue;
     }
 

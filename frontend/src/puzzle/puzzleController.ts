@@ -17,9 +17,9 @@ class PuzzleController implements CursorController {
         this.renderer = renderer;
         this.boardDom = boardDom;
 
-        tableElement.addEventListener("pointerdown", this.handlePointerInput.bind(this));
-        tableElement.addEventListener("beforeinput", this.handleBeforeInput.bind(this));
-        tableElement.addEventListener("keydown", this.handleKeydown.bind(this));
+        tableElement.addEventListener("pointerdown", this.handlePointerInput);
+        tableElement.addEventListener("beforeinput", this.handleBeforeInput);
+        tableElement.addEventListener("keydown", this.handleKeydown);
     }
 
     setCursorByPlacement(placementId: PlacementId): void {
@@ -27,7 +27,7 @@ class PuzzleController implements CursorController {
         this.updateCursorVisuals();
     }
  
-    private handlePointerInput(event: PointerEvent) {
+    private handlePointerInput = (event: PointerEvent) => {
         if (!event.isPrimary) return; // ignore multi-touch / secondary stylus
         if (event.button !== 0) return; // ignore right/middle clicks
 
@@ -53,13 +53,13 @@ class PuzzleController implements CursorController {
         this.updateCursorVisuals()
     }
 
-    private handleBeforeInput(event: InputEvent) {
+    private handleBeforeInput = (event: InputEvent) => {
         if (this.isCharacterKey(event)) {
             this.handleCharacterInput(event);
         }
     }
 
-    private handleKeydown(event: KeyboardEvent) {        
+    private handleKeydown = (event: KeyboardEvent) => {        
         if (this.isModifierKey(event)) {
             return;
         }

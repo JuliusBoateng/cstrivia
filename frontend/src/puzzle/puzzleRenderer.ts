@@ -18,28 +18,21 @@ class PuzzleRenderer {
 
     renderLetter(row: number, col: number, letter: string | null) {
         const inputElement: HTMLInputElement = this.inputGrid[row][col];
-        if (!inputElement) {
-            throw Error("Unable to write to cell.")
-        }
+        if (!inputElement) return;
 
         inputElement.value = letter ?? ""
     }
 
     focusCell(row: number, col: number) {
         const inputElement: HTMLInputElement = this.inputGrid[row][col];
-        if (!inputElement) {
-            throw Error("Unable to focus cell.")
-        }
+        if (!inputElement) return;
 
         inputElement.focus()
     }
 
     setCursorHighlight(row: number, col: number) {
         const cell = this.cellGrid[row][col];
-        if (cell.classList.contains("block")) {
-            throw Error("Unable to highlight cursor.");
-        }
-    
+        if (cell.classList.contains("block")) return;
         if (this.highlightedCursor === cell) return;
 
         this.clearCursorHighlight();
@@ -49,18 +42,17 @@ class PuzzleRenderer {
 
     setPlacementHighlight(placementId: number, coords: { row: number; col: number }[]) {
         if (this.highlightedPlacementId === placementId) return;
-        
         this.clearPlacementHighlight();
+        
+        const cells: HTMLTableCellElement[] = [];
         for (const { row, col } of coords) {
             const cell = this.cellGrid[row][col];
-    
-            if (cell.classList.contains("block")) {
-                throw Error("Unable to highlight placement.");
-            }
+            if (cell.classList.contains("block")) return;
     
             cell.classList.add("highlight-word");
-            this.highlightedPlacementCells.push(cell);
+            cells.push(cell);
         }
+        this.highlightedPlacementCells = cells
         this.highlightedPlacementId = placementId;
     }
 
@@ -77,8 +69,8 @@ class PuzzleRenderer {
     }
 
     markPuzzleComplete(playableCells: Coord[]) {
-        const cells = playableCells.map(playableCell => this.cellGrid[playableCell.row][playableCell.col])
-        this.animateElements(cells, "placement-success");
+        const fillElements = this.getFillElements(playableCells);
+        this.animateElements(fillElements, "placement-success");
     }
 
     private clearPlacementHighlight() {

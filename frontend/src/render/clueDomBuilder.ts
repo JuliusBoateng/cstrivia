@@ -3,12 +3,16 @@ import { BoardView, Clue, Direction, Placement, PlacementId} from "../models/boa
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
     const placements = boardView.getPlacements();
-    const {acrossNodes, downNodes} = createLiElements();
+    const {acrossNodes, downNodes} = createLiElements(placements, clueMap);
 
-    renderClues("#todo-across-clues", "#todo-across-toggle", acrossNodes);
-    renderClues("#todo-down-clues", "#todo-down-toggle", downNodes);
+    const {acrossList, acrossToggle} = queryAcrossElements();
+    const {downList, downToggle} = queryDownElements();
 
-    function createLiElements(): {acrossNodes: HTMLLIElement[], downNodes: HTMLLIElement[]} {
+    renderClues(acrossList, acrossToggle, acrossNodes);
+    renderClues(downList, downToggle, downNodes);
+
+    function createLiElements(placements: Placement[], clueMap: Map<PlacementId, Clue>):
+        {acrossNodes: HTMLLIElement[], downNodes: HTMLLIElement[]} {
         const acrossNodes: HTMLLIElement[] = [];
         const downNodes: HTMLLIElement[] = [];
 
@@ -67,10 +71,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         span.textContent = `(${count})`;
     }
 
-    function renderClues(listSelector: string, toggleSelector: string, nodes: HTMLLIElement[]) {
-        const list = clueContainer.querySelector(listSelector) as HTMLOListElement;
-        const toggle = clueContainer.querySelector(toggleSelector) as HTMLButtonElement;
-    
+    function renderClues(list: HTMLOListElement, toggle: HTMLButtonElement, nodes: HTMLLIElement[]) {    
         const hasItems = nodes.length > 0;
     
         list.hidden = !hasItems;
@@ -85,6 +86,20 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         nodes.forEach(node => fragment.appendChild(node));
     
         list.replaceChildren(fragment);
+    }
+
+    function queryAcrossElements(): {acrossList: HTMLOListElement, acrossToggle: HTMLButtonElement} {
+        const acrossList = clueContainer.querySelector("#todo-across-clues") as HTMLOListElement;
+        const acrossToggle = clueContainer.querySelector("#todo-across-toggle") as HTMLButtonElement;
+
+        return {acrossList, acrossToggle};
+    }
+    
+    function queryDownElements(): {downList: HTMLOListElement, downToggle: HTMLButtonElement} {
+        const acrossList = clueContainer.querySelector("#todo-across-clues") as HTMLOListElement;
+        const acrossToggle = clueContainer.querySelector("#todo-across-toggle") as HTMLButtonElement;
+
+        return {downList, downToggle};
     }
 }
 
