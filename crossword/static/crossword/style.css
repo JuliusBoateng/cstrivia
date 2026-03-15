@@ -259,6 +259,10 @@ h1 {
     overflow-wrap: break-word;
 }
 
+.section-toggle[aria-expanded="true"] .clue-count {
+    display: none;
+  }
+
 /*  min-width: --clue-width  max-width: --clue-width */
 @media (max-width: 1000px) {
     .board-wrapper {

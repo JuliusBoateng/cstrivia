@@ -5,6 +5,7 @@ const CLUE_TEXT = "clue-text";
 const CLUE_LABEL = "clue-label";
 const CLUE_COUNT = ".clue-count";
 const ARIA_EXPANDED = "aria-expanded";
+const TODO_TOGGLE = "#todo-toggle";
 const TODO_ACROSS_CLUES = "#todo-across-clues";
 const TODO_ACROSS_TOGGLE = "#todo-across-toggle";
 const TODO_DOWN_CLUES = "#todo-down-clues";
@@ -14,36 +15,38 @@ const FOCUS = "tabindex";
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
     const placements = boardView.getPlacements();
-    const {acrossNodes, downNodes} = createLiElements(placements, clueMap);
+    const {acrossClues, downClues} = createClues(placements, clueMap);
 
-    const {acrossList, acrossToggle} = queryAcrossElements();
+    renderTodoButton(acrossClues.length, downClues.length);
+
+    const {acrossClueContainer, acrossToggle} = queryAcrossElements();
+    renderClues(acrossClueContainer, acrossToggle, acrossClues);
+
     const {downList, downToggle} = queryDownElements();
+    renderClues(downList, downToggle, downClues);
 
-    renderClues(acrossList, acrossToggle, acrossNodes);
-    renderClues(downList, downToggle, downNodes);
-
-    function createLiElements(placements: Placement[], clueMap: Map<PlacementId, Clue>):
-        {acrossNodes: HTMLLIElement[], downNodes: HTMLLIElement[]} {
-        const acrossNodes: HTMLLIElement[] = [];
-        const downNodes: HTMLLIElement[] = [];
+    function createClues(placements: Placement[], clueMap: Map<PlacementId, Clue>):
+        {acrossClues: HTMLLIElement[], downClues: HTMLLIElement[]} {
+        const acrossClues: HTMLLIElement[] = [];
+        const downClues: HTMLLIElement[] = [];
 
         for (const placement of placements) {
             const clue = clueMap.get(placement.id);
             if (!clue) continue;
     
-            const liElement = createLiElement(placement, clue);
+            const liElement = createClue(placement, clue);
         
             if (placement.direction === Direction.A) {
-                acrossNodes.push(liElement);
+                acrossClues.push(liElement);
             } else {
-                downNodes.push(liElement);
+                downClues.push(liElement);
             }
         }
 
-        return {acrossNodes, downNodes};
+        return {acrossClues, downClues};
     }
 
-    function createLiElement(placement: Placement, clue: Clue): HTMLLIElement {
+    function createClue(placement: Placement, clue: Clue): HTMLLIElement {
         const liElement = document.createElement("li");
         liElement.classList.add(CLUE);
         liElement.setAttribute(FOCUS, String(0));
@@ -84,28 +87,28 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         span.textContent = `(${count})`;
     }
 
-    function renderClues(list: HTMLOListElement, toggle: HTMLButtonElement, nodes: HTMLLIElement[]) {    
+    function renderClues(acrossClueContainer: HTMLOListElement, toggle: HTMLButtonElement, nodes: HTMLLIElement[]) {    
         const hasItems = nodes.length > 0;
     
-        list.hidden = !hasItems;
+        acrossClueContainer.hidden = !hasItems;
         toggle.setAttribute(ARIA_EXPANDED, String(hasItems));
         setToggleCount(toggle, nodes.length);
 
-        renderClueList(list, nodes);
+        renderClueList(acrossClueContainer, nodes);
     }
 
-    function renderClueList(list: HTMLOListElement, nodes: HTMLLIElement[]) {
+    function renderClueList(acrossClueContainer: HTMLOListElement, nodes: HTMLLIElement[]) {
         const fragment = document.createDocumentFragment();
         nodes.forEach(node => fragment.appendChild(node));
     
-        list.replaceChildren(fragment);
+        acrossClueContainer.replaceChildren(fragment);
     }
 
-    function queryAcrossElements(): {acrossList: HTMLOListElement, acrossToggle: HTMLButtonElement} {
-        const acrossList = clueContainer.querySelector(TODO_ACROSS_CLUES) as HTMLOListElement;
+    function queryAcrossElements(): {acrossClueContainer: HTMLOListElement, acrossToggle: HTMLButtonElement} {
+        const acrossClueContainer = clueContainer.querySelector(TODO_ACROSS_CLUES) as HTMLOListElement;
         const acrossToggle = clueContainer.querySelector(TODO_ACROSS_TOGGLE) as HTMLButtonElement;
 
-        return {acrossList, acrossToggle};
+        return {acrossClueContainer, acrossToggle};
     }
     
     function queryDownElements(): {downList: HTMLOListElement, downToggle: HTMLButtonElement} {
@@ -113,6 +116,12 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const downToggle = clueContainer.querySelector(TODO_DOWN_TOGGLE) as HTMLButtonElement;
 
         return {downList, downToggle};
+    }
+
+    function renderTodoButton(todo_across_length: number, todo_down_length: number) {
+        const todoToggle = clueContainer.querySelector(TODO_TOGGLE) as HTMLButtonElement;
+        const totalClues = todo_across_length + todo_down_length;
+        setToggleCount(todoToggle, totalClues);
     }
 }
 

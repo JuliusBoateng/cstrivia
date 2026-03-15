@@ -20,8 +20,9 @@
           <div class="clue-wrapper">
             <div id="clues" class="clue-card">
               <h2>
-                <button id="todo-toggle" type="button" class="clue-toggle" aria-expanded="true" aria-controls="todo-section">
+                <button id="todo-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="true" aria-controls="todo-section">
                   <span class="clue-label">To Do</span>
+                  <span class="clue-count"></span>
                 </button>
               </h2>
               <div id="todo-section" class="clue-section-body">
@@ -41,8 +42,9 @@
                 <ol id="todo-down-clues" class="clue-list" hidden></ol>
               </div>
               <h2>
-                <button id="solved-toggle" type="button" class="clue-toggle" aria-expanded="false" aria-controls="solved-section">
+                <button id="solved-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="false" aria-controls="solved-section">
                   <span class="clue-label">Solved</span>
+                  <span class="clue-count"></span>
                 </button>
               </h2>
               <div id="solved-section" class="clue-section-body" hidden>
