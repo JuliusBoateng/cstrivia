@@ -226,7 +226,28 @@ h1 {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 0.5rem;
+    cursor: pointer;
+    padding: 0 4px;
+    border-radius: 4px;
 }
+  
+.clue:hover {
+    background: #eef0f7;
+}
+
+.clue.active {
+    background: #e4e7f1;
+    font-weight: 500;
+  }
+
+.clue:active {
+    background: #d6daf0;
+}
+
+.clue:focus-visible {
+    outline: 2px solid #6A6D8F;
+    outline-offset: 2px;
+  }
 
 .clue-label {
     font-weight: 600;

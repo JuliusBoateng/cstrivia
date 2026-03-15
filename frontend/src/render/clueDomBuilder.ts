@@ -9,6 +9,7 @@ const TODO_ACROSS_CLUES = "#todo-across-clues";
 const TODO_ACROSS_TOGGLE = "#todo-across-toggle";
 const TODO_DOWN_CLUES = "#todo-down-clues";
 const TODO_DOWN_TOGGLE = "#todo-down-toggle";
+const FOCUS = "tabindex";
 
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
@@ -45,6 +46,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     function createLiElement(placement: Placement, clue: Clue): HTMLLIElement {
         const liElement = document.createElement("li");
         liElement.classList.add(CLUE);
+        liElement.setAttribute(FOCUS, String(0));
 
         liElement.dataset.placementId = placement.id.toString();
         liElement.dataset.direction = placement.direction;
