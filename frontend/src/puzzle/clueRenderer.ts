@@ -31,8 +31,8 @@ class ClueRenderer {
         this.handleAction(event);
       }
       
-      else if (this.isVerticalArrow(event)) {
-        this.handleVerticalArrow(event);
+      else if (this.isVerticalArrowPress(event)) {
+        this.handleVerticalArrowPress(event);
       }
     }
 
@@ -56,11 +56,11 @@ class ClueRenderer {
       return ((event.key === "Enter") || (event.key === " "))
     }
 
-    private isVerticalArrow(event: KeyboardEvent) {
+    private isVerticalArrowPress(event: KeyboardEvent) {
       return ((event.key === "ArrowDown") || (event.key === "ArrowUp"))
     }
 
-    private handleVerticalArrow(event: KeyboardEvent) {
+    private handleVerticalArrowPress(event: KeyboardEvent) {
       event.preventDefault();
       const target = event.target as HTMLElement;
       const start = target.closest(".clue, .clue-toggle") as HTMLElement | null;

@@ -51,10 +51,11 @@ class PuzzleSession {
         this.moveCursor(previous);
     }
 
-    moveCursorRelative(rowDelta: number, colDelata: number) {
+    moveCursorRelative(rowDelta: number, colDelta: number) {
         const coord = this.getCoord();
+        const relativeCoord = {row: coord.row + rowDelta, col: coord.col + colDelta}
+        if (!this.boardView.isValidCoord(relativeCoord)) return;
 
-        const relativeCoord = {row: coord.row + rowDelta, col: coord.col + colDelata}
         this.moveCursor(relativeCoord);
     }
 
@@ -98,12 +99,17 @@ class PuzzleSession {
 
     movePlacementBy(offset: number) {
         const placements = this.boardView.getPlacements();
+
         const index = placements.findIndex(placement => placement.id === this.activePlacement.id);
+        if (index === -1) return;
+
         const nextIndex = (index + offset) % placements.length
         const nextPlacement = placements[nextIndex];
 
         this.activePlacement = nextPlacement;
         const coord = {row: this.activePlacement.start_row, col: this.activePlacement.start_col};
+        
+        if (!this.boardView.isValidCoord(coord)) return;
         this.moveCursor(coord);
     }
 

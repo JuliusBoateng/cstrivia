@@ -53,12 +53,22 @@ class BoardView {
         );
     }
 
+    isValidCoord(coord: Coord): boolean {
+        return (
+          coord.row >= 0 &&
+          coord.row < this.board.rows &&
+          coord.col >= 0 &&
+          coord.col < this.board.cols
+        );
+      }
+
     static createCoordKey(row: number, col: number): CoordKey {
         return `${row},${col}`;
     }
 
     getCell(coord: Coord): Cell | null {
-        return this.cellGrid[coord.row][coord.col]
+        if (!this.isValidCoord(coord)) return null;
+        return this.cellGrid[coord.row][coord.col];
     }
 
     getCells(): Cell[] {
@@ -66,10 +76,12 @@ class BoardView {
     }
 
     isStartingCell(coord: Coord): boolean {
+        if (!this.isValidCoord(coord)) return false;
         return this.labelGrid[coord.row][coord.col] > 0;
     }
 
     getLabel(coord: Coord): number {
+        if (!this.isValidCoord(coord)) return -1;
         return this.labelGrid[coord.row][coord.col]
     }
 
@@ -142,7 +154,7 @@ class BoardView {
     private createLabelGrid(): number[][] {
         const rows = this.board.rows;
         const cols = this.board.cols;
-        const labelGrid = Array.from({ length: rows }, () => Array(cols).fill(0));
+        const labelGrid = Array.from({ length: rows }, () => Array(cols).fill(-1));
         
         let label = 1;
         for (const p of this.placements) {
@@ -150,7 +162,7 @@ class BoardView {
             const c = p.start_col;
 
             // placements can have the same start coords across directions
-            if (labelGrid[r][c] !== 0) {
+            if (labelGrid[r][c] !== -1) {
                 continue;
             }
 
