@@ -2,6 +2,7 @@ import {BoardDom} from "../render/boardDomBuilder.js";
 import {Direction, PlacementId} from "../models/boardView.js";
 import {PuzzleSession} from "../puzzle/puzzleSession.js";
 import {PuzzleRenderer} from "../puzzle/puzzleRenderer.js";
+import {Coord} from "../models/boardView.js";
 
 interface CursorController {
     setCursorByPlacement(placementId: PlacementId): void;
@@ -44,12 +45,13 @@ class PuzzleController implements CursorController {
 
         if (Number.isNaN(row) || Number.isNaN(col)) return;
 
-        const coord = this.session.getCoord();
-        if (coord.row === row && coord.col === col) {
+        const prevCoord = this.session.getCoord();
+        if (prevCoord.row === row && prevCoord.col === col) {
             this.session.toggleDirection();
         }
-
-        this.session.moveCursor(row, col)
+        
+        const newCoord = {row, col};
+        this.session.moveCursor(newCoord)
         this.updateCursorVisuals()
     }
 
@@ -115,12 +117,11 @@ class PuzzleController implements CursorController {
 
     private handleCharacterInput(event: InputEvent) {
         event.preventDefault();    
-        const coord = this.session.getCoord();
-
+        
         this.session.setLetter(event.data);
-
-        this.renderer.renderLetter(coord.row, coord.col, this.session.getLetter());
-        this.renderPlacementFeedback(coord.row, coord.col);
+        const coord = this.session.getCoord();
+        this.renderer.renderLetter(coord, this.session.getLetter());
+        this.renderPlacementFeedback(coord);
         
         if (this.session.isPuzzleComplete()) {
             const playableCells = this.session.getPlayableCells();
@@ -142,8 +143,8 @@ class PuzzleController implements CursorController {
 
     private handleEnterInput(event: KeyboardEvent) {
         if (this.session.isEndOfPlacement() && !event.repeat) {
-            const current = this.session.getCoord();
-            this.renderPlacementFeedback(current.row, current.col)
+            const coord = this.session.getCoord();
+            this.renderPlacementFeedback(coord)
         } else {
             this.session.advanceCursor();
             this.updateCursorVisuals();
@@ -161,7 +162,7 @@ class PuzzleController implements CursorController {
         
         this.session.setLetter(null);
         const coords = this.session.getCoord();
-        this.renderer.renderLetter(coords.row, coords.col, this.session.getLetter());
+        this.renderer.renderLetter(coords, this.session.getLetter());
     }
 
     private handleHorizontalArrowInput(event: KeyboardEvent) {
@@ -189,13 +190,13 @@ class PuzzleController implements CursorController {
         const placementCoords = this.session.getActivePlacementCoords();    
         this.renderer.setPlacementHighlight(placement.id, placementCoords);
 
-        const coords = this.session.getCoord();
-        this.renderer.setCursorHighlight(coords.row, coords.col);
-        this.renderer.focusCell(coords.row, coords.col);
+        const coord = this.session.getCoord();
+        this.renderer.setCursorHighlight(coord);
+        this.renderer.focusCell(coord);
     }
 
-    private renderPlacementFeedback(row: number, col: number) {
-        const result = this.session.evaluateCellPlacements(row, col);
+    private renderPlacementFeedback(coord: Coord) {
+        const result = this.session.evaluateCellPlacements(coord);
 
         for (const placementId of result.solved) {
             const coords = this.session.getPlacementCells(placementId);

@@ -59,7 +59,8 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const labelSpan = document.createElement("span");
         labelSpan.classList.add("clue-label");
 
-        const label = boardView.getLabel(placement.start_row, placement.start_col);
+        const coord = {row: placement.start_row, col: placement.start_col}
+        const label = boardView.getLabel(coord);
         labelSpan.textContent = label.toString();
 
         return labelSpan;
@@ -96,8 +97,8 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     }
     
     function queryDownElements(): {downList: HTMLOListElement, downToggle: HTMLButtonElement} {
-        const acrossList = clueContainer.querySelector("#todo-across-clues") as HTMLOListElement;
-        const acrossToggle = clueContainer.querySelector("#todo-across-toggle") as HTMLButtonElement;
+        const downList = clueContainer.querySelector("#todo-down-clues") as HTMLOListElement;
+        const downToggle = clueContainer.querySelector("#todo-down-toggle") as HTMLButtonElement;
 
         return {downList, downToggle};
     }

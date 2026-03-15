@@ -9,8 +9,7 @@ type PlacementCheckResult = {
 }
 
 class PuzzleSession {
-    private row: number;
-    private col: number;
+    private coord: Coord;
     private rows: number;
     private cols: number;
     private activePlacement: Placement;
@@ -31,8 +30,7 @@ class PuzzleSession {
         // start cursor on first placement
         this.activePlacement = this.getInitialPlacement();
         this.activePlacementIndex = 0;
-        this.row = this.activePlacement.start_row;
-        this.col = this.activePlacement.start_col;
+        this.coord = {row: this.activePlacement.start_row, col: this.activePlacement.start_col}
         this.filledLetterCount = this.createFilledLetterCount();
 
         this.letterGrid = this.createLetterGrid();
@@ -42,40 +40,42 @@ class PuzzleSession {
     advanceCursor() {
         const next = this.getCellInActivePlacement(1);
         if (!next) return;
-    
-        this.moveCursor(next.row, next.col);
+        
+        this.moveCursor(next);
     }
 
     reverseCursor() {
         const previous = this.getCellInActivePlacement(-1);
         if (!previous) return;
     
-        this.moveCursor(previous.row, previous.col);
+        this.moveCursor(previous);
     }
 
     moveCursorRelative(rowDelta: number, colDelata: number) {
         const coord = this.getCoord();
-        this.moveCursor(coord.row + rowDelta, coord.col + colDelata);
+
+        const relativeCoord = {row: coord.row + rowDelta, col: coord.col + colDelata}
+        this.moveCursor(relativeCoord);
     }
 
     setCursorByPlacement(placementId: PlacementId) {
         const placement = this.boardView.getPlacement(placementId);
         if (!placement) return;
 
-        const cell = this.boardView.getCell(placement.start_row, placement.start_col);
+        const coord = {row: placement.start_row, col: placement.start_col}
+        const cell = this.boardView.getCell(coord);
         if (!cell) return;
 
         const position = cell.placement_positions[placement.direction];
         if (!position) return;
 
-        this.row = placement.start_row;
-        this.col = placement.start_col;
+        this.coord = {row: placement.start_row, col: placement.start_col}
         this.activePlacement = placement;
         this.activePlacementIndex = position.placement_index;
     }
 
-    moveCursor(row: number, col: number) {
-        const cell = this.boardView.getCell(row, col);
+    moveCursor(coord: Coord) {
+        const cell = this.boardView.getCell(coord);
         if (!cell) return;
     
         let direction = this.activePlacement.direction;
@@ -91,8 +91,7 @@ class PuzzleSession {
         const placement = this.boardView.getPlacement(position.placement_id);
         if (!placement) return;
     
-        this.row = row;
-        this.col = col;
+        this.coord = coord;
         this.activePlacement = placement;    
         this.activePlacementIndex = position.placement_index;
     }
@@ -104,11 +103,12 @@ class PuzzleSession {
         const nextPlacement = placements[nextIndex];
 
         this.activePlacement = nextPlacement;
-        this.moveCursor(this.activePlacement.start_row, this.activePlacement.start_col);
+        const coord = {row: this.activePlacement.start_row, col: this.activePlacement.start_col};
+        this.moveCursor(coord);
     }
 
     setDirection(desired: Direction) {
-        const cell = this.boardView.getCell(this.row, this.col);
+        const cell = this.boardView.getCell(this.coord);
         if (!cell) return;
     
         // Already in the desired direction.
@@ -118,7 +118,7 @@ class PuzzleSession {
     }
 
     toggleDirection() {
-        const cell = this.boardView.getCell(this.row, this.col)
+        const cell = this.boardView.getCell(this.coord);
         if (!cell) return;
 
         const currentDirection = this.activePlacement.direction;
@@ -140,26 +140,26 @@ class PuzzleSession {
         }
     
         letter = this.validateLetter(letter);
-        const prev = this.letterGrid[this.row][this.col];
+        const prev = this.letterGrid[this.coord.row][this.coord.col];
     
         if (prev === letter) return;
     
-        this.letterGrid[this.row][this.col] = letter;
+        this.letterGrid[this.coord.row][this.coord.col] = letter;
         if (prev === null && letter !== null) this.adjustLetterCount(1);
         if (prev !== null && letter === null) this.adjustLetterCount(-1);
         
-        this.invalidateSolvedPlacement(this.row, this.col);
+        this.invalidateSolvedPlacement(this.coord);
     }
 
     getLetter(): string | null {
-        return this.letterGrid[this.row][this.col]
+        return this.letterGrid[this.coord.row][this.coord.col]
     }
 
-    evaluateCellPlacements(row: number, col: number): PlacementCheckResult {
+    evaluateCellPlacements(coord: Coord): PlacementCheckResult {
         const solved = [];
         const incorrect = [];
 
-        const placements = this.boardView.getCellPlacements(row, col);
+        const placements = this.boardView.getCellPlacements(coord);
         for (const placement of placements) {
             if (!this.isPlacementComplete(placement)) continue;
             
@@ -176,8 +176,8 @@ class PuzzleSession {
         return {solved, incorrect} as PlacementCheckResult;
     }
 
-    private invalidateSolvedPlacement(row: number, col: number) {
-        const placements = this.boardView.getCellPlacements(row, col);
+    private invalidateSolvedPlacement(coord: Coord) {
+        const placements = this.boardView.getCellPlacements(coord);
     
         for (const placement of placements) {
             this.solvedPlacements.delete(placement.id);
@@ -189,14 +189,14 @@ class PuzzleSession {
     }
 
     isCellEmpty(): boolean {
-        return this.letterGrid[this.row][this.col] === null;
+        return this.letterGrid[this.coord.row][this.coord.col] === null;
     }
 
     getActivePlacement(): Placement {
         return this.activePlacement;
     }
 
-    getActivePlacementCoords(): { row: number; col: number }[] {
+    getActivePlacementCoords(): Coord[] {
         const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
         if (!cells) return [];
 
@@ -208,7 +208,7 @@ class PuzzleSession {
     }
 
     getCoord(): Coord {
-        return {row: this.row, col: this.col} as Coord;
+        return this.coord;
     }
 
     getPlacementCells(placementId: PlacementId): Coord[] {
@@ -260,7 +260,7 @@ class PuzzleSession {
     }
 
     private adjustLetterCount(delta: number) {
-        const cell = this.boardView.getCell(this.row, this.col);
+        const cell = this.boardView.getCell(this.coord);
         if (!cell) return;
     
         const positions = cell.placement_positions;
@@ -294,7 +294,7 @@ class PuzzleSession {
     }
 
     // positive offset provides next cell in placement. negative offset provides previous cell.
-    private getCellInActivePlacement(offset: number): {row: number; col: number} | null {
+    private getCellInActivePlacement(offset: number): Coord | null {
         const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
         if (!cells) return null;
 
@@ -306,7 +306,7 @@ class PuzzleSession {
     }
 
     private isBlock(): boolean {
-        return this.boardView.getCell(this.row, this.col) === null;
+        return this.boardView.getCell(this.coord) === null;
     }
 }
 

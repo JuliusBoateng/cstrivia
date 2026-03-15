@@ -57,25 +57,20 @@ class BoardView {
         return `${row},${col}`;
     }
 
-    static parseCoordKey(key: CoordKey): Coord {
-        const [row, col] = key.split(",").map(Number);
-        return { row, col } as Coord;
-    }
-
-    getCell(row: number, col: number): Cell | null {
-        return this.cellGrid[row][col]
+    getCell(coord: Coord): Cell | null {
+        return this.cellGrid[coord.row][coord.col]
     }
 
     getCells(): Cell[] {
         return this.cells;
     }
 
-    isStartingCell(row: number, col: number): boolean {
-        return this.labelGrid[row][col] > 0;
+    isStartingCell(coord: Coord): boolean {
+        return this.labelGrid[coord.row][coord.col] > 0;
     }
 
-    getLabel(row: number, col: number): number {
-        return this.labelGrid[row][col]
+    getLabel(coord: Coord): number {
+        return this.labelGrid[coord.row][coord.col]
     }
 
     getCellsWithPlacementId(placement_id: PlacementId): Cell[] | undefined {
@@ -90,8 +85,8 @@ class BoardView {
         return this.placementMap.get(placement_id);
     }
 
-    getCellPlacements(row: number, col: number): Placement[] {
-        const cell = this.getCell(row, col);
+    getCellPlacements(coord: Coord): Placement[] {
+        const cell = this.getCell(coord);
         if (!cell) return [];
     
         const placements = [];

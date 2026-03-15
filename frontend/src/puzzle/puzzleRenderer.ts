@@ -16,22 +16,22 @@ class PuzzleRenderer {
         this.highlightedCursor = null;
     }
 
-    renderLetter(row: number, col: number, letter: string | null) {
-        const inputElement: HTMLInputElement = this.inputGrid[row][col];
+    renderLetter(coord: Coord, letter: string | null) {
+        const inputElement: HTMLInputElement = this.inputGrid[coord.row][coord.col];
         if (!inputElement) return;
 
         inputElement.value = letter ?? ""
     }
 
-    focusCell(row: number, col: number) {
-        const inputElement: HTMLInputElement = this.inputGrid[row][col];
+    focusCell(coord: Coord) {
+        const inputElement: HTMLInputElement = this.inputGrid[coord.row][coord.col];
         if (!inputElement) return;
 
         inputElement.focus()
     }
 
-    setCursorHighlight(row: number, col: number) {
-        const cell = this.cellGrid[row][col];
+    setCursorHighlight(coord: Coord) {
+        const cell = this.cellGrid[coord.row][coord.col];
         if (cell.classList.contains("block")) return;
         if (this.highlightedCursor === cell) return;
 
@@ -40,7 +40,7 @@ class PuzzleRenderer {
         this.highlightedCursor = cell;
     }
 
-    setPlacementHighlight(placementId: number, coords: { row: number; col: number }[]) {
+    setPlacementHighlight(placementId: number, coords: Coord[]) {
         if (this.highlightedPlacementId === placementId) return;
         this.clearPlacementHighlight();
         

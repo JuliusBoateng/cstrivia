@@ -1,4 +1,5 @@
 import {BoardView, Direction} from "../models/boardView.js";
+import {Coord} from "../models/boardView.js";
 
 interface BoardDom {
     cellGrid: HTMLTableCellElement[][];
@@ -46,7 +47,8 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         rowElement.dataset.row = row.toString();
         
         for (let col = 0; col < cols; col++) {
-            const cellElement =  createTableCellElement(row, col)
+            const coord = {row, col};
+            const cellElement =  createTableCellElement(coord)
 
             cellGrid[row][col] = cellElement;
             rowElement.appendChild(cellElement);
@@ -55,13 +57,13 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         return rowElement;
     }
 
-    function createTableCellElement(row: number, col: number): HTMLTableCellElement {
+    function createTableCellElement(coord: Coord): HTMLTableCellElement {
         const cellElement = document.createElement("td");
         cellElement.classList.add("cell")
-        cellElement.dataset.col = col.toString();
-        cellElement.dataset.row = row.toString();
+        cellElement.dataset.col = coord.col.toString();
+        cellElement.dataset.row = coord.row.toString();
         
-        const cell = boardView.getCell(row, col)
+        const cell = boardView.getCell(coord)
         if (!cell) {
             cellElement.classList.add("block");
             const fillContainer = createEmptyFillContainer()
@@ -80,7 +82,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
             cellElement.dataset.downPlacementId = placement_id.toString();
         }
         
-        const fillContainer = createFillContainer(row, col);
+        const fillContainer = createFillContainer(coord);
         cellElement.appendChild(fillContainer);
         
         return cellElement;
@@ -92,19 +94,19 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         return divElement
     }
 
-    function createFillContainer(row: number, col: number): HTMLDivElement {
+    function createFillContainer(coord: Coord): HTMLDivElement {
         const divElement = createEmptyFillContainer();
 
-        const startingCell = boardView.isStartingCell(row, col);
+        const startingCell = boardView.isStartingCell(coord);
         if (startingCell) {
-            const labelNumber = boardView.getLabel(row, col);
+            const labelNumber = boardView.getLabel(coord);
 
             const spanElement = createSpanElement(labelNumber)
             divElement.appendChild(spanElement);
         }
 
         const inputElement = createInputElement();
-        inputGrid[row][col] = inputElement;
+        inputGrid[coord.row][coord.col] = inputElement;
         divElement.appendChild(inputElement);
 
         return divElement;
