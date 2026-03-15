@@ -12,6 +12,7 @@
     /* Clue sizing */
     --clue-width: 420px;
     --clue-min: 320px;
+    --clue-max-height: 760px;
   }
 
 html {
@@ -179,6 +180,9 @@ h1 {
 .clue-card {
     width: var(--clue-width);
     max-width: 100%;
+    height: min(80vh, var(--clue-max-height));
+    min-height: var(--clue-min);
+    overflow-y: auto;
     font-size: 14px;
     line-height: 1.4;
 }
@@ -270,19 +274,15 @@ h1 {
 
 /*  min-width: --clue-width  max-width: --clue-width */
 @media (max-width: 1000px) {
-    .board-wrapper {
-        position: sticky;
-        top: 20px;
-    }
     .panel {
       flex-direction: column;
       align-items: center;
     }
     .clue-card {
-        width: 100%;
-        max-width: 420px;
-        min-width: 320px;
-    }
+        height: auto;
+        max-height: none;
+        overflow-y: visible;
+      }
   }
 
 /* max-width: --board-min 
