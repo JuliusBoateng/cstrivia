@@ -18,7 +18,7 @@ class PuzzleSession {
     private letterGrid: (string | null)[][];
     private boardView: BoardView;
     private puzzleValidator: PuzzleValidator;
-    private solvedPlacements: Set<PlacementId>;
+    private solvedPlacementIds: Set<PlacementId>;
 
     constructor(boardView: BoardView, puzzleValidator: PuzzleValidator) {
         this.boardView = boardView;
@@ -34,7 +34,7 @@ class PuzzleSession {
         this.filledLetterCount = this.createFilledLetterCount();
 
         this.letterGrid = this.createLetterGrid();
-        this.solvedPlacements = new Set();
+        this.solvedPlacementIds = new Set();
     }
     
     advanceCursor() {
@@ -141,9 +141,7 @@ class PuzzleSession {
     }
 
     setLetter(letter: string | null) {
-        if (this.isBlock()) {
-            throw Error("Unable to write to block cell.");
-        }
+        if (this.isBlock()) throw Error("Unable to write to block cell.");
     
         letter = this.validateLetter(letter);
         const prev = this.letterGrid[this.coord.row][this.coord.col];
@@ -171,10 +169,10 @@ class PuzzleSession {
             
             const correct = this.puzzleValidator.checkPlacement(this.letterGrid, placement);
             if (correct) {
-                this.solvedPlacements.add(placement.id);
+                this.solvedPlacementIds.add(placement.id);
                 solved.push(placement.id);
             } else {
-                this.solvedPlacements.delete(placement.id);
+                this.solvedPlacementIds.delete(placement.id);
                 incorrect.push(placement.id)
             }
         }
@@ -182,16 +180,20 @@ class PuzzleSession {
         return {solved, incorrect} as PlacementCheckResult;
     }
 
+    getSolvedPlacementIds() {
+        return this.solvedPlacementIds;
+    }
+
     private invalidateSolvedPlacement(coord: Coord) {
         const placements = this.boardView.getCellPlacements(coord);
     
         for (const placement of placements) {
-            this.solvedPlacements.delete(placement.id);
+            this.solvedPlacementIds.delete(placement.id);
         }
     }
 
     isPuzzleComplete() {
-        return this.solvedPlacements.size === this.boardView.getPlacements().length;
+        return this.solvedPlacementIds.size === this.boardView.getPlacements().length;
     }
 
     isCellEmpty(): boolean {

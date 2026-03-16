@@ -1,9 +1,9 @@
-import {BoardDom} from "../render/boardDomBuilder.js";
 import {Direction, PlacementId} from "../models/boardView.js";
 import {PuzzleSession} from "./puzzleSession.js";
 import {PuzzleRenderer} from "./puzzleRenderer.js";
 import {ClueView} from "./clueRenderer.js";
 import {Coord} from "../models/boardView.js";
+import {hasSetDifference} from "../comparisonHelpers.js";
 
 interface CursorController {
     setCursorByPlacement(placementId: PlacementId): void;
@@ -18,13 +18,11 @@ const NullClueView: ClueView = {
 class PuzzleController implements CursorController {
     private session: PuzzleSession;
     private renderer: PuzzleRenderer;
-    private boardDom: BoardDom;
     private clueView: ClueView;
 
-    constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardDom: BoardDom) {
+    constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer) {
         this.session = session;
         this.renderer = renderer;
-        this.boardDom = boardDom;
         this.clueView = NullClueView;
 
         tableElement.addEventListener("pointerdown", this.handlePointerInput);
@@ -129,12 +127,8 @@ class PuzzleController implements CursorController {
     }
 
     private handleCharacterInput(event: InputEvent) {
-        event.preventDefault();    
-        
-        this.session.setLetter(event.data);
-        const coord = this.session.getCoord();
-        this.renderer.renderLetter(coord, this.session.getLetter());
-        this.renderPlacementFeedback(coord);
+        event.preventDefault();
+        this.applyLetter(event.data);
         
         if (this.session.isPuzzleComplete()) {
             const playableCells = this.session.getPlayableCells();
@@ -173,9 +167,7 @@ class PuzzleController implements CursorController {
             return;
         }
         
-        this.session.setLetter(null);
-        const coords = this.session.getCoord();
-        this.renderer.renderLetter(coords, this.session.getLetter());
+        this.applyLetter(null);
     }
 
     private handleHorizontalArrowInput(event: KeyboardEvent) {
@@ -196,6 +188,24 @@ class PuzzleController implements CursorController {
         this.session.setDirection(Direction.D);
     
         this.updateCursorVisuals();
+    }
+
+    private applyLetter(letter: string | null) {
+        letter = letter?.trim() || null;
+
+        const prevSolved = [...this.session.getSolvedPlacementIds()];
+        this.session.setLetter(letter);
+
+        const currCoord = this.session.getCoord();
+        const currentLetter = this.session.getLetter();
+        this.renderer.renderLetter(currCoord, currentLetter);
+        
+        if (currentLetter) this.renderPlacementFeedback(currCoord);
+
+        const currSolved = [...this.session.getSolvedPlacementIds()];
+        if (hasSetDifference(prevSolved, currSolved)) {
+            this.clueView.renderClues(currSolved);
+        }
     }
 
     private updateCursorVisuals() {

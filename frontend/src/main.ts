@@ -35,9 +35,10 @@ function createClueRenderer(boardView: BoardView, clueContainer: HTMLDivElement)
 
 function createPuzzleController(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
     const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);
-    const boardDom: BoardDom = createBoard(boardView, tableElement);
     const puzzleSession: PuzzleSession = new PuzzleSession(boardView, puzzleValidator)
+
+    const boardDom: BoardDom = createBoard(boardView, tableElement);
     const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardDom)
 
-    return new PuzzleController(tableElement, puzzleSession, puzzleRenderer, boardDom);
+    return new PuzzleController(tableElement, puzzleSession, puzzleRenderer);
 }
