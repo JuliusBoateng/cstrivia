@@ -178,6 +178,7 @@ h1 {
 
 .clue-card {
     width: var(--clue-width);
+    min-width: var(--clue-width);
     max-width: 100%;
     height: min(80vh, var(--clue-max-height));
     min-height: var(--clue-min);
@@ -269,6 +270,24 @@ h1 {
     overflow-wrap: break-word;
 }
 
+.clue-empty {
+    display: none;
+    text-align: center;
+    padding: 24px 12px;
+    color: #777;
+    font-style: italic;
+}
+
+/* Empty state: all clue lists hidden */
+.clue-card:not(:has(.clue-list:not([hidden]))) .clue-empty {
+    display: block;
+}
+
+/* Empty state: all sections are hidden */
+.clue-card:not(:has(.clue-section-body:not([hidden]))) .clue-empty {
+    display: block;
+}
+
 .section-toggle[aria-expanded="true"] .clue-count {
     display: none;
   }
@@ -286,10 +305,10 @@ h1 {
       }
   }
 
-/* max-width: --board-min 
-reason for this query is to prevent unreachable 
-horizontal scroll after overflow */
-  @media (max-width: 320px) {
+/* max-width: --clue-width: 420px;
+prevents issue where clue / board is unreachable 
+through horizontal scroll after overflow */
+  @media (max-width: 420px) {
     .panel {
       align-items: flex-start;
     }

@@ -12,7 +12,7 @@ class PuzzleRenderer {
     private inputGrid: HTMLInputElement[][];
     private highlightedPlacementId: number;
     private highlightedPlacementCells: HTMLTableCellElement[];
-    private highlightedCursor: HTMLTableCellElement | null = null;
+    private highlightedCursor: HTMLTableCellElement | null;
 
     constructor(boardDom: BoardDom) {
         this.cellGrid = boardDom.cellGrid;

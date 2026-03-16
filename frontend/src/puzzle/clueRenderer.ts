@@ -21,10 +21,10 @@ const TODO_TOGGLE = "#todo-toggle";
 const SOLVED_TOGGLE = "#solved-toggle";
 const CLUE_COUNT = ".clue-count";
 
-type ClueCounts = {todo_access_count: number,
-          todo_down_count: number,
-          solved_across_count: number,
-          solved_down_count: number}
+type ClueCounts = {todoAcrossCount: number,
+          todoDownCount: number,
+          solvedAcrossCount: number,
+          solvedDownCount: number}
 
 interface ClueView {
   highlightClue(placementId: PlacementId): void;
@@ -48,6 +48,13 @@ class ClueRenderer {
     private solvedAcross: HTMLOListElement;
     private solvedDown: HTMLOListElement;
 
+    private todoCountLabel: HTMLSpanElement;
+    private solvedCountLabel: HTMLSpanElement;
+    private todoAcrossLabel: HTMLSpanElement;
+    private todoDownLabel: HTMLSpanElement;
+    private solvedAcrossLabel: HTMLSpanElement;
+    private solvedDownLabel: HTMLSpanElement;
+
     constructor(clueContainer: HTMLDivElement) {
         this.clueContainer = clueContainer;
         this.cursorController = NullCursorController;
@@ -62,7 +69,15 @@ class ClueRenderer {
         this.todoDown = document.querySelector(TODO_DOWN_CLUES)!;
         this.solvedAcross = document.querySelector(SOLVED_ACROSS_CLUES)!;
         this.solvedDown = document.querySelector(SOLVED_DOWN_CLUES)!;
-        
+
+        // initialize labels
+        this.todoCountLabel = this.clueContainer.querySelector(TODO_TOGGLE)!.querySelector(CLUE_COUNT)!;
+        this.solvedCountLabel = this.clueContainer.querySelector(SOLVED_TOGGLE)!.querySelector(CLUE_COUNT)!;
+        this.todoAcrossLabel = this.clueContainer.querySelector(TODO_ACROSS_TOGGLE)!.querySelector(CLUE_COUNT)!;
+        this.todoDownLabel = this.clueContainer.querySelector(TODO_DOWN_TOGGLE)!.querySelector(CLUE_COUNT)!;
+        this.solvedAcrossLabel = this.clueContainer.querySelector(SOLVED_ACROSS_TOGGLE)!.querySelector(CLUE_COUNT)!;
+        this.solvedDownLabel = this.clueContainer.querySelector(SOLVED_DOWN_TOGGLE)!.querySelector(CLUE_COUNT)!;
+
         this.navItems = this.createNavItems();
         this.navIndexMap = this.createNavIndexMap(this.navItems);
         this.placementClueMap = this.createPlacementClueMap(this.navItems);
@@ -75,7 +90,6 @@ class ClueRenderer {
       const solvedSet = new Set(solved);
       const clueCounts: ClueCounts = this.renderClueList(solvedSet);
       
-      console.log(clueCounts);
       this.renderProgressCount(clueCounts);
     }
 
@@ -85,28 +99,22 @@ class ClueRenderer {
     }
 
     private renderMainProgressCount(clueCounts: ClueCounts) {
-      const todoCount = clueCounts.todo_access_count + clueCounts.todo_down_count;
-      const solvedCount = clueCounts.solved_across_count + clueCounts.solved_down_count;
+      const todoCount = clueCounts.todoAcrossCount + clueCounts.todoDownCount;
+      const solvedCount = clueCounts.solvedAcrossCount + clueCounts.solvedDownCount;
 
-      const todoClueLabel = this.clueContainer.querySelector(TODO_TOGGLE)!.querySelector(CLUE_COUNT) as HTMLSpanElement;
-      todoClueLabel.textContent = String(todoCount);
-
-      const solvedClueLabel = this.clueContainer.querySelector(SOLVED_TOGGLE)!.querySelector(CLUE_COUNT) as HTMLSpanElement;
-      solvedClueLabel.textContent = String(solvedCount);
+      this.setLabelCount(this.todoCountLabel, todoCount);
+      this.setLabelCount(this.solvedCountLabel, solvedCount);
     }
 
     private renderSubProgressCount(clueCounts: ClueCounts) {
-      const todoAcrossLabel = this.clueContainer.querySelector(TODO_ACROSS_TOGGLE)!.querySelector(CLUE_COUNT) as HTMLSpanElement;
-      todoAcrossLabel.textContent = String(clueCounts.todo_access_count);
+      this.setLabelCount(this.todoAcrossLabel, clueCounts.todoAcrossCount);
+      this.setLabelCount(this.todoDownLabel, clueCounts.todoDownCount);
+      this.setLabelCount(this.solvedAcrossLabel, clueCounts.solvedAcrossCount);
+      this.setLabelCount(this.solvedDownLabel, clueCounts.solvedDownCount);
+    }
 
-      const todoDownLabel = this.clueContainer.querySelector(TODO_DOWN_TOGGLE)!.querySelector(CLUE_COUNT) as HTMLSpanElement;
-      todoDownLabel.textContent = String(clueCounts.todo_down_count);
-
-      const solvedAcrossLabel = this.clueContainer.querySelector(SOLVED_ACROSS_TOGGLE)!.querySelector(CLUE_COUNT) as HTMLSpanElement;
-      solvedAcrossLabel.textContent = String(clueCounts.solved_across_count);
-
-      const solvedDownLabel = this.clueContainer.querySelector(SOLVED_DOWN_TOGGLE)!.querySelector(CLUE_COUNT) as HTMLSpanElement;
-      solvedDownLabel.textContent = String(clueCounts.solved_down_count);
+    private setLabelCount(spanElement: HTMLSpanElement, count: number) {
+      spanElement.textContent = count > 0 ? String(count) : "";
     }
 
     private renderClueList(solvedSet: Set<PlacementId>): ClueCounts {
@@ -131,10 +139,10 @@ class ClueRenderer {
       }
 
       const clueCounts = {
-        todo_access_count: todoAcrossFrag.childElementCount,
-        todo_down_count: todoDownFrag.childElementCount,
-        solved_across_count: solvedAcrossFrag.childElementCount,
-        solved_down_count: solvedDownFrag.childElementCount
+        todoAcrossCount: todoAcrossFrag.childElementCount,
+        todoDownCount: todoDownFrag.childElementCount,
+        solvedAcrossCount: solvedAcrossFrag.childElementCount,
+        solvedDownCount: solvedDownFrag.childElementCount
       } as ClueCounts;
 
       this.todoAcross.replaceChildren(todoAcrossFrag);
