@@ -110,7 +110,7 @@ class ClueRenderer {
       const clueCounts: ClueCounts = this.renderClueList(solvedSet);
       
       this.renderProgressCount(clueCounts);
-      this.updateEmptyState();
+      this.updateEmptyState(clueCounts);
     }
 
     setCursorController(cursorController: CursorController) {
@@ -230,19 +230,28 @@ class ClueRenderer {
       spanElement.textContent = count > 0 ? String(count) : "";
     }
 
-    private updateEmptyState() {
-      this.setEmptyState(this.solvedDownClues, Number(this.solvedDownCountLabel.textContent));
-      this.setEmptyState(this.solvedDownToggle, Number(this.solvedDownCountLabel.textContent));
-      this.setEmptyState(this.solvedAcrossClues, Number(this.solvedAcrossCountLabel.textContent));
-      this.setEmptyState(this.solvedAcrossToggle, Number(this.solvedAcrossCountLabel.textContent));
-      this.setEmptyState(this.solvedToggle, Number(this.solvedCountLabel.textContent));
-
-
-      this.setEmptyState(this.todoDownClues, Number(this.todoDownCountLabel.textContent));
-      this.setEmptyState(this.todoDownToggle, Number(this.todoDownCountLabel.textContent));
-      this.setEmptyState(this.todoAcrossClues, Number(this.todoAcrossCountLabel.textContent));
-      this.setEmptyState(this.todoAcrossToggle, Number(this.todoAcrossCountLabel.textContent));
-      this.setEmptyState(this.todoToggle, Number(this.todoCountLabel.textContent));
+    private updateEmptyState(clueCounts: ClueCounts) {
+      const {todoAcrossCount, todoDownCount, solvedAcrossCount,
+        solvedDownCount} = clueCounts;
+    
+      const todoCount = todoAcrossCount + todoDownCount;
+      const solvedCount = solvedAcrossCount + solvedDownCount;
+    
+      this.setEmptyState(this.solvedDownClues, solvedDownCount);
+      this.setEmptyState(this.solvedDownToggle, solvedDownCount);
+    
+      this.setEmptyState(this.solvedAcrossClues, solvedAcrossCount);
+      this.setEmptyState(this.solvedAcrossToggle, solvedAcrossCount);
+    
+      this.setEmptyState(this.solvedToggle, solvedCount);
+    
+      this.setEmptyState(this.todoDownClues, todoDownCount);
+      this.setEmptyState(this.todoDownToggle, todoDownCount);
+    
+      this.setEmptyState(this.todoAcrossClues, todoAcrossCount);
+      this.setEmptyState(this.todoAcrossToggle, todoAcrossCount);
+    
+      this.setEmptyState(this.todoToggle, todoCount);
     }
 
     private setEmptyState(element: HTMLElement, count: number) {
