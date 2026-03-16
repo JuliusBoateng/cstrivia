@@ -37,7 +37,7 @@ class Board(models.Model):
     
     title = models.CharField(max_length=50, unique=True)
     puzzle_number = models.PositiveIntegerField(unique=True, blank=True) # user visible puzzle number
-    published = models.BooleanField(default=False)
+    published_at = models.DateTimeField(null=True, blank=True)
     description = models.CharField(max_length=200)
     categories = models.ManyToManyField(Category, related_name="boards")
     created_at = models.DateTimeField(auto_now_add=True)

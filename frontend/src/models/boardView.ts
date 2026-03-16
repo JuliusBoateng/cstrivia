@@ -195,7 +195,7 @@ class Board {
     readonly id: number;
     readonly title: string;
     readonly puzzle_number: number;
-    readonly published: boolean;
+    readonly published_at: string;
     readonly description: string;
     readonly rows: number;
     readonly cols: number;
@@ -203,11 +203,11 @@ class Board {
     readonly createdAt: string;
     readonly updatedAt: string;
 
-    constructor(id: number, title: string, puzzle_number: number, published: boolean, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
+    constructor(id: number, title: string, puzzle_number: number, published_at: string, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
         this.id = id;
         this.title = title;
         this.puzzle_number = puzzle_number;
-        this.published = published;
+        this.published_at = published_at;
         this.description = description;
         this.rows = rows;
         this.cols = cols;

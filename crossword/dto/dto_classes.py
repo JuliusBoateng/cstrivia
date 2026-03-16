@@ -18,7 +18,7 @@ class BoardDTO(DTO):
     id: int
     title: str
     puzzle_number: int
-    published: bool
+    published_at: datetime
     description: str
     rows: int
     cols: int

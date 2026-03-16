@@ -23,7 +23,7 @@ def _serialize_board(b: BoardDTO) -> dict:
         "id": b.id,
         "title": b.title,
         "puzzle_number": b.puzzle_number,
-        "published": b.published,
+        "published_at": b.published_at.isoformat() if b.published_at else None,
         "description": b.description,
         "rows": b.rows,
         "cols": b.cols,
