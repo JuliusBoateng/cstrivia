@@ -207,10 +207,6 @@ h1 {
     margin: 0;
 }
 
-.clue-section-body:empty {
-    display: none;
-}
-
 .clue-count {
     color: #555;
     font-weight: 500;
@@ -223,6 +219,12 @@ h1 {
     margin: 0.5rem 0;
 }
 
+/* remove empty section */
+.clue-section-body:empty {
+    display: none;
+}
+
+/* remove empty clue-list */
 .clue-list:empty {
     display: none;
 }
@@ -288,6 +290,7 @@ h1 {
     display: block;
 }
 
+/* Hide clue-count from UX when expanded */
 .section-toggle[aria-expanded="true"] .clue-count {
     display: none;
   }

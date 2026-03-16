@@ -43,17 +43,25 @@ class ClueRenderer {
     private placementClueMap: Map<PlacementId, HTMLLIElement>;
     private activeClue: HTMLElement | null; 
 
-    private todoAcross: HTMLOListElement;
-    private todoDown: HTMLOListElement;
-    private solvedAcross: HTMLOListElement;
-    private solvedDown: HTMLOListElement;
+    private todoAcrossClues: HTMLOListElement;
+    private todoDownClues: HTMLOListElement;
+    private solvedAcrossClues: HTMLOListElement;
+    private solvedDownClues: HTMLOListElement;
+
+    private todoToggle: HTMLButtonElement;
+    private todoAcrossToggle: HTMLButtonElement;
+    private todoDownToggle: HTMLButtonElement;
+
+    private solvedToggle: HTMLButtonElement;
+    private solvedAcrossToggle: HTMLButtonElement;
+    private solvedDownToggle: HTMLButtonElement;
 
     private todoCountLabel: HTMLSpanElement;
     private solvedCountLabel: HTMLSpanElement;
-    private todoAcrossLabel: HTMLSpanElement;
-    private todoDownLabel: HTMLSpanElement;
-    private solvedAcrossLabel: HTMLSpanElement;
-    private solvedDownLabel: HTMLSpanElement;
+    private todoAcrossCountLabel: HTMLSpanElement;
+    private todoDownCountLabel: HTMLSpanElement;
+    private solvedAcrossCountLabel: HTMLSpanElement;
+    private solvedDownCountLabel: HTMLSpanElement;
 
     constructor(clueContainer: HTMLDivElement) {
         this.clueContainer = clueContainer;
@@ -65,18 +73,29 @@ class ClueRenderer {
         this.placementClueMap = new Map<PlacementId, HTMLLIElement>();
 
         // initialize clue_list
-        this.todoAcross = document.querySelector(TODO_ACROSS_CLUES)!;
-        this.todoDown = document.querySelector(TODO_DOWN_CLUES)!;
-        this.solvedAcross = document.querySelector(SOLVED_ACROSS_CLUES)!;
-        this.solvedDown = document.querySelector(SOLVED_DOWN_CLUES)!;
+        this.todoAcrossClues = document.querySelector(TODO_ACROSS_CLUES)!;
+        this.todoDownClues = document.querySelector(TODO_DOWN_CLUES)!;
+
+        this.solvedAcrossClues = document.querySelector(SOLVED_ACROSS_CLUES)!;
+        this.solvedDownClues = document.querySelector(SOLVED_DOWN_CLUES)!;
+
+        // initialize toggles
+        this.todoToggle = this.clueContainer.querySelector(TODO_TOGGLE)!;
+        this.todoAcrossToggle = this.clueContainer.querySelector(TODO_ACROSS_TOGGLE)!;
+        this.todoDownToggle = this.clueContainer.querySelector(TODO_DOWN_TOGGLE)!;
+
+        this.solvedToggle = this.clueContainer.querySelector(SOLVED_TOGGLE)!;
+        this.solvedAcrossToggle = this.clueContainer.querySelector(SOLVED_ACROSS_TOGGLE)!;
+        this.solvedDownToggle = this.clueContainer.querySelector(SOLVED_DOWN_TOGGLE)!;
 
         // initialize labels
-        this.todoCountLabel = this.clueContainer.querySelector(TODO_TOGGLE)!.querySelector(CLUE_COUNT)!;
-        this.solvedCountLabel = this.clueContainer.querySelector(SOLVED_TOGGLE)!.querySelector(CLUE_COUNT)!;
-        this.todoAcrossLabel = this.clueContainer.querySelector(TODO_ACROSS_TOGGLE)!.querySelector(CLUE_COUNT)!;
-        this.todoDownLabel = this.clueContainer.querySelector(TODO_DOWN_TOGGLE)!.querySelector(CLUE_COUNT)!;
-        this.solvedAcrossLabel = this.clueContainer.querySelector(SOLVED_ACROSS_TOGGLE)!.querySelector(CLUE_COUNT)!;
-        this.solvedDownLabel = this.clueContainer.querySelector(SOLVED_DOWN_TOGGLE)!.querySelector(CLUE_COUNT)!;
+        this.todoCountLabel = this.todoToggle.querySelector(CLUE_COUNT)!;
+        this.todoAcrossCountLabel = this.todoAcrossToggle.querySelector(CLUE_COUNT)!;
+        this.todoDownCountLabel = this.todoDownToggle.querySelector(CLUE_COUNT)!;
+
+        this.solvedCountLabel = this.solvedToggle.querySelector(CLUE_COUNT)!;
+        this.solvedAcrossCountLabel = this.solvedAcrossToggle.querySelector(CLUE_COUNT)!;
+        this.solvedDownCountLabel = this.solvedDownToggle.querySelector(CLUE_COUNT)!;
 
         this.navItems = this.createNavItems();
         this.navIndexMap = this.createNavIndexMap(this.navItems);
@@ -91,66 +110,7 @@ class ClueRenderer {
       const clueCounts: ClueCounts = this.renderClueList(solvedSet);
       
       this.renderProgressCount(clueCounts);
-    }
-
-    private renderProgressCount(clueCounts: ClueCounts) {
-      this.renderMainProgressCount(clueCounts);
-      this.renderSubProgressCount(clueCounts);
-    }
-
-    private renderMainProgressCount(clueCounts: ClueCounts) {
-      const todoCount = clueCounts.todoAcrossCount + clueCounts.todoDownCount;
-      const solvedCount = clueCounts.solvedAcrossCount + clueCounts.solvedDownCount;
-
-      this.setLabelCount(this.todoCountLabel, todoCount);
-      this.setLabelCount(this.solvedCountLabel, solvedCount);
-    }
-
-    private renderSubProgressCount(clueCounts: ClueCounts) {
-      this.setLabelCount(this.todoAcrossLabel, clueCounts.todoAcrossCount);
-      this.setLabelCount(this.todoDownLabel, clueCounts.todoDownCount);
-      this.setLabelCount(this.solvedAcrossLabel, clueCounts.solvedAcrossCount);
-      this.setLabelCount(this.solvedDownLabel, clueCounts.solvedDownCount);
-    }
-
-    private setLabelCount(spanElement: HTMLSpanElement, count: number) {
-      spanElement.textContent = count > 0 ? String(count) : "";
-    }
-
-    private renderClueList(solvedSet: Set<PlacementId>): ClueCounts {
-      const todoAcrossFrag = document.createDocumentFragment();
-      const todoDownFrag = document.createDocumentFragment();
-      const solvedAcrossFrag = document.createDocumentFragment();
-      const solvedDownFrag = document.createDocumentFragment();
-      
-      // preserves order given that initial clues were ordered correctly.
-      for (const [placementId, clueLiElement] of this.placementClueMap) {
-        const direction = clueLiElement.dataset.placementDirection as Direction | undefined;
-        if (!direction) continue;
-
-        const isSolved = solvedSet.has(placementId);
-    
-        const documentFrag: DocumentFragment = (isSolved
-                ? (direction === Direction.A ? solvedAcrossFrag : solvedDownFrag)
-                : (direction === Direction.A ? todoAcrossFrag : todoDownFrag));
-        
-
-        documentFrag.appendChild(clueLiElement);
-      }
-
-      const clueCounts = {
-        todoAcrossCount: todoAcrossFrag.childElementCount,
-        todoDownCount: todoDownFrag.childElementCount,
-        solvedAcrossCount: solvedAcrossFrag.childElementCount,
-        solvedDownCount: solvedDownFrag.childElementCount
-      } as ClueCounts;
-
-      this.todoAcross.replaceChildren(todoAcrossFrag);
-      this.todoDown.replaceChildren(todoDownFrag);
-      this.solvedAcross.replaceChildren(solvedAcrossFrag);
-      this.solvedDown.replaceChildren(solvedDownFrag);
-
-      return clueCounts;
+      this.updateEmptyState();
     }
 
     setCursorController(cursorController: CursorController) {
@@ -245,6 +205,86 @@ class ClueRenderer {
   
       this.cursorController.setCursorByPlacement(Number(placementId));
     };
+
+    private renderProgressCount(clueCounts: ClueCounts) {
+      this.renderMainProgressCount(clueCounts);
+      this.renderSubProgressCount(clueCounts);
+    }
+
+    private renderMainProgressCount(clueCounts: ClueCounts) {
+      const todoCount = clueCounts.todoAcrossCount + clueCounts.todoDownCount;
+      const solvedCount = clueCounts.solvedAcrossCount + clueCounts.solvedDownCount;
+
+      this.setLabelCount(this.todoCountLabel, todoCount);
+      this.setLabelCount(this.solvedCountLabel, solvedCount);
+    }
+
+    private renderSubProgressCount(clueCounts: ClueCounts) {
+      this.setLabelCount(this.todoAcrossCountLabel, clueCounts.todoAcrossCount);
+      this.setLabelCount(this.todoDownCountLabel, clueCounts.todoDownCount);
+      this.setLabelCount(this.solvedAcrossCountLabel, clueCounts.solvedAcrossCount);
+      this.setLabelCount(this.solvedDownCountLabel, clueCounts.solvedDownCount);
+    }
+
+    private setLabelCount(spanElement: HTMLSpanElement, count: number) {
+      spanElement.textContent = count > 0 ? String(count) : "";
+    }
+
+    private updateEmptyState() {
+      this.setEmptyState(this.solvedDownClues, Number(this.solvedDownCountLabel.textContent));
+      this.setEmptyState(this.solvedDownToggle, Number(this.solvedDownCountLabel.textContent));
+      this.setEmptyState(this.solvedAcrossClues, Number(this.solvedAcrossCountLabel.textContent));
+      this.setEmptyState(this.solvedAcrossToggle, Number(this.solvedAcrossCountLabel.textContent));
+      this.setEmptyState(this.solvedToggle, Number(this.solvedCountLabel.textContent));
+
+
+      this.setEmptyState(this.todoDownClues, Number(this.todoDownCountLabel.textContent));
+      this.setEmptyState(this.todoDownToggle, Number(this.todoDownCountLabel.textContent));
+      this.setEmptyState(this.todoAcrossClues, Number(this.todoAcrossCountLabel.textContent));
+      this.setEmptyState(this.todoAcrossToggle, Number(this.todoAcrossCountLabel.textContent));
+      this.setEmptyState(this.todoToggle, Number(this.todoCountLabel.textContent));
+    }
+
+    private setEmptyState(element: HTMLElement, count: number) {
+      const hasItems = (count > 0);
+      element.classList.toggle("is-empty", !hasItems);
+    } 
+
+    private renderClueList(solvedSet: Set<PlacementId>): ClueCounts {
+      const todoAcrossFrag = document.createDocumentFragment();
+      const todoDownFrag = document.createDocumentFragment();
+      const solvedAcrossFrag = document.createDocumentFragment();
+      const solvedDownFrag = document.createDocumentFragment();
+      
+      // preserves order given that initial clues were ordered correctly.
+      for (const [placementId, clueLiElement] of this.placementClueMap) {
+        const direction = clueLiElement.dataset.placementDirection as Direction | undefined;
+        if (!direction) continue;
+
+        const isSolved = solvedSet.has(placementId);
+    
+        const documentFrag: DocumentFragment = (isSolved
+                ? (direction === Direction.A ? solvedAcrossFrag : solvedDownFrag)
+                : (direction === Direction.A ? todoAcrossFrag : todoDownFrag));
+        
+
+        documentFrag.appendChild(clueLiElement);
+      }
+
+      const clueCounts = {
+        todoAcrossCount: todoAcrossFrag.childElementCount,
+        todoDownCount: todoDownFrag.childElementCount,
+        solvedAcrossCount: solvedAcrossFrag.childElementCount,
+        solvedDownCount: solvedDownFrag.childElementCount
+      } as ClueCounts;
+
+      this.todoAcrossClues.replaceChildren(todoAcrossFrag);
+      this.todoDownClues.replaceChildren(todoDownFrag);
+      this.solvedAcrossClues.replaceChildren(solvedAcrossFrag);
+      this.solvedDownClues.replaceChildren(solvedDownFrag);
+
+      return clueCounts;
+    }
 
     private getToggle(target: HTMLElement): HTMLButtonElement | null {
       const toggle = target.closest(CLUE_TOGGLE) as HTMLButtonElement | null;

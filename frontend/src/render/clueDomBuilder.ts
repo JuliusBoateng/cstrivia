@@ -10,25 +10,29 @@ const TODO_ACROSS_CLUES = "#todo-across-clues";
 const TODO_ACROSS_TOGGLE = "#todo-across-toggle";
 const TODO_DOWN_CLUES = "#todo-down-clues";
 const TODO_DOWN_TOGGLE = "#todo-down-toggle";
+const SOLVED_TOGGLE = "#solved-toggle";
+const SOLVED_ACROSS_TOGGLE = "#solved-across-toggle";
+const SOLVED_DOWN_TOGGLE = "#solved-down-toggle";
 const FOCUS = "tabindex";
 
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
     const placements = boardView.getPlacements();
-    const {acrossClues, downClues} = createClues(placements, clueMap);
+    const {acrossTodoClues, downTodoClues} = createTodoClues(placements, clueMap);
 
-    renderTodoButton(acrossClues.length, downClues.length);
+    initializeSolvedToggles();
+    renderTodoToggle(acrossTodoClues.length, downTodoClues.length);
 
-    const {acrossClueContainer, acrossToggle} = queryAcrossElements();
-    renderClues(acrossClueContainer, acrossToggle, acrossClues);
+    const {acrossClueContainer, acrossTodoToggle} = queryTodoAcrossElements();
+    const {downClueContainer, downTodoToggle} = queryTodoDownElements();
 
-    const {downList, downToggle} = queryDownElements();
-    renderClues(downList, downToggle, downClues);
+    renderTodoClues(acrossClueContainer, acrossTodoToggle, acrossTodoClues);
+    renderTodoClues(downClueContainer, downTodoToggle, downTodoClues);
 
-    function createClues(placements: Placement[], clueMap: Map<PlacementId, Clue>):
-        {acrossClues: HTMLLIElement[], downClues: HTMLLIElement[]} {
-        const acrossClues: HTMLLIElement[] = [];
-        const downClues: HTMLLIElement[] = [];
+    function createTodoClues(placements: Placement[], clueMap: Map<PlacementId, Clue>):
+        {acrossTodoClues: HTMLLIElement[], downTodoClues: HTMLLIElement[]} {
+        const acrossTodoClues: HTMLLIElement[] = [];
+        const downTodoClues: HTMLLIElement[] = [];
 
         for (const placement of placements) {
             const clue = clueMap.get(placement.id);
@@ -37,13 +41,13 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
             const liElement = createClue(placement, clue);
         
             if (placement.direction === Direction.A) {
-                acrossClues.push(liElement);
+                acrossTodoClues.push(liElement);
             } else {
-                downClues.push(liElement);
+                downTodoClues.push(liElement);
             }
         }
 
-        return {acrossClues, downClues};
+        return {acrossTodoClues, downTodoClues};
     }
 
     function createClue(placement: Placement, clue: Clue): HTMLLIElement {
@@ -82,19 +86,22 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     }
 
     function setToggleCount(button: HTMLButtonElement, count: number) {
-        let span = button.querySelector(CLUE_COUNT);
-        if (!span) return;
-        span.textContent = `(${count})`;
+        let spanElement = button.querySelector(CLUE_COUNT);
+        if (!spanElement) return;
+
+        spanElement.textContent = count > 0 ? String(count) : "";
     }
 
-    function renderClues(acrossClueContainer: HTMLOListElement, toggle: HTMLButtonElement, nodes: HTMLLIElement[]) {    
-        const hasItems = nodes.length > 0;
-    
-        acrossClueContainer.hidden = !hasItems;
-        toggle.setAttribute(ARIA_EXPANDED, String(hasItems));
-        setToggleCount(toggle, nodes.length);
+    function renderTodoClues(todoClueContainer: HTMLOListElement, directionToggle: HTMLButtonElement, todoClues: HTMLLIElement[]) {    
+        const hasItems = todoClues.length > 0;
 
-        renderClueList(acrossClueContainer, nodes);
+        acrossClueContainer.hidden = !hasItems;
+        todoClueContainer.classList.toggle("is-empty", !hasItems);
+
+        directionToggle.setAttribute(ARIA_EXPANDED, String(hasItems));
+        setToggleCount(directionToggle, todoClues.length);
+
+        renderClueList(todoClueContainer, todoClues);
     }
 
     function renderClueList(acrossClueContainer: HTMLOListElement, nodes: HTMLLIElement[]) {
@@ -104,24 +111,41 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         acrossClueContainer.replaceChildren(fragment);
     }
 
-    function queryAcrossElements(): {acrossClueContainer: HTMLOListElement, acrossToggle: HTMLButtonElement} {
+    function queryTodoAcrossElements(): {acrossClueContainer: HTMLOListElement, acrossTodoToggle: HTMLButtonElement} {
         const acrossClueContainer = clueContainer.querySelector(TODO_ACROSS_CLUES) as HTMLOListElement;
-        const acrossToggle = clueContainer.querySelector(TODO_ACROSS_TOGGLE) as HTMLButtonElement;
+        const acrossTodoToggle = clueContainer.querySelector(TODO_ACROSS_TOGGLE) as HTMLButtonElement;
 
-        return {acrossClueContainer, acrossToggle};
+        return {acrossClueContainer, acrossTodoToggle};
     }
     
-    function queryDownElements(): {downList: HTMLOListElement, downToggle: HTMLButtonElement} {
-        const downList = clueContainer.querySelector(TODO_DOWN_CLUES) as HTMLOListElement;
-        const downToggle = clueContainer.querySelector(TODO_DOWN_TOGGLE) as HTMLButtonElement;
+    function queryTodoDownElements(): {downClueContainer: HTMLOListElement, downTodoToggle: HTMLButtonElement} {
+        const downClueContainer = clueContainer.querySelector(TODO_DOWN_CLUES) as HTMLOListElement;
+        const downTodoToggle = clueContainer.querySelector(TODO_DOWN_TOGGLE) as HTMLButtonElement;
 
-        return {downList, downToggle};
+        return {downClueContainer, downTodoToggle};
     }
 
-    function renderTodoButton(todo_across_length: number, todo_down_length: number) {
+    function renderTodoToggle(todo_across_length: number, todo_down_length: number) {
         const todoToggle = clueContainer.querySelector(TODO_TOGGLE) as HTMLButtonElement;
         const totalClues = todo_across_length + todo_down_length;
+        
+        const hasItems = totalClues > 0;
+        todoToggle.classList.toggle("is-empty", !hasItems);
         setToggleCount(todoToggle, totalClues);
+    }
+
+    function initializeSolvedToggles() {
+        const solvedAcrossToggle = clueContainer.querySelector(SOLVED_ACROSS_TOGGLE) as HTMLButtonElement;
+        const solvedDownToggle = clueContainer.querySelector(SOLVED_DOWN_TOGGLE) as HTMLButtonElement;
+        const solvedToggle =clueContainer.querySelector(SOLVED_TOGGLE) as HTMLButtonElement;
+
+        setToggleCount(solvedAcrossToggle, 0);
+        setToggleCount(solvedDownToggle, 0);
+        setToggleCount(solvedToggle, 0);
+
+        solvedAcrossToggle.classList.toggle("is-empty", true);
+        solvedDownToggle.classList.toggle("is-empty", true);
+        solvedToggle.classList.toggle("is-empty", true);
     }
 }
 
