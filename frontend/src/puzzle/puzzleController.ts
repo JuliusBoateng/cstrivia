@@ -11,7 +11,8 @@ interface CursorController {
 
 const BLOCK = "block";
 const NullClueView: ClueView = {
-    highlightClue(_placementId: PlacementId) {}
+    highlightClue(_placementId: PlacementId): void {},
+    renderClues(_solved: PlacementId[]): void {}
 };
   
 class PuzzleController implements CursorController {

@@ -52,7 +52,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         liElement.setAttribute(FOCUS, String(0));
 
         liElement.dataset.placementId = placement.id.toString();
-        liElement.dataset.direction = placement.direction;
+        liElement.dataset.placementDirection = placement.direction;
 
         const textSpan = createLiText(clue);
         const labelSpan = createLabel(placement)

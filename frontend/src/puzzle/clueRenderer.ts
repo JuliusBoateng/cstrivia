@@ -1,5 +1,5 @@
 import {CursorController} from "./puzzleController.js"
-import {Placement, PlacementId} from "../models/boardView.js";
+import {PlacementId, Direction} from "../models/boardView.js";
 
 const CLUE_TOGGLE = ".clue-toggle";
 const CLUE = ".clue";
@@ -9,9 +9,15 @@ const HIDDEN = "hidden";
 const NAV_SELECTOR = ".clue-toggle, .clue";
 const HIGHLIGHT = "highlight";
 const CLUE_CARD = ".clue-card";
+const TODO_ACROSS_CLUES = "#todo-across-clues";
+const TODO_DOWN_CLUES = "#todo-down-clues";
+const SOLVED_ACROSS_CLUES = "#solved-across-clues";
+const SOLVED_DOWN_CLUES = "#solved-down-clues";
+
 
 interface ClueView {
   highlightClue(placementId: PlacementId): void;
+  renderClues(solved: PlacementId[]): void;
 }
 
 const NullCursorController: CursorController = {
@@ -21,14 +27,30 @@ const NullCursorController: CursorController = {
 class ClueRenderer {
     private clueContainer: HTMLDivElement;
     private cursorController: CursorController;
-    private navItems: HTMLElement[] = [];
-    private navIndexMap = new Map<HTMLElement, number>();
-    private placementClueMap = new Map<PlacementId, HTMLLIElement>();
-    private activeClue: HTMLElement | null = null; 
+    private navItems: HTMLElement[];
+    private navIndexMap: Map<HTMLElement, number>;
+    private placementClueMap: Map<PlacementId, HTMLLIElement>;
+    private activeClue: HTMLElement | null; 
+
+    private todoAcross: HTMLOListElement;
+    private todoDown: HTMLOListElement;
+    private solvedAcross: HTMLOListElement;
+    private solvedDown: HTMLOListElement;
 
     constructor(clueContainer: HTMLDivElement) {
         this.clueContainer = clueContainer;
         this.cursorController = NullCursorController;
+        this.activeClue = null;
+
+        this.navItems = [];
+        this.navIndexMap = new Map<HTMLElement, number>()
+        this.placementClueMap = new Map<PlacementId, HTMLLIElement>();
+
+        // initialize clue_list
+        this.todoAcross = document.querySelector(TODO_ACROSS_CLUES)!;
+        this.todoDown = document.querySelector(TODO_DOWN_CLUES)!;
+        this.solvedAcross = document.querySelector(SOLVED_ACROSS_CLUES)!;
+        this.solvedDown = document.querySelector(SOLVED_DOWN_CLUES)!;
         
         this.navItems = this.createNavItems();
         this.navIndexMap = this.createNavIndexMap(this.navItems);
@@ -36,6 +58,35 @@ class ClueRenderer {
 
         clueContainer.addEventListener("click", this.handleContainerClick);
         clueContainer.addEventListener("keydown", this.handleContainerKeydown);
+    }
+
+    renderClues(solved: PlacementId[]): void {
+      const solvedSet = new Set(solved);
+
+      const todoAcrossFrag = document.createDocumentFragment();
+      const todoDownFrag = document.createDocumentFragment();
+      const solvedAcrossFrag = document.createDocumentFragment();
+      const solvedDownFrag = document.createDocumentFragment();
+      
+      // preserves order given that initial clues were ordered correctly.
+      for (const [placementId, clueLiElement] of this.placementClueMap) {
+        const direction = clueLiElement.dataset.placementDirection as Direction | undefined;
+        if (!direction) continue;
+
+        const isSolved = solvedSet.has(placementId);
+    
+        const documentFrag: DocumentFragment = (isSolved
+                ? (direction === Direction.A ? solvedAcrossFrag : solvedDownFrag)
+                : (direction === Direction.A ? todoAcrossFrag : todoDownFrag));
+        
+
+        documentFrag.appendChild(clueLiElement);
+      }
+
+      this.todoAcross.replaceChildren(todoAcrossFrag);
+      this.todoDown.replaceChildren(todoDownFrag);
+      this.solvedAcross.replaceChildren(solvedAcrossFrag);
+      this.solvedDown.replaceChildren(solvedDownFrag);
     }
 
     setCursorController(cursorController: CursorController) {
@@ -51,25 +102,6 @@ class ClueRenderer {
       this.activeClue = clue;
       clue.classList.add(HIGHLIGHT);
       this.scrollClue(clue);
-    }
-
-    // In single column view, clue_card is no longer scrollable.
-    // Ensures the page does not scroll when clue is clicked.
-    scrollClue(clue: HTMLLIElement) {
-      const clue_card = document.querySelector(CLUE_CARD) as HTMLDivElement | null;
-      if (!clue_card) return;
-    
-      // Check if clue_card is scrollable
-      const isScrollable = (clue_card.scrollHeight > clue_card.clientHeight) &&
-                            (getComputedStyle(clue_card).overflowY !== "visible");
-    
-      if (!isScrollable) {
-        // Mobile / page-scroll mode → do nothing
-        return;
-      }
-    
-      // Desktop / internal-scroll mode
-      clue.scrollIntoView({block: "nearest"});
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {
@@ -184,6 +216,25 @@ class ClueRenderer {
       }
 
       return placementClueMap;
+    }
+
+    // In single column view, clue_card is no longer scrollable.
+    // Ensures the page does not scroll when clue is clicked.
+    private scrollClue(clue: HTMLLIElement) {
+      const clue_card = document.querySelector(CLUE_CARD) as HTMLDivElement | null;
+      if (!clue_card) return;
+    
+      // Check if clue_card is scrollable
+      const isScrollable = (clue_card.scrollHeight > clue_card.clientHeight) &&
+                            (getComputedStyle(clue_card).overflowY !== "visible");
+    
+      if (!isScrollable) {
+        // Mobile / page-scroll mode → do nothing
+        return;
+      }
+    
+      // Desktop / internal-scroll mode
+      clue.scrollIntoView({block: "nearest"});
     }
 }
 
