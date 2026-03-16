@@ -20,6 +20,8 @@ const SOLVED_DOWN_TOGGLE = "#solved-down-toggle";
 const TODO_TOGGLE = "#todo-toggle";
 const SOLVED_TOGGLE = "#solved-toggle";
 const CLUE_COUNT = ".clue-count";
+const TODO_SECTION = "#todo-section";
+const SOLVED_SECTION = "#solved-section";
 
 type ClueCounts = {todoAcrossCount: number,
           todoDownCount: number,
@@ -43,25 +45,28 @@ class ClueRenderer {
     private placementClueMap: Map<PlacementId, HTMLLIElement>;
     private activeClue: HTMLElement | null; 
 
-    private todoAcrossClues: HTMLOListElement;
-    private todoDownClues: HTMLOListElement;
-    private solvedAcrossClues: HTMLOListElement;
-    private solvedDownClues: HTMLOListElement;
+    private todoAcrossClues!: HTMLOListElement;
+    private todoDownClues!: HTMLOListElement;
+    private solvedAcrossClues!: HTMLOListElement;
+    private solvedDownClues!: HTMLOListElement;
 
-    private todoToggle: HTMLButtonElement;
-    private todoAcrossToggle: HTMLButtonElement;
-    private todoDownToggle: HTMLButtonElement;
+    private todoToggle!: HTMLButtonElement;
+    private todoAcrossToggle!: HTMLButtonElement;
+    private todoDownToggle!: HTMLButtonElement;
 
-    private solvedToggle: HTMLButtonElement;
-    private solvedAcrossToggle: HTMLButtonElement;
-    private solvedDownToggle: HTMLButtonElement;
+    private solvedToggle!: HTMLButtonElement;
+    private solvedAcrossToggle!: HTMLButtonElement;
+    private solvedDownToggle!: HTMLButtonElement;
 
-    private todoCountLabel: HTMLSpanElement;
-    private solvedCountLabel: HTMLSpanElement;
-    private todoAcrossCountLabel: HTMLSpanElement;
-    private todoDownCountLabel: HTMLSpanElement;
-    private solvedAcrossCountLabel: HTMLSpanElement;
-    private solvedDownCountLabel: HTMLSpanElement;
+    private todoCountLabel!: HTMLSpanElement;
+    private solvedCountLabel!: HTMLSpanElement;
+    private todoAcrossCountLabel!: HTMLSpanElement;
+    private todoDownCountLabel!: HTMLSpanElement;
+    private solvedAcrossCountLabel!: HTMLSpanElement;
+    private solvedDownCountLabel!: HTMLSpanElement;
+
+    private todoSection!: HTMLDivElement;
+    private solvedSection!: HTMLDivElement;
 
     constructor(clueContainer: HTMLDivElement) {
         this.clueContainer = clueContainer;
@@ -72,34 +77,11 @@ class ClueRenderer {
         this.navIndexMap = new Map<HTMLElement, number>()
         this.placementClueMap = new Map<PlacementId, HTMLLIElement>();
 
-        // initialize clue_list
-        this.todoAcrossClues = document.querySelector(TODO_ACROSS_CLUES)!;
-        this.todoDownClues = document.querySelector(TODO_DOWN_CLUES)!;
-
-        this.solvedAcrossClues = document.querySelector(SOLVED_ACROSS_CLUES)!;
-        this.solvedDownClues = document.querySelector(SOLVED_DOWN_CLUES)!;
-
-        // initialize toggles
-        this.todoToggle = this.clueContainer.querySelector(TODO_TOGGLE)!;
-        this.todoAcrossToggle = this.clueContainer.querySelector(TODO_ACROSS_TOGGLE)!;
-        this.todoDownToggle = this.clueContainer.querySelector(TODO_DOWN_TOGGLE)!;
-
-        this.solvedToggle = this.clueContainer.querySelector(SOLVED_TOGGLE)!;
-        this.solvedAcrossToggle = this.clueContainer.querySelector(SOLVED_ACROSS_TOGGLE)!;
-        this.solvedDownToggle = this.clueContainer.querySelector(SOLVED_DOWN_TOGGLE)!;
-
-        // initialize labels
-        this.todoCountLabel = this.todoToggle.querySelector(CLUE_COUNT)!;
-        this.todoAcrossCountLabel = this.todoAcrossToggle.querySelector(CLUE_COUNT)!;
-        this.todoDownCountLabel = this.todoDownToggle.querySelector(CLUE_COUNT)!;
-
-        this.solvedCountLabel = this.solvedToggle.querySelector(CLUE_COUNT)!;
-        this.solvedAcrossCountLabel = this.solvedAcrossToggle.querySelector(CLUE_COUNT)!;
-        this.solvedDownCountLabel = this.solvedDownToggle.querySelector(CLUE_COUNT)!;
-
-        this.navItems = this.createNavItems();
-        this.navIndexMap = this.createNavIndexMap(this.navItems);
-        this.placementClueMap = this.createPlacementClueMap(this.navItems);
+        this.initClueLists();
+        this.initToggles();
+        this.initLabels();
+        this.initNavigation();
+        this.initSections();
 
         clueContainer.addEventListener("click", this.handleContainerClick);
         clueContainer.addEventListener("keydown", this.handleContainerKeydown);
@@ -111,6 +93,7 @@ class ClueRenderer {
       
       this.renderProgressCount(clueCounts);
       this.updateEmptyState(clueCounts);
+      this.updateEmptyVisibility()
     }
 
     setCursorController(cursorController: CursorController) {
@@ -197,6 +180,8 @@ class ClueRenderer {
     
       button.setAttribute(ARIA_EXPANDED, String(!expanded));
       section.toggleAttribute(HIDDEN, expanded);
+
+      this.updateEmptyVisibility();
     }
 
     private handleClue(li: HTMLLIElement) {
@@ -230,6 +215,47 @@ class ClueRenderer {
       spanElement.textContent = count > 0 ? String(count) : "";
     }
 
+    // Sets the clue card's empty state based on whether any clues are visible.
+    // A clue list is visible if its section is expanded, the list is expanded,
+    // and neither the section nor the list is marked as `.is-empty`.
+    private updateEmptyVisibility() {
+      const todoSectionVisible =
+        !this.todoSection.hidden &&
+        !this.todoSection.classList.contains("is-empty");
+
+      const solvedSectionVisible =
+        !this.solvedSection.hidden &&
+        !this.solvedSection.classList.contains("is-empty");
+
+      const todoAcrossVisible =
+        todoSectionVisible &&
+        !this.todoAcrossClues.hidden &&
+        !this.todoAcrossClues.classList.contains("is-empty");
+
+      const todoDownVisible =
+        todoSectionVisible &&
+        !this.todoDownClues.hidden &&
+        !this.todoDownClues.classList.contains("is-empty");
+
+      const solvedAcrossVisible =
+        solvedSectionVisible &&
+        !this.solvedAcrossClues.hidden &&
+        !this.solvedAcrossClues.classList.contains("is-empty");
+
+      const solvedDownVisible =
+        solvedSectionVisible &&
+        !this.solvedDownClues.hidden &&
+        !this.solvedDownClues.classList.contains("is-empty");
+
+      const anyVisible =
+        todoAcrossVisible ||
+        todoDownVisible ||
+        solvedAcrossVisible ||
+        solvedDownVisible;
+
+      this.clueContainer.classList.toggle("show-empty", !anyVisible);
+    }
+
     private updateEmptyState(clueCounts: ClueCounts) {
       const {todoAcrossCount, todoDownCount, solvedAcrossCount,
         solvedDownCount} = clueCounts;
@@ -243,6 +269,7 @@ class ClueRenderer {
       this.setEmptyState(this.solvedAcrossClues, solvedAcrossCount);
       this.setEmptyState(this.solvedAcrossToggle, solvedAcrossCount);
     
+      this.setEmptyState(this.solvedSection, solvedCount);
       this.setEmptyState(this.solvedToggle, solvedCount);
     
       this.setEmptyState(this.todoDownClues, todoDownCount);
@@ -250,7 +277,8 @@ class ClueRenderer {
     
       this.setEmptyState(this.todoAcrossClues, todoAcrossCount);
       this.setEmptyState(this.todoAcrossToggle, todoAcrossCount);
-    
+        
+      this.setEmptyState(this.todoSection, todoCount);
       this.setEmptyState(this.todoToggle, todoCount);
     }
 
@@ -348,6 +376,45 @@ class ClueRenderer {
     
       // Desktop / internal-scroll mode
       clue.scrollIntoView({block: "nearest"});
+    }
+
+    private initClueLists() {
+      this.todoAcrossClues = document.querySelector(TODO_ACROSS_CLUES)!;
+      this.todoDownClues = document.querySelector(TODO_DOWN_CLUES)!;
+    
+      this.solvedAcrossClues = document.querySelector(SOLVED_ACROSS_CLUES)!;
+      this.solvedDownClues = document.querySelector(SOLVED_DOWN_CLUES)!;
+    }
+
+    private initToggles() {
+      this.todoToggle = this.clueContainer.querySelector(TODO_TOGGLE)!;
+      this.todoAcrossToggle = this.clueContainer.querySelector(TODO_ACROSS_TOGGLE)!;
+      this.todoDownToggle = this.clueContainer.querySelector(TODO_DOWN_TOGGLE)!;
+    
+      this.solvedToggle = this.clueContainer.querySelector(SOLVED_TOGGLE)!;
+      this.solvedAcrossToggle = this.clueContainer.querySelector(SOLVED_ACROSS_TOGGLE)!;
+      this.solvedDownToggle = this.clueContainer.querySelector(SOLVED_DOWN_TOGGLE)!;
+    }
+
+    private initLabels() {
+      this.todoCountLabel = this.todoToggle.querySelector(CLUE_COUNT)!;
+      this.todoAcrossCountLabel = this.todoAcrossToggle.querySelector(CLUE_COUNT)!;
+      this.todoDownCountLabel = this.todoDownToggle.querySelector(CLUE_COUNT)!;
+    
+      this.solvedCountLabel = this.solvedToggle.querySelector(CLUE_COUNT)!;
+      this.solvedAcrossCountLabel = this.solvedAcrossToggle.querySelector(CLUE_COUNT)!;
+      this.solvedDownCountLabel = this.solvedDownToggle.querySelector(CLUE_COUNT)!;
+    }
+
+    private initSections() {
+      this.todoSection = this.clueContainer.querySelector(TODO_SECTION)!;
+      this.solvedSection = this.clueContainer.querySelector(SOLVED_SECTION)!;
+    }
+
+    private initNavigation() {
+      this.navItems = this.createNavItems();
+      this.navIndexMap = this.createNavIndexMap(this.navItems);
+      this.placementClueMap = this.createPlacementClueMap(this.navItems);
     }
 }
 

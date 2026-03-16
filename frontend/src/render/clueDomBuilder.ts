@@ -4,16 +4,25 @@ const CLUE = "clue";
 const CLUE_TEXT = "clue-text";
 const CLUE_LABEL = "clue-label";
 const CLUE_COUNT = ".clue-count";
-const ARIA_EXPANDED = "aria-expanded";
+
 const TODO_TOGGLE = "#todo-toggle";
-const TODO_ACROSS_CLUES = "#todo-across-clues";
 const TODO_ACROSS_TOGGLE = "#todo-across-toggle";
-const TODO_DOWN_CLUES = "#todo-down-clues";
 const TODO_DOWN_TOGGLE = "#todo-down-toggle";
+
+const TODO_ACROSS_CLUES = "#todo-across-clues";
+const TODO_DOWN_CLUES = "#todo-down-clues";
+const TODO_SECTION = "#todo-section";
+
 const SOLVED_TOGGLE = "#solved-toggle";
 const SOLVED_ACROSS_TOGGLE = "#solved-across-toggle";
 const SOLVED_DOWN_TOGGLE = "#solved-down-toggle";
+
+const SOLVED_ACROSS_CLUES = "#solved-across-clues";
+const SOLVED_DOWN_CLUES = "#solved-down-clues";
+const SOLVED_SECTION = "#solved-section";
+
 const FOCUS = "tabindex";
+const ARIA_EXPANDED = "aria-expanded";
 
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
@@ -95,7 +104,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     function renderTodoClues(todoClueContainer: HTMLOListElement, directionToggle: HTMLButtonElement, todoClues: HTMLLIElement[]) {    
         const hasItems = todoClues.length > 0;
 
-        acrossClueContainer.hidden = !hasItems;
+        todoClueContainer.hidden = !hasItems;
         todoClueContainer.classList.toggle("is-empty", !hasItems);
 
         directionToggle.setAttribute(ARIA_EXPANDED, String(hasItems));
@@ -127,10 +136,13 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
 
     function renderTodoToggle(todo_across_length: number, todo_down_length: number) {
         const todoToggle = clueContainer.querySelector(TODO_TOGGLE) as HTMLButtonElement;
+        const todoSection = clueContainer.querySelector(TODO_SECTION) as HTMLDivElement;
         const totalClues = todo_across_length + todo_down_length;
         
         const hasItems = totalClues > 0;
         todoToggle.classList.toggle("is-empty", !hasItems);
+        todoSection.classList.toggle("is-empty", !hasItems);
+
         setToggleCount(todoToggle, totalClues);
     }
 
@@ -146,6 +158,14 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         solvedAcrossToggle.classList.toggle("is-empty", true);
         solvedDownToggle.classList.toggle("is-empty", true);
         solvedToggle.classList.toggle("is-empty", true);
+
+        const solvedDownClues = clueContainer.querySelector(SOLVED_DOWN_CLUES) as HTMLOListElement;
+        const solvedAcrossClues = clueContainer.querySelector(SOLVED_ACROSS_CLUES) as HTMLOListElement;
+        const solvedSection = clueContainer.querySelector(SOLVED_SECTION) as HTMLDivElement;
+
+        solvedDownClues.classList.toggle("is-empty", true);
+        solvedAcrossClues.classList.toggle("is-empty", true);
+        solvedSection.classList.toggle("is-empty", true);
     }
 }
 

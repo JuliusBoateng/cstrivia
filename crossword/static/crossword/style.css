@@ -219,16 +219,6 @@ h1 {
     margin: 0.5rem 0;
 }
 
-/* remove empty section */
-.clue-section-body:empty {
-    display: none;
-}
-
-/* remove empty clue-list */
-.clue-list:empty {
-    display: none;
-}
-
 /* vertical spacing between clues */
 .clue + .clue {
     margin-top: 0.3rem;
@@ -280,20 +270,19 @@ h1 {
     font-style: italic;
 }
 
-/* Empty state: all clue lists hidden */
-.clue-card:not(:has(.clue-list:not([hidden]))) .clue-empty {
+.clue-card.show-empty .clue-empty {
     display: block;
-}
+  }
 
-/* Empty state: all sections are hidden */
-.clue-card:not(:has(.clue-section-body:not([hidden]))) .clue-empty {
-    display: block;
+/* remove empty clue-list */
+.clue-list:empty {
+    display: none;
 }
 
 /* Hide clue-count from UX when expanded */
 .section-toggle[aria-expanded="true"] .clue-count {
     display: none;
-  }
+}
 
 /*  min-width: --clue-width  max-width: --clue-width */
 @media (max-width: 1000px) {
