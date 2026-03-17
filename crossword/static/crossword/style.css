@@ -145,7 +145,10 @@ h1 {
 }
 
 .puzzle-metadata {
+    width: clamp(260px, 30vw, 420px);
+    min-width: 260px;
     margin-top: 1.5rem;
+    padding: 0.75rem 1rem;
     font-size: 0.9rem;
     color: #666;
 }
@@ -160,13 +163,12 @@ h1 {
     content: " • ";
 }
 
-
 .puzzle-metadata p {
     margin: 0;
 }
 
 .puzzle-metadata .meta-line {
-        margin-bottom: 0.2rem;
+    margin-bottom: 0.2rem;
 }
   
 .puzzle-metadata .board-desc {
@@ -174,6 +176,8 @@ h1 {
     color: #777;
     line-height: 1.4;
     text-wrap: pretty;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .clue-wrapper {
@@ -290,6 +294,23 @@ h1 {
 .section-toggle[aria-expanded="true"] .clue-count {
     display: none;
 }
+
+.site-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding: 1rem 0;
+    font-size: 0.85rem;
+    color: #777;
+  }
+  
+  .site-footer a {
+    color: inherit;
+    text-decoration: underline;
+  }
+  
+  .site-footer a:hover {
+    color: #555;
+  }
 
 @keyframes success-pulse {
     0% {transform: scale(1); background-color: var(--cell-bg);}

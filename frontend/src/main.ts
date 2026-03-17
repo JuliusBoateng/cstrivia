@@ -1,5 +1,5 @@
 import { createPuzzleController, createPuzzleHeader, createPuzzleMetadata } from "./app/initPuzzle.js";
-import { getBoardView, getClueContainer, getSolutionView, getTableElement } from "./app/domLoader.js";
+import { getBoardView, getClueContainer, getSolutionView, getTableElement } from "./app/puzzleSetup.js";
 
 import { createClueRenderer } from "./clue/createClueRenderer.js";
 
