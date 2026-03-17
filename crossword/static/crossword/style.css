@@ -32,6 +32,7 @@ body {
 .main {
     max-width: var(--site-max-width);
     margin: 0 auto;
+    padding: 0 1rem;
     flex: 1;
 }
 
@@ -150,7 +151,7 @@ h1 {
     width: clamp(260px, 30vw, 420px);
     min-width: 260px;
     margin-top: 1.5rem;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0;
     font-size: 0.9rem;
     color: #666;
 }
@@ -315,7 +316,8 @@ h1 {
 .solution-toggle {
     cursor: pointer;
     font-weight: 600;
-    padding: 4px 6px;
+    padding: 4px 0;
+    border-radius: 12px;
 }
 
 .solution-toggle:hover {
@@ -334,7 +336,6 @@ h1 {
     line-height: 1.4;
     border: 1px solid #2d2d2d;;
 }
-
 
 .site-header {
     padding: 0.75rem 1rem;
@@ -364,16 +365,16 @@ h1 {
     padding: 1rem 0;
     font-size: 0.85rem;
     color: #777;
-  }
+}
   
-  .site-footer a {
+.site-footer a {
     color: inherit;
     text-decoration: underline;
-  }
+}
   
-  .site-footer a:hover {
+.site-footer a:hover {
     color: #555;
-  }
+}
 
 @keyframes success-pulse {
     0% {transform: scale(1); background-color: var(--cell-bg);}
