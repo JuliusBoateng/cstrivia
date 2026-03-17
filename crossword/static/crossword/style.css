@@ -13,24 +13,26 @@
     --clue-width: 420px;
     --clue-min: 320px;
     --clue-max-height: 760px;
+
+    /* Site sizing */
+    --site-max-width: 1440px;
   }
 
 html {
     font-family: system-ui, "Segoe UI", Roboto, sans-serif;
 }
 
-html, body {
-    height: 100%;
-}
-
 body {
+    display: flex;
+    flex-direction: column;
     margin: 0;
+    min-height: 100vh;
 }
 
 .main {
-    max-width: 1440px;
+    max-width: var(--site-max-width);
     margin: 0 auto;
-    height: 100%;
+    flex: 1;
 }
 
 h1 {
@@ -50,7 +52,7 @@ h1 {
 }
 
 .board-wrapper {
-    width: clamp(var(--board-min), 45vw, var(--board-max));
+    width: clamp(var(--board-min), 50vw, var(--board-max));
     max-width: 100%;
     min-width: var(--board-min);
     flex: 0 0 auto;
@@ -295,6 +297,28 @@ h1 {
     display: none;
 }
 
+.site-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+  
+.site-header nav {
+    display: flex;
+    gap: 1rem;
+    max-width: var(--site-max-width);
+    margin: 0 auto;
+}
+
+.site-header a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 500;
+}
+
+.site-header a:hover {
+    text-decoration: underline;
+}
+
 .site-footer {
     text-align: center;
     margin-top: 1.5rem;
@@ -335,11 +359,13 @@ h1 {
     animation: error-shake 180ms ease-out;
 }
 
-/*  min-width: --clue-width  max-width: --clue-width */
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
     .puzzle-panel {
       flex-direction: column;
       align-items: center;
+    }
+    .board-wrapper {
+        width: clamp(320px, 60vw, 720px);
     }
     .clue-card {
         height: auto;

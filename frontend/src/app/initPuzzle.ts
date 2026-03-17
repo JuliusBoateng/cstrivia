@@ -22,8 +22,8 @@ function createPuzzleHeader(boardView: BoardView) {
     const puzzleNumber = boardView.board.puzzle_number;
     const title = boardView.board.title;
 
-    const headerBoardTitle = document.querySelector("header .board-title")!;
-    headerBoardTitle.textContent = title;
+    const boardTitle = document.querySelector("h1.board-title")!;
+    boardTitle.textContent = title;
 
     document.title = `Puzzle #${puzzleNumber}: ${title}`;
 }
