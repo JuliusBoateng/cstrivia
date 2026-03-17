@@ -1,5 +1,5 @@
-import {BoardView} from "./models/boardView.js";
-import {SolutionView} from "./models/solutionView.js";
+import {BoardView} from "../models/boardView.js";
+import {SolutionView} from "../models/solutionView.js";
 
 const BOARD = "board";
 const BOARD_VIEW_DTO = "board-view-dto";

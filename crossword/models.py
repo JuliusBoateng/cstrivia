@@ -35,6 +35,7 @@ class Board(models.Model):
             ]
         )
     
+    author = models.CharField(max_length=50, null=True, blank=True)
     title = models.CharField(max_length=50, unique=True)
     puzzle_number = models.PositiveIntegerField(unique=True, blank=True) # user visible puzzle number
     published_at = models.DateTimeField(null=True, blank=True)

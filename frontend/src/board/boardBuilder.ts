@@ -1,5 +1,4 @@
-import {BoardView, Direction} from "../models/boardView.js";
-import {Coord} from "../models/boardView.js";
+import { BoardView, Coord, Direction } from "../models/boardView.js";
 
 interface BoardDom {
     cellGrid: HTMLTableCellElement[][];
@@ -144,4 +143,5 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     }
 }
 
-export {createBoard, BoardDom};
+export { BoardDom, createBoard };
+

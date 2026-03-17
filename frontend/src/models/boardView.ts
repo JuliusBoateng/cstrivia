@@ -194,6 +194,7 @@ class BoardView {
 class Board {
     readonly id: number;
     readonly title: string;
+    readonly author: string;
     readonly puzzle_number: number;
     readonly published_at: string;
     readonly description: string;
@@ -203,9 +204,10 @@ class Board {
     readonly createdAt: string;
     readonly updatedAt: string;
 
-    constructor(id: number, title: string, puzzle_number: number, published_at: string, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
+    constructor(id: number, title: string, author: string, puzzle_number: number, published_at: string, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
         this.id = id;
         this.title = title;
+        this.author = author;
         this.puzzle_number = puzzle_number;
         this.published_at = published_at;
         this.description = description;
@@ -272,4 +274,5 @@ class Clue {
     }
 }
 
-export {BoardView, CoordKey, Placement, Direction, PlacementId, Coord, Clue};
+export { BoardView, Clue, Coord, CoordKey, Direction, Placement, PlacementId };
+

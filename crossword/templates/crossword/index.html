@@ -8,12 +8,15 @@
     <script type="module" src="{% static 'crossword/dist/main.js' %}"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Crossword</title>
+    <title></title>
   </head>
   <body class="off-white">
     <div class="main">
-      <h1>Crossword</h1>
-        <div class = "panel">
+      <article class="puzzle">
+      <header>
+      <h1 class="board-title"></h1>
+    </header>
+        <div class = "puzzle-panel">
           <div class="board-wrapper">
             <table id="board" class="board-card"></table>
           </div>
@@ -67,6 +70,15 @@
             </div>
           </div>
         </div>
+        <footer class="puzzle-metadata">
+          <p class="meta-line">
+            <span class="author"></span>
+            <time class="published-at"></time>
+            <span class="puzzle-number"></span>
+          </p>
+          <p class="board-desc"></p>
+        </footer>
+      </article>
     </div>
   </body>
 </html>

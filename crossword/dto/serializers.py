@@ -22,6 +22,7 @@ def _serialize_board(b: BoardDTO) -> dict:
     return {
         "id": b.id,
         "title": b.title,
+        "author": b.author,
         "puzzle_number": b.puzzle_number,
         "published_at": b.published_at.isoformat() if b.published_at else None,
         "description": b.description,

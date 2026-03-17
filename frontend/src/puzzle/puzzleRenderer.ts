@@ -1,4 +1,4 @@
-import {BoardDom} from "../render/boardDomBuilder.js";
+import {BoardDom} from "../board/boardBuilder.js";
 import {Coord} from "../models/boardView.js";
 
 const ANIMATION_SUCCESS = "placement-success";

@@ -1,5 +1,5 @@
-import {CursorController} from "./puzzleController.js"
-import {PlacementId, Direction} from "../models/boardView.js";
+import { Direction, PlacementId } from "../models/boardView.js";
+import { CursorController } from "../puzzle/puzzleController.js";
 
 const CLUE_TOGGLE = ".clue-toggle";
 const CLUE = ".clue";
@@ -418,4 +418,5 @@ class ClueRenderer {
     }
 }
 
-export {ClueRenderer, ClueView};
+export { ClueRenderer, ClueView };
+

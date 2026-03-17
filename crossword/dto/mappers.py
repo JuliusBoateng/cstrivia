@@ -43,6 +43,7 @@ def _map_to_board_dto(board: Board) -> BoardDTO:
     return BoardDTO(
             board.id,
             board.title,
+            board.author,
             board.puzzle_number,
             board.published_at,
             board.description,

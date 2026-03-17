@@ -1,4 +1,4 @@
-import {BoardView, PlacementId, CoordKey} from "./boardView.js";
+import { BoardView, CoordKey, PlacementId } from "./boardView.js";
 
 interface SolutionViewDTO {
     board_id: number;
@@ -76,4 +76,5 @@ class Letter {
     }
 }
 
-export {SolutionView};
+export { SolutionView };
+

@@ -1,20 +1,32 @@
 import {Direction, PlacementId} from "../models/boardView.js";
 import {PuzzleSession} from "./puzzleSession.js";
 import {PuzzleRenderer} from "./puzzleRenderer.js";
-import {ClueView} from "./clueRenderer.js";
+import {ClueView} from "../clue/clueRenderer.js";
 import {Coord} from "../models/boardView.js";
-import {hasSetDifference} from "../comparisonHelpers.js";
 
 interface CursorController {
     setCursorByPlacement(placementId: PlacementId): void;
   }
 
-const BLOCK = "block";
-const NullClueView: ClueView = {
-    highlightClue(_placementId: PlacementId): void {},
-    renderClues(_solved: PlacementId[]): void {}
-};
+function hasSetDifference<T>(a: T[], b: T[]): boolean {
+    if (a.length !== b.length) return true;
   
+    const setB = new Set(b);
+  
+    for (const item of a) {
+      if (!setB.has(item)) return true;
+    }
+  
+    return false;
+  }
+  
+const BLOCK = "block";
+
+const NullClueView: ClueView = {
+      highlightClue(_placementId: PlacementId): void {},
+      renderClues(_solved: PlacementId[]): void {}
+  };
+
 class PuzzleController implements CursorController {
     private session: PuzzleSession;
     private renderer: PuzzleRenderer;
