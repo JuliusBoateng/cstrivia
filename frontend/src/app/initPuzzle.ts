@@ -29,17 +29,18 @@ function createPuzzleHeader(boardView: BoardView) {
 }
 
 function createPuzzleMetadata(boardView: BoardView) {
+    const boardDescElement = document.querySelector(".board-desc p")!;
+    const desc = boardView.board.description || "";
+
     const puzzleMetadataElement = document.querySelector(".puzzle-metadata")!;
     const authorElement = puzzleMetadataElement.querySelector(".author")!;
     const publishedAtElement = puzzleMetadataElement.querySelector(".published-at")! as HTMLTimeElement;
     const puzzleNumberElement = puzzleMetadataElement.querySelector(".puzzle-number")!;
-    const boardDescElement = puzzleMetadataElement.querySelector(".board-desc")!;
 
     const author = boardView.board.author || "Anonymous Contributor";
     const iso = boardView.board.published_at;
     const formatted = formatDate(iso);
     const puzzleNumber = boardView.board.puzzle_number;
-    const desc = boardView.board.description || "";
 
     authorElement.textContent = author;
     publishedAtElement.setAttribute("datetime", iso);
