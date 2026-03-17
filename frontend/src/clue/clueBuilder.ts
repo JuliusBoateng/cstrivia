@@ -3,6 +3,7 @@ import { BoardView, Clue, Direction, Placement, PlacementId} from "../models/boa
 const CLUE = "clue";
 const CLUE_TEXT = "clue-text";
 const CLUE_LABEL = "clue-label";
+const CLUE_LENGTH_LABEL = "clue-length-label";
 const CLUE_COUNT = ".clue-count";
 
 const TODO_TOGGLE = "#todo-toggle";
@@ -67,11 +68,23 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         liElement.dataset.placementId = placement.id.toString();
         liElement.dataset.placementDirection = placement.direction;
 
-        const textSpan = createLiText(clue);
         const labelSpan = createLabel(placement)
+
+        const textSpan = createLiText(clue);
+        const lengthSpan = createLenLabel(placement)
+        textSpan.appendChild(lengthSpan);
+
         liElement.append(labelSpan, textSpan);
 
         return liElement;
+    }
+
+    function createLenLabel(placement: Placement): HTMLSpanElement {
+        const lengthSpan = document.createElement("span");
+        lengthSpan.classList.add(CLUE_LENGTH_LABEL);
+        lengthSpan.textContent = `(${placement.length})`;
+        
+        return lengthSpan;
     }
 
     function createLiText(clue: Clue): HTMLSpanElement {
