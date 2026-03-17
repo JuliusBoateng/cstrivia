@@ -1,4 +1,4 @@
-import { createPuzzleController, createPuzzleHeader, createPuzzleMetadata } from "./app/initPuzzle.js";
+import { createPuzzleController, createPuzzleHeader, createPuzzleMetadata, createSolutionExport } from "./app/initPuzzle.js";
 import { getBoardView, getClueContainer, getSolutionView, getTableElement } from "./app/puzzleSetup.js";
 
 import { createClueRenderer } from "./clue/createClueRenderer.js";
@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     createPuzzleHeader(boardView);
     createPuzzleMetadata(boardView);
+    createSolutionExport(boardView, solutionView);
 
     const puzzleController = createPuzzleController(tableElement, boardView, solutionView);
     const clueRenderer = createClueRenderer(boardView, clueContainer);

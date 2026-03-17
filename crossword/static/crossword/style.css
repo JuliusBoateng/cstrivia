@@ -297,6 +297,36 @@ h1 {
     display: none;
 }
 
+.solution-panel {
+    margin-top: 1rem;
+    width: clamp(320px, 28vw, 460px);
+    max-width: 100%;
+}
+  
+.solution-toggle {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 4px 6px;
+}
+
+.solution-toggle:hover {
+    background: #f2f2f2;
+}
+
+.solution-json {
+    background: #1e1e1e;
+    color: #ce9178;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 12px;
+    overflow-x: auto;
+    font-family: ui-monospace, monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    border: 1px solid #2d2d2d;;
+}
+
+
 .site-header {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid #e5e5e5;
@@ -365,7 +395,7 @@ h1 {
       align-items: center;
     }
     .board-wrapper {
-        width: clamp(320px, 60vw, 720px);
+        width: clamp(320px, 65vw, 720px);
     }
     .clue-card {
         height: auto;
