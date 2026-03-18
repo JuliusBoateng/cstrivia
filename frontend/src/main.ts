@@ -23,6 +23,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     const puzzleController = createPuzzleController(tableElement, boardView, solutionView);
     const clueRenderer = createClueRenderer(boardView, clueContainer);
-    puzzleController.setClueView(clueRenderer);
-    clueRenderer.setCursorController(puzzleController);
+    puzzleController.init(clueRenderer);
+    clueRenderer.setCursorController(puzzleController); // TODO add init
 });

@@ -31,21 +31,28 @@ class PuzzleController implements CursorController {
     private renderer: PuzzleRenderer;
     private clueView: ClueView;
     private boardView: BoardView;
+    private hasShownInitialFocus = false;
+    private tableElement: HTMLTableElement;
 
     constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardView: BoardView) {
+        this.tableElement = tableElement;
         this.session = session;
         this.renderer = renderer;
         this.boardView = boardView;
         this.clueView = NullClueView;
-
-        this.updateCursorVisuals();
-
-        tableElement.addEventListener("pointerdown", this.handlePointerInput);
-        tableElement.addEventListener("beforeinput", this.handleBeforeInput);
-        tableElement.addEventListener("keydown", this.handleKeydown);
     }
 
-    setClueView(clueView: ClueView) {
+    public init(clueView: ClueView) {
+        this.setClueView(clueView)
+        this.updateCursorVisuals();
+        this.triggerInitialFocus()
+
+        this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
+        this.tableElement.addEventListener("beforeinput", this.handleBeforeInput);
+        this.tableElement.addEventListener("keydown", this.handleKeydown);
+    }
+
+    private setClueView(clueView: ClueView) {
         this.clueView = clueView;
         const placement_id = this.session.getActivePlacement().id;
         this.clueView.highlightClue(placement_id);
@@ -278,6 +285,15 @@ class PuzzleController implements CursorController {
         
         const captionText = this.formatBoardHeader(label, direction, clue.question);
         this.renderer.updateBoardHeader(captionText);
+    }
+
+    private triggerInitialFocus() {
+        if (this.hasShownInitialFocus) return;
+    
+        const coord = this.session.getCoord();
+        this.renderer.renderInitialFocus([coord]);
+    
+        this.hasShownInitialFocus = true;
     }
 
     private formatBoardHeader(label: number, direction: string, clue: string) {
