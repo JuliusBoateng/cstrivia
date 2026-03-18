@@ -37,6 +37,7 @@ class PuzzleController implements CursorController {
         this.renderer = renderer;
         this.clueView = NullClueView;
 
+        this.updateCursorVisuals();
         tableElement.addEventListener("pointerdown", this.handlePointerInput);
         tableElement.addEventListener("beforeinput", this.handleBeforeInput);
         tableElement.addEventListener("keydown", this.handleKeydown);
@@ -44,7 +45,12 @@ class PuzzleController implements CursorController {
 
     setClueView(clueView: ClueView) {
         this.clueView = clueView;
-      }
+        const placement_id = this.session.getActivePlacement().id;
+        this.clueView.highlightClue(placement_id);
+
+        const currSolved = [...this.session.getSolvedPlacementIds()];
+        this.clueView.renderClues(currSolved);
+    }
 
     setCursorByPlacement(placementId: PlacementId): void {
         this.session.setCursorByPlacement(placementId);
