@@ -282,8 +282,9 @@ class PuzzleController implements CursorController {
         if (!clue) return;
 
         const direction = (clue.direction === Direction.A) ? "Across" : "Down";
-        
-        const captionText = this.formatBoardHeader(label, direction, clue.question);
+        const arrow = (clue.direction === Direction.A )? "→" : "↓";
+
+        const captionText = this.formatBoardHeader(label, direction, arrow, clue.question);
         this.renderer.updateBoardHeader(captionText);
     }
 
@@ -296,8 +297,8 @@ class PuzzleController implements CursorController {
         this.hasShownInitialFocus = true;
     }
 
-    private formatBoardHeader(label: number, direction: string, clue: string) {
-        return `${label} ${direction}: ${clue}`;
+    private formatBoardHeader(label: number, direction: string, arrow:string, clue: string) {
+        return `${label} ${arrow} ${direction}: ${clue}`;
     }
 }
 
