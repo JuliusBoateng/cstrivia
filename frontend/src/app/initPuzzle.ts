@@ -14,7 +14,7 @@ function createPuzzleController(tableElement: HTMLTableElement, boardView: Board
     const boardDom: BoardDom = createBoard(boardView, tableElement);
     const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardDom)
 
-    return new PuzzleController(tableElement, puzzleSession, puzzleRenderer);
+    return new PuzzleController(tableElement, puzzleSession, puzzleRenderer, boardView);
 }
 
 
@@ -62,7 +62,7 @@ function createSolutionExport(boardView: BoardView, solutionView: SolutionView) 
     for (const placement of placements) {
         const coord = { row: placement.start_row, col: placement.start_col };
         const label = boardView.getLabel(coord);
-        if (label == -1) continue;
+        if (label < 0) continue;
         
         const solution = solutionView.getSolution(placement.id);
         if (!solution) continue;

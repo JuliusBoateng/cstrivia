@@ -16,6 +16,7 @@
 
     /* Site sizing */
     --site-max-width: 1440px;
+    --clue-text: 55ch;
   }
 
 html {
@@ -82,10 +83,16 @@ h1 {
     contain: layout style paint;
 }
 
-.board-card caption {
-    font-size: clamp(12px, 1.2vw, 18px);
-    font-weight: 500;
-    letter-spacing: 0.02em;
+.board-header {
+    width: min(100%, var(--clue-text));
+    margin: 0;
+    margin-inline: auto;
+    text-align: center;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     padding-bottom: clamp(8px, 2.5vw, 12px);
 }
 
@@ -282,7 +289,7 @@ h1 {
 }
 
 .clue-text {
-    max-width: 55ch;
+    max-width: var(--clue-text);
     overflow-wrap: break-word;
 }
 

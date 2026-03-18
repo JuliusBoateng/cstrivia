@@ -13,9 +13,6 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     const cellGrid: (HTMLTableCellElement | null)[][] = initializeGrid()
     const inputGrid: (HTMLInputElement | null)[][] = initializeGrid()
 
-    const captionElement = createCaptionElement();
-    tableElement.appendChild(captionElement);
-
     const tbodyElement = createTableBodyElement();
     tableElement.appendChild(tbodyElement);
     
@@ -133,13 +130,6 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         inputElement.classList.add("letter");
 
         return inputElement;
-    }
-
-    function createCaptionElement(): HTMLTableCaptionElement {
-        const caption = document.createElement("caption");
-        caption.textContent = boardView.board.title;
-
-        return caption;
     }
 }
 

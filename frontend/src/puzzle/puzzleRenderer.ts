@@ -1,5 +1,5 @@
-import {BoardDom} from "../board/boardBuilder.js";
-import {Coord} from "../models/boardView.js";
+import { BoardDom } from "../board/boardBuilder.js";
+import { Coord } from "../models/boardView.js";
 
 const ANIMATION_SUCCESS = "placement-success";
 const ANIMATION_ERROR = "placement-error";
@@ -13,6 +13,7 @@ class PuzzleRenderer {
     private highlightedPlacementId: number;
     private highlightedPlacementCells: HTMLTableCellElement[];
     private highlightedCursor: HTMLTableCellElement | null;
+    private boardHeader: HTMLParagraphElement;
 
     constructor(boardDom: BoardDom) {
         this.cellGrid = boardDom.cellGrid;
@@ -20,6 +21,8 @@ class PuzzleRenderer {
         this.highlightedPlacementId = -1;
         this.highlightedPlacementCells = [];
         this.highlightedCursor = null;
+
+        this.boardHeader = this.initializeBoardHeader();
     }
 
     renderLetter(coord: Coord, letter: string | null) {
@@ -79,6 +82,23 @@ class PuzzleRenderer {
         this.animateElements(fillElements, ANIMATION_SUCCESS);
     }
 
+    updateBoardHeader(captionText: string) {
+        this.boardHeader.textContent = captionText;    
+        this.boardHeader.title = captionText;
+    }
+
+    private initializeBoardHeader(): HTMLParagraphElement {
+        const boardWrapper = document.querySelector(".board-wrapper")!;
+
+        const boardHeader = document.createElement("p");
+        boardHeader.classList.add("board-header");
+        boardHeader.textContent = "Click a cell to begin";
+        boardHeader.title = "Click a cell to begin";
+
+        boardWrapper.prepend(boardHeader);
+        return boardHeader;
+    }
+
     private clearPlacementHighlight() {
         for (const cell of this.highlightedPlacementCells) {
             cell.classList.remove(HIGHLIGHT_WORD);
@@ -118,4 +138,5 @@ class PuzzleRenderer {
     }
 }
 
-export {PuzzleRenderer};
+export { PuzzleRenderer };
+

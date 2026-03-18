@@ -1,8 +1,7 @@
-import {Direction, PlacementId} from "../models/boardView.js";
-import {PuzzleSession} from "./puzzleSession.js";
-import {PuzzleRenderer} from "./puzzleRenderer.js";
-import {ClueView} from "../clue/clueRenderer.js";
-import {Coord} from "../models/boardView.js";
+import { ClueView } from "../clue/clueRenderer.js";
+import { BoardView, Coord, Direction, PlacementId } from "../models/boardView.js";
+import { PuzzleRenderer } from "./puzzleRenderer.js";
+import { PuzzleSession } from "./puzzleSession.js";
 
 interface CursorController {
     setCursorByPlacement(placementId: PlacementId): void;
@@ -31,13 +30,16 @@ class PuzzleController implements CursorController {
     private session: PuzzleSession;
     private renderer: PuzzleRenderer;
     private clueView: ClueView;
+    private boardView: BoardView;
 
-    constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer) {
+    constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardView: BoardView) {
         this.session = session;
         this.renderer = renderer;
+        this.boardView = boardView;
         this.clueView = NullClueView;
 
         this.updateCursorVisuals();
+
         tableElement.addEventListener("pointerdown", this.handlePointerInput);
         tableElement.addEventListener("beforeinput", this.handleBeforeInput);
         tableElement.addEventListener("keydown", this.handleKeydown);
@@ -235,6 +237,7 @@ class PuzzleController implements CursorController {
         this.renderer.setCursorHighlight(coord);
         this.clueView.highlightClue(placement.id);
         this.renderer.focusCell(coord);
+        this.updateBoardHeader();
     }
 
     private renderPlacementFeedback(coord: Coord) {
@@ -250,6 +253,31 @@ class PuzzleController implements CursorController {
             this.renderer.markPlacementIncorrect(coords);
         }
     }
+
+    private updateBoardHeader() {
+        const placement = this.session.getActivePlacement();
+        if (!placement) return;
+
+        const coord: Coord = {
+            row: placement.start_row,
+            col: placement.start_col
+        };
+        const label = this.boardView.getLabel(coord)
+        if (label < 0) return;
+        
+        const clue = this.boardView.getClue(placement.id);
+        if (!clue) return;
+
+        const direction = (clue.direction === Direction.A) ? "Across" : "Down";
+        
+        const captionText = this.formatBoardHeader(label, direction, clue.question);
+        this.renderer.updateBoardHeader(captionText);
+    }
+
+    private formatBoardHeader(label: number, direction: string, clue: string) {
+        return `${label} ${direction}: ${clue}`;
+    }
 }
 
-export {PuzzleController, CursorController};
+export { CursorController, PuzzleController };
+

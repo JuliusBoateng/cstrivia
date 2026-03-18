@@ -115,6 +115,10 @@ class BoardView {
         return this.clueMap;
     }
 
+    getClue(placement_id: number): Clue | undefined {
+        return this.clueMap.get(placement_id);
+    }
+
     private createClueMap(clues: Clue[]): Map<PlacementId, Clue> {
         return new Map(clues.map(clue => [clue.placement_id, clue]));
      }
@@ -162,9 +166,7 @@ class BoardView {
             const c = p.start_col;
 
             // placements can have the same start coords across directions
-            if (labelGrid[r][c] !== -1) {
-                continue;
-            }
+            if (labelGrid[r][c] !== -1) continue;
 
             labelGrid[r][c] = label++;
         }

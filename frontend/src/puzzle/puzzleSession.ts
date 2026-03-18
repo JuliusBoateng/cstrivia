@@ -101,7 +101,7 @@ class PuzzleSession {
         const placements = this.boardView.getPlacements();
 
         const index = placements.findIndex(placement => placement.id === this.activePlacement.id);
-        if (index === -1) return;
+        if (index < 0) return;
 
         const nextIndex = (index + offset) % placements.length
         const nextPlacement = placements[nextIndex];
