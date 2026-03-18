@@ -78,7 +78,13 @@ class PuzzleController implements CursorController {
 
         const prevCoord = this.session.getCoord();
         if (prevCoord.row === row && prevCoord.col === col) {
-            this.session.toggleDirection();
+            const hasChanged = this.session.toggleDirection();
+
+            if (!(hasChanged)) {
+                const placementId = this.session.getActivePlacement().id;
+                const coords = this.session.getPlacementCells(placementId);
+                this.renderer.renderDirectionRejection(coords)
+            }
         }
         
         const newCoord = {row, col};

@@ -123,21 +123,22 @@ class PuzzleSession {
         this.toggleDirection();
     }
 
-    toggleDirection() {
+    toggleDirection(): boolean {
         const cell = this.boardView.getCell(this.coord);
-        if (!cell) return;
+        if (!cell) return false;
 
         const currentDirection = this.activePlacement.direction;
         const newDirection: Direction = (currentDirection === Direction.A ? Direction.D : Direction.A);
         
         const position = cell.placement_positions[newDirection];
-        if (!position) return; // no crossing word
+        if (!position) return false; // no crossing word
 
         const placement = this.boardView.getPlacement(position.placement_id);
-        if (!placement) return;
+        if (!placement) return false;
 
         this.activePlacement = placement;
         this.activePlacementIndex = position.placement_index;
+        return true
     }
 
     setLetter(letter: string | null) {

@@ -5,6 +5,7 @@ const ANIMATION_SUCCESS = "placement-success";
 const ANIMATION_ERROR = "placement-error";
 const HIGHLIGHT_CURSOR = "highlight-cursor";
 const HIGHLIGHT_WORD = "highlight-word";
+const DIRECTION_REJECTION = "direction-reject";
 const BLOCK = "block";
 
 class PuzzleRenderer {
@@ -63,6 +64,12 @@ class PuzzleRenderer {
         }
         this.highlightedPlacementCells = cells
         this.highlightedPlacementId = placementId;
+    }
+
+    renderDirectionRejection(coords: Coord[]) {
+        const className = DIRECTION_REJECTION;
+        const fillElements = this.getFillElements(coords);
+        this.animateElements(fillElements, className);
     }
 
     markPlacementSolved(coords: Coord[]) {
@@ -134,7 +141,7 @@ class PuzzleRenderer {
     }
     
     private clearAnimation(elements: HTMLElement[]) {
-        elements.forEach(element => element.classList.remove(ANIMATION_SUCCESS, ANIMATION_ERROR));
+        elements.forEach(element => element.classList.remove(ANIMATION_SUCCESS, ANIMATION_ERROR, DIRECTION_REJECTION));
     }
 }
 
