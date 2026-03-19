@@ -44,8 +44,8 @@ class PuzzleController implements CursorController {
 
     public init(clueView: ClueView) {
         this.setClueView(clueView)
-        this.updateCursorVisuals();
-        this.triggerInitialFocus()
+        this.updateCursorVisuals(false);
+        this.animateStartingCell()
 
         this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
         this.tableElement.addEventListener("beforeinput", this.handleBeforeInput);
@@ -241,7 +241,7 @@ class PuzzleController implements CursorController {
         }
     }
 
-    private updateCursorVisuals() {
+    private updateCursorVisuals(focus: boolean = true) {
         const placement = this.session.getActivePlacement();
         const placementCoords = this.session.getActivePlacementCoords();    
         this.renderer.setPlacementHighlight(placement.id, placementCoords);
@@ -249,7 +249,7 @@ class PuzzleController implements CursorController {
         const coord = this.session.getCoord();
         this.renderer.setCursorHighlight(coord);
         this.clueView.highlightClue(placement.id);
-        this.renderer.focusCell(coord);
+        if (focus) this.renderer.focusCell(coord);
         this.updateBoardHeader();
     }
 
@@ -288,11 +288,11 @@ class PuzzleController implements CursorController {
         this.renderer.updateBoardHeader(captionText);
     }
 
-    private triggerInitialFocus() {
+    private animateStartingCell() {
         if (this.hasShownInitialFocus) return;
     
         const coord = this.session.getCoord();
-        this.renderer.renderInitialFocus([coord]);
+        this.renderer.animateStartingCell([coord]);
     
         this.hasShownInitialFocus = true;
     }

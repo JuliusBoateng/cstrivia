@@ -250,6 +250,12 @@ class PuzzleSession {
             throw new Error("Puzzle contains no placements.");
         }
 
+        for (const placement of placements) {
+            if (placement.direction === Direction.A) {
+                return placement;
+            }
+        }
+
         return placements[0];
     }
 

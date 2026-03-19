@@ -6,7 +6,7 @@ const ANIMATION_ERROR = "placement-error";
 const HIGHLIGHT_CURSOR = "highlight-cursor";
 const HIGHLIGHT_WORD = "highlight-word";
 const DIRECTION_REJECTION = "direction-reject";
-const INITIAL_FOCUS = "initial-focus";
+const ANIMATE_STARTING_CELL = "animate-starting-cell";
 const BLOCK = "block";
 
 class PuzzleRenderer {
@@ -67,8 +67,8 @@ class PuzzleRenderer {
         this.highlightedPlacementId = placementId;
     }
 
-    renderInitialFocus(coords: Coord[]) {
-        const className = INITIAL_FOCUS;
+    animateStartingCell(coords: Coord[]) {
+        const className = ANIMATE_STARTING_CELL;
         const fillElements = this.getFillElements(coords);
         this.animateElements(fillElements, className);
     }
@@ -148,7 +148,7 @@ class PuzzleRenderer {
     }
     
     private clearAnimation(elements: HTMLElement[]) {
-        elements.forEach(element => element.classList.remove(ANIMATION_SUCCESS, ANIMATION_ERROR, DIRECTION_REJECTION, INITIAL_FOCUS));
+        elements.forEach(element => element.classList.remove(ANIMATION_SUCCESS, ANIMATION_ERROR, DIRECTION_REJECTION, ANIMATE_STARTING_CELL));
     }
 }
 

@@ -171,7 +171,7 @@ h1 {
     line-height: 1.4;
 
     color: #4b5563;
-    padding-bottom: clamp(0.25rem, 1vw, 0.75rem);
+    margin-bottom: clamp(0.25rem, 1vw, 0.75rem);
 }
 
 .board-help p {
@@ -180,14 +180,11 @@ h1 {
 
 .puzzle-help {
     width: min(100%, var(--clue-text));
-    margin-bottom: 1.25rem;
+    margin-bottom: clamp(0.5rem, 2vw, 1rem);
 
     font-size: clamp(0.9rem, 1vw, 1rem);
-    line-height: 1.5;
+    line-height: 1.4;
     color: #4b5563;
-
-    padding: 4px 0;
-    border-radius: 12px;
 }
 
 .puzzle-help summary {
@@ -197,7 +194,7 @@ h1 {
     letter-spacing: 0.01em;
 
     font-size: clamp(1rem, 1.15vw, 1.1rem);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .puzzle-help ul {
@@ -205,7 +202,11 @@ h1 {
 }
 
 .puzzle-help li {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.3rem;
+}
+
+.puzzle-help li:last-child {
+    margin-bottom: 0;
 }
 
 .puzzle-help:hover {
@@ -426,6 +427,7 @@ h1 {
 
 .site-header .site-name {
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .site-header .github {
@@ -454,13 +456,13 @@ h1 {
     color: #555;
 }
 
-@keyframes initial-focus {
+@keyframes animate-starting-cell {
     0%   { box-shadow: inset 0 0 0 2px #b6bddc; }
     50%  { box-shadow: inset 0 0 0 4px #8f99c5; }
     100% { box-shadow: inset 0 0 0 2px #b6bddc; }
 }
-.initial-focus {
-    animation: initial-focus 400ms ease-out;
+.animate-starting-cell {
+    animation: animate-starting-cell 400ms ease-out;
 }
 
 @keyframes success-pulse {
