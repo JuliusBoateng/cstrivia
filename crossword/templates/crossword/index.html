@@ -18,8 +18,7 @@
           
               <div class="hero-meta">
                 <p>No ads • No login • Just crosswords</p>
-                <p>New puzzles every Tuesday</p>
-                <p class="publish-time">12 PM UTC</p>
+                <p>New puzzles every Tuesday<span>→ 12 PM UTC</span></p>
               </div>
             </section>
 
@@ -30,7 +29,7 @@
                 {% for puzzle in puzzles %}
                   <li>
                     <a href="{% url 'puzzle' puzzle.id %}">
-                      <span class="puzzle-number">Puzzle {{ puzzle.puzzle_number }}</span>
+                      <span class="puzzle-number">Puzzle {{ puzzle.puzzle_number }}:</span>
                       <span class="puzzle-title">{{ puzzle.title }}</span>
                       <span class="puzzle-date">
                         {{ puzzle.published_at|date:"M j, Y" }}
@@ -63,5 +62,15 @@
             </section>
             
           </main>
+          <footer class="site-footer">
+            <p>
+              Open source on <a href="https://github.com/JuliusBoateng/cs-trivia" target="_blank"
+                rel="noopener noreferrer">GitHub</a>
+            </p>
+            <p>
+              Have feedback or suggestions? Email <a href="mailto:julius@cstrivia.com">julius@cstrivia.com</a> or open an issue
+              above.
+            </p>
+          </footer>
     </body>
 </html>
