@@ -4,12 +4,13 @@ from .dto.mappers import map_to_board_view_dto, map_to_solution_view_dto
 from .models import Board, CluePlacement
 from .dto.serializers import serialize_board_view, serialize_solution_view
 from typing import NamedTuple
+from django.utils import timezone
 
 class views(NamedTuple):
     serialized_board_view: dict
     serialized_solution_view: dict
 
-def get_views(board_id: int) -> views:
+def get_puzzle_views(board_id: int) -> views:
     board: Model = _fetch_board(board_id)
 
     board_view = map_to_board_view_dto(board)
@@ -28,6 +29,7 @@ def _fetch_board(board_id: int) -> Board:
                             .select_related("clue")
                             .prefetch_related("clue_cells")
                     ))
+                .filter(published_at__lte=timezone.now())
                 .get(id=board_id)
             )
     

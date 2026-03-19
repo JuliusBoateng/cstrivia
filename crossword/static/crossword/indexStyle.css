@@ -71,6 +71,59 @@ body {
   font-weight: 500;
 }
 
+.publish-time {
+  font-size: 0.85rem;
+}
+
+.puzzle-list {
+  margin-top: 2rem;
+}
+
+.puzzle-list h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.puzzle-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.puzzle-list li {
+  margin-bottom: 0.3rem;
+}
+
+.puzzle-list a {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+
+  text-decoration: none;
+  color: inherit;
+
+  padding: 0.3rem 0.4rem;
+  border-radius: 6px;
+}
+
+.puzzle-list a:hover {
+  background: #f2f2f2;
+}
+
+.puzzle-number {
+  color: #6b7280;
+}
+
+.puzzle-title {
+  font-weight: 500;
+}
+
+.puzzle-date {
+  margin-left: auto;
+  color: #6b7280;
+  font-size: 0.9em;
+}
+
 .about {
   display: flex;
   flex-direction: column;

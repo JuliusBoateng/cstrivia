@@ -19,14 +19,49 @@
               <div class="hero-meta">
                 <p>No ads • No login • Just crosswords</p>
                 <p>New puzzles every Tuesday</p>
+                <p class="publish-time">12 PM UTC</p>
               </div>
-            </section>          
+            </section>
+
+            <section class="puzzle-list container">
+              <h2>Puzzles</h2>
+            
+              <ul>
+                {% for puzzle in puzzles %}
+                  <li>
+                    <a href="{% url 'puzzle' puzzle.id %}">
+                      <span class="puzzle-number">Puzzle {{ puzzle.puzzle_number }}</span>
+                      <span class="puzzle-title">{{ puzzle.title }}</span>
+                      <span class="puzzle-date">
+                        {{ puzzle.published_at|date:"M j, Y" }}
+                      </span>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            
+              {% if is_paginated %}
+                <div class="pagination">
+                  {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                  {% endif %}
+            
+                  <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            
+                  {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </section>
+
             <section class="about container">
                 <p>Fully open source</p>
-                <p>Puzzles are created by people</p>
-                <p>Not a coding challenge or technical assessment</p>
+                <p>Puzzles created by people</p>
                 <p>No data collection. We don’t want your data.</p>
+                <p>No coding challenges or technical assessments. Just puzzles</p>
             </section>
+            
           </main>
     </body>
 </html>
