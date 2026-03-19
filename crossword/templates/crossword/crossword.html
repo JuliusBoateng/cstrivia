@@ -1,0 +1,125 @@
+{% load static %}
+<!doctype html>
+<html lang="en-US">
+  <head>
+    {{board_view_dto|json_script:"board-view-dto" }}
+    {{solution_view_dto|json_script:"solution-view-dto" }}
+    <link rel="stylesheet" href="{% static 'crossword/crosswordStyle.css' %}">
+    <script type="module" src="{% static 'crossword/dist/main.js' %}"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+  </head>
+  <body class="off-white">
+    <header class="site-header">
+      <nav>
+        <a href="/" class="site-name">CS Trivia</a>
+        <a href="https://github.com/JuliusBoateng/cs-trivia" class="github" target="_blank"
+          rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </header>
+    <main>
+      <article class="puzzle">
+        <h1 class="board-title"></h1>
+        <div class="board-help">
+          <p>Click to type • Double-click to switch direction • Navigate with arrow keys</p>
+        </div>
+        <details class="puzzle-help">
+          <summary>Navigation tips</summary>
+          <ul>
+            <li>Words shake briefly on incorrect and flash purple on correct.</li>
+            <li>Double-click a cell to change direction if a corresponding clue exists; otherwise it pulses briefly.</li>
+            <li>Press Tab to move to next clue; Shift+Tab to move to previous clue.</li>
+            <li>Click clues on the list to jump to them.</li>
+            <li>Solved clues move from “To Do” → “Solved”.</li>
+            <li>Click headers to expand or collapse sections.</li>
+          </ul>
+        </details>
+        <div class="puzzle-panel">
+          <div class="board-wrapper">
+            <table id="board" class="board-card"></table>
+          </div>
+          <div class="clue-wrapper">
+            <div id="clues" class="clue-card">
+              <h2>
+                <button id="todo-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="true"
+                  aria-controls="todo-section">
+                  <span class="clue-label">To Do</span>
+                  <span class="clue-count"></span>
+                </button>
+              </h2>
+              <div id="todo-section" class="clue-section-body">
+                <h3>
+                  <button id="todo-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                    aria-controls="todo-across-clues">
+                    <span class="clue-label">→ Across</span>
+                    <span class="clue-count"></span>
+                  </button>
+                </h3>
+                <ol id="todo-across-clues" class="clue-list" hidden></ol>
+                <h3>
+                  <button id="todo-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                    aria-controls="todo-down-clues">
+                    <span class="clue-label">↓ Down</span>
+                    <span class="clue-count"></span>
+                  </button>
+                </h3>
+                <ol id="todo-down-clues" class="clue-list" hidden></ol>
+              </div>
+              <h2>
+                <button id="solved-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="false"
+                  aria-controls="solved-section">
+                  <span class="clue-label">Solved</span>
+                  <span class="clue-count"></span>
+                </button>
+              </h2>
+              <div id="solved-section" class="clue-section-body" hidden>
+                <h3>
+                  <button id="solved-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                    aria-controls="solved-across-clues">
+                    <span class="clue-label">→ Across</span>
+                    <span class="clue-count"></span>
+                  </button>
+                </h3>
+                <ol id="solved-across-clues" class="clue-list" hidden></ol>
+                <h3>
+                  <button id="solved-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                    aria-controls="solved-down-clues">
+                    <span class="clue-label">↓ Down</span>
+                    <span class="clue-count"></span>
+                  </button>
+                </h3>
+                <ol id="solved-down-clues" class="clue-list" hidden></ol>
+              </div>
+              <div class="clue-empty">No clues visible</div>
+            </div>
+          </div>
+        </div>
+        <section class="board-desc">
+          <p></p>
+        </section>
+        <details class="solution-panel">
+          <summary class="solution-toggle">solution.txt</summary>
+          <pre class="solution-json"><code></code></pre>
+        </details>
+        <footer class="puzzle-metadata">
+          <p class="meta-line">
+            <span class="author"></span>
+            <time class="published-at"></time>
+            <span class="puzzle-number"></span>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <p>
+        Open source on <a href="https://github.com/JuliusBoateng/cs-trivia" target="_blank"
+          rel="noopener noreferrer">GitHub</a>
+      </p>
+      <p>
+        Feedback or suggestions? Email <a href="mailto:julius@cstrivia.com">julius@cstrivia.com</a> or open an issue
+        above.
+      </p>
+    </footer>
+  </body>
+</html>

@@ -30,7 +30,7 @@ body {
     min-height: 100vh;
 }
 
-.main {
+main {
     max-width: var(--site-max-width);
     margin: 0 auto;
     padding: 0 1rem;
