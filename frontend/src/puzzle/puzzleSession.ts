@@ -27,6 +27,7 @@ class PuzzleSession {
 
         this.puzzleValidator = puzzleValidator;
 
+        // TODO move to init function
         // start cursor on first placement
         this.activePlacement = this.getInitialPlacement();
         this.activePlacementIndex = 0;
@@ -103,13 +104,13 @@ class PuzzleSession {
         const index = placements.findIndex(placement => placement.id === this.activePlacement.id);
         if (index < 0) return;
 
-        const nextIndex = (index + offset) % placements.length
+        const nextIndex = (index + offset + placements.length) % placements.length;
         const nextPlacement = placements[nextIndex];
 
         this.activePlacement = nextPlacement;
-        const coord = {row: this.activePlacement.start_row, col: this.activePlacement.start_col};
-        
-        if (!this.boardView.isValidCoord(coord)) return;
+        this.activePlacementIndex = 0;
+        const coord = {row: this.activePlacement.start_row, col: this.activePlacement.start_col} as Coord;
+
         this.moveCursor(coord);
     }
 
