@@ -417,11 +417,23 @@ h1 {
 
 .site-header a {
     text-decoration: none;
-    color: inherit;
+    color: #111827;
     font-weight: 500;
+    letter-spacing: 0.01em;
+
+    padding: 0.25rem 0.4rem;
+}
+
+.site-header .site-name {
+    font-weight: 600;
+}
+
+.site-header .github {
+    color: #4b5563;
 }
 
 .site-header a:hover {
+    color: #111827;
     text-decoration: underline;
 }
 
