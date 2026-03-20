@@ -86,12 +86,31 @@ body {
   margin-left: 0.25rem;
 }
 
+.cta {
+  display: inline-block;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  padding: 0.45rem 0.8rem;
+  border-radius: 8px;
+
+  background: #111827;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.cta:hover {
+  background: #1f2937;
+}
+
 .hero-screenshot {
   display: block;
   width: clamp(200px, 35%, 400px);
-  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .puzzle-list {

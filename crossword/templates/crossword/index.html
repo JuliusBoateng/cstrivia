@@ -3,6 +3,7 @@
 <html>
     <head>
       <link rel="stylesheet" href="{% static 'crossword/indexStyle.css' %}">
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/">
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width" />
       <title>CS Trivia</title>
@@ -20,6 +21,9 @@
                 <p>No ads • No login • Just crosswords</p>
                 <p>New puzzles every Tuesday<span>→ 12 PM UTC</span></p>
               </div>
+              {% if latest_puzzle %}
+              <a href="{% url 'puzzle' latest_puzzle.id %}" class="cta">Solve latest puzzle</a>
+              {% endif %}
               <img src="{% static 'crossword/img/sample-board.png' %}" alt="Puzzle board" class="hero-screenshot">
             </section>
 
@@ -65,12 +69,12 @@
           </main>
           <footer class="site-footer">
             <p>
-              Open source on <a href="https://github.com/JuliusBoateng/cs-trivia" target="_blank"
+              View on <a href="https://github.com/JuliusBoateng/cs-trivia" target="_blank"
                 rel="noopener noreferrer">GitHub</a>
             </p>
+            <p>Subscribe via <a href="/rss/">RSS</a></p>
             <p>
-              Have feedback or suggestions? Email <a href="mailto:julius@cstrivia.com">julius@cstrivia.com</a> or open an issue
-              above.
+              Have feedback or suggestions? Email <a href="mailto:julius@cstrivia.com">julius@cstrivia.com</a> or open an issue.
             </p>
           </footer>
     </body>
