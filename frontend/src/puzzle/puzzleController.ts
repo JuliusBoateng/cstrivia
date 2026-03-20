@@ -2,6 +2,7 @@ import { ClueView } from "../clue/clueRenderer.js";
 import { BoardView, Coord, Direction, PlacementId } from "../models/boardView.js";
 import { PuzzleRenderer } from "./puzzleRenderer.js";
 import { PuzzleSession } from "./puzzleSession.js";
+import { PuzzleValidator } from "./puzzleValidator.js";
 
 interface CursorController {
     setCursorByPlacement(placementId: PlacementId): void;
@@ -31,8 +32,13 @@ class PuzzleController implements CursorController {
     private renderer: PuzzleRenderer;
     private clueView: ClueView;
     private boardView: BoardView;
-    private hasShownInitialFocus = false;
+    private hasShownInitialFocus;
     private tableElement: HTMLTableElement;
+    
+    // keydown is the primary input handler.
+    // beforeinput is secondary.
+    // sometimes both events are triggered at the same time.
+    private suppressNextBeforeInput: boolean;
 
     constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardView: BoardView) {
         this.tableElement = tableElement;
@@ -40,6 +46,8 @@ class PuzzleController implements CursorController {
         this.renderer = renderer;
         this.boardView = boardView;
         this.clueView = NullClueView;
+        this.hasShownInitialFocus = false;
+        this.suppressNextBeforeInput = false;
     }
 
     public init(clueView: ClueView) {
@@ -100,13 +108,40 @@ class PuzzleController implements CursorController {
     }
 
     private handleBeforeInput = (event: InputEvent) => {
-        if (this.isCharacterKey(event)) {
-            this.handleCharacterInput(event);
+        if (this.suppressNextBeforeInput) {
+            this.suppressNextBeforeInput = false;
+            event.preventDefault();
+            return;
+        }
+
+        if (event.inputType === "insertText" && event.data && this.isAllowedCharacter(event.data)) {
+            event.preventDefault();
+            this.commitChar(event.data);
+            return;
+        }
+    
+        if (event.inputType === "deleteContentBackward") {
+            event.preventDefault();
+            this.commitBackDelete();
+            return;
+        }
+    
+        if (event.inputType === "deleteContentForward") {
+            event.preventDefault();
+            this.commitForwardDelete();
+            return;
         }
     }
 
     private handleKeydown = (event: KeyboardEvent) => {        
         if (this.isModifierKey(event)) {
+            return;
+        }
+
+        if (this.isTypingKey(event)) {
+            event.preventDefault();
+            this.suppressNextBeforeInput = true;
+            this.commitChar(event.key);
             return;
         }
         
@@ -131,48 +166,7 @@ class PuzzleController implements CursorController {
         }
     }
 
-    private isModifierKey(event: KeyboardEvent) {
-        return (event.ctrlKey || event.metaKey || event.altKey);
-    }
-
-    private isCharacterKey(event: InputEvent) {
-        return (event.data) && (event.data.length === 1);
-    }
-
-    private isEnterKey(event: KeyboardEvent) {
-        return event.key === "Enter";
-    }
-    
-    private isDeleteKey(event: KeyboardEvent) {
-        return event.key === "Delete" || event.key === "Backspace";
-    }
-    
-    private isHorizontalArrow(event: KeyboardEvent) {
-        return event.key === "ArrowLeft" || event.key === "ArrowRight";
-    }
-    
-    private isVerticalArrow(event: KeyboardEvent) {
-        return event.key === "ArrowUp" || event.key === "ArrowDown";
-    }
-
-    private isTabKey(event: KeyboardEvent) {
-        return event.key === "Tab";
-    }
-
-    private handleCharacterInput(event: InputEvent) {
-        event.preventDefault();
-        this.applyLetter(event.data);
-        
-        if (this.session.isPuzzleComplete()) {
-            const playableCells = this.session.getPlayableCells();
-            this.renderer.markPuzzleComplete(playableCells);
-        }
-
-        this.session.advanceCursor();
-        this.updateCursorVisuals();
-    }
-
-    handleTabInput(event: KeyboardEvent) {
+    private handleTabInput(event: KeyboardEvent) {
         event.preventDefault();
 
         const offset = event.shiftKey ? -1 : 1;
@@ -193,14 +187,16 @@ class PuzzleController implements CursorController {
     
     private handleDeleteInput(event: KeyboardEvent) {
         event.preventDefault();
-
-        if (this.session.isCellEmpty()) {
-            this.session.reverseCursor();
-            this.updateCursorVisuals();
+    
+        if (event.key === "Backspace") {
+            this.commitBackDelete();
             return;
         }
-        
-        this.applyLetter(null);
+    
+        if (event.key === "Delete") {
+            this.commitForwardDelete();
+            return;
+        }
     }
 
     private handleHorizontalArrowInput(event: KeyboardEvent) {
@@ -223,9 +219,39 @@ class PuzzleController implements CursorController {
         this.updateCursorVisuals();
     }
 
-    private applyLetter(letter: string | null) {
-        letter = letter?.trim() || null;
+    private isAllowedCharacter(value: string) {
+        return value.length === 1 && PuzzleValidator.isLetterOrDigit(value);
+    }
 
+    private isTypingKey(event: KeyboardEvent) {
+        return event.key.length === 1 && PuzzleValidator.isLetterOrDigit(event.key);
+    }
+
+    private isModifierKey(event: KeyboardEvent) {
+        return (event.ctrlKey || event.metaKey || event.altKey);
+    }
+
+    private isEnterKey(event: KeyboardEvent) {
+        return event.key === "Enter";
+    }
+    
+    private isDeleteKey(event: KeyboardEvent) {
+        return event.key === "Delete" || event.key === "Backspace";
+    }
+    
+    private isHorizontalArrow(event: KeyboardEvent) {
+        return event.key === "ArrowLeft" || event.key === "ArrowRight";
+    }
+    
+    private isVerticalArrow(event: KeyboardEvent) {
+        return event.key === "ArrowUp" || event.key === "ArrowDown";
+    }
+
+    private isTabKey(event: KeyboardEvent) {
+        return event.key === "Tab";
+    }
+
+    private applyLetter(letter: string | null) {
         const prevSolved = [...this.session.getSolvedPlacementIds()];
         this.session.setLetter(letter);
 
@@ -241,6 +267,35 @@ class PuzzleController implements CursorController {
         }
     }
 
+    private commitChar(rawChar: string) {
+        if (!this.isAllowedCharacter(rawChar)) return;
+
+        const normalized = rawChar.toUpperCase();
+        this.applyLetter(normalized);
+    
+        if (this.session.isPuzzleComplete()) {
+            const playableCells = this.session.getPlayableCells();
+            this.renderer.markPuzzleComplete(playableCells);
+        }
+    
+        this.session.advanceCursor();
+        this.updateCursorVisuals();
+    }
+
+    private commitBackDelete() {
+        if (this.session.isCellEmpty()) {
+            this.session.reverseCursor();
+            this.updateCursorVisuals();
+            return;
+        }
+    
+        this.applyLetter(null);
+    }
+
+    private commitForwardDelete() {
+        this.applyLetter(null);
+    }
+
     private updateCursorVisuals(focus: boolean = true) {
         const placement = this.session.getActivePlacement();
         const placementCoords = this.session.getActivePlacementCoords();    
@@ -251,20 +306,6 @@ class PuzzleController implements CursorController {
         this.clueView.highlightClue(placement.id);
         if (focus) this.renderer.focusCell(coord);
         this.updateBoardHeader();
-    }
-
-    private renderPlacementFeedback(coord: Coord) {
-        const result = this.session.evaluateCellPlacements(coord);
-
-        for (const placementId of result.solved) {
-            const coords = this.session.getPlacementCells(placementId);
-            this.renderer.markPlacementSolved(coords);
-        }
-        
-        for (const placementId of result.incorrect) {
-            const coords = this.session.getPlacementCells(placementId);
-            this.renderer.markPlacementIncorrect(coords);
-        }
     }
 
     private updateBoardHeader() {
@@ -286,6 +327,20 @@ class PuzzleController implements CursorController {
 
         const captionText = this.formatBoardHeader(label, direction, arrow, clue.question);
         this.renderer.updateBoardHeader(captionText);
+    }
+
+    private renderPlacementFeedback(coord: Coord) {
+        const result = this.session.evaluateCellPlacements(coord);
+
+        for (const placementId of result.solved) {
+            const coords = this.session.getPlacementCells(placementId);
+            this.renderer.markPlacementSolved(coords);
+        }
+        
+        for (const placementId of result.incorrect) {
+            const coords = this.session.getPlacementCells(placementId);
+            this.renderer.markPlacementIncorrect(coords);
+        }
     }
 
     private animateStartingCell() {
