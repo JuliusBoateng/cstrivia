@@ -114,9 +114,12 @@ class PuzzleController implements CursorController {
             return;
         }
 
-        if (event.inputType === "insertText" && event.data && this.isAllowedCharacter(event.data)) {
+        if (event.inputType === "insertText") {
             event.preventDefault();
-            this.commitChar(event.data);
+    
+            if (event.data && this.isAllowedCharacter(event.data)) {
+                this.commitChar(event.data);
+            }
             return;
         }
     
@@ -133,8 +136,14 @@ class PuzzleController implements CursorController {
         }
     }
 
-    private handleKeydown = (event: KeyboardEvent) => {        
+    private handleKeydown = (event: KeyboardEvent) => {
         if (this.isModifierKey(event)) {
+            return;
+        }
+
+        if (this.isSpace(event)) {
+            event.preventDefault();
+            this.suppressNextBeforeInput = true;
             return;
         }
 
@@ -145,30 +154,34 @@ class PuzzleController implements CursorController {
             return;
         }
         
+        else if (this.isDeleteKey(event)) {
+            event.preventDefault();
+            this.suppressNextBeforeInput = true;
+            this.handleDeleteInput(event);
+        }
+
         else if (this.isEnterKey(event)) {
+            event.preventDefault();
             this.handleEnterInput(event);
         }
 
         else if (this.isTabKey(event)) {
+            event.preventDefault();
             this.handleTabInput(event);
-        }
-
-        else if (this.isDeleteKey(event)) {
-            this.handleDeleteInput(event);
         }
         
         else if (this.isHorizontalArrow(event)) {
+            event.preventDefault();
             this.handleHorizontalArrowInput(event);
         }
         
         else if (this.isVerticalArrow(event)) {
+            event.preventDefault();
             this.handleVerticalArrowInput(event);
         }
     }
 
     private handleTabInput(event: KeyboardEvent) {
-        event.preventDefault();
-
         const offset = event.shiftKey ? -1 : 1;
         this.session.movePlacementBy(offset);
     
@@ -185,9 +198,7 @@ class PuzzleController implements CursorController {
         }
     }
     
-    private handleDeleteInput(event: KeyboardEvent) {
-        event.preventDefault();
-    
+    private handleDeleteInput(event: KeyboardEvent) {    
         if (event.key === "Backspace") {
             this.commitBackDelete();
             return;
@@ -199,9 +210,7 @@ class PuzzleController implements CursorController {
         }
     }
 
-    private handleHorizontalArrowInput(event: KeyboardEvent) {
-        event.preventDefault();
-    
+    private handleHorizontalArrowInput(event: KeyboardEvent) {    
         const delta = event.key === "ArrowLeft" ? -1 : 1;
         this.session.moveCursorRelative(0, delta);
         this.session.setDirection(Direction.A);
@@ -210,8 +219,6 @@ class PuzzleController implements CursorController {
     }
     
     private handleVerticalArrowInput(event: KeyboardEvent) {
-        event.preventDefault();
-
         const delta = event.key === "ArrowUp" ? -1 : 1;
         this.session.moveCursorRelative(delta, 0);
         this.session.setDirection(Direction.D);
@@ -249,6 +256,10 @@ class PuzzleController implements CursorController {
 
     private isTabKey(event: KeyboardEvent) {
         return event.key === "Tab";
+    }
+
+    private isSpace(event: KeyboardEvent) {
+        return event.key === " " || event.key === "Spacebar" || event.code === "Space";
     }
 
     private applyLetter(letter: string | null) {

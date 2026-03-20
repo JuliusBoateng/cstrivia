@@ -29,16 +29,20 @@ class PuzzleRenderer {
 
     renderLetter(coord: Coord, letter: string | null) {
         const inputElement: HTMLInputElement = this.inputGrid[coord.row][coord.col];
-        if (!inputElement) return;
+        if (!inputElement) {
+            throw new Error("Input element not found for coord");
+        }
 
         inputElement.value = letter ?? ""
     }
 
     focusCell(coord: Coord) {
         const inputElement: HTMLInputElement = this.inputGrid[coord.row][coord.col];
-        if (!inputElement) return;
+        if (!inputElement) {
+            throw new Error("Input element not found for coord");
+        }
 
-        inputElement.focus()
+        inputElement.setSelectionRange(0, 1);
     }
 
     setCursorHighlight(coord: Coord) {
