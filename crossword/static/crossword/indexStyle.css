@@ -34,7 +34,6 @@ main {
 }
 
 .hero {
-  line-height: 1.5;
   text-align: left;
 }
 
@@ -47,14 +46,13 @@ main {
     font-size: clamp(1.9rem, 3.1vw, 2.3rem);
     line-height: 1.2;
     font-weight: 600;
-    margin-bottom: var(--space-md);
+    margin-bottom: 1.5rem;
 }
 
 .hero p.subheadline {
   font-size: clamp(1.1rem, 1.4vw, 1.2rem);
   color: #4b5563;
-  line-height: 1.5;
-  margin-bottom: var(--space-lg);
+  margin-bottom: 1.5rem;
 }
 
 .subheadline .underline {
@@ -64,8 +62,7 @@ main {
 .hero-meta {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
-
+  gap: var(--space-sm);
   font-size: 1.05rem;
 }
 
@@ -87,8 +84,7 @@ main {
 
 .cta {
   display: inline-block;
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin: 1.2rem 0;
 
   padding: 0.45rem 0.8rem;
   border-radius: 8px;
@@ -103,29 +99,28 @@ main {
   background: #1f2937;
 }
 
-.hero-figure {
-  margin: 0;
-  padding: 0;
+/* Link wraps screenshot. Reason link has clamp and screenshot has 100% width*/
+.hero-link {
+  display: block;
+  width: 300px;
 }
 
-.hero-figure .hero-screenshot {
+.hero-screenshot {
   display: block;
-  width: clamp(200px, 35%, 400px);
+  width: 100%;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  margin-top: 0.75rem;
   transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 .hero-screenshot:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
 }
 
 .puzzle-list {
   padding: 1rem 0;
   border-bottom: 1px solid #e5e7eb;
-  line-height: 1.5;
 }
 
 .puzzle-list h2 {
@@ -147,6 +142,7 @@ main {
 
   text-decoration: none;
   color: inherit;
+  padding: .5rem 0;
 }
 
 .puzzle-list a:hover {
