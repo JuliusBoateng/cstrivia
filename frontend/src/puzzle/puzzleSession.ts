@@ -60,20 +60,18 @@ class PuzzleSession {
         this.moveCursor(relativeCoord);
     }
 
-    setCursorByPlacement(placementId: PlacementId) {
+    moveCursorToPlacement(placementId: PlacementId) {
         const placement = this.boardView.getPlacement(placementId);
         if (!placement) return;
-
-        const coord = {row: placement.start_row, col: placement.start_col}
+    
+        const coord = { row: placement.start_row, col: placement.start_col };
         const cell = this.boardView.getCell(coord);
         if (!cell) return;
-
+    
         const position = cell.placement_positions[placement.direction];
         if (!position) return;
-
-        this.coord = {row: placement.start_row, col: placement.start_col}
-        this.activePlacement = placement;
-        this.activePlacementIndex = position.placement_index;
+    
+        this.setCursorState(coord, placement, position.placement_index);
     }
 
     moveCursor(coord: Coord) {
@@ -82,20 +80,18 @@ class PuzzleSession {
     
         let direction = this.activePlacement.direction;
         let position = cell.placement_positions[direction];
-
+    
         if (!position) {
-            direction = (direction === Direction.A ? Direction.D : Direction.A);
+            direction = direction === Direction.A ? Direction.D : Direction.A;
             position = cell.placement_positions[direction];
         }
-
+    
         if (!position) return;
-
+    
         const placement = this.boardView.getPlacement(position.placement_id);
         if (!placement) return;
     
-        this.coord = coord;
-        this.activePlacement = placement;    
-        this.activePlacementIndex = position.placement_index;
+        this.setCursorState(coord, placement, position.placement_index);
     }
 
     movePlacementBy(offset: number) {
@@ -112,6 +108,12 @@ class PuzzleSession {
         const coord = {row: this.activePlacement.start_row, col: this.activePlacement.start_col} as Coord;
 
         this.moveCursor(coord);
+    }
+
+    private setCursorState(coord: Coord, placement: Placement, placementIndex: number) {
+        this.coord = coord;
+        this.activePlacement = placement;
+        this.activePlacementIndex = placementIndex;
     }
 
     setDirection(desired: Direction) {

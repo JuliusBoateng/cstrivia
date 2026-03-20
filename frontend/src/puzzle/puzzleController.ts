@@ -5,7 +5,7 @@ import { PuzzleSession } from "./puzzleSession.js";
 import { PuzzleValidator } from "./puzzleValidator.js";
 
 interface CursorController {
-    setCursorByPlacement(placementId: PlacementId): void;
+    moveCursorToPlacement(placementId: PlacementId): void;
   }
 
 function hasSetDifference<T>(a: T[], b: T[]): boolean {
@@ -69,8 +69,8 @@ class PuzzleController implements CursorController {
         this.clueView.renderClues(currSolved);
     }
 
-    setCursorByPlacement(placementId: PlacementId): void {
-        this.session.setCursorByPlacement(placementId);
+    moveCursorToPlacement(placementId: PlacementId): void {
+        this.session.moveCursorToPlacement(placementId);
         this.updateCursorVisuals();
     }
  

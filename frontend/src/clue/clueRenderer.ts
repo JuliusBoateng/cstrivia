@@ -34,7 +34,7 @@ interface ClueView {
 }
 
 const NullCursorController: CursorController = {
-  setCursorByPlacement(_placementId: PlacementId): void {}
+  moveCursorToPlacement(_placementId: PlacementId): void {}
 };
 
 class ClueRenderer {
@@ -113,17 +113,22 @@ class ClueRenderer {
 
     private handleContainerKeydown = (event: KeyboardEvent) => {
       if (this.isActionKey(event)) {
+        event.preventDefault();
         this.handleAction(event);
+        return;
       }
       
       else if (this.isVerticalArrowPress(event)) {
+        event.preventDefault();
         this.handleVerticalArrowPress(event);
+        return;
       }
     }
 
-    private handleContainerClick = (event: Event) => {
-      const target = event.target as HTMLElement;
-    
+    private handleContainerClick = (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+
       const toggle = this.getToggle(target);
       if (toggle) {
         this.handleToggle(toggle);
@@ -146,8 +151,9 @@ class ClueRenderer {
     }
 
     private handleVerticalArrowPress(event: KeyboardEvent) {
-      event.preventDefault();
-      const target = event.target as HTMLElement;
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+
       const start = target.closest(".clue, .clue-toggle") as HTMLElement | null;
       if (!start) return;
     
@@ -161,12 +167,19 @@ class ClueRenderer {
     }
 
     private handleAction(event: KeyboardEvent) {
-      event.preventDefault();
-      const target = event.target as HTMLElement;
-      const clue = this.getClue(target);
-      if (!clue) return;
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
 
-      this.handleClue(clue);
+      const toggle = this.getToggle(target);
+      if (toggle) {
+        this.handleToggle(toggle);
+        return;
+      }
+
+      const clue = this.getClue(target);
+      if (clue) {
+        this.handleClue(clue);
+      }
     }
 
     private handleToggle(button: HTMLButtonElement) {
@@ -188,7 +201,7 @@ class ClueRenderer {
       const placementId = li.dataset.placementId;
       if (!placementId) return;
   
-      this.cursorController.setCursorByPlacement(Number(placementId));
+      this.cursorController.moveCursorToPlacement(Number(placementId));
     };
 
     private renderProgressCount(clueCounts: ClueCounts) {

@@ -42,6 +42,7 @@ class PuzzleRenderer {
             throw new Error("Input element not found for coord");
         }
 
+        inputElement.focus();
         inputElement.setSelectionRange(0, 1);
     }
 
