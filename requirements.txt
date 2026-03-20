@@ -5,7 +5,7 @@ gunicorn==25.1.0
 ijson==3.4.0
 packaging==26.0
 psycopg==3.2.3
-psycopg-binary==3.2.3
+psycopg-binary==3.3.3
 python-dotenv==1.2.2
 sqlparse==0.5.3
 whitenoise==6.12.0
