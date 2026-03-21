@@ -1,5 +1,5 @@
 {
-  "name": "cs-trivia",
+  "name": "cstrivia",
   "version": "1.0.0",
   "description": "Repo for https://cstrivia.com",
   "main": "index.js",
@@ -9,16 +9,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JuliusBoateng/cs-trivia.git"
+    "url": "git+https://github.com/JuliusBoateng/cstrivia.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/JuliusBoateng/cs-trivia/issues"
+    "url": "https://github.com/JuliusBoateng/cstrivia/issues"
   },
-  "homepage": "https://github.com/JuliusBoateng/cs-trivia#readme",
+  "homepage": "https://github.com/JuliusBoateng/cstrivia#readme",
   "devDependencies": {
     "typescript": "^5.9.3"
   }
