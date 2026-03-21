@@ -1,0 +1,114 @@
+{
+  "board": {
+    "title": "Open Source Basics",
+    "author": "Julius Boateng",
+    "puzzle_number": 1,
+    "published_at": "2026-03-17T09:38:40.373467+00:00",
+    "description": "The tools we use today come from decades of open source work. We stand on the shoulders of giants.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Open Source"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Build file for the make tool, created at Bell Labs to manage dependencies; requires tabs, not spaces",
+      "display_answer": "MAKEFILE",
+      "direction": "A",
+      "start_row": 1,
+      "start_col": 6
+    },
+    {
+      "question": "Extensible object-relational database system developed at UC Berkeley; its creator later won the Turing Award",
+      "display_answer": "POSTGRESQL",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 2
+    },
+    {
+      "question": "Modular open-source HTTP server; “a patchy server” was an early pun on its name",
+      "display_answer": "APACHE",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 2
+    },
+    {
+      "question": "Distributed version control system with full local commit history; originally created for kernel development",
+      "display_answer": "GIT",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 10
+    },
+    {
+      "question": "GNU Compiler Collection, originally the GNU C Compiler",
+      "display_answer": "GCC",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 10
+    },
+    {
+      "question": "Unix-like operating system kernel",
+      "display_answer": "LINUX",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 1
+    },
+    {
+      "question": "Recursive acronym for a free Unix alternative; “___’s Not Unix”",
+      "display_answer": "GNU",
+      "direction": "A",
+      "start_row": 7,
+      "start_col": 10
+    },
+    {
+      "question": "Unix command-line interpreter; “Bourne Again Shell,” successor to the Bourne shell",
+      "display_answer": "BASH",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 1
+    },
+    {
+      "question": "Open-source TLS/SSL cryptography library used for HTTPS",
+      "display_answer": "OPENSSL",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 6
+    },
+    {
+      "question": "Terminal text editor scripted with Vimscript; one side of the editor wars",
+      "display_answer": "VIM",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 6
+    },
+    {
+      "question": "Universal character encoding standard",
+      "display_answer": "UNICODE",
+      "direction": "A",
+      "start_row": 11,
+      "start_col": 5
+    },
+    {
+      "question": "Permissive software license named after a Cambridge university",
+      "display_answer": "MITLICENSE",
+      "direction": "D",
+      "start_row": 0,
+      "start_col": 11
+    },
+    {
+      "question": "Open-source implementation of the Secure Shell (SSH) protocol",
+      "display_answer": "OPENSSH",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 3
+    },
+    {
+      "question": "Extensible text editor written in Elisp; the other side of the editor wars",
+      "display_answer": "EMACS",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 8
+    }
+  ]
+}
