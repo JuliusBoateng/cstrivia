@@ -307,44 +307,50 @@ h1 {
   }
   
 .clue {
+    list-style: none;
+}
+
+.clue-button {
     display: grid;
-    grid-template-columns: 2ch 1fr; /* */
+    grid-template-columns: 2ch 1fr;
     gap: 0.5rem; /* gap between clue number and text */
+    width: 100%;
+    font: inherit;
+    text-align: left;
+    background: none;
+    border: none;
     cursor: pointer;
-    padding: 2px 4px; /* click area */
+    padding: 2px 4px;  /* click area */
     border-radius: 4px;
     align-items: start;
     transition: background-color 120ms ease;
 }
-  
-.clue-length-label {
-    color: #6b7280;
-    font-size: 0.90em;
-    margin-left: 0.3rem;
-    white-space: nowrap;
-}
 
-.clue:hover {
+.clue-button:hover {
     background: #e0e4f1;
 }
 
-.clue.highlight {
-    background: #c9d0e6;
-}
-
-.clue:active {
+.clue-button:active {
     background: #b6bddc;
 }
 
-.clue:focus-visible {
+.clue-button:focus-visible {
     outline: 2px solid #6A6D8F;
     outline-offset: 2px;
-  }
+}
+
 
 .clue-label {
     text-align: right;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
+}
+
+.clue-length-label {
+    color: #6b7280;
+    font-size: 0.90em;
+    margin-left: 0.3rem;
+    white-space: nowrap;
 }
 
 .clue-text {

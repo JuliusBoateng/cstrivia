@@ -5,6 +5,7 @@ const CLUE_TEXT = "clue-text";
 const CLUE_LABEL = "clue-label";
 const CLUE_LENGTH_LABEL = "clue-length-label";
 const CLUE_COUNT = ".clue-count";
+const CLUE_BUTTON = ".clue-button";
 
 const TODO_TOGGLE = "#todo-toggle";
 const TODO_ACROSS_TOGGLE = "#todo-across-toggle";
@@ -22,7 +23,6 @@ const SOLVED_ACROSS_CLUES = "#solved-across-clues";
 const SOLVED_DOWN_CLUES = "#solved-down-clues";
 const SOLVED_SECTION = "#solved-section";
 
-const FOCUS = "tabindex";
 const ARIA_EXPANDED = "aria-expanded";
 
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
@@ -63,19 +63,22 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     function createClue(placement: Placement, clue: Clue): HTMLLIElement {
         const liElement = document.createElement("li");
         liElement.classList.add(CLUE);
-        liElement.setAttribute(FOCUS, String(0));
 
         liElement.dataset.placementId = placement.id.toString();
         liElement.dataset.placementDirection = placement.direction;
 
-        const labelSpan = createLabel(placement)
-
+        const button = createButton();
+        button.dataset.placementId = placement.id.toString();
+        button.dataset.placementDirection = placement.direction;
+        
         const textSpan = createLiText(clue);
-        const lengthSpan = createLenLabel(placement)
+        const lengthSpan = createLenLabel(placement);
         textSpan.appendChild(lengthSpan);
 
-        liElement.append(labelSpan, textSpan);
-
+        const labelSpan = createLabel(placement);
+        button.append(labelSpan, textSpan);
+        
+        liElement.appendChild(button);
         return liElement;
     }
 
@@ -105,6 +108,13 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         labelSpan.textContent = label.toString();
 
         return labelSpan;
+    }
+
+    function createButton(): HTMLButtonElement {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.classList.add(CLUE_BUTTON);
+        return button;
     }
 
     function setToggleCount(button: HTMLButtonElement, count: number) {
