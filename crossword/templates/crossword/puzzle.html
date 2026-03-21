@@ -8,7 +8,23 @@
     <script type="module" src="{% static 'crossword/dist/main.js' %}"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <link rel="icon" href="{% static 'crossword/img/favicon.svg' %}" type="image/svg+xml">
+    
+    <!-- title set dynamically -->
+    <title></title> 
+
+    <!-- Open Graph (LinkedIn, Facebook, etc.) -->
+    <meta property="og:title" content="CS Trivia" />
+    <meta property="og:description" content="Computer science crossword puzzles. No ads. No login. Just crosswords." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cstrivia.com{{ request.path }}" />
+    <meta property="og:image" content="https://cstrivia.com/static/crossword/img/site-screenshot.png" />
+  
+    <!-- Twitter (also used by some platforms) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CS Trivia" />
+    <meta name="twitter:description" content="Computer science crossword puzzles. No ads. No login. Just crosswords." />
+    <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/site-screenshot.png" />
   </head>
   <body class="off-white">
     <header class="site-header">
