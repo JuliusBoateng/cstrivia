@@ -37,7 +37,7 @@ class Board(models.Model):
     
     author = models.CharField(max_length=50, null=True, blank=True)
     title = models.CharField(max_length=50, unique=True)
-    puzzle_number = models.PositiveIntegerField(unique=True, blank=True) # user visible puzzle number
+    puzzle_number = models.PositiveIntegerField(unique=True, null=True, blank=True) # user visible puzzle number
     published_at = models.DateTimeField(null=True, blank=True)
     description = models.CharField(max_length=200)
     categories = models.ManyToManyField(Category, related_name="boards")
@@ -82,7 +82,7 @@ class Clue(models.Model):
     question = models.CharField(max_length=150)
     display_answer = models.CharField(max_length=21) # Keep diacritics
     normalized_answer = models.CharField(max_length=21, editable=False) # derived field. diacritics removed
-    categories = models.ManyToManyField(Category, related_name="clues", null=True, blank=True)
+    categories = models.ManyToManyField(Category, related_name="clues", blank=True)
     
     '''
     Filters allowed chars
