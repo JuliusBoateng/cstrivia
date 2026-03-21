@@ -1,4 +1,3 @@
-````md
 # CS Trivia
 Public repo for https://cstrivia.com
 
