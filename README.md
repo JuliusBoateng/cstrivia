@@ -139,3 +139,7 @@ Visit: [http://localhost:8000/](http://localhost:8000/)
 
 > Make sure you're using **http**, not https.
 > Some browsers (like Chrome) may auto-redirect to https, which will cause errors.
+
+## Feedback
+
+Feedback or suggestions? Open an issue or email julius@cstrivia.com
