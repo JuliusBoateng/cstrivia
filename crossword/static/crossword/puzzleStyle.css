@@ -250,7 +250,7 @@ h1 {
     overflow-wrap: break-word;
     text-wrap: pretty;
 }
-
+ 
 .clue-wrapper {
     background: #f3f3f3;
     border-radius: 20px;
@@ -279,7 +279,11 @@ h1 {
     margin: 0;
     padding: 0;
 }
- 
+
+.clue-card.show-empty .clue-empty {
+    display: block;
+}
+
 .clue-toggle {
     font: inherit;
     cursor: pointer;
@@ -301,22 +305,32 @@ h1 {
     margin: 0.5rem 0;
 }
 
+/* remove empty clue-list */
+.clue-list:empty {
+    display: none;
+}
+
 /* vertical spacing between clues */
 .clue + .clue {
     margin-top: 0.3rem;
 }
   
 .clue {
+    margin: 0;
+    padding: 0;
     list-style: none;
 }
   
 .clue-button {
     appearance: none;
+    -webkit-appearance: none;
     background: none;
     border: none;
     font: inherit;
     color: inherit;
     text-align: left;
+    line-height: inherit;
+    margin: 0;
 
     display: grid;
     grid-template-columns: 2ch 1fr;
@@ -328,8 +342,6 @@ h1 {
     align-items: start;
     cursor: pointer;
     transition: background-color 120ms ease;
-
-    line-height: inherit;
 }
 
 .clue-button:hover {
@@ -355,16 +367,16 @@ h1 {
     font-variant-numeric: tabular-nums;
 }
 
+.clue-text {
+    max-width: var(--clue-text);
+    overflow-wrap: break-word;
+}
+
 .clue-length-label {
     color: #6b7280;
     font-size: 0.90em;
     margin-left: 0.3rem;
     white-space: nowrap;
-}
-
-.clue-text {
-    max-width: var(--clue-text);
-    overflow-wrap: break-word;
 }
 
 .clue-empty {
@@ -373,15 +385,6 @@ h1 {
     padding: 24px 12px;
     color: #777;
     font-style: italic;
-}
-
-.clue-card.show-empty .clue-empty {
-    display: block;
-  }
-
-/* remove empty clue-list */
-.clue-list:empty {
-    display: none;
 }
 
 /* Hide clue-count from UX when expanded */
