@@ -304,26 +304,32 @@ h1 {
 /* vertical spacing between clues */
 .clue + .clue {
     margin-top: 0.3rem;
-  }
+}
   
 .clue {
     list-style: none;
 }
-
+  
 .clue-button {
-    display: grid;
-    grid-template-columns: 2ch 1fr;
-    gap: 0.5rem; /* gap between clue number and text */
-    width: 100%;
-    font: inherit;
-    text-align: left;
+    appearance: none;
     background: none;
     border: none;
-    cursor: pointer;
-    padding: 2px 4px;  /* click area */
+    font: inherit;
+    color: inherit;
+    text-align: left;
+
+    display: grid;
+    grid-template-columns: 2ch 1fr;
+    gap: 0.5rem;
+    width: 100%;
+
+    padding: 2px 4px;
     border-radius: 4px;
     align-items: start;
+    cursor: pointer;
     transition: background-color 120ms ease;
+
+    line-height: inherit;
 }
 
 .clue-button:hover {
@@ -339,6 +345,9 @@ h1 {
     outline-offset: 2px;
 }
 
+.clue.highlight .clue-button {
+    background: #c9d0e6;
+}
 
 .clue-label {
     text-align: right;

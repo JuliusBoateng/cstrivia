@@ -5,7 +5,7 @@ const CLUE_TEXT = "clue-text";
 const CLUE_LABEL = "clue-label";
 const CLUE_LENGTH_LABEL = "clue-length-label";
 const CLUE_COUNT = ".clue-count";
-const CLUE_BUTTON = ".clue-button";
+const CLUE_BUTTON = "clue-button";
 
 const TODO_TOGGLE = "#todo-toggle";
 const TODO_ACROSS_TOGGLE = "#todo-across-toggle";
