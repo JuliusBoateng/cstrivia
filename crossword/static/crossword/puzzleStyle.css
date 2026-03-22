@@ -39,6 +39,9 @@ main {
 
 h1 {
     text-align: center;
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    margin-bottom: clamp(0.5rem, 0.8vw, 0.9rem);
+    font-weight: 600;
 }
 
 .off-white {
@@ -171,12 +174,12 @@ h1 {
     margin-inline: auto;
     text-align: center;
 
-    font-size: clamp(0.85rem, 1.1vw, 0.95rem);
-    font-weight: 500;
+    font-size: clamp(0.85rem, 1.05vw, 0.95rem);
+    font-weight: 400;
     line-height: 1.4;
 
     color: #4b5563;
-    margin-bottom: clamp(0.25rem, 1vw, 0.75rem);
+    margin-bottom: clamp(0.2rem, 0.8vw, 0.6rem);
 }
 
 .board-instructions p {
@@ -185,8 +188,7 @@ h1 {
 
 .board-tips {
     width: min(100%, var(--clue-text));
-    margin-bottom: clamp(0.5rem, 2vw, 1rem);
-
+    margin-bottom: clamp(0.25rem, 0.8vw, 0.5rem);
     font-size: clamp(0.9rem, 1vw, 1rem);
     line-height: 1.4;
     color: #4b5563;
@@ -196,10 +198,17 @@ h1 {
     cursor: pointer;
     font-weight: 600;
     color: #374151;
-    letter-spacing: 0.01em;
+    letter-spacing: 0em;
+    font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+    margin-bottom: 0.3rem;
+}
 
-    font-size: clamp(1rem, 1.15vw, 1.1rem);
-    margin-bottom: 0.4rem;
+.board-tips summary:hover {
+    background: #f2f2f2;
+}
+
+.board-tips[open] ul {
+    margin-top: 0.35rem;
 }
 
 .board-tips ul {
@@ -212,48 +221,6 @@ h1 {
 
 .board-tips li:last-child {
     margin-bottom: 0;
-}
-
-.board-tips:hover {
-    background: #f2f2f2;
-}
-
-.puzzle-metadata {
-    width: clamp(260px, 30vw, 420px);
-    min-width: 260px;
-    margin-top: 1.5rem;
-    padding: 0.75rem 0;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-/* remove empty items */
-.puzzle-metadata .meta-line > :empty {
-    display: none;
-}
-
-/* add separator between remaining items */
-.puzzle-metadata .meta-line > * + *::before {
-    content: " • ";
-}
-
-.puzzle-metadata p {
-    margin: 0;
-}
-
-.puzzle-metadata .meta-line {
-    margin-bottom: 0.2rem;
-}
-
-.board-desc {
-    max-width: 65ch;
-    margin: 1.5rem 0;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: #444;
-
-    overflow-wrap: break-word;
-    text-wrap: pretty;
 }
  
 .clue-wrapper {
@@ -399,36 +366,6 @@ h1 {
     display: none;
 }
 
-.solution-panel {
-    margin-top: 1rem;
-    width: clamp(320px, 28vw, 460px);
-    max-width: 100%;
-}
-  
-.solution-toggle {
-    cursor: pointer;
-    font-weight: 600;
-    padding: 4px 0;
-    border-radius: 12px;
-}
-
-.solution-toggle:hover {
-    background: #f2f2f2;
-}
-
-.solution-json {
-    background: #1e1e1e;
-    color: #ce9178;
-    padding: 1rem;
-    margin-top: 0.5rem;
-    border-radius: 12px;
-    overflow-x: auto;
-    font-family: ui-monospace, monospace;
-    font-size: 0.85rem;
-    line-height: 1.4;
-    border: 1px solid #2d2d2d;;
-}
-
 .site-header {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid #e5e5e5;
@@ -463,27 +400,99 @@ h1 {
     text-decoration: underline;
 }
 
-.site-footer p {
+.post-puzzle {
+    margin-top: 2rem;
+    max-width: var(--board-max);
+}
+
+.puzzle-metadata {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: .4rem;
+}
+
+/* remove empty items */
+.puzzle-metadata .meta-line > :empty {
+    display: none;
+}
+
+/* add separator between remaining items */
+.puzzle-metadata .meta-line > * + *::before {
+    content: " • ";
+}
+
+.puzzle-metadata p {
     margin: 0;
-    margin-bottom: .2rem;
+}
+
+.board-desc {
+    max-width: 65ch;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4b5563;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+
+    margin: 0;
+}
+
+.solution-panel {
+    width: clamp(320px, 28vw, 460px);
+    max-width: 100%;
+}
+  
+.solution-toggle {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 4px 0;
+    border-radius: 12px;
+}
+
+.solution-toggle:hover {
+    background: #f2f2f2;
+}
+
+.solution-json {
+    background: #1e1e1e;
+    color: #ce9178;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 12px;
+    overflow-x: auto;
+    font-family: ui-monospace, monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    border: 1px solid #2d2d2d;;
+}
+
+
+.site-footer {
+    margin-top: 1.75rem;
+    text-align: center;
+    padding: 0.75rem 0 1rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+}
+
+.site-footer p {
+    margin: 0 0 0.3rem;
     padding: 0;
 }
 
-.site-footer {
-    text-align: center;
-    margin-top: 1.5rem;
-    padding: 1rem 0;
-    font-size: 0.85rem;
-    color: #777;
-}
-  
 .site-footer a {
     color: inherit;
     text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
 }
   
 .site-footer a:hover {
-    color: #555;
+    color: #666;
+}
+
+.site-footer p:last-child {
+    margin-bottom: 0;
 }
 
 @keyframes animate-starting-cell {

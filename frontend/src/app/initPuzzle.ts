@@ -29,7 +29,7 @@ function createPuzzleHeader(boardView: BoardView) {
 }
 
 function createPuzzleMetadata(boardView: BoardView) {
-    const boardDescElement = document.querySelector(".board-desc p")!;
+    const boardDescElement = document.querySelector(".board-desc")!;
     const desc = boardView.board.description || "";
 
     const puzzleMetadataElement = document.querySelector(".puzzle-metadata")!;
