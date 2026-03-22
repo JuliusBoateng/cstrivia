@@ -37,18 +37,33 @@
     <main>
       <article class="puzzle">
         <h1 class="board-title"></h1>
-        <div class="board-help">
-          <p>Click to type • Double-click to switch direction • Navigate with arrow keys</p>
+        <div class="board-instructions">
+          <p class="instructions-mobile">
+            Tap to type • Tap again to switch • Tap a clue to jump
+          </p>
+        
+          <p class="instructions-desktop">
+            Click to type • Arrow keys to navigate • Tab to jump clues
+          </p>
         </div>
-        <details class="puzzle-help">
+        
+        <details class="board-tips">
           <summary>Navigation tips</summary>
-          <ul>
-            <li>Words shake briefly on incorrect and flash purple on correct.</li>
-            <li>Double-click a cell to change direction if a corresponding clue exists; otherwise it pulses briefly.</li>
-            <li>Press Tab to move to next clue; Shift+Tab to move to previous clue.</li>
-            <li>Click clues on the list to jump to them.</li>
-            <li>Solved clues move from “To Do” → “Solved”.</li>
-            <li>Click headers to expand or collapse sections.</li>
+        
+          <ul class="tips-desktop">
+            <li>Correct answers flash purple; incorrect words shake.</li>
+            <li>Double-click to switch direction (cell pulses if unavailable).</li>
+            <li>Tab for next clue; Shift+Tab for previous.</li>
+            <li>Click a clue to jump.</li>
+            <li>Solved clues move from “To Do” to “Solved”.</li>
+            <li>Click section headers to expand or collapse.</li>
+          </ul>
+        
+          <ul class="tips-mobile">
+            <li>Correct answers flash purple; incorrect words shake.</li>
+            <li>Tap a clue to jump.</li>
+            <li>Solved clues move from “To Do” to “Solved”.</li>
+            <li>Tap section headers to expand or collapse.</li>
           </ul>
         </details>
         <div class="puzzle-panel">
