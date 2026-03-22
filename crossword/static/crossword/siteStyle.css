@@ -1,0 +1,63 @@
+.site-header {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+  
+.site-header nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: var(--site-max-width);
+    margin: 0 auto;
+}
+
+.site-header a {
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.4rem 0.5rem;
+}
+
+.site-header .site-name {
+    font-weight: 600;
+    color: #111827;
+    white-space: nowrap;
+}
+
+.site-header .github {
+    color: #4b5563;
+}
+
+.site-header a:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+}
+
+.site-footer {
+    margin-top: 1.75rem;
+    text-align: center;
+    padding: 0.75rem 0 1rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+}
+
+.site-footer p {
+    margin: 0 0 0.3rem;
+    padding: 0;
+}
+
+.site-footer a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+  
+.site-footer a:hover {
+    color: #666;
+}
+
+.site-footer p:last-child {
+    margin-bottom: 0;
+}

@@ -186,6 +186,7 @@ h1 {
     margin: 0;
 }
 
+/* TODO make this left align to board left. horizontally */
 .board-tips {
     width: min(100%, var(--clue-text));
     margin-bottom: clamp(0.25rem, 0.8vw, 0.5rem);
@@ -366,40 +367,6 @@ h1 {
     display: none;
 }
 
-.site-header {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #e5e5e5;
-}
-  
-.site-header nav {
-    display: flex;
-    gap: 1rem;
-    max-width: var(--site-max-width);
-    margin: 0 auto;
-}
-
-.site-header a {
-    text-decoration: none;
-    color: #111827;
-    font-weight: 500;
-
-    padding: 0.25rem 0.4rem;
-}
-
-.site-header .site-name {
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.site-header .github {
-    color: #4b5563;
-}
-
-.site-header a:hover {
-    color: #111827;
-    text-decoration: underline;
-}
-
 .post-puzzle {
     margin-top: 2rem;
     max-width: var(--board-max);
@@ -463,36 +430,6 @@ h1 {
     font-size: 0.85rem;
     line-height: 1.4;
     border: 1px solid #2d2d2d;;
-}
-
-
-.site-footer {
-    margin-top: 1.75rem;
-    text-align: center;
-    padding: 0.75rem 0 1rem;
-    font-size: 0.85rem;
-    color: #6b7280;
-    border-top: 1px solid #e5e7eb;
-}
-
-.site-footer p {
-    margin: 0 0 0.3rem;
-    padding: 0;
-}
-
-.site-footer a {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
-}
-  
-.site-footer a:hover {
-    color: #666;
-}
-
-.site-footer p:last-child {
-    margin-bottom: 0;
 }
 
 @keyframes animate-starting-cell {
@@ -565,14 +502,5 @@ h1 {
     .instructions-mobile,
     .tips-mobile {
       display: block;
-    }
-}
-
-/* max-width: --clue-width: 420px;
-prevents issue where clue / board is unreachable 
-through horizontal scroll after overflow */
-@media (max-width: 420px) {
-    .puzzle-panel {
-        align-items: flex-start;
     }
 }

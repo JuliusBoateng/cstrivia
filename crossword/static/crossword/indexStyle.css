@@ -194,26 +194,3 @@ main {
   color: #374151;
   font-weight: 600;
 }
-
-.site-footer {
-  text-align: center;
-  margin-top: 1.5rem;
-  padding: 1rem 0;
-  font-size: 0.85rem;
-  color: #777;
-}
-
-.site-footer p {
-  margin: 0;
-  padding: 0;
-  margin-bottom: .2rem;
-}
-
-.site-footer a {
-  color: inherit;
-  text-decoration: underline;
-}
-
-.site-footer a:hover {
-  color: #555;
-}
