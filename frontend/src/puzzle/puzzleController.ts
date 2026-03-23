@@ -32,7 +32,6 @@ class PuzzleController implements CursorController {
     private renderer: PuzzleRenderer;
     private clueView: ClueView;
     private boardView: BoardView;
-    private hasShownInitialFocus;
     private tableElement: HTMLTableElement;
     
     // keydown is the primary input handler.
@@ -46,14 +45,11 @@ class PuzzleController implements CursorController {
         this.renderer = renderer;
         this.boardView = boardView;
         this.clueView = NullClueView;
-        this.hasShownInitialFocus = false;
         this.suppressNextBeforeInput = false;
     }
 
     public init(clueView: ClueView) {
         this.setClueView(clueView)
-        this.updateCursorVisuals(false);
-        this.animateStartingCell()
 
         this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
         this.tableElement.addEventListener("beforeinput", this.handleBeforeInput);
@@ -62,11 +58,6 @@ class PuzzleController implements CursorController {
 
     private setClueView(clueView: ClueView) {
         this.clueView = clueView;
-        const placement_id = this.session.getActivePlacement().id;
-        this.clueView.highlightClue(placement_id);
-
-        const currSolved = [...this.session.getSolvedPlacementIds()];
-        this.clueView.renderClues(currSolved);
     }
 
     moveCursorToPlacement(placementId: PlacementId): void {
@@ -307,7 +298,7 @@ class PuzzleController implements CursorController {
         this.applyLetter(null);
     }
 
-    private updateCursorVisuals(focus: boolean = true) {
+    private updateCursorVisuals() {
         const placement = this.session.getActivePlacement();
         const placementCoords = this.session.getActivePlacementCoords();    
         this.renderer.setPlacementHighlight(placement.id, placementCoords);
@@ -315,7 +306,7 @@ class PuzzleController implements CursorController {
         const coord = this.session.getCoord();
         this.renderer.setCursorHighlight(coord);
         this.clueView.highlightClue(placement.id);
-        if (focus) this.renderer.focusCell(coord);
+        this.renderer.focusCell(coord);
         this.updateBoardHeader();
     }
 
@@ -352,15 +343,6 @@ class PuzzleController implements CursorController {
             const coords = this.session.getPlacementCells(placementId);
             this.renderer.markPlacementIncorrect(coords);
         }
-    }
-
-    private animateStartingCell() {
-        if (this.hasShownInitialFocus) return;
-    
-        const coord = this.session.getCoord();
-        this.renderer.animateStartingCell([coord]);
-    
-        this.hasShownInitialFocus = true;
     }
 
     private formatBoardHeader(label: number, direction: string, arrow:string, clue: string) {
