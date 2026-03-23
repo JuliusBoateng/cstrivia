@@ -72,8 +72,8 @@ main {
 }
 
 .hero-meta #release-cadence {
-  color: #6b7280;
-  font-weight: 400;
+  color: #7c8594;
+  font-size: 0.95em;
 }
 
 #release-cadence span {
@@ -84,7 +84,7 @@ main {
 
 .cta {
   display: inline-block;
-  margin: 1.2rem 0 0.5rem 0;
+  margin: .5rem 0 0.2rem 0;
 
   padding: 0.55rem 1rem;
   border-radius: 8px;
@@ -117,7 +117,7 @@ main {
 
 .hero-link:focus-visible {
   outline: 2px solid #6A6D8F;
-  outline-offset: 3px;
+  outline-offset: 2px;
   border-radius: 8px;
 }
 
@@ -131,7 +131,7 @@ main {
 }
 
 .puzzle-list {
-  padding: 1rem 0;
+  padding: 1.5rem 0;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -162,8 +162,9 @@ main {
   border-radius: 12px;
 }
 
-.puzzle-number {
-  color: #6b7280;
+.puzzle-number,
+.puzzle-date {
+  color: #7c8594;
 }
 
 .puzzle-title {
@@ -172,7 +173,6 @@ main {
 
 .puzzle-date {
   margin-left: auto;
-  color: #6b7280;
   font-size: 0.9em;
 }
 
@@ -190,7 +190,7 @@ main {
 }
 
 .feature-list .emphasis {
-  padding-top: 1rem;
+  padding-top: .5rem;
   color: #374151;
   font-weight: 600;
 }
