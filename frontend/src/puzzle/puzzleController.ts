@@ -84,13 +84,7 @@ class PuzzleController implements CursorController {
 
         const prevCoord = this.session.getCoord();
         if (prevCoord.row === row && prevCoord.col === col) {
-            const hasChanged = this.session.toggleDirection();
-
-            if (!(hasChanged)) {
-                const placementId = this.session.getActivePlacement().id;
-                const coords = this.session.getPlacementCells(placementId);
-                this.renderer.renderDirectionRejection(coords)
-            }
+            this.toggleDirection();
         }
         
         const newCoord = {row, col};
@@ -135,6 +129,7 @@ class PuzzleController implements CursorController {
         if (this.isSpace(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
+            this.handleSpacebar();
             return;
         }
 
@@ -170,6 +165,11 @@ class PuzzleController implements CursorController {
             event.preventDefault();
             this.handleVerticalArrowInput(event);
         }
+    }
+
+    private handleSpacebar() {    
+        const hasChanged = this.toggleDirection();
+        if (hasChanged) this.updateCursorVisuals();
     }
 
     private handleTabInput(event: KeyboardEvent) {
@@ -250,7 +250,7 @@ class PuzzleController implements CursorController {
     }
 
     private isSpace(event: KeyboardEvent) {
-        return event.key === " " || event.key === "Spacebar" || event.code === "Space";
+        return event.code === "Space";
     }
 
     private applyLetter(letter: string | null) {
@@ -329,6 +329,18 @@ class PuzzleController implements CursorController {
 
         const captionText = this.formatBoardHeader(label, direction, arrow, clue.question);
         this.renderer.updateBoardHeader(captionText);
+    }
+
+    private toggleDirection(): boolean {
+        const hasChanged = this.session.toggleDirection();
+        
+        if (!hasChanged) {
+            const activePlacement = this.session.getActivePlacement().id;
+            const coords = this.session.getPlacementCells(activePlacement);
+            this.renderer.renderDirectionRejection(coords)
+        }
+
+        return hasChanged;
     }
 
     private renderPlacementFeedback(coord: Coord) {
