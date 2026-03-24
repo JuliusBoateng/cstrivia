@@ -1,10 +1,13 @@
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.views.generic import ListView
 
 from .models import Board
 
 PAGINATION_LIMIT = 10
 
+@method_decorator(never_cache, name="dispatch")
 class PuzzleListView(ListView):
     model = Board
     template_name = "crossword/index.html"
