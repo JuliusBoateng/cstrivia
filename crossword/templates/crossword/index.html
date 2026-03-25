@@ -52,7 +52,7 @@
               <ul>
                 {% for puzzle in puzzles %}
                   <li>
-                    <a href="{% url 'puzzle' puzzle.id %}">
+                    <a href="{% url 'puzzle' puzzle.id %}" class="puzzle-row">
                       <span class="puzzle-number">Puzzle {{ puzzle.puzzle_number }}:</span>
                       <span class="puzzle-title">{{ puzzle.title }}</span>
                       <span class="puzzle-date">

@@ -195,7 +195,6 @@ h1 {
     margin: 0;
 }
 
-/* TODO make this left align to board left. horizontally */
 .controls {
     width: min(100%, var(--clue-text));
     margin-bottom: clamp(0.25rem, 0.8vw, 0.5rem);
@@ -215,6 +214,7 @@ h1 {
 
 .controls summary:hover {
     background: #f2f2f2;
+    border-radius: 8px;
 }
 
 .controls[open] ul {
@@ -449,7 +449,7 @@ p.board-desc {
     cursor: pointer;
     font-weight: 600;
     padding: 4px 0;
-    border-radius: 12px;
+    border-radius: 8px;
 }
 
 .solution-toggle:hover {
@@ -461,7 +461,7 @@ p.board-desc {
     color: #ce9178;
     padding: 1rem;
     margin-top: 0.5rem;
-    border-radius: 12px;
+    border-radius: 8px;
     overflow-x: auto;
     font-family: ui-monospace, monospace;
     font-size: 0.85rem;

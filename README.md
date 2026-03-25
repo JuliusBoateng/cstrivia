@@ -8,7 +8,7 @@ A site centered around computer science crossword puzzles.
 ## Tech Stack
 - Backend: Python, Django
 - Database: PostgreSQL
-- Frontend: TypeScript
+- Frontend: **vanilla TypeScript** (no frontend framework)
 
 ## Architecture
 
