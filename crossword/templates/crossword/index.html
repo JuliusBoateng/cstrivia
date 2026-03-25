@@ -38,10 +38,10 @@
                 <p id="release-cadence">New puzzles every Tuesday<span>→ 12:00 UTC</span></p>
               </div>
               {% if latest_puzzle %}
-              <a href="{% url 'puzzle' latest_puzzle.id %}" class="cta" aria-label="Solve the latest puzzle">Solve the latest puzzle</a>
+              <a href="{% url 'puzzle' latest_puzzle.id %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle</a>
 
-                <a href="{% url 'puzzle' latest_puzzle.id %}" aria-label="Solve the latest puzzle" class="hero-link">
-                  <img src="{% static 'crossword/img/sample-board.png' %}" alt="Solve the latest crossword puzzle" class="hero-screenshot">
+                <a href="{% url 'puzzle' latest_puzzle.id %}" aria-label="Solve latest puzzle" class="hero-link">
+                  <img src="{% static 'crossword/img/sample-board.png' %}" alt="Solve latest puzzle" class="hero-screenshot">
                 </a>
               {% endif %}
             </section>
