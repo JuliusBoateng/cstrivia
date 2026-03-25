@@ -35,7 +35,7 @@
           
               <div class="hero-meta">
                 <p id="tagline">No ads • No login • Just crosswords</p>
-                <p id="release-cadence">New puzzles every Tuesday<span>→ 12:00 UTC</span> (starting next week)</p>
+                <p id="release-cadence">New puzzles every Tuesday<span>→ 12:00 UTC</span></p>
               </div>
               {% if latest_puzzle %}
               <a href="{% url 'puzzle' latest_puzzle.id %}" class="cta" aria-label="Solve the latest puzzle">Solve the latest puzzle</a>
@@ -77,10 +77,10 @@
                 </div>
               {% endif %}
             </section>
-
+            <p class="puzzle-note">Each crossword is manually constructed.</p>
             <section class="feature-list">
               <ul>
-                <li>Original puzzles • Open source • No tracking • No data collection</li>
+                <li>Open source • No tracking • No data collection</li>
                 <li class="emphasis">No coding challenges or technical assessments. Just puzzles.</li>
               </ul>
             </section>
