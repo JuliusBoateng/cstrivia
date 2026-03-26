@@ -112,7 +112,7 @@ python manage.py load_puzzle crossword/data/open_source_basics.json
 
 ## Setup Frontend
 
-This project uses **vanilla TypeScript** compiled with `tsc` (no frontend framework).
+This project uses **vanilla TypeScript** compiled with **esbuild** for bundling and minification (no frontend framework).
 
 Build the frontend assets before running the development server:
 
@@ -121,12 +121,17 @@ npm install
 npm run build
 ```
 
-For development:
+For development (auto-rebuild on changes):
 
 ```bash
-npx tsc --watch
+npm run watch
 ```
 
+To run TypeScript type checking:
+
+```bash
+npm run typecheck
+```
 ---
 
 ## Run the Server

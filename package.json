@@ -4,8 +4,9 @@
   "description": "Repo for https://cstrivia.com",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch"
+    "typecheck": "tsc --noEmit",
+    "watch": "esbuild frontend/src/main.ts --bundle --sourcemap --outfile=crossword/static/crossword/dist/main.js --watch",
+    "build": "esbuild frontend/src/main.ts --bundle --minify --outfile=crossword/static/crossword/dist/main.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/JuliusBoateng/cstrivia#readme",
   "devDependencies": {
+    "esbuild": "^0.27.4",
     "typescript": "^5.9.3"
   }
 }
