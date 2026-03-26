@@ -9,7 +9,7 @@ const CLUES = "clues";
 function getTableElement(): HTMLTableElement {
     const tableElement = document.getElementById(BOARD);
 
-    if (!(tableElement instanceof HTMLTableElement) || !tableElement) {
+    if (!(tableElement instanceof HTMLTableElement)) {
         throw Error("Table is not available");
     }
 
@@ -40,7 +40,7 @@ function getSolutionView(): SolutionView {
 function getClueContainer(): HTMLDivElement {
     const clueContainer = document.getElementById(CLUES);
 
-    if (!(clueContainer instanceof HTMLDivElement) || !clueContainer) {
+    if (!(clueContainer instanceof HTMLDivElement)) {
         throw Error("Clue dom is not available");
     }
 

@@ -12,6 +12,9 @@ function createPuzzleController(tableElement: HTMLTableElement, boardView: Board
     const puzzleSession: PuzzleSession = new PuzzleSession(boardView, puzzleValidator)
 
     const boardDom: BoardDom = createBoard(boardView, tableElement);
+    const puzzleDynamic = document.querySelector(".puzzle-dynamic")!;
+    puzzleDynamic.classList.add("is-ready");
+
     const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardDom)
 
     return new PuzzleController(tableElement, puzzleSession, puzzleRenderer, boardView);

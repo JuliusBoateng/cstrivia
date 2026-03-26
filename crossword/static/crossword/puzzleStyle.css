@@ -17,6 +17,9 @@
     /* Site sizing */
     --site-max-width: 1440px;
     --clue-text: 55ch;
+
+    /* Reserve space so panel doesn't collapse before puzzle initializes */
+    --puzzle-dynamic-loading-min-height: 1000px;
   }
 
 html {
@@ -37,7 +40,18 @@ main {
     flex: 1;
 }
 
-h1 {
+.puzzle-dynamic {
+    visibility: hidden;
+    min-height: var(--puzzle-dynamic-loading-min-height);
+}
+
+.puzzle-dynamic.is-ready {
+    /* Reserve space so panel doesn't collapse before puzzle initializes */
+    visibility: visible;
+    min-height: auto;
+}
+
+.board-title {
     text-align: center;
     font-size: clamp(1.4rem, 2.2vw, 2rem);
     margin-bottom: clamp(0.5rem, 0.8vw, 0.9rem);
