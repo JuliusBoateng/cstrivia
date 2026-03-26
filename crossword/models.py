@@ -1,10 +1,12 @@
 from string import capwords
+from unicodedata import category, combining, normalize
 
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models, transaction
+from django.urls import reverse
 from django.utils import timezone
-from unicodedata import category, normalize, combining
+
 
 class Category(models.Model):
     name = models.CharField(max_length=16, unique=True)
@@ -44,6 +46,9 @@ class Board(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, editable=False) # also updates when saving CluePlacement
     
+    def get_absolute_url(self):
+        return reverse("puzzle", kwargs={"id": self.id})
+
     class Meta:
         ordering = ["puzzle_number"]
         constraints = [
