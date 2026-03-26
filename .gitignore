@@ -170,6 +170,13 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# Node
+node_modules/
+
+# Built frontend assets
+crossword/static/crossword/dist/
+
+# Django collectstatic output
 staticfiles/
 
 .DS_Store
