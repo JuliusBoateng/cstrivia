@@ -9,7 +9,9 @@
     <script type="module" src="{% static 'crossword/dist/main.js' %}"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" href="{% static 'crossword/img/favicon.svg' %}" type="image/svg+xml">
+    
+    <link rel="icon" sizes="16x16" href="{% static 'crossword/img/favicon-16.png' %}">
+    <link rel="icon" sizes="48x48" href="{% static 'crossword/img/favicon-48.png' %}">
     
     <!-- title and meta set dynamically -->
     <title></title>
@@ -20,18 +22,21 @@
     <meta property="og:description" content="Solve computer science crossword puzzles on CS Trivia." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://cstrivia.com{{ request.path }}" />
-    <meta property="og:image" content="https://cstrivia.com/static/crossword/img/site-screenshot.png" />
+    <meta property="og:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
   
     <!-- Twitter (also used by some platforms) -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="CS Trivia - Computer Science Crossword Puzzles" />
     <meta name="twitter:description" content="Solve computer science crossword puzzles on CS Trivia." />
-    <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/site-screenshot.png" />
+    <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
   </head>
   <body class="off-white">
     <header class="site-header">
       <nav>
-        <a href="/" class="site-name">CS Trivia</a>
+        <a href="/" class="site-name">
+          <img src="{% static 'crossword/img/favicon-16.png' %}" class="nav-logo" alt="logo">
+          CS Trivia
+        </a>
         <a href="https://github.com/JuliusBoateng/cstrivia" class="github" target="_blank"
           rel="noopener noreferrer">GitHub</a>
       </nav>
@@ -40,7 +45,7 @@
       <article class="puzzle">
         <div class="puzzle-dynamic">
           <h1 class="board-title"></h1>
-          
+
           <div class="board-instructions">
             <p class="instructions-mobile">
               Tap clues to jump • Tap to type • Tap again to switch direction

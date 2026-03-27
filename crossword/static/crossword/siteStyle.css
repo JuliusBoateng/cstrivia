@@ -17,6 +17,13 @@
     padding: 0.4rem 0.5rem;
 }
 
+.site-header .nav-logo {
+    height: 16px;
+    width: 16px;
+    margin-right: .25rem;
+    vertical-align: -2px;
+}
+
 .site-header .site-name {
     font-weight: 600;
     color: #111827;

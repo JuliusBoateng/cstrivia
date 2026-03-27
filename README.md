@@ -3,7 +3,7 @@ Public repo for https://cstrivia.com
 
 A site centered around computer science crossword puzzles.
 
-<img src="crossword/static/crossword/img/readme-screenshot.png" width="700" />
+<img src="crossword/static/crossword/img/readme.png" width="860" />
 
 ## Tech Stack
 - Backend: Python, Django

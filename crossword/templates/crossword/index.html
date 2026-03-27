@@ -7,7 +7,9 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" href="{% static 'crossword/img/favicon.svg' %}" type="image/svg+xml">
+
+    <link rel="icon" sizes="16x16" href="{% static 'crossword/img/favicon-16.png' %}">
+    <link rel="icon" sizes="48x48" href="{% static 'crossword/img/favicon-48.png' %}">
 
     <title>CS Trivia - Computer Science Crossword Puzzles</title>
     <meta name="description" content="Computer science crossword puzzles for anyone curious about computer science. New puzzles every Tuesday.">
@@ -17,13 +19,13 @@
     <meta property="og:description" content="Computer science crossword puzzles for anyone curious about computer science. New puzzles every Tuesday." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://cstrivia.com/" />
-    <meta property="og:image" content="https://cstrivia.com/static/crossword/img/site-screenshot.png" />
+    <meta property="og:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
   
     <!-- Twitter (also used by some platforms) -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="CS Trivia - Computer Science Crossword Puzzles" />
     <meta name="twitter:description" content="Computer science crossword puzzles for anyone curious about computer science. New puzzles every Tuesday." />
-    <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/site-screenshot.png" />
+    <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
   </head>
     <body>
         <main>
@@ -42,7 +44,7 @@
               <a href="{% url 'puzzle' latest_puzzle.id %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle</a>
 
                 <a href="{% url 'puzzle' latest_puzzle.id %}" aria-label="Solve latest puzzle" class="hero-link">
-                  <img src="{% static 'crossword/img/sample-board.png' %}" alt="Solve latest puzzle" class="hero-screenshot">
+                  <img src="{% static 'crossword/img/board.png' %}" alt="Solve latest puzzle" class="hero-screenshot">
                 </a>
               {% endif %}
             </section>
