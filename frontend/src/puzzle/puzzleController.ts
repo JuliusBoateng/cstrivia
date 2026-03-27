@@ -23,9 +23,10 @@ function hasSetDifference<T>(a: T[], b: T[]): boolean {
 const BLOCK = "block";
 
 const NullClueView: ClueView = {
-      highlightClue(_placementId: PlacementId): void {},
-      renderClues(_solved: PlacementId[]): void {}
-  };
+    resetActiveClue(): void {},
+    setActiveClue(_placementId: PlacementId): void {},
+    renderClues(_solved: PlacementId[]): void {}
+};
 
 class PuzzleController implements CursorController {
     private session: PuzzleSession;
@@ -65,6 +66,11 @@ class PuzzleController implements CursorController {
         this.updateCursorVisuals();
     }
  
+    resetActiveUI() {
+        this.renderer.resetActiveElements();
+        this.clueView.resetActiveClue();
+    }
+
     private handlePointerInput = (event: PointerEvent) => {
         if (!event.isPrimary) return; // ignore multi-touch / secondary stylus
         if (event.button !== 0) return; // ignore right/middle clicks
@@ -301,12 +307,11 @@ class PuzzleController implements CursorController {
     private updateCursorVisuals() {
         const placement = this.session.getActivePlacement();
         const placementCoords = this.session.getActivePlacementCoords();    
-        this.renderer.setPlacementHighlight(placement.id, placementCoords);
+        this.renderer.setActivePlacement(placement.id, placementCoords);
 
         const coord = this.session.getCoord();
-        this.renderer.setCursorHighlight(coord);
-        this.clueView.highlightClue(placement.id);
-        this.renderer.focusCell(coord);
+        this.renderer.setActiveCursor(coord);
+        this.clueView.setActiveClue(placement.id);
         this.updateBoardHeader();
     }
 

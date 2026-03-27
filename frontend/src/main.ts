@@ -6,6 +6,9 @@ import { createClueRenderer } from "./clue/createClueRenderer.js";
 
 import { BoardView } from "./models/boardView.js";
 import { SolutionView } from "./models/solutionView.js";
+import { PuzzleController } from "./puzzle/puzzleController.js";
+
+const PUZZLE_PANEL = ".puzzle-panel";
 
 document.addEventListener("DOMContentLoaded", (event) => {
     const tableElement: HTMLTableElement = getTableElement();
@@ -25,4 +28,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const clueRenderer = createClueRenderer(boardView, clueContainer);
     puzzleController.init(clueRenderer);
     clueRenderer.setCursorController(puzzleController); // TODO add init
+
+    const puzzlePanel = document.querySelector(PUZZLE_PANEL) as HTMLDivElement;
+    setupOutsideClickHandler(puzzleController, puzzlePanel);
 });
+
+function setupOutsideClickHandler(puzzleController: PuzzleController, puzzlePanel: HTMLDivElement): void {
+    document.addEventListener("pointerdown", (event: PointerEvent) => {
+      if (!puzzlePanel.contains(event.target as Node)) {
+        puzzleController.resetActiveUI();
+      }
+    });
+  }

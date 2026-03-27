@@ -2,7 +2,7 @@ import { BoardView, Coord, Direction } from "../models/boardView.js";
 
 interface BoardDom {
     cellGrid: HTMLTableCellElement[][];
-    inputGrid: HTMLInputElement[][];
+    inputGrid: (HTMLInputElement | null)[][];
 }
 
 const BLOCK = "block";
@@ -10,15 +10,15 @@ const CELL = "cell";
 const FILL = "fill";
 
 function createBoard(boardView: BoardView, tableElement: HTMLTableElement): BoardDom {
-    const cellGrid: (HTMLTableCellElement | null)[][] = initializeGrid()
-    const inputGrid: (HTMLInputElement | null)[][] = initializeGrid()
+    const cellGrid = initializeGrid<HTMLTableCellElement | null>();
+    const inputGrid = initializeGrid<HTMLInputElement | null>();
 
     const tbodyElement = createTableBodyElement();
     tableElement.appendChild(tbodyElement);
     
     const dom: BoardDom = {
         cellGrid: cellGrid as HTMLTableCellElement[][],
-        inputGrid: inputGrid as HTMLInputElement[][]
+        inputGrid
     }
     
     return dom;
@@ -26,6 +26,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     function initializeGrid<T>(): (T | null)[][] {
         const rows = boardView.board.rows;
         const cols = boardView.board.cols;
+        
         return Array.from({ length: rows }, () => Array(cols).fill(null))
     }
 

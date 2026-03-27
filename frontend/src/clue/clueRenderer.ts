@@ -29,7 +29,8 @@ type ClueCounts = {todoAcrossCount: number,
           solvedDownCount: number}
 
 interface ClueView {
-  highlightClue(placementId: PlacementId): void;
+  resetActiveClue(): void;
+  setActiveClue(placementId: PlacementId): void;
   renderClues(solved: PlacementId[]): void;
 }
 
@@ -37,7 +38,7 @@ const NullCursorController: CursorController = {
   moveCursorToPlacement(_placementId: PlacementId): void {}
 };
 
-class ClueRenderer {
+class ClueRenderer implements ClueView {
     private clueContainer: HTMLDivElement;
     private cursorController: CursorController;
     private navItems: HTMLElement[];
@@ -101,15 +102,20 @@ class ClueRenderer {
       this.cursorController = cursorController;
     }
 
-    highlightClue(placementId: PlacementId): void {
+    setActiveClue(placementId: PlacementId): void {
       const clue = this.placementClueMap.get(placementId);
       if (!clue) return;
 
-      if (this.activeClue) this.activeClue.classList.remove(HIGHLIGHT)
+      this.resetActiveClue();
 
       this.activeClue = clue;
       clue.classList.add(HIGHLIGHT);
       this.scrollClue(clue);
+    }
+
+    resetActiveClue() {
+      if (this.activeClue) this.activeClue.classList.remove(HIGHLIGHT);
+      this.activeClue = null;
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {

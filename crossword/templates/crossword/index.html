@@ -30,7 +30,7 @@
     <body>
         <main>
             <section class="hero">
-              <h1>Computer Science Crossword Puzzles.</h1>
+              <h1>Computer Science Crosswords.</h1>
           
               <p class="subheadline">
                 For anyone curious about computer science
@@ -41,7 +41,7 @@
                 <p id="release-cadence">New puzzles every Tuesday<span>→ 12:00 UTC</span></p>
               </div>
               {% if latest_puzzle %}
-              <a href="{% url 'puzzle' latest_puzzle.id %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle</a>
+              <a href="{% url 'puzzle' latest_puzzle.id %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle →</a>
 
                 <a href="{% url 'puzzle' latest_puzzle.id %}" aria-label="Solve latest puzzle" class="hero-link">
                   <img src="{% static 'crossword/img/board.png' %}" alt="Solve latest puzzle" class="hero-screenshot">
