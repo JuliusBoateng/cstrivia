@@ -27,14 +27,6 @@ function createPuzzleHeader(boardView: BoardView) {
 
     const boardTitle = document.querySelector("h1.board-title")!;
     boardTitle.textContent = title;
-
-    document.title = `Puzzle #${puzzleNumber}: ${title} - CS Trivia`;
-
-    const meta = document.querySelector('meta[name="description"]')!;
-    meta.setAttribute(
-        "content",
-        `Solve Puzzle #${puzzleNumber}: ${title} on CS Trivia.`
-    );
 }
 
 function createPuzzleMetadata(boardView: BoardView) {

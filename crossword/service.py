@@ -1,17 +1,18 @@
 from django.db.models import Model, Prefetch
-
-from .dto.mappers import map_to_board_view_dto, map_to_solution_view_dto
+from django.shortcuts import get_object_or_404
+from .dto.mappers import map_to_board_view_dto, map_to_solution_view_dto, map_to_seo_dto, SeoDTO
 from .models import Board, CluePlacement
 from .dto.serializers import serialize_board_view, serialize_solution_view
 from typing import NamedTuple
 from django.utils import timezone
 
-class views(NamedTuple):
+class Views(NamedTuple):
+    seo: SeoDTO
     serialized_board_view: dict
     serialized_solution_view: dict
 
-def get_puzzle_views(board_id: int) -> views:
-    board: Model = _fetch_board(board_id)
+def get_puzzle_views(puzzle_number: int) -> Views:
+    board: Model = _fetch_board(puzzle_number)
 
     board_view = map_to_board_view_dto(board)
     serialized_board_view = serialize_board_view(board_view)
@@ -19,10 +20,12 @@ def get_puzzle_views(board_id: int) -> views:
     solution_view = map_to_solution_view_dto(board)
     serialized_solution_view = serialize_solution_view(solution_view)
 
-    return views(serialized_board_view, serialized_solution_view)
+    seo = map_to_seo_dto(board) # not serialized b/c used directly for django templates
 
-def _fetch_board(board_id: int) -> Board:
-    board = (Board.objects
+    return Views(seo, serialized_board_view, serialized_solution_view)
+
+def _fetch_board(puzzle_number: int) -> Board:
+    queryset = (Board.objects
                 .prefetch_related("categories",
                     Prefetch("clue_placements",
                         queryset=CluePlacement.objects
@@ -30,7 +33,6 @@ def _fetch_board(board_id: int) -> Board:
                             .prefetch_related("clue_cells")
                     ))
                 .filter(published_at__lte=timezone.now())
-                .get(id=board_id)
-            )
+                )
     
-    return board
+    return get_object_or_404(queryset, puzzle_number=puzzle_number)

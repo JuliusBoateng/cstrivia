@@ -12,10 +12,27 @@
     
     <link rel="icon" sizes="16x16" href="{% static 'crossword/img/favicon-16.png' %}">
     <link rel="icon" sizes="48x48" href="{% static 'crossword/img/favicon-48.png' %}">
+    <link rel="canonical" href="https://cstrivia.com/puzzle/{{ seo.puzzle_number }}">
+
+    <title>Puzzle #{{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia</title>
+    <meta name="description" content="Solve '{{ seo.title|escape }}', a computer science crossword puzzle{% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}.">
     
-    <!-- title and meta set dynamically -->
-    <title></title>
-    <meta name="description" content="Solve computer science crossword puzzles on CS Trivia.">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": "{{ seo.title|escapejs }}",
+      {% if seo.author %}
+      "author": {
+        "@type": "Person",
+        "name": "{{ seo.author|escapejs }}"
+      },
+      {% endif %}
+      "datePublished": "{{ seo.published_at|date:'Y-m-d' }}",
+      "url": "https://cstrivia.com/puzzle/{{ seo.puzzle_number }}"
+    }
+    </script>
+  </head>
 
     <!-- Open Graph (LinkedIn, Facebook, etc.) -->
     <meta property="og:title" content="CS Trivia - Computer Science Crossword Puzzles" />

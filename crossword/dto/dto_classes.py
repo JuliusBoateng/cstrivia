@@ -82,3 +82,11 @@ class SolutionViewDTO(DTO):
     board_id: int
     solutions: list[SolutionDTO]
     letters: list[LetterDTO]
+
+@dataclass
+class SeoDTO(DTO):
+    puzzle_number: int
+    title: str
+    author: str
+    published_at: datetime
+    categories: str | None

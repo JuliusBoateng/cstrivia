@@ -10,7 +10,8 @@ from .dto_classes import (
     LetterDTO,
     SolutionDTO,
     SolutionViewDTO,
-    PlacementPositionDTO
+    PlacementPositionDTO,
+    SeoDTO
 )
 from ..models import Board, ClueCell, CluePlacement
 
@@ -122,3 +123,12 @@ def _map_to_solution_dto(placement: CluePlacement) -> SolutionDTO:
 
 def _map_to_letter_dto(c: ClueCell) -> LetterDTO:
     return LetterDTO(c.row_index, c.col_index, c.letter)
+
+def map_to_seo_dto(board: Board) -> SeoDTO:
+    return SeoDTO(
+        puzzle_number=board.puzzle_number,
+        title=board.title,
+        author=board.author,
+        published_at=board.published_at,
+        categories=[c.name for c in board.categories.all()]
+    )

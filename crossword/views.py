@@ -7,8 +7,11 @@ PAGINATION_LIMIT = 10
 
 # Create your views here.
 @never_cache
-def puzzle(request, id: int):
-    views = get_puzzle_views(id)
-    data = {"board_view_dto": views.serialized_board_view,
-            "solution_view_dto": views.serialized_solution_view}
+def puzzle(request, puzzle_number: int):
+    views = get_puzzle_views(puzzle_number)
+    data = {
+        "seo": views.seo,
+        "board_view_dto": views.serialized_board_view,
+        "solution_view_dto": views.serialized_solution_view
+    }
     return render(request, "crossword/puzzle.html", data)
