@@ -19,6 +19,7 @@ from django.urls import include, path
 from django.http import HttpResponse
 from django.contrib.sitemaps.views import sitemap
 from crossword.sitemaps import PuzzleSitemap, StaticSitemap
+from django.conf import settings
 
 sitemaps = {
     "static": StaticSitemap,
@@ -31,6 +32,9 @@ def healthz(request):
 urlpatterns = [
     path("healthz/", healthz),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
-    path('admin/', admin.site.urls),
     path('', include("crossword.urls")),
 ]
+
+if settings.DEBUG:
+    from django.contrib import admin
+    urlpatterns.append(path("admin/", admin.site.urls))
