@@ -314,6 +314,7 @@ main {
     color: #555;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
+    user-select: none;
 }
 
 .clue-list:not([hidden]) {
@@ -345,7 +346,12 @@ main {
     padding: 0;
     list-style: none;
 }
-  
+
+.clue-button,
+.clue-button * {
+  user-select: text;
+}
+
 .clue-button {
     appearance: none;
     -webkit-appearance: none;
@@ -390,6 +396,7 @@ main {
     text-align: right;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
+    user-select: none;
 }
 
 .clue-text {
@@ -397,11 +404,15 @@ main {
     overflow-wrap: break-word;
 }
 
+/* prepend non-breakable space */
+.clue-length-label::before {
+    content: "\00A0";
+}
+
 .clue-length-label {
     color: #6b7280;
     font-size: 0.90em;
-    margin-left: 0.3rem;
-    white-space: nowrap;
+    user-select: none;
 }
 
 .clue-empty {

@@ -144,6 +144,9 @@ class ClueRenderer implements ClueView {
     
       const clueButton = this.getClueButton(target);
       if (clueButton) {
+        // prevent clicks when user is copying text
+        const selection = window.getSelection();
+        if (selection && !selection.isCollapsed && selection.toString().trim()) return;
         this.handleClueButton(clueButton);
         return;
       }
