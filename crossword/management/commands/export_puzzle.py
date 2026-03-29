@@ -10,7 +10,7 @@ class Command(BaseCommand):
     help = "Export one puzzle to compact JSON."
 
     def add_arguments(self, parser):
-        parser.add_argument("puzzle_id", type=int)
+        parser.add_argument("board_id", type=int)
         parser.add_argument(
             "--out",
             type=str,
@@ -18,17 +18,17 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        puzzle_id = options["puzzle_id"]
+        board_id = options["board_id"]
         out_path = options.get("out")
 
         try:
             board = (
                 Board.objects
                 .prefetch_related("categories", "clue_placements__clue")
-                .get(id=puzzle_id)
+                .get(id=board_id)
             )
         except Board.DoesNotExist:
-            raise CommandError(f"Board with id={puzzle_id} does not exist.")
+            raise CommandError(f"Board with id={board_id} does not exist.")
 
         clue_entries = []
         placements = board.clue_placements.select_related("clue").all().order_by(
