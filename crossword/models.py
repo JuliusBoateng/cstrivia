@@ -47,7 +47,7 @@ class Board(models.Model):
     updated_at = models.DateTimeField(auto_now=True, editable=False) # also updates when saving CluePlacement
     
     def get_absolute_url(self):
-        return reverse("puzzle", kwargs={"id": self.id})
+        return reverse("puzzle", kwargs={"puzzle_number": self.puzzle_number})
 
     class Meta:
         ordering = ["puzzle_number"]
