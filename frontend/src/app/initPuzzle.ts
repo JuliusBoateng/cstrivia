@@ -87,5 +87,20 @@ function formatDate(isoString: string) {
       }).format(new Date(isoString));
 }
 
-export { createPuzzleController, createPuzzleHeader, createPuzzleMetadata, createSolutionExport };
+function initPuzzleToolbar() {
+    const toggle = document.getElementById("controls-toggle");
+    const panel = document.getElementById("controls-panel");
+  
+    if (!toggle || !panel) return;
+  
+    toggle.addEventListener("click", () => {
+        const expanded = toggle.ariaExpanded === "true";
+        const next = !expanded;
+    
+        toggle.ariaExpanded = String(next);
+        panel.hidden = !next;
+    });
+}
+
+export { createPuzzleController, createPuzzleHeader, createPuzzleMetadata, createSolutionExport, initPuzzleToolbar };
 

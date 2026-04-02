@@ -209,44 +209,75 @@ main {
     margin: 0;
 }
 
-.controls {
+.puzzle-toolbar {
+    display: flex;
+    align-items: center;
+    letter-spacing: 0em;
+    font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+    color: #6b7280;
+}
+
+.toolbar-separator {
+    margin: 0 0.4rem;
+    user-select: none;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.puzzle-toolbar button {
+    background: none;
+    border: none;
+    padding: 0.3rem 0.2rem;
+    font: inherit;
+    cursor: pointer;
+}
+
+.puzzle-toolbar button:hover {
+    background: #f2f2f2;
+    border-radius: 8px;
+}
+
+.puzzle-toolbar .controls-toggle::before {
+    content: "▶";
+    margin-right: 0.1rem;
+}
+  
+.puzzle-toolbar .controls-toggle[aria-expanded="true"]::before {
+    content: "▼";
+}
+
+.puzzle-toolbar .controls-toggle {
+    color: #374151;
+}
+
+.puzzle-toolbar .clear-puzzle {
+    color: #6b7280;
+}
+
+.puzzle-toolbar .clear-puzzle.confirming {
+    color: #374151;
+    font-weight: 600;
+}
+
+.toolbar-wrapper .controls-panel {
     width: min(100%, var(--clue-text));
-    margin-bottom: clamp(0.25rem, 0.8vw, 0.5rem);
     font-size: clamp(0.9rem, 1vw, 1rem);
     line-height: 1.4;
     color: #4b5563;
 }
 
-.controls summary {
-    cursor: pointer;
-    font-weight: 600;
-    color: #374151;
-    letter-spacing: 0em;
-    font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+.controls-panel {
     margin-bottom: 0.3rem;
 }
 
-.controls summary:hover {
-    background: #f2f2f2;
-    border-radius: 8px;
-}
-
-.controls[open] ul {
-    margin-top: 0.35rem;
-}
-
-.controls ul {
+.controls-panel ul {
     margin: 0;
 }
 
-.controls li {
-    margin-bottom: 0.3rem;
+.controls-panel li + li {
+    margin-top: 0.3rem;
 }
 
-.controls li:last-child {
-    margin-bottom: 0;
-}
- 
 .clue-wrapper {
     background: #f3f3f3;
     border-radius: 20px;
