@@ -29,9 +29,9 @@ type ClueCounts = {todoAcrossCount: number,
           solvedDownCount: number}
 
 interface ClueView {
-  resetActiveClue(): void;
-  setActiveClue(placementId: PlacementId): void;
   renderClues(solved: PlacementId[]): void;
+  clearClues(): void;
+  renderActiveClue(placementId: PlacementId): void;
 }
 
 const NullCursorController: CursorController = {
@@ -77,16 +77,19 @@ class ClueRenderer implements ClueView {
         this.navItems = [];
         this.navIndexMap = new Map<HTMLElement, number>()
         this.placementClueMap = new Map<PlacementId, HTMLLIElement>();
+    }
 
-        this.initClueLists();
-        this.initToggles();
-        this.initLabels();
-        this.initNavigation();
-        this.initPlacementClues();
-        this.initSections();
+    init(cursorController: CursorController) {
+      this.initClueLists();
+      this.initToggles();
+      this.initLabels();
+      this.initNavigation();
+      this.initPlacementClues();
+      this.initSections();
+      this.setCursorController(cursorController);
 
-        clueContainer.addEventListener("click", this.handleContainerClick);
-        clueContainer.addEventListener("keydown", this.handleContainerKeydown);
+      this.clueContainer.addEventListener("click", this.handleContainerClick);
+      this.clueContainer.addEventListener("keydown", this.handleContainerKeydown);
     }
 
     renderClues(solved: PlacementId[]): void {
@@ -94,28 +97,28 @@ class ClueRenderer implements ClueView {
       const clueCounts: ClueCounts = this.renderClueList(solvedSet);
       
       this.renderProgressCount(clueCounts);
-      this.updateEmptyState(clueCounts);
-      this.updateEmptyVisibility()
+      this.renderEmptyState(clueCounts);
+      this.renderClueVisibility()
     }
 
-    setCursorController(cursorController: CursorController) {
-      this.cursorController = cursorController;
+    clearClues(): void {
+      const clueCounts: ClueCounts = this.renderClueList(new Set<number>());      
+      this.renderProgressCount(clueCounts);
+      this.renderEmptyState(clueCounts);
+
+      this.renderClueVisibility()
+      this.clearActiveClue();
     }
 
-    setActiveClue(placementId: PlacementId): void {
+    renderActiveClue(placementId: PlacementId): void {
       const clue = this.placementClueMap.get(placementId);
       if (!clue) return;
 
-      this.resetActiveClue();
+      this.clearActiveClue();
 
       this.activeClue = clue;
       clue.classList.add(HIGHLIGHT);
       this.scrollClue(clue);
-    }
-
-    resetActiveClue() {
-      if (this.activeClue) this.activeClue.classList.remove(HIGHLIGHT);
-      this.activeClue = null;
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {
@@ -208,7 +211,7 @@ class ClueRenderer implements ClueView {
       button.setAttribute(ARIA_EXPANDED, String(!expanded));
       section.toggleAttribute(HIDDEN, expanded);
 
-      this.updateEmptyVisibility();
+      this.renderClueVisibility();
     }
 
     private handleClueButton(button: HTMLButtonElement) {
@@ -242,10 +245,12 @@ class ClueRenderer implements ClueView {
       spanElement.textContent = count > 0 ? String(count) : "";
     }
 
-    // Sets the clue card's empty state based on whether any clues are visible.
-    // A clue list is visible if its section is expanded, the list is expanded,
-    // and neither the section nor the list is marked as `.is-empty`.
-    private updateEmptyVisibility() {
+    /*
+      Sets the clue card's empty state based on whether any clues are visible.
+      A clue list is visible if its section is expanded, the list is expanded,
+      and neither the section nor the list is marked as `.is-empty`.
+    */
+    private renderClueVisibility() {
       const todoSectionVisible =
         !this.todoSection.hidden &&
         !this.todoSection.classList.contains("is-empty");
@@ -283,7 +288,7 @@ class ClueRenderer implements ClueView {
       this.clueContainer.classList.toggle("show-empty", !anyVisible);
     }
 
-    private updateEmptyState(clueCounts: ClueCounts) {
+    private renderEmptyState(clueCounts: ClueCounts) {
       const {todoAcrossCount, todoDownCount, solvedAcrossCount,
         solvedDownCount} = clueCounts;
     
@@ -346,6 +351,11 @@ class ClueRenderer implements ClueView {
       this.solvedDownClues.replaceChildren(solvedDownFrag);
 
       return clueCounts;
+    }
+
+    private clearActiveClue() {
+      if (this.activeClue) this.activeClue.classList.remove(HIGHLIGHT);
+      this.activeClue = null;
     }
 
     private getToggle(target: HTMLElement): HTMLButtonElement | null {
@@ -436,6 +446,10 @@ class ClueRenderer implements ClueView {
 
     private initPlacementClues() {
       this.placementClueMap = this.createPlacementClueMap();
+    }
+
+    private setCursorController(cursorController: CursorController) {
+      this.cursorController = cursorController;
     }
 }
 

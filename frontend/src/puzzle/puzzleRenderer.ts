@@ -11,6 +11,7 @@ const BOARD_HEADER_DEFAULT = "Click a clue or cell to begin";
 
 class PuzzleRenderer {
     private cellGrid: HTMLTableCellElement[][];
+    private fillGrid: (HTMLElement | null)[][];
     private inputGrid: (HTMLInputElement | null)[][];
     private activePlacementId: number;
     private activePlacementCells: HTMLTableCellElement[];
@@ -20,6 +21,7 @@ class PuzzleRenderer {
 
     constructor(boardDom: BoardDom) {
         this.cellGrid = boardDom.cellGrid;
+        this.fillGrid = boardDom.fillGrid;
         this.inputGrid = boardDom.inputGrid;
         this.activePlacementId = -1;
         this.activePlacementCells = [];
@@ -38,21 +40,21 @@ class PuzzleRenderer {
         inputElement.value = letter ?? ""
     }
 
-    setActiveCursor(coord: Coord) {
+    renderActiveCursor(coord: Coord) {
         const cell = this.cellGrid[coord.row][coord.col];
         if (cell.classList.contains(BLOCK)) return;
         if (this.activeCursor === cell) return;
 
-        this.resetActiveCursor();
+        this.clearActiveCursor();
         cell.classList.add(HIGHLIGHT_CURSOR);
         this.activeCursor = cell;
 
         this.setFocus(coord);
     }
 
-    setActivePlacement(placementId: number, coords: Coord[]) {
+    renderActivePlacement(placementId: number, coords: Coord[]) {
         if (this.activePlacementId === placementId) return;
-        this.resetActivePlacement();
+        this.clearActivePlacement();
         
         const cells: HTMLTableCellElement[] = [];
         for (const { row, col } of coords) {
@@ -66,43 +68,64 @@ class PuzzleRenderer {
         this.activePlacementId = placementId;
     }
 
-    resetActiveElements() {
-        this.resetActiveCursor();
-        this.resetActivePlacement();
-        this.resetBoardHeader();
+    clearRenderer() {
+        this.clearAllAnimations()
+        this.clearInput();
+        this.clearActiveCursor();
+        this.clearActivePlacement();
+        this.clearBoardHeader();
     }
 
     renderDirectionRejection(coords: Coord[]) {
         const className = DIRECTION_REJECTION;
-        const fillElements = this.getFillElements(coords);
+        const fillElements = this.getFillFromCoords(coords);
         this.animateElements(fillElements, className);
     }
 
-    markPlacementSolved(coords: Coord[]) {
+    renderPlacementSolved(coords: Coord[]) {
         const className = ANIMATION_SUCCESS;
-        const fillElements = this.getFillElements(coords);
+        const fillElements = this.getFillFromCoords(coords);
         this.animateElements(fillElements, className);
     }
 
-    markPlacementIncorrect(coords: Coord[]) {
+    renderPlacementIncorrect(coords: Coord[]) {
         const className = ANIMATION_ERROR;
-        const fillElements = this.getFillElements(coords);
+        const fillElements = this.getFillFromCoords(coords);
         this.animateElements(fillElements, className);
     }
 
-    markPuzzleComplete(playableCells: Coord[]) {
-        const fillElements = this.getFillElements(playableCells);
+    renderPuzzleComplete(playableCells: Coord[]) {
+        const fillElements = this.getFillFromCoords(playableCells);
         this.animateElements(fillElements, ANIMATION_SUCCESS);
     }
 
-    updateBoardHeader(captionText: string) {
+    renderBoardHeader(captionText: string) {
         this.boardHeader.textContent = captionText;    
         this.boardHeader.title = captionText;
     }
 
-    private resetBoardHeader() {
-        this.boardHeader.textContent = BOARD_HEADER_DEFAULT;
-        this.boardHeader.title = BOARD_HEADER_DEFAULT;
+    private animateElements(elements: HTMLElement[], className: string) {
+        this.clearAnimations(elements);
+
+        // Double requestAnimationFrame ensures the browser processes the class
+        // removal in a separate frame before re-adding it. Otherwise the DOM
+        // changes may be batched together and the animation will not restart.
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                elements.forEach(element => element.classList.add(className));
+            });
+        });
+    }
+
+    private getFillFromCoords(coords: Coord[]): HTMLElement[] {
+        const fills: HTMLElement[] = [];
+
+        for (const coord of coords) {
+            let fill = this.fillGrid[coord.row][coord.col];
+            if (fill !== null) fills.push(fill);
+        }
+    
+        return fills;
     }
 
     private setFocus(coord: Coord) {
@@ -116,12 +139,21 @@ class PuzzleRenderer {
         this.focusedInput = inputElement;
     }
 
-    private resetFocus(): void {
+    private clearFocus(): void {
         this.focusedInput?.blur();
         this.focusedInput = null;
     }
 
-    private resetActivePlacement() {
+    private clearInput() {
+        for (const row of this.inputGrid) {
+            for (const inputElement of row) {
+                if (!inputElement) continue;
+                inputElement.value = "";
+            }
+        }
+    }
+
+    private clearActivePlacement() {
         for (const cell of this.activePlacementCells) {
             cell.classList.remove(HIGHLIGHT_WORD);
         }
@@ -129,34 +161,28 @@ class PuzzleRenderer {
         this.activePlacementCells = [];
     }
 
-    private resetActiveCursor() {
+    private clearActiveCursor() {
         if (!this.activeCursor) return;
         this.activeCursor.classList.remove(HIGHLIGHT_CURSOR);
         this.activeCursor = null;
-        this.resetFocus();
+        this.clearFocus();
     }
 
-    private getFillElements(coords: Coord[]): HTMLElement[] {
-        const fills = coords.map(coord => this.cellGrid[coord.row][coord.col].querySelector(".fill"))
-                        .filter((fill): fill is HTMLElement => (fill !== null));
-        return fills;
-    }
-
-    private animateElements(elements: HTMLElement[], className: string) {
-        this.clearAnimation(elements);
-
-        // Double requestAnimationFrame ensures the browser processes the class
-        // removal in a separate frame before re-adding it. Otherwise the DOM
-        // changes may be batched together and the animation will not restart.
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                elements.forEach(element => element.classList.add(className));
-            });
-        });
+    private clearAllAnimations() {
+        for (const row of this.fillGrid) {
+            for (const fill of row) {
+                if (!fill) continue;
+                this.clearAnimationClasses(fill);
+            }
+        }
     }
     
-    private clearAnimation(elements: HTMLElement[]) {
-        elements.forEach(element => element.classList.remove(ANIMATION_SUCCESS, ANIMATION_ERROR, DIRECTION_REJECTION));
+    private clearAnimations(elements: HTMLElement[]) {
+        elements.forEach(element => this.clearAnimationClasses(element));
+    }
+
+    private clearAnimationClasses(element: HTMLElement) {
+        element.classList.remove(ANIMATION_SUCCESS, ANIMATION_ERROR, DIRECTION_REJECTION)
     }
 
     private initializeBoardHeader(): HTMLParagraphElement {
@@ -170,6 +196,11 @@ class PuzzleRenderer {
 
         boardWrapper.prepend(boardHeader);
         return boardHeader;
+    }
+
+    private clearBoardHeader() {
+        this.boardHeader.textContent = BOARD_HEADER_DEFAULT;
+        this.boardHeader.title = BOARD_HEADER_DEFAULT;
     }
 }
 

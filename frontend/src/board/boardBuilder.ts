@@ -2,6 +2,7 @@ import { BoardView, Coord, Direction } from "../models/boardView.js";
 
 interface BoardDom {
     cellGrid: HTMLTableCellElement[][];
+    fillGrid: (HTMLElement | null)[][];
     inputGrid: (HTMLInputElement | null)[][];
 }
 
@@ -11,6 +12,7 @@ const FILL = "fill";
 
 function createBoard(boardView: BoardView, tableElement: HTMLTableElement): BoardDom {
     const cellGrid = initializeGrid<HTMLTableCellElement | null>();
+    const fillGrid = initializeGrid<HTMLElement | null>();
     const inputGrid = initializeGrid<HTMLInputElement | null>();
 
     const tbodyElement = createTableBodyElement();
@@ -18,6 +20,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     
     const dom: BoardDom = {
         cellGrid: cellGrid as HTMLTableCellElement[][],
+        fillGrid,
         inputGrid
     }
     
@@ -67,7 +70,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         const cell = boardView.getCell(coord)
         if (!cell) {
             cellElement.classList.add(BLOCK);
-            const fillContainer = createEmptyFillContainer()
+            const fillContainer = createEmptyFillContainer(coord)
             cellElement.appendChild(fillContainer)
             
             return cellElement;
@@ -89,14 +92,15 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         return cellElement;
     }
 
-    function createEmptyFillContainer(): HTMLDivElement {
+    function createEmptyFillContainer(coord: Coord): HTMLDivElement {
         const divElement = document.createElement("div");
         divElement.classList.add(FILL)
+        fillGrid[coord.row][coord.col] = divElement;
         return divElement
     }
 
     function createFillContainer(coord: Coord): HTMLDivElement {
-        const divElement = createEmptyFillContainer();
+        const divElement = createEmptyFillContainer(coord);
 
         const startingCell = boardView.isStartingCell(coord);
         if (startingCell) {

@@ -1,7 +1,5 @@
-import { createPuzzleController, createPuzzleHeader, createPuzzleMetadata, createSolutionExport, initPuzzleToolbar } from "./app/initPuzzle.js";
+import { initPuzzlePage, initPuzzleInteraction } from "./app/initPuzzle.js";
 import { getBoardView, getClueContainer, getSolutionView, getTableElement } from "./app/puzzleSetup.js";
-
-import { createClueRenderer } from "./clue/createClueRenderer.js";
 
 import { BoardView } from "./models/boardView.js";
 import { SolutionView } from "./models/solutionView.js";
@@ -16,13 +14,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         throw Error("SolutionView does not match BoardView")
     }
 
-    initPuzzleToolbar();
-    createPuzzleHeader(boardView);
-    createPuzzleMetadata(boardView);
-    createSolutionExport(boardView, solutionView);
-
-    const puzzleController = createPuzzleController(tableElement, boardView, solutionView);
-    const clueRenderer = createClueRenderer(boardView, clueContainer);
-    puzzleController.init(clueRenderer);
-    clueRenderer.setCursorController(puzzleController); // TODO add init
+    initPuzzlePage(boardView, solutionView);
+    initPuzzleInteraction(tableElement, boardView, solutionView, clueContainer);
 });

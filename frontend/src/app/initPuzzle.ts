@@ -5,7 +5,25 @@ import { PuzzleController } from "../puzzle/puzzleController.js";
 import { PuzzleRenderer } from "../puzzle/puzzleRenderer.js";
 import { PuzzleSession } from "../puzzle/puzzleSession.js";
 import { PuzzleValidator } from "../puzzle/puzzleValidator.js";
+import { createClueRenderer } from "../clue/createClueRenderer.js";
 
+function initPuzzlePage(boardView: BoardView, solutionView: SolutionView) {
+  renderPuzzleHeader(boardView);
+  renderPuzzleMetadata(boardView);
+  renderSolutionJson(boardView, solutionView);
+
+  initControlsToggle();
+}
+
+function initPuzzleInteraction(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView, clueContainer: HTMLDivElement) {
+  const puzzleController = createPuzzleController(tableElement, boardView, solutionView);
+  const clueRenderer = createClueRenderer(boardView, clueContainer);
+
+  puzzleController.init(clueRenderer);
+  clueRenderer.init(puzzleController);
+
+  initClearPuzzleButton(() => puzzleController.resetPuzzle());
+}
 
 function createPuzzleController(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
     const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);
@@ -21,7 +39,7 @@ function createPuzzleController(tableElement: HTMLTableElement, boardView: Board
 }
 
 
-function createPuzzleHeader(boardView: BoardView) {
+function renderPuzzleHeader(boardView: BoardView) {
     const puzzleNumber = boardView.board.puzzle_number;
     const title = boardView.board.title;
 
@@ -29,7 +47,7 @@ function createPuzzleHeader(boardView: BoardView) {
     boardTitle.textContent = title;
 }
 
-function createPuzzleMetadata(boardView: BoardView) {
+function renderPuzzleMetadata(boardView: BoardView) {
     const boardDescElement = document.querySelector(".board-desc")!;
     const desc = boardView.board.description || "";
 
@@ -51,7 +69,7 @@ function createPuzzleMetadata(boardView: BoardView) {
     boardDescElement.textContent = desc;
 }
 
-function createSolutionExport(boardView: BoardView, solutionView: SolutionView) {
+function renderSolutionJson(boardView: BoardView, solutionView: SolutionView) {
     const solutionJson = document.querySelector(".solution-json")!;
 
     const solutionExport = {
@@ -87,20 +105,73 @@ function formatDate(isoString: string) {
       }).format(new Date(isoString));
 }
 
-function initPuzzleToolbar() {
-    const toggle = document.getElementById("controls-toggle");
-    const panel = document.getElementById("controls-panel");
-  
-    if (!toggle || !panel) return;
-  
-    toggle.addEventListener("click", () => {
-        const expanded = toggle.ariaExpanded === "true";
-        const next = !expanded;
-    
-        toggle.ariaExpanded = String(next);
-        panel.hidden = !next;
-    });
+function initControlsToggle() {
+  const toggle = document.getElementById("controls-toggle");
+  const panel = document.getElementById("controls-panel");
+
+  if (!(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) {
+    return;
+  }
+
+  toggle.addEventListener("click", () => {
+    const expanded = toggle.ariaExpanded === "true";
+    const next = !expanded;
+
+    toggle.ariaExpanded = String(next);
+    panel.hidden = !next;
+  });
 }
 
-export { createPuzzleController, createPuzzleHeader, createPuzzleMetadata, createSolutionExport, initPuzzleToolbar };
+function initClearPuzzleButton(resetPuzzle: () => void) {
+  const clearButton = document.getElementById("clear-puzzle");
+  if (!(clearButton instanceof HTMLButtonElement)) return;
+
+  const CLEAR_LABEL = "Clear puzzle";
+  const CONFIRM_LABEL = "Click again to clear";
+  const CONFIRM_CLASS = "confirming";
+  const CONFIRM_TIMEOUT_MS = 2000;
+
+  let confirmTimer: number | null = null;
+
+  clearButton.addEventListener("click", handleClearClick);
+
+  function handleClearClick(event: MouseEvent) {
+    const button = event.currentTarget as HTMLButtonElement;
+    const isConfirming = button.classList.contains(CONFIRM_CLASS);
+
+    if (isConfirming) {
+      exitConfirmState(button);
+      resetPuzzle();
+      return;
+    }
+
+    enterConfirmState(button);
+  }
+
+  function enterConfirmState(button: HTMLButtonElement) {
+    if (confirmTimer !== null) {
+      clearTimeout(confirmTimer);
+      confirmTimer = null;
+    }
+
+    button.textContent = CONFIRM_LABEL;
+    button.classList.add(CONFIRM_CLASS);
+
+    confirmTimer = window.setTimeout(() => {
+      exitConfirmState(button);
+    }, CONFIRM_TIMEOUT_MS);
+  }
+
+  function exitConfirmState(button: HTMLButtonElement) {
+    if (confirmTimer !== null) {
+      clearTimeout(confirmTimer);
+      confirmTimer = null;
+    }
+
+    button.classList.remove(CONFIRM_CLASS);
+    button.textContent = CLEAR_LABEL;
+  }
+}
+
+export { initPuzzlePage, initPuzzleInteraction };
 
