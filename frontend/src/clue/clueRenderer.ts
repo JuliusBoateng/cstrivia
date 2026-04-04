@@ -87,6 +87,7 @@ class ClueRenderer implements ClueView {
       this.initSections();
       this.setCursorController(cursorController);
 
+      this.clueContainer.addEventListener("pointerdown", this.handleContainerPointerDown);
       this.clueContainer.addEventListener("click", this.handleContainerClick);
       this.clueContainer.addEventListener("keydown", this.handleContainerKeydown);
     }
@@ -133,6 +134,20 @@ class ClueRenderer implements ClueView {
         return;
       }
     }
+
+    /*
+      Preserves boad input focus when pressing a clue.
+      Without this focus falls to <body>, interrupting input focus.
+    */
+    private handleContainerPointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+    
+      const clue = this.getClue(target);
+      if (!clue) return;
+    
+      event.preventDefault();
+    };
 
     private handleContainerClick = (event: MouseEvent) => {
       const target = event.target;

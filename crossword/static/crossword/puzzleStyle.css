@@ -96,8 +96,10 @@ main {
     border: 2px solid #18181b;
     border-collapse: collapse;
     touch-action: manipulation;
-    user-select: none;
     contain: layout style paint;
+
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .board-header {
@@ -215,11 +217,13 @@ main {
     letter-spacing: 0em;
     font-size: clamp(0.95rem, 1.05vw, 1.05rem);
     color: #6b7280;
+
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .toolbar-separator {
     margin: 0 0.4rem;
-    user-select: none;
     color: #9ca3af;
     pointer-events: none;
 }
@@ -321,6 +325,9 @@ main {
     background: none;
     border: none;
 
+    user-select: none;
+    -webkit-user-select: none;
+
     padding: 0;
     margin: 0;
 }
@@ -344,7 +351,6 @@ main {
     color: #555;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
-    user-select: none;
 }
 
 .clue-list:not([hidden]) {
@@ -377,12 +383,15 @@ main {
     border-radius: 4px;
     list-style: none;
 
+    user-select: none;
+    -webkit-user-select: none;
+
     display: grid;
     grid-template-columns: 2ch 1fr;
     gap: 0.5rem;
     width: 100%;
     align-items: start;
-    
+
     cursor: pointer;
     transition: background-color 120ms ease;
 }
@@ -403,7 +412,6 @@ main {
     text-align: right;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
-    user-select: none;
 }
 
 .clue-text {
@@ -419,7 +427,6 @@ main {
 .clue-length-label {
     color: #6b7280;
     font-size: 0.90em;
-    user-select: none;
 }
 
 .clue-empty {
