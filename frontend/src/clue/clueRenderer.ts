@@ -6,7 +6,6 @@ const CLUE = ".clue"
 const ARIA_CONTROLS = "aria-controls";
 const ARIA_EXPANDED = "aria-expanded";
 const HIDDEN = "hidden";
-const NAV_SELECTOR = ".clue-toggle";
 const HIGHLIGHT = "highlight";
 const TODO_ACROSS_CLUES = "#todo-across-clues";
 const TODO_DOWN_CLUES = "#todo-down-clues";
@@ -40,8 +39,6 @@ const NullCursorController: CursorController = {
 class ClueRenderer implements ClueView {
     private clueContainer: HTMLDivElement;
     private cursorController: CursorController;
-    private navItems: HTMLElement[];
-    private navIndexMap: Map<HTMLElement, number>;
     private placementClueMap: Map<PlacementId, HTMLLIElement>;
     private activeClue: HTMLLIElement | null; 
 
@@ -73,8 +70,6 @@ class ClueRenderer implements ClueView {
         this.cursorController = NullCursorController;
         this.activeClue = null;
 
-        this.navItems = [];
-        this.navIndexMap = new Map<HTMLElement, number>()
         this.placementClueMap = new Map<PlacementId, HTMLLIElement>();
     }
 
@@ -82,7 +77,6 @@ class ClueRenderer implements ClueView {
       this.initClueLists();
       this.initToggles();
       this.initLabels();
-      this.initNavigation();
       this.initPlacementClues();
       this.initSections();
       this.setCursorController(cursorController);
@@ -127,12 +121,6 @@ class ClueRenderer implements ClueView {
         this.handleAction(event);
         return;
       }
-      
-      if (this.isVerticalArrowPress(event)) {
-        event.preventDefault();
-        this.handleVerticalArrowPress(event);
-        return;
-      }
     }
 
     /*
@@ -168,30 +156,6 @@ class ClueRenderer implements ClueView {
     
     private isActionKey(event: KeyboardEvent) {
       return ((event.key === "Enter") || (event.key === " "))
-    }
-
-    private isVerticalArrowPress(event: KeyboardEvent) {
-      return ((event.key === "ArrowDown") || (event.key === "ArrowUp"))
-    }
-
-    private handleVerticalArrowPress(event: KeyboardEvent) {
-      const target = event.target;
-      if (!(target instanceof HTMLElement)) return;
-
-      const start = target.closest(NAV_SELECTOR) as HTMLElement | null;
-      if (!start) return;
-    
-      const index = this.navIndexMap.get(start);
-      if (index === undefined) return;
-    
-      const delta = event.key === "ArrowDown" ? 1 : -1;
-      const length = this.navItems.length;
-      
-      if (length === 0) return;
-      
-      const nextIndex = (index + delta + length) % length;
-      
-      this.navItems[nextIndex].focus();
     }
 
     private handleAction(event: KeyboardEvent) {
@@ -383,16 +347,6 @@ class ClueRenderer implements ClueView {
       return clue;
     }
 
-    private createNavItems() {
-      return Array.from(this.clueContainer.querySelectorAll<HTMLElement>(NAV_SELECTOR));
-    }
-
-    private createNavIndexMap(navItems: HTMLElement[]) {
-      const navIndexMap = new Map<HTMLElement, number>();
-      navItems.forEach((element, index) => {navIndexMap.set(element, index)});
-      return navIndexMap;
-    }
-
     private createPlacementClueMap(): Map<PlacementId, HTMLLIElement> {
       const placementClueMap = new Map<PlacementId, HTMLLIElement>();
 
@@ -450,11 +404,6 @@ class ClueRenderer implements ClueView {
     private initSections() {
       this.todoSection = this.clueContainer.querySelector(TODO_SECTION)!;
       this.solvedSection = this.clueContainer.querySelector(SOLVED_SECTION)!;
-    }
-
-    private initNavigation() {
-      this.navItems = this.createNavItems();
-      this.navIndexMap = this.createNavIndexMap(this.navItems);
     }
 
     private initPlacementClues() {
