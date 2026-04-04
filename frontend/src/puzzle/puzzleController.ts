@@ -53,6 +53,7 @@ class PuzzleController implements CursorController {
     public init(clueView: ClueView) {
         this.setClueView(clueView)
 
+        this.tableElement.addEventListener("focus", this.handleFocus, true);
         this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
         this.tableElement.addEventListener("beforeinput", this.handleBeforeInput);
         this.tableElement.addEventListener("keydown", this.handleKeydown);
@@ -72,6 +73,13 @@ class PuzzleController implements CursorController {
         this.session.moveCursorToPlacement(placementId);
         this.renderCursorVisuals();
     }
+
+    private handleFocus = (event: FocusEvent) => {
+        const target = event.target;
+        if (!(target instanceof HTMLInputElement)) return;
+      
+        this.renderCursorVisuals();
+      };
 
     private handlePointerInput = (event: PointerEvent) => {
         if (!event.isPrimary) return; // ignore multi-touch / secondary stylus
