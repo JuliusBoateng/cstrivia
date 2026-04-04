@@ -2,12 +2,11 @@ import { Direction, PlacementId } from "../models/boardView.js";
 import { CursorController } from "../puzzle/puzzleController.js";
 
 const CLUE_TOGGLE = ".clue-toggle";
-const CLUE_BUTTON = ".clue-button";
-const CLUE_ITEM = ".clue"
+const CLUE = ".clue"
 const ARIA_CONTROLS = "aria-controls";
 const ARIA_EXPANDED = "aria-expanded";
 const HIDDEN = "hidden";
-const NAV_SELECTOR = ".clue-toggle, .clue-button";
+const NAV_SELECTOR = ".clue-toggle";
 const HIGHLIGHT = "highlight";
 const TODO_ACROSS_CLUES = "#todo-across-clues";
 const TODO_DOWN_CLUES = "#todo-down-clues";
@@ -145,16 +144,13 @@ class ClueRenderer implements ClueView {
         return;
       }
     
-      const clueButton = this.getClueButton(target);
-      if (clueButton) {
-        // prevent clicks when user is copying text
-        const selection = window.getSelection();
-        if (selection && !selection.isCollapsed && selection.toString().trim()) return;
-        this.handleClueButton(clueButton);
+      const clue = this.getClue(target);
+      if (clue) {
+        this.handleClue(clue);
         return;
       }
     };
-
+    
     private isActionKey(event: KeyboardEvent) {
       return ((event.key === "Enter") || (event.key === " "))
     }
@@ -193,9 +189,10 @@ class ClueRenderer implements ClueView {
         return;
       }
 
-      const clueButton = this.getClueButton(target);
-      if (clueButton) {
-        this.handleClueButton(clueButton);
+      const clue = this.getClue(target);
+      if (clue) {
+        this.handleClue(clue);
+        return;
       }
     }
 
@@ -214,11 +211,12 @@ class ClueRenderer implements ClueView {
       this.renderClueVisibility();
     }
 
-    private handleClueButton(button: HTMLButtonElement) {
-      const placementId = button.dataset.placementId;
+    private handleClue(clue: HTMLLIElement) {
+      const placementId = clue.dataset.placementId;
       if (!placementId) return;
   
       this.cursorController.moveCursorToPlacement(Number(placementId));
+      console.log("active element:", document.activeElement);
     };
 
     private renderProgressCount(clueCounts: ClueCounts) {
@@ -364,10 +362,10 @@ class ClueRenderer implements ClueView {
       return toggle;
     }
 
-    private getClueButton(target: HTMLElement): HTMLButtonElement | null {
-      const clueButton = target.closest(CLUE_BUTTON) as HTMLButtonElement | null;
-      if (!clueButton || !this.clueContainer.contains(clueButton)) return null;
-      return clueButton;
+    private getClue(target: HTMLElement): HTMLLIElement | null {
+      const clue = target.closest(CLUE) as HTMLLIElement | null;
+      if (!clue || !this.clueContainer.contains(clue)) return null;
+      return clue;
     }
 
     private createNavItems() {
@@ -383,12 +381,12 @@ class ClueRenderer implements ClueView {
     private createPlacementClueMap(): Map<PlacementId, HTMLLIElement> {
       const placementClueMap = new Map<PlacementId, HTMLLIElement>();
 
-      const clueItems = this.clueContainer.querySelectorAll<HTMLLIElement>(CLUE_ITEM);
-      for (const element of clueItems) {
-        const placementId = element.dataset.placementId;
+      const clues = this.clueContainer.querySelectorAll<HTMLLIElement>(CLUE);
+      for (const clue of clues) {
+        const placementId = clue.dataset.placementId;
         if (!placementId) continue;
     
-        placementClueMap.set(Number(placementId), element);
+        placementClueMap.set(Number(placementId), clue);
       }
 
       return placementClueMap;

@@ -373,52 +373,29 @@ main {
   
 .clue {
     margin: 0;
-    padding: 0;
+    padding: 2px 4px;
+    border-radius: 4px;
     list-style: none;
-}
-
-.clue-button,
-.clue-button * {
-  user-select: text;
-}
-
-.clue-button {
-    appearance: none;
-    -webkit-appearance: none;
-    background: none;
-    border: none;
-    font: inherit;
-    color: inherit;
-    text-align: left;
-    line-height: inherit;
-    margin: 0;
 
     display: grid;
     grid-template-columns: 2ch 1fr;
     gap: 0.5rem;
     width: 100%;
-
-    padding: 2px 4px;
-    border-radius: 4px;
     align-items: start;
+    
     cursor: pointer;
     transition: background-color 120ms ease;
 }
 
-.clue-button:hover {
+.clue:hover {
     background: #e0e4f1;
 }
 
-.clue-button:active {
+.clue:active {
     background: #b6bddc;
 }
 
-.clue-button:focus-visible {
-    outline: 2px solid #6A6D8F;
-    outline-offset: 2px;
-}
-
-.clue.highlight .clue-button {
+.clue.highlight {
     background: #c9d0e6;
 }
 

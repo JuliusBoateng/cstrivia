@@ -5,7 +5,6 @@ const CLUE_TEXT = "clue-text";
 const CLUE_LABEL = "clue-label";
 const CLUE_LENGTH_LABEL = "clue-length-label";
 const CLUE_COUNT = ".clue-count";
-const CLUE_BUTTON = "clue-button";
 
 const TODO_TOGGLE = "#todo-toggle";
 const TODO_ACROSS_TOGGLE = "#todo-across-toggle";
@@ -63,22 +62,17 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     function createClue(placement: Placement, clue: Clue): HTMLLIElement {
         const liElement = document.createElement("li");
         liElement.classList.add(CLUE);
-
+    
         liElement.dataset.placementId = placement.id.toString();
         liElement.dataset.placementDirection = placement.direction;
-
-        const button = createButton();
-        button.dataset.placementId = placement.id.toString();
-        button.dataset.placementDirection = placement.direction;
-        
+    
         const textSpan = createLiText(clue);
         const lengthSpan = createLenLabel(placement);
         textSpan.appendChild(lengthSpan);
-
+    
         const labelSpan = createLabel(placement);
-        button.append(labelSpan, textSpan);
-        
-        liElement.appendChild(button);
+        liElement.append(labelSpan, textSpan);
+    
         return liElement;
     }
 
@@ -108,13 +102,6 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         labelSpan.textContent = label.toString();
 
         return labelSpan;
-    }
-
-    function createButton(): HTMLButtonElement {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.classList.add(CLUE_BUTTON);
-        return button;
     }
 
     function setToggleCount(button: HTMLButtonElement, count: number) {
