@@ -28,7 +28,7 @@
       "start_col": 1
     },
     {
-      "question": "Database company inspired by early relational model research; first to market a commercial relational DB in 1979",
+      "question": "Database company inspired by early relational model research; first to market a commercial relational database in 1979",
       "display_answer": "ORACLE",
       "direction": "A",
       "start_row": 4,
@@ -77,7 +77,7 @@
       "start_col": 11
     },
     {
-      "question": "Distributed systems theorem proposed by Eric Brewer stating only two of the three can be guaranteed: consistency, availability, partition tolerance",
+      "question": "Distributed systems theorem proposed by Eric Brewer stating only two of three can be guaranteed: consistency, availability, partition tolerance",
       "display_answer": "CAP",
       "direction": "D",
       "start_row": 7,

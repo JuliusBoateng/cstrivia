@@ -9,7 +9,7 @@ from django.utils import timezone
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=16, unique=True)
+    name = models.CharField(max_length=32, unique=True)
 
     class Meta:
         ordering = ["name"]
