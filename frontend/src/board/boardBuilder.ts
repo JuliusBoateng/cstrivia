@@ -128,6 +128,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
     function createInputElement(): HTMLInputElement {
         const inputElement = document.createElement("input");
         inputElement.maxLength = 1;
+        inputElement.tabIndex = -1;
         inputElement.autocomplete = "off";
         inputElement.spellcheck = false;
         inputElement.autocapitalize = "characters";

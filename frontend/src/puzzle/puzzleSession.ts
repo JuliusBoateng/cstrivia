@@ -104,20 +104,31 @@ class PuzzleSession {
         this.setCursorState(coord, placement, position.placement_index);
     }
 
-    movePlacementBy(offset: number) {
+    movePlacementBy(offset: number): boolean {
         const placements = this.boardView.getPlacements();
-
+    
         const index = placements.findIndex(placement => placement.id === this.activePlacement.id);
-        if (index < 0) return;
-
-        const nextIndex = (index + offset + placements.length) % placements.length;
+        if (index < 0) return false;
+    
+        // bounds check
+        const nextIndex = index + offset;
+        if (nextIndex < 0 || nextIndex >= placements.length) {
+            return false;
+        }
+    
         const nextPlacement = placements[nextIndex];
-
+    
         this.activePlacement = nextPlacement;
         this.activePlacementIndex = 0;
-        const coord = {row: this.activePlacement.start_row, col: this.activePlacement.start_col} as Coord;
-
+    
+        const coord = {
+            row: this.activePlacement.start_row,
+            col: this.activePlacement.start_col
+        } as Coord;
+    
         this.moveCursor(coord);
+    
+        return true;
     }
 
     setDirection(desired: Direction) {

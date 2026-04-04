@@ -40,10 +40,29 @@ class PuzzleRenderer {
         inputElement.value = letter ?? ""
     }
 
+    /*
+        Does not highlight or focus cell. Makes cell tab-able
+    */
+    initActiveCursor(coord: Coord) {
+        const cell = this.cellGrid[coord.row][coord.col];
+        if (cell.classList.contains(BLOCK)) return;
+
+        this.clearActiveCursor();
+        this.activeCursor = cell;
+        // No highlight
+
+        // Does not actually focus
+        const inputElement: HTMLInputElement | null = this.inputGrid[coord.row][coord.col];
+        if (!inputElement) return;
+
+        inputElement.tabIndex = 0;
+        this.focusedInput = inputElement;
+    }
+
     renderActiveCursor(coord: Coord) {
         const cell = this.cellGrid[coord.row][coord.col];
         if (cell.classList.contains(BLOCK)) return;
-        if (this.activeCursor === cell) return;
+        if (this.activeCursor === cell && cell.classList.contains(HIGHLIGHT_CURSOR)) return;
 
         this.clearActiveCursor();
         cell.classList.add(HIGHLIGHT_CURSOR);
@@ -130,17 +149,19 @@ class PuzzleRenderer {
 
     private setFocus(coord: Coord) {
         const inputElement: HTMLInputElement | null = this.inputGrid[coord.row][coord.col];
-        if (!inputElement) {
-            throw new Error("Input element not found for coord");
-        }
+        if (!inputElement) return;
 
+        inputElement.tabIndex = 0;
         inputElement.focus();
         inputElement.setSelectionRange(0, 1);
         this.focusedInput = inputElement;
     }
 
     private clearFocus(): void {
-        this.focusedInput?.blur();
+        if (!this.focusedInput) return;
+
+        this.focusedInput.tabIndex = -1;
+        this.focusedInput.blur();
         this.focusedInput = null;
     }
 

@@ -52,6 +52,7 @@ class PuzzleController implements CursorController {
 
     public init(clueView: ClueView) {
         this.setClueView(clueView)
+        this.initActiveCursor();
 
         this.tableElement.addEventListener("focus", this.handleFocus, true);
         this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
@@ -61,6 +62,11 @@ class PuzzleController implements CursorController {
 
     private setClueView(clueView: ClueView) {
         this.clueView = clueView;
+    }
+
+    private initActiveCursor() {
+        const coord = this.session.getCoord();
+        this.renderer.initActiveCursor(coord);
     }
 
     resetPuzzle() {
@@ -168,8 +174,10 @@ class PuzzleController implements CursorController {
         }
 
         else if (this.isTabKey(event)) {
-            event.preventDefault();
-            this.handleTabInput(event);
+            const handled = this.handleTabInput(event);
+            if (handled) {
+                event.preventDefault();
+            }
         }
         
         else if (this.isHorizontalArrow(event)) {
@@ -188,11 +196,17 @@ class PuzzleController implements CursorController {
         if (hasChanged) this.renderCursorVisuals();
     }
 
-    private handleTabInput(event: KeyboardEvent) {
+    private handleTabInput(event: KeyboardEvent): boolean {
         const offset = event.shiftKey ? -1 : 1;
-        this.session.movePlacementBy(offset);
+        const handled = this.session.movePlacementBy(offset);
+    
+        if (!handled) {
+            // Let browser move focus normally
+            return false;
+        }
     
         this.renderCursorVisuals();
+        return true;
     }
 
     private handleEnterInput(event: KeyboardEvent) {

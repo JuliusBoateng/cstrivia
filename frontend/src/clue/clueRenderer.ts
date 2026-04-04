@@ -195,7 +195,6 @@ class ClueRenderer implements ClueView {
       if (!placementId) return;
   
       this.cursorController.moveCursorToPlacement(Number(placementId));
-      console.log("active element:", document.activeElement);
     };
 
     private renderProgressCount(clueCounts: ClueCounts) {
