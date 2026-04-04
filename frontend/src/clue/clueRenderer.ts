@@ -27,6 +27,7 @@ type ClueCounts = {todoAcrossCount: number,
           solvedDownCount: number}
 
 interface ClueView {
+  focusToggle(): void;
   renderClues(solved: PlacementId[]): void;
   clearClues(): void;
   renderActiveClue(placementId: PlacementId): void;
@@ -84,6 +85,10 @@ class ClueRenderer implements ClueView {
       this.clueContainer.addEventListener("pointerdown", this.handleContainerPointerDown);
       this.clueContainer.addEventListener("click", this.handleContainerClick);
       this.clueContainer.addEventListener("keydown", this.handleContainerKeydown);
+    }
+
+    focusToggle() {
+      this.todoToggle.focus();
     }
 
     renderClues(solved: PlacementId[]): void {

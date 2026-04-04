@@ -23,6 +23,7 @@ function hasSetDifference<T>(a: T[], b: T[]): boolean {
 const BLOCK = "block";
 
 const NullClueView: ClueView = {
+    focusToggle(): void {},
     renderClues(_solved: PlacementId[]): void {},
     clearClues(): void {},
     renderActiveClue(_placementId: PlacementId): void {},
@@ -174,12 +175,15 @@ class PuzzleController implements CursorController {
         }
 
         else if (this.isTabKey(event)) {
-            const handled = this.handleTabInput(event);
-            if (handled) {
-                event.preventDefault();
-            }
+            event.preventDefault();
+            this.handleTabInput(event);
         }
         
+        else if (this.isEscapeKey(event)) {
+            event.preventDefault();
+            this.handleEscapeInput();
+        }
+
         else if (this.isHorizontalArrow(event)) {
             event.preventDefault();
             this.handleHorizontalArrowInput(event);
@@ -196,17 +200,15 @@ class PuzzleController implements CursorController {
         if (hasChanged) this.renderCursorVisuals();
     }
 
-    private handleTabInput(event: KeyboardEvent): boolean {
+    private handleTabInput(event: KeyboardEvent) {
         const offset = event.shiftKey ? -1 : 1;
-        const handled = this.session.movePlacementBy(offset);
-    
-        if (!handled) {
-            // Let browser move focus normally
-            return false;
-        }
+        this.session.movePlacementBy(offset);
     
         this.renderCursorVisuals();
-        return true;
+    }
+
+    private handleEscapeInput() {    
+        this.clueView.focusToggle();
     }
 
     private handleEnterInput(event: KeyboardEvent) {
@@ -277,6 +279,10 @@ class PuzzleController implements CursorController {
 
     private isTabKey(event: KeyboardEvent) {
         return event.key === "Tab";
+    }
+
+    private isEscapeKey(event: KeyboardEvent): boolean {
+        return event.key === "Escape";
     }
 
     private isSpace(event: KeyboardEvent) {
