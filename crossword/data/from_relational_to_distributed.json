@@ -1,47 +1,48 @@
 {
   "board": {
-    "title": "From Relational To Distributed",
+    "title": "From Relational to Distributed",
     "author": "Julius Boateng",
     "puzzle_number": 2,
     "published_at": "2026-03-31T12:00:00Z",
-    "description": "From early relational models to large-scale distributed systems, many foundational ideas about storing data remain the same",
+    "description": "From early relational models to large-scale distributed systems, many foundational ideas about storing data remain the same.",
     "rows": 15,
     "cols": 15,
     "categories": [
-      "Databases"
+      "Databases",
+      "Distributed Systems"
     ]
   },
   "clues": [
     {
-      "question": "Query language developed during System R project; not strictly relational, allows duplicates, nulls, and ordered results",
+      "question": "Query language developed during System R database project; not strictly relational, allows duplicates, nulls, and ordered results",
       "display_answer": "SQL",
       "direction": "A",
       "start_row": 2,
       "start_col": 11
     },
     {
-      "question": "Google's 2006 distributed storage system that influenced modern NoSQL databases; scales petabytes",
+      "question": "Google's 2006 distributed wide-column storage system that influenced modern NoSQL databases",
       "display_answer": "BIGTABLE",
       "direction": "A",
       "start_row": 3,
       "start_col": 1
     },
     {
-      "question": "Company inspired by relational database research; beat inventors to market with a commercial database in 1979",
+      "question": "Database company inspired by early relational model research; first to market a commercial relational DB in 1979",
       "display_answer": "ORACLE",
       "direction": "A",
       "start_row": 4,
       "start_col": 9
     },
     {
-      "question": "Open-source distributed in-memory cache for web apps",
+      "question": "In-memory cache for web apps; influenced Redis and large-scale web caching",
       "display_answer": "MEMCACHED",
       "direction": "A",
       "start_row": 6,
       "start_col": 3
     },
     {
-      "question": "Company behind System R project that proved relational model practical",
+      "question": "Computing giant behind System R database project that proved relational model practical",
       "display_answer": "IBM",
       "direction": "A",
       "start_row": 7,
@@ -55,7 +56,7 @@
       "start_col": 1
     },
     {
-      "question": "Open-source framework inspired by Google's Bigtable and MapReduce papers",
+      "question": "Open-source data processing framework inspired by Google's 2004 MapReduce and 2006 Bigtable papers",
       "display_answer": "HADOOP",
       "direction": "A",
       "start_row": 11,
@@ -69,14 +70,14 @@
       "start_col": 4
     },
     {
-      "question": "Horizontal scaling strategy that distributes data across servers",
+      "question": "Horizontal database scaling strategy that partitions data across servers; named after broken pottery fragments",
       "display_answer": "SHARDING",
       "direction": "D",
       "start_row": 2,
       "start_col": 11
     },
     {
-      "question": "Distributed systems theorem proving only two of three can be guaranteed: consistency, availability, partition tolerance",
+      "question": "Distributed systems theorem proposed by Eric Brewer stating only two of the three can be guaranteed: consistency, availability, partition tolerance",
       "display_answer": "CAP",
       "direction": "D",
       "start_row": 7,
