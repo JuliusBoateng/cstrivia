@@ -59,7 +59,7 @@ class Board(models.Model):
         ]
 
     def clean(self):
-        self.title = self.title.strip().title()
+        self.title = self.title.strip()
 
         if self.rows != self.cols:
             raise ValidationError(
