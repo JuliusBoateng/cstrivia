@@ -76,14 +76,14 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         textSpan.appendChild(lengthSpan);
     
         const labelSpan = createLabel(placement);
-        const { button, handleCopy } = createCopyButton(clue.question);        
+        const { button, revealCopyButton } = createCopyButton(clue.question);        
         liElement.append(labelSpan, textSpan, button);
 
-        addLongPressListener(liElement, handleCopy);
+        addLongPressListener(liElement, revealCopyButton);
 
         return liElement;
 
-        function addLongPressListener(liElement: HTMLLIElement, handleCopy: () => Promise<void>) {
+        function addLongPressListener(liElement: HTMLLIElement, onLongPress: () => void) {
             let timer: number | null = null;
             const LONG_PRESS_MS = 500;
 
@@ -91,7 +91,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
                 cancel();
         
                 timer = window.setTimeout(() => {
-                    void handleCopy();
+                    void onLongPress();
                     timer = null;
                 }, LONG_PRESS_MS);
             }
@@ -138,22 +138,23 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         return labelSpan;
     }
 
-    function createCopyButton(clueText: string): {button: HTMLButtonElement, handleCopy: () => Promise<void>} {
-        const button = buildButton();
+    function createCopyButton(clueText: string): {button: HTMLButtonElement, revealCopyButton: () => void} {
+        const TIMEOUT_MS = 800;
+        let copiedTimeout: number | null = null;
 
         // Prevent button from stealing focus
+        const button = buildButton();       
         button.addEventListener("pointerdown", (event) => {
             event.preventDefault();
             event.stopPropagation();
         });
-
-        const handleCopy = createCopyHandler(button, clueText);
+    
         button.addEventListener("click", (event) => {
             event.stopPropagation();
-            void handleCopy();
+            void copyClue();
         });
-
-        return { button, handleCopy };
+    
+        return { button, revealCopyButton };
 
         function buildButton() {
             const button = document.createElement("button");
@@ -167,6 +168,10 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
             button.append(copyImg, checkImg);
         
             return button;
+        }
+        
+        function revealCopyButton() {
+            showTemporarily(button);
         }
 
         function showTemporarily(button: HTMLButtonElement): boolean {
@@ -188,6 +193,11 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
             button.ariaLabel = COPY_ARIA;
         }
 
+        function setCopiedState(button: HTMLButtonElement) {
+            button.classList.add(COPIED_CLASS);
+            button.ariaLabel = COPIED_ARIA;
+        }
+
         function hideTemporarily(button: HTMLButtonElement) {
             if (temporarilyVisibleCopyButton === button) temporarilyVisibleCopyButton = null;
         
@@ -195,40 +205,26 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
             resetCopyState(button);
         }
 
-        function createCopyHandler(button: HTMLButtonElement, clueText: string): () => Promise<void> {
-            let copiedTimeout: number | null = null;
-            const TIMEOUT_MS = 800;
-        
-            return async function (): Promise<void> {
-                const wasTemporarilyShown = showTemporarily(button);
-        
-                try {
-                    await navigator.clipboard.writeText(clueText);
-        
-                    button.classList.add(COPIED_CLASS);
-                    button.ariaLabel = COPIED_ARIA;
-        
-                    if (copiedTimeout !== null) {
-                        clearTimeout(copiedTimeout);
-                    }
-        
-                    copiedTimeout = window.setTimeout(() => {
-                        if (wasTemporarilyShown) {
-                            hideTemporarily(button);
-                        } else {
-                            resetCopyState(button);
-                        }
-        
-                        copiedTimeout = null;
-                    }, TIMEOUT_MS);
-                } catch (err) {
-                    if (wasTemporarilyShown) {
-                        hideTemporarily(button);
-                    }
-        
-                    console.error("Failed to copy clue:", err);
-                }
-            };
+        async function copyClue(): Promise<void> {
+            const wasTemporarilyShown = showTemporarily(button);
+    
+            try {
+                await navigator.clipboard.writeText(clueText);
+                setCopiedState(button);
+    
+                if (copiedTimeout !== null) clearTimeout(copiedTimeout);
+    
+                copiedTimeout = window.setTimeout(() => {
+                    if (wasTemporarilyShown) hideTemporarily(button);
+                    else resetCopyState(button);
+    
+                    copiedTimeout = null;
+                }, TIMEOUT_MS);
+            } catch (err) {
+                if (wasTemporarilyShown) hideTemporarily(button);
+    
+                console.error("Failed to copy clue:", err);
+            }
         }
     }
 
