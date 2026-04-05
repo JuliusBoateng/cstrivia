@@ -28,20 +28,24 @@ const COPY_ARIA = "Copy clue";
 const COPIED_ARIA = "Copied clue";
 
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
-    let temporarilyVisibleCopyButton: HTMLButtonElement | null = null;
+    let currentlyVisibleCopyButton: HTMLButtonElement | null = null;
+    initSolvedSection();
 
-    const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
     const placements = boardView.getPlacements();
-    const {acrossTodoClues, downTodoClues} = createTodoClues(placements, clueMap);
+    const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
+    createTodoSection(placements, clueMap);
+
+    function createTodoSection(placements: Placement[], clueMap: Map<PlacementId, Clue>) {
+        const { acrossTodoClues, downTodoClues } = createTodoClues(placements, clueMap);
+
+        renderTodoToggle(acrossTodoClues.length, downTodoClues.length);
     
-    initializeSolvedToggles();
-    renderTodoToggle(acrossTodoClues.length, downTodoClues.length);
+        const { acrossClueContainer, acrossTodoToggle } = queryTodoAcrossElements();    
+        renderTodoClues(acrossClueContainer, acrossTodoToggle, acrossTodoClues);
 
-    const {acrossClueContainer, acrossTodoToggle} = queryTodoAcrossElements();
-    const {downClueContainer, downTodoToggle} = queryTodoDownElements();
-
-    renderTodoClues(acrossClueContainer, acrossTodoToggle, acrossTodoClues);
-    renderTodoClues(downClueContainer, downTodoToggle, downTodoClues);
+        const { downClueContainer, downTodoToggle } = queryTodoDownElements();
+        renderTodoClues(downClueContainer, downTodoToggle, downTodoClues);
+    }
 
     function createTodoClues(placements: Placement[], clueMap: Map<PlacementId, Clue>):
         {acrossTodoClues: HTMLLIElement[], downTodoClues: HTMLLIElement[]} {
@@ -54,14 +58,11 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     
             const liElement = createClueElement(placement, clue);
         
-            if (placement.direction === Direction.A) {
-                acrossTodoClues.push(liElement);
-            } else {
-                downTodoClues.push(liElement);
-            }
+            if (placement.direction === Direction.A) acrossTodoClues.push(liElement);
+            else downTodoClues.push(liElement);
         }
 
-        return {acrossTodoClues, downTodoClues};
+        return { acrossTodoClues, downTodoClues };
     }
 
     function createClueElement(placement: Placement, clue: Clue): HTMLLIElement {
@@ -74,12 +75,12 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const textSpan = createLiText(clue);
         const lengthSpan = createLenLabel(placement);
         textSpan.appendChild(lengthSpan);
-    
-        const labelSpan = createLabel(placement);
-        const { button, revealCopyButton } = createCopyButton(clue.question);        
-        liElement.append(labelSpan, textSpan, button);
 
-        addLongPressListener(liElement, revealCopyButton);
+        const labelSpan = createLabel(placement);
+        const copyButton = createCopyButton(clue.question);
+        liElement.append(labelSpan, textSpan, copyButton);
+
+        addLongPressListener(liElement, () => revealCopyButton(copyButton));
 
         return liElement;
 
@@ -89,20 +90,20 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
 
             function start() {
                 cancel();
-        
+
                 timer = window.setTimeout(() => {
-                    void onLongPress();
+                    onLongPress();
                     timer = null;
                 }, LONG_PRESS_MS);
             }
-    
+
             function cancel() {
                 if (timer !== null) {
                     clearTimeout(timer);
                     timer = null;
                 }
             }
-    
+
             liElement.addEventListener("touchstart", start, { passive: true });
             liElement.addEventListener("touchend", cancel);
             liElement.addEventListener("touchcancel", cancel);
@@ -114,7 +115,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const lengthSpan = document.createElement("span");
         lengthSpan.classList.add(CLUE_LENGTH_LABEL);
         lengthSpan.textContent = `(${placement.length})`;
-        
+
         return lengthSpan;
     }
 
@@ -131,101 +132,90 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const labelSpan = document.createElement("span");
         labelSpan.classList.add(CLUE_LABEL);
 
-        const coord = {row: placement.start_row, col: placement.start_col}
+        const coord = { row: placement.start_row, col: placement.start_col };
         const label = boardView.getLabel(coord);
         labelSpan.textContent = label.toString();
 
         return labelSpan;
     }
 
-    function createCopyButton(clueText: string): {button: HTMLButtonElement, revealCopyButton: () => void} {
+    function createCopyButton(clueText: string): HTMLButtonElement {
         const TIMEOUT_MS = 800;
         let copiedTimeout: number | null = null;
 
-        // Prevent button from stealing focus
-        const button = buildButton();       
+        const button = buildButton();
+
         button.addEventListener("pointerdown", (event) => {
             event.preventDefault();
             event.stopPropagation();
         });
-    
+
         button.addEventListener("click", (event) => {
             event.stopPropagation();
             void copyClue();
         });
-    
-        return { button, revealCopyButton };
 
-        function buildButton() {
+        return button;
+
+        function buildButton(): HTMLButtonElement {
             const button = document.createElement("button");
             button.classList.add("clue-copy");
             button.ariaLabel = COPY_ARIA;
             button.tabIndex = -1;
             button.hidden = true;
-            
+
             const copyImg = createCopyImg();
             const checkImg = createCheckImg();
             button.append(copyImg, checkImg);
-        
+
             return button;
-        }
-        
-        function revealCopyButton() {
-            showTemporarily(button);
-        }
-
-        function showTemporarily(button: HTMLButtonElement): boolean {
-            const wasHidden = button.hidden;
-            if (!wasHidden) return false;
-        
-            if (temporarilyVisibleCopyButton && temporarilyVisibleCopyButton !== button) {
-                temporarilyVisibleCopyButton.hidden = true;
-                resetCopyState(temporarilyVisibleCopyButton);
-            }
-        
-            button.hidden = false;
-            temporarilyVisibleCopyButton = button;
-            return true;
-        }
-        
-        function resetCopyState(button: HTMLButtonElement) {
-            button.classList.remove(COPIED_CLASS);
-            button.ariaLabel = COPY_ARIA;
-        }
-
-        function setCopiedState(button: HTMLButtonElement) {
-            button.classList.add(COPIED_CLASS);
-            button.ariaLabel = COPIED_ARIA;
-        }
-
-        function hideTemporarily(button: HTMLButtonElement) {
-            if (temporarilyVisibleCopyButton === button) temporarilyVisibleCopyButton = null;
-        
-            button.hidden = true;
-            resetCopyState(button);
         }
 
         async function copyClue(): Promise<void> {
-            const wasTemporarilyShown = showTemporarily(button);
-    
+            revealCopyButton(button);
+
             try {
                 await navigator.clipboard.writeText(clueText);
                 setCopiedState(button);
-    
+
                 if (copiedTimeout !== null) clearTimeout(copiedTimeout);
-    
+
                 copiedTimeout = window.setTimeout(() => {
-                    if (wasTemporarilyShown) hideTemporarily(button);
-                    else resetCopyState(button);
-    
+                    resetCopyButtonState(button);
                     copiedTimeout = null;
                 }, TIMEOUT_MS);
             } catch (err) {
-                if (wasTemporarilyShown) hideTemporarily(button);
-    
                 console.error("Failed to copy clue:", err);
             }
         }
+    }
+
+    function revealCopyButton(button: HTMLButtonElement): void {
+        if (currentlyVisibleCopyButton && currentlyVisibleCopyButton !== button) {
+            hideCopyButton(currentlyVisibleCopyButton);
+        }
+
+        button.hidden = false;
+        currentlyVisibleCopyButton = button;
+    }
+
+    function hideCopyButton(button: HTMLButtonElement): void {
+        if (currentlyVisibleCopyButton === button) {
+            currentlyVisibleCopyButton = null;
+        }
+
+        button.hidden = true;
+        resetCopyButtonState(button);
+    }
+
+    function setCopiedState(button: HTMLButtonElement): void {
+        button.classList.add(COPIED_CLASS);
+        button.ariaLabel = COPIED_ARIA;
+    }
+
+    function resetCopyButtonState(button: HTMLButtonElement): void {
+        button.classList.remove(COPIED_CLASS);
+        button.ariaLabel = COPY_ARIA;
     }
 
     function createCopyImg(): HTMLImageElement {
@@ -248,7 +238,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         img.alt = "";
 
         return img;
-    }   
+    }
 
     function setToggleCount(button: HTMLButtonElement, count: number) {
         let spanElement = button.querySelector(CLUE_COUNT);
@@ -302,7 +292,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         setToggleCount(todoToggle, totalClues);
     }
 
-    function initializeSolvedToggles() {
+    function initSolvedSection() {
         const solvedAcrossToggle = clueContainer.querySelector(SOLVED_ACROSS_TOGGLE) as HTMLButtonElement;
         const solvedDownToggle = clueContainer.querySelector(SOLVED_DOWN_TOGGLE) as HTMLButtonElement;
         const solvedToggle =clueContainer.querySelector(SOLVED_TOGGLE) as HTMLButtonElement;
