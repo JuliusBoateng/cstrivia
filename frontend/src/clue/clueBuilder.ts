@@ -71,7 +71,8 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         textSpan.appendChild(lengthSpan);
     
         const labelSpan = createLabel(placement);
-        liElement.append(labelSpan, textSpan);
+        const button = createCopyButton();
+        liElement.append(labelSpan, textSpan, button);
     
         return liElement;
     }
@@ -102,6 +103,34 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         labelSpan.textContent = label.toString();
 
         return labelSpan;
+    }
+
+    function createCopyButton(): HTMLButtonElement {
+        const button = document.createElement("button");
+        button.classList.add("clue-copy");
+        button.ariaLabel = "Copy clue";
+        button.tabIndex = -1;
+        button.hidden = true;
+        
+        const img = createCopyImg()
+        button.appendChild(img);
+
+        button.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+    
+        return button;
+    }
+
+    function createCopyImg(): HTMLImageElement {
+        console.log(window.location.pathname);
+        const img = document.createElement("img");
+        img.src = "/static/crossword/icons/copy.svg";
+        img.width = 16;
+        img.height = 16;
+        img.alt = "";
+
+        return img;
     }
 
     function setToggleCount(button: HTMLButtonElement, count: number) {

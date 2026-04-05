@@ -33,6 +33,11 @@ interface ClueView {
   renderActiveClue(placementId: PlacementId): void;
 }
 
+type ClueElement = {
+  liElement: HTMLLIElement;
+  copyButton: HTMLButtonElement;
+}
+
 const NullCursorController: CursorController = {
   moveCursorToPlacement(_placementId: PlacementId): void {}
 };
@@ -40,8 +45,8 @@ const NullCursorController: CursorController = {
 class ClueRenderer implements ClueView {
     private clueContainer: HTMLDivElement;
     private cursorController: CursorController;
-    private placementClueMap: Map<PlacementId, HTMLLIElement>;
-    private activeClue: HTMLLIElement | null; 
+    private placementClueMap: Map<PlacementId, ClueElement>;
+    private activeClue: ClueElement | null; 
 
     private todoAcrossClues!: HTMLOListElement;
     private todoDownClues!: HTMLOListElement;
@@ -71,7 +76,7 @@ class ClueRenderer implements ClueView {
         this.cursorController = NullCursorController;
         this.activeClue = null;
 
-        this.placementClueMap = new Map<PlacementId, HTMLLIElement>();
+        this.placementClueMap = new Map<PlacementId, ClueElement>();
     }
 
     init(cursorController: CursorController) {
@@ -110,14 +115,16 @@ class ClueRenderer implements ClueView {
     }
 
     renderActiveClue(placementId: PlacementId): void {
-      const clue = this.placementClueMap.get(placementId);
-      if (!clue) return;
+      const clueElement = this.placementClueMap.get(placementId);
+      if (!clueElement) return;
 
       this.clearActiveClue();
 
-      this.activeClue = clue;
-      clue.classList.add(HIGHLIGHT);
-      this.scrollClue(clue);
+      this.activeClue = clueElement;
+      clueElement.liElement.classList.add(HIGHLIGHT);
+      this.scrollClue(clueElement.liElement);
+
+      clueElement.copyButton.hidden = false;
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {
@@ -307,7 +314,8 @@ class ClueRenderer implements ClueView {
       const solvedDownFrag = document.createDocumentFragment();
       
       // preserves order given that initial clues were ordered correctly.
-      for (const [placementId, clueLiElement] of this.placementClueMap) {
+      for (const [placementId, clueElement] of this.placementClueMap) {
+        const clueLiElement = clueElement.liElement;
         const direction = clueLiElement.dataset.placementDirection as Direction | undefined;
 
         const isSolved = solvedSet.has(placementId);
@@ -335,7 +343,11 @@ class ClueRenderer implements ClueView {
     }
 
     private clearActiveClue() {
-      if (this.activeClue) this.activeClue.classList.remove(HIGHLIGHT);
+      if (this.activeClue) {
+        this.activeClue.liElement.classList.remove(HIGHLIGHT);
+        this.activeClue.copyButton.hidden = true;
+      }
+        
       this.activeClue = null;
     }
 
@@ -351,15 +363,23 @@ class ClueRenderer implements ClueView {
       return clue;
     }
 
-    private createPlacementClueMap(): Map<PlacementId, HTMLLIElement> {
-      const placementClueMap = new Map<PlacementId, HTMLLIElement>();
+    private createPlacementClueMap(): Map<PlacementId, ClueElement> {
+      const placementClueMap = new Map<PlacementId, ClueElement>();
 
       const clues = this.clueContainer.querySelectorAll<HTMLLIElement>(CLUE);
       for (const clue of clues) {
         const placementId = clue.dataset.placementId;
         if (!placementId) continue;
+
+        const copyButton = clue.querySelector<HTMLButtonElement>(".clue-copy");
+        if (!copyButton) continue;
+
+        const ClueElement = {
+          liElement: clue,
+          copyButton: copyButton
+        } as ClueElement
     
-        placementClueMap.set(Number(placementId), clue);
+        placementClueMap.set(Number(placementId), ClueElement);
       }
 
       return placementClueMap;
