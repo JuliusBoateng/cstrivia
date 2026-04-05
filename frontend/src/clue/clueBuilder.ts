@@ -71,10 +71,39 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         textSpan.appendChild(lengthSpan);
     
         const labelSpan = createLabel(placement);
-        const button = createCopyButton(clue.question);
+        const { button, handleCopy } = createCopyButton(clue.question);        
         liElement.append(labelSpan, textSpan, button);
-    
+
+        addLongPressListener(liElement, handleCopy);
+
         return liElement;
+
+        function addLongPressListener(liElement: HTMLLIElement, handleCopy: () => Promise<void>) {
+            let timer: number | null = null;
+            const LONG_PRESS_MS = 500;
+        
+            const handlePointerDown = (event: PointerEvent) => {
+                if (event.pointerType !== "touch") return;
+                cancel();
+    
+                timer = window.setTimeout(() => {
+                    void handleCopy();
+                    timer = null;
+                }, LONG_PRESS_MS);
+            };
+    
+            function cancel() {
+                if (timer !== null) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
+            }
+    
+            liElement.addEventListener("pointerdown", handlePointerDown);
+            liElement.addEventListener("pointerup", cancel);
+            liElement.addEventListener("pointercancel", cancel);
+            liElement.addEventListener("pointerleave", cancel);
+        }
     }
 
     function createLenLabel(placement: Placement): HTMLSpanElement {
@@ -105,39 +134,22 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         return labelSpan;
     }
 
-    function createCopyButton(clueText: string): HTMLButtonElement {
+    function createCopyButton(clueText: string): {button: HTMLButtonElement, handleCopy: () => Promise<void>} {
         const button = buildButton();
 
         // Prevent button from stealing focus
         button.addEventListener("pointerdown", (event) => {
             event.preventDefault();
-        });
-
-        let copiedTimeout: number | null = null;
-        const TIMEOUT_MS = 800;
-        button.addEventListener("click", async (event) => {
             event.stopPropagation();
-
-            try {
-                await navigator.clipboard.writeText(clueText);
-                button.classList.add("copied");
-                button.ariaLabel = "Copied clue";
-
-                if (copiedTimeout !== null) {
-                    clearTimeout(copiedTimeout);
-                }
-        
-                copiedTimeout = window.setTimeout(() => {
-                    button.classList.remove("copied");
-                    button.ariaLabel = "Copy clue";
-                    copiedTimeout = null;
-                }, TIMEOUT_MS);
-            } catch (err) {
-                console.error("Failed to copy clue:", err);
-            }
         });
 
-        return button;
+        const handleCopy = createCopyHandler(button, clueText);
+        button.addEventListener("click", (event) => {
+            event.stopPropagation();
+            void handleCopy();
+        });
+
+        return { button, handleCopy };
 
         function buildButton() {
             const button = document.createElement("button");
@@ -151,6 +163,31 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
             button.append(copyImg, checkImg);
         
             return button;
+        }
+
+        function createCopyHandler(button: HTMLButtonElement, clueText: string): () => Promise<void> {
+            let copiedTimeout: number | null = null;
+            const TIMEOUT_MS = 800;
+        
+            return async function (): Promise<void> {
+                try {
+                    await navigator.clipboard.writeText(clueText);
+                    button.classList.add("copied");
+                    button.ariaLabel = "Copied clue";
+        
+                    if (copiedTimeout !== null) {
+                        clearTimeout(copiedTimeout);
+                    }
+        
+                    copiedTimeout = window.setTimeout(() => {
+                        button.classList.remove("copied");
+                        button.ariaLabel = "Copy clue";
+                        copiedTimeout = null;
+                    }, TIMEOUT_MS);
+                } catch (err) {
+                    console.error("Failed to copy clue:", err);
+                }
+            };
         }
     }
 
