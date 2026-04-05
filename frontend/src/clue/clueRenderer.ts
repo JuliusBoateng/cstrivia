@@ -1,5 +1,6 @@
 import { Direction, PlacementId } from "../models/boardView.js";
 import { CursorController } from "../puzzle/puzzleController.js";
+import { revealCopyButton, hideCopyButton} from "./clueBuilder.js";
 
 const CLUE_TOGGLE = ".clue-toggle";
 const CLUE = ".clue"
@@ -20,9 +21,6 @@ const SOLVED_TOGGLE = "#solved-toggle";
 const CLUE_COUNT = ".clue-count";
 const TODO_SECTION = "#todo-section";
 const SOLVED_SECTION = "#solved-section";
-
-const COPIED_CLASS = "copied";
-const COPY_ARIA = "Copy clue";
 
 type ClueCounts = {todoAcrossCount: number,
           todoDownCount: number,
@@ -127,7 +125,7 @@ class ClueRenderer implements ClueView {
       clueElement.liElement.classList.add(HIGHLIGHT);
       this.scrollClue(clueElement.liElement);
 
-      this.revealCopyButton(clueElement.copyButton);
+      revealCopyButton(clueElement.copyButton);
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {
@@ -236,27 +234,6 @@ class ClueRenderer implements ClueView {
       spanElement.textContent = count > 0 ? String(count) : "";
     }
 
-    private hideCopyButton(button: HTMLButtonElement): void {
-      const timeoutId = button.dataset.copyTimeoutId;
-      if (timeoutId) {
-        clearTimeout(Number(timeoutId));
-        delete button.dataset.copyTimeoutId;
-      }
-    
-      this.resetCopyButtonState(button);
-      button.hidden = true;
-    }
-
-    private revealCopyButton(button: HTMLButtonElement): void {
-      this.resetCopyButtonState(button);
-      button.hidden = false;
-    }
-
-    private resetCopyButtonState(button: HTMLButtonElement): void {
-      button.classList.remove(COPIED_CLASS);
-      button.ariaLabel = COPY_ARIA;
-    }
-    
     /*
       Sets the clue card's empty state based on whether any clues are visible.
       A clue list is visible if its section is expanded, the list is expanded,
@@ -366,10 +343,10 @@ class ClueRenderer implements ClueView {
       return clueCounts;
     }
 
-    private clearActiveClue() {
+    private clearActiveClue(): void {
       if (this.activeClue) {
         this.activeClue.liElement.classList.remove(HIGHLIGHT);
-        this.hideCopyButton(this.activeClue.copyButton);
+        hideCopyButton(this.activeClue.copyButton);
       }
         
       this.activeClue = null;
@@ -398,12 +375,12 @@ class ClueRenderer implements ClueView {
         const copyButton = clue.querySelector<HTMLButtonElement>(".clue-copy");
         if (!copyButton) continue;
 
-        const ClueElement = {
+        const clueElement = {
           liElement: clue,
           copyButton: copyButton
         } as ClueElement
     
-        placementClueMap.set(Number(placementId), ClueElement);
+        placementClueMap.set(Number(placementId), clueElement);
       }
 
       return placementClueMap;
