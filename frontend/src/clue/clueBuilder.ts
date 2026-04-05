@@ -113,11 +113,25 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
             event.preventDefault();
         });
 
+        let copiedTimeout: number | null = null;
+        const TIMEOUT_MS = 800;
         button.addEventListener("click", async (event) => {
             event.stopPropagation();
 
             try {
                 await navigator.clipboard.writeText(clueText);
+                button.classList.add("copied");
+                button.ariaLabel = "Copied clue";
+
+                if (copiedTimeout !== null) {
+                    clearTimeout(copiedTimeout);
+                }
+        
+                copiedTimeout = window.setTimeout(() => {
+                    button.classList.remove("copied");
+                    button.ariaLabel = "Copy clue";
+                    copiedTimeout = null;
+                }, TIMEOUT_MS);
             } catch (err) {
                 console.error("Failed to copy clue:", err);
             }
@@ -132,16 +146,17 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
             button.tabIndex = -1;
             button.hidden = true;
             
-            const img = createCopyImg()
-            button.appendChild(img);
+            const copyImg = createCopyImg()
+            const checkImg = createCheckImg();
+            button.append(copyImg, checkImg);
         
             return button;
         }
     }
 
     function createCopyImg(): HTMLImageElement {
-        console.log(window.location.pathname);
         const img = document.createElement("img");
+        img.classList.add("copy-icon");
         img.src = "/static/crossword/icons/copy.svg";
         img.width = 16;
         img.height = 16;
@@ -149,6 +164,17 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
 
         return img;
     }
+
+    function createCheckImg(): HTMLImageElement {
+        const img = document.createElement("img");
+        img.classList.add("check-icon");
+        img.src = "/static/crossword/icons/check.svg";
+        img.width = 16;
+        img.height = 16;
+        img.alt = "";
+
+        return img;
+    }   
 
     function setToggleCount(button: HTMLButtonElement, count: number) {
         let spanElement = button.querySelector(CLUE_COUNT);

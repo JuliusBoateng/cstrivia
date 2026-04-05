@@ -455,6 +455,23 @@ main {
     display: block;
 }
 
+.check-icon {
+    transform: scale(1.3);
+    overflow: visible;
+}
+
+.clue-copy .check-icon {
+    display: none;
+}
+
+.clue-copy.copied .check-icon {
+    display: block;
+}
+
+.clue-copy.copied .copy-icon {
+    display: none;
+}
+
 .clue-empty {
     display: none;
     text-align: center;
