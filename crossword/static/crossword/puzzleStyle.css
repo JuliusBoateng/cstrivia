@@ -40,6 +40,10 @@ main {
     flex: 1;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 .puzzle-dynamic {
     visibility: hidden;
     min-height: var(--puzzle-dynamic-loading-min-height);

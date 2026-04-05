@@ -71,7 +71,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         textSpan.appendChild(lengthSpan);
     
         const labelSpan = createLabel(placement);
-        const button = createCopyButton();
+        const button = createCopyButton(clue.question);
         liElement.append(labelSpan, textSpan, button);
     
         return liElement;
@@ -105,21 +105,38 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         return labelSpan;
     }
 
-    function createCopyButton(): HTMLButtonElement {
-        const button = document.createElement("button");
-        button.classList.add("clue-copy");
-        button.ariaLabel = "Copy clue";
-        button.tabIndex = -1;
-        button.hidden = true;
-        
-        const img = createCopyImg()
-        button.appendChild(img);
+    function createCopyButton(clueText: string): HTMLButtonElement {
+        const button = buildButton();
 
-        button.addEventListener("click", (event) => {
-            event.stopPropagation();
+        // Prevent button from stealing focus
+        button.addEventListener("pointerdown", (event) => {
+            event.preventDefault();
         });
-    
+
+        button.addEventListener("click", async (event) => {
+            event.stopPropagation();
+
+            try {
+                await navigator.clipboard.writeText(clueText);
+            } catch (err) {
+                console.error("Failed to copy clue:", err);
+            }
+        });
+
         return button;
+
+        function buildButton() {
+            const button = document.createElement("button");
+            button.classList.add("clue-copy");
+            button.ariaLabel = "Copy clue";
+            button.tabIndex = -1;
+            button.hidden = true;
+            
+            const img = createCopyImg()
+            button.appendChild(img);
+        
+            return button;
+        }
     }
 
     function createCopyImg(): HTMLImageElement {
