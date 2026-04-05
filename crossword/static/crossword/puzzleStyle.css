@@ -389,6 +389,8 @@ main {
 
     user-select: none;
     -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
 
     display: grid;
     grid-template-columns: 2ch 1fr 0px;
