@@ -21,6 +21,9 @@ const CLUE_COUNT = ".clue-count";
 const TODO_SECTION = "#todo-section";
 const SOLVED_SECTION = "#solved-section";
 
+const COPIED_CLASS = "copied";
+const COPY_ARIA = "Copy clue";
+
 type ClueCounts = {todoAcrossCount: number,
           todoDownCount: number,
           solvedAcrossCount: number,
@@ -124,7 +127,7 @@ class ClueRenderer implements ClueView {
       clueElement.liElement.classList.add(HIGHLIGHT);
       this.scrollClue(clueElement.liElement);
 
-      clueElement.copyButton.hidden = false;
+      this.revealCopyButton(clueElement.copyButton);
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {
@@ -233,6 +236,27 @@ class ClueRenderer implements ClueView {
       spanElement.textContent = count > 0 ? String(count) : "";
     }
 
+    private hideCopyButton(button: HTMLButtonElement): void {
+      const timeoutId = button.dataset.copyTimeoutId;
+      if (timeoutId) {
+        clearTimeout(Number(timeoutId));
+        delete button.dataset.copyTimeoutId;
+      }
+    
+      this.resetCopyButtonState(button);
+      button.hidden = true;
+    }
+
+    private revealCopyButton(button: HTMLButtonElement): void {
+      this.resetCopyButtonState(button);
+      button.hidden = false;
+    }
+
+    private resetCopyButtonState(button: HTMLButtonElement): void {
+      button.classList.remove(COPIED_CLASS);
+      button.ariaLabel = COPY_ARIA;
+    }
+    
     /*
       Sets the clue card's empty state based on whether any clues are visible.
       A clue list is visible if its section is expanded, the list is expanded,
@@ -345,7 +369,7 @@ class ClueRenderer implements ClueView {
     private clearActiveClue() {
       if (this.activeClue) {
         this.activeClue.liElement.classList.remove(HIGHLIGHT);
-        this.activeClue.copyButton.hidden = true;
+        this.hideCopyButton(this.activeClue.copyButton);
       }
         
       this.activeClue = null;

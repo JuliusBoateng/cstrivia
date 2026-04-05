@@ -141,10 +141,9 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
 
     function createCopyButton(clueText: string): HTMLButtonElement {
         const TIMEOUT_MS = 800;
-        let copiedTimeout: number | null = null;
 
+        // Prevent button from stealing focus
         const button = buildButton();
-
         button.addEventListener("pointerdown", (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -173,17 +172,20 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
 
         async function copyClue(): Promise<void> {
             revealCopyButton(button);
-
+        
             try {
                 await navigator.clipboard.writeText(clueText);
                 setCopiedState(button);
-
-                if (copiedTimeout !== null) clearTimeout(copiedTimeout);
-
-                copiedTimeout = window.setTimeout(() => {
+        
+                const existingTimeoutId = button.dataset.copyTimeoutId;
+                if (existingTimeoutId) clearTimeout(Number(existingTimeoutId));
+        
+                const timeoutId = window.setTimeout(() => {
                     resetCopyButtonState(button);
-                    copiedTimeout = null;
+                    delete button.dataset.copyTimeoutId;
                 }, TIMEOUT_MS);
+        
+                button.dataset.copyTimeoutId = String(timeoutId);
             } catch (err) {
                 console.error("Failed to copy clue:", err);
             }
@@ -195,17 +197,22 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
             hideCopyButton(currentlyVisibleCopyButton);
         }
 
+        resetCopyButtonState(button);
         button.hidden = false;
         currentlyVisibleCopyButton = button;
     }
 
     function hideCopyButton(button: HTMLButtonElement): void {
-        if (currentlyVisibleCopyButton === button) {
-            currentlyVisibleCopyButton = null;
+        const timeoutId = button.dataset.copyTimeoutId;
+        if (timeoutId) {
+            clearTimeout(Number(timeoutId));
+            delete button.dataset.copyTimeoutId;
         }
-
-        button.hidden = true;
+    
+        if (currentlyVisibleCopyButton === button) currentlyVisibleCopyButton = null;
+    
         resetCopyButtonState(button);
+        button.hidden = true;
     }
 
     function setCopiedState(button: HTMLButtonElement): void {
