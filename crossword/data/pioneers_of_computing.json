@@ -4,7 +4,7 @@
     "author": "Julius Boateng",
     "puzzle_number": 3,
     "published_at": "2026-04-07T12:00:00Z",
-    "description": "The people in this puzzle helped shape our modern understanding of computing. However, they did not work in isolation; credit also belongs to the unsung contributors who advanced the field.",
+    "description": "The people in this puzzle helped shape our modern understanding of computing. They did not work in isolation; credit belongs to the unsung contributors who advanced the field.",
     "rows": 15,
     "cols": 15,
     "categories": [
@@ -27,7 +27,7 @@
       "start_col": 2
     },
     {
-      "question": "Applied Boolean algebra to switching circuits; founded information theory in the 1948 paper “A Mathematical Theory of Communication”",
+      "question": "Applied Boolean algebra to switching circuits; founded information theory in the 1948 paper \"A Mathematical Theory of Communication\"",
       "display_answer": "SHANNON",
       "direction": "A",
       "start_row": 5,
@@ -41,7 +41,7 @@
       "start_col": 4
     },
     {
-      "question": "Pioneered the mathematical analysis of algorithms; author of “The Art of Computer Programming”",
+      "question": "Pioneered the mathematical analysis of algorithms; author of \"The Art of Computer Programming\"",
       "display_answer": "KNUTH",
       "direction": "A",
       "start_row": 9,
@@ -76,11 +76,18 @@
       "start_col": 8
     },
     {
-      "question": "Proposed the relational database model in the seminal 1970 paper “A Relational Model of Data for Large Shared Data Banks”",
+      "question": "Proposed the relational database model in the seminal 1970 paper \"A Relational Model of Data for Large Shared Data Banks\"",
       "display_answer": "CODD",
       "direction": "D",
       "start_row": 2,
       "start_col": 3
+    },
+    {
+      "question": "Co-inventor of TCP/IP with Robert Kahn; recognized as one of the \"fathers of the internet\"",
+      "display_answer": "CERF",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 6
     },
     {
       "question": "Created the C programming language; rewrote Unix in C",
