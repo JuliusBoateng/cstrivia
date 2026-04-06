@@ -72,6 +72,8 @@ class ClueRenderer implements ClueView {
     private todoSection!: HTMLDivElement;
     private solvedSection!: HTMLDivElement;
 
+    private visibleCopyButton: HTMLButtonElement | null = null;
+
     constructor(clueContainer: HTMLDivElement) {
         this.clueContainer = clueContainer;
         this.cursorController = NullCursorController;
@@ -80,20 +82,24 @@ class ClueRenderer implements ClueView {
         this.placementClueMap = new Map<PlacementId, ClueElement>();
     }
 
-    init(cursorController: CursorController) {
+    init(cursorController: CursorController): void {
       this.initClueLists();
       this.initToggles();
       this.initLabels();
       this.initPlacementClues();
       this.initSections();
       this.setCursorController(cursorController);
-
+      
+      // Standard event handler
       this.clueContainer.addEventListener("pointerdown", this.handleContainerPointerDown);
       this.clueContainer.addEventListener("click", this.handleContainerClick);
       this.clueContainer.addEventListener("keydown", this.handleContainerKeydown);
+
+      // Custom event handler
+      this.clueContainer.addEventListener("cluecopyreveal", this.handleCopyReveal as EventListener);
     }
 
-    focusToggle() {
+    focusToggle(): void {
       this.todoToggle.focus();
     }
 
@@ -125,7 +131,7 @@ class ClueRenderer implements ClueView {
       clueElement.liElement.classList.add(HIGHLIGHT);
       this.scrollClue(clueElement.liElement);
 
-      revealCopyButton(clueElement.copyButton);
+      this.revealCurrentCopyButton(clueElement.copyButton);
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {
@@ -167,7 +173,7 @@ class ClueRenderer implements ClueView {
       }
     };
     
-    private isActionKey(event: KeyboardEvent) {
+    private isActionKey(event: KeyboardEvent): boolean {
       return ((event.key === "Enter") || (event.key === " "))
     }
 
@@ -188,7 +194,7 @@ class ClueRenderer implements ClueView {
       }
     }
 
-    private handleToggle(button: HTMLButtonElement) {
+    private handleToggle(button: HTMLButtonElement): void {
       const sectionId = button.getAttribute(ARIA_CONTROLS);
       if (!sectionId) return;
     
@@ -203,19 +209,32 @@ class ClueRenderer implements ClueView {
       this.renderClueVisibility();
     }
 
-    private handleClue(clue: HTMLLIElement) {
+    private handleClue(clue: HTMLLIElement): void {
       const placementId = clue.dataset.placementId;
       if (!placementId) return;
   
       this.cursorController.moveCursorToPlacement(Number(placementId));
     };
 
-    private renderProgressCount(clueCounts: ClueCounts) {
+    private handleCopyReveal = (event: Event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+    
+      const clue = this.getClue(target);
+      if (!clue) return;
+    
+      const copyButton = clue.querySelector<HTMLButtonElement>(".clue-copy");
+      if (!copyButton) return;
+    
+      this.revealCurrentCopyButton(copyButton);
+    };
+
+    private renderProgressCount(clueCounts: ClueCounts): void {
       this.renderMainProgressCount(clueCounts);
       this.renderSubProgressCount(clueCounts);
     }
 
-    private renderMainProgressCount(clueCounts: ClueCounts) {
+    private renderMainProgressCount(clueCounts: ClueCounts): void {
       const todoCount = clueCounts.todoAcrossCount + clueCounts.todoDownCount;
       const solvedCount = clueCounts.solvedAcrossCount + clueCounts.solvedDownCount;
 
@@ -223,15 +242,32 @@ class ClueRenderer implements ClueView {
       this.setLabelCount(this.solvedCountLabel, solvedCount);
     }
 
-    private renderSubProgressCount(clueCounts: ClueCounts) {
+    private renderSubProgressCount(clueCounts: ClueCounts): void {
       this.setLabelCount(this.todoAcrossCountLabel, clueCounts.todoAcrossCount);
       this.setLabelCount(this.todoDownCountLabel, clueCounts.todoDownCount);
       this.setLabelCount(this.solvedAcrossCountLabel, clueCounts.solvedAcrossCount);
       this.setLabelCount(this.solvedDownCountLabel, clueCounts.solvedDownCount);
     }
 
-    private setLabelCount(spanElement: HTMLSpanElement, count: number) {
+    private setLabelCount(spanElement: HTMLSpanElement, count: number): void {
       spanElement.textContent = count > 0 ? String(count) : "";
+    }
+
+    private revealCurrentCopyButton(button: HTMLButtonElement): void {
+      if (this.visibleCopyButton && this.visibleCopyButton !== button) {
+        hideCopyButton(this.visibleCopyButton);
+      }
+    
+      revealCopyButton(button);
+      this.visibleCopyButton = button;
+    }
+    
+    private hideCurrentCopyButton(button: HTMLButtonElement): void {
+      hideCopyButton(button);
+    
+      if (this.visibleCopyButton === button) {
+        this.visibleCopyButton = null;
+      }
     }
 
     /*
@@ -239,7 +275,7 @@ class ClueRenderer implements ClueView {
       A clue list is visible if its section is expanded, the list is expanded,
       and neither the section nor the list is marked as `.is-empty`.
     */
-    private renderClueVisibility() {
+    private renderClueVisibility(): void {
       const todoSectionVisible =
         !this.todoSection.hidden &&
         !this.todoSection.classList.contains("is-empty");
@@ -277,7 +313,7 @@ class ClueRenderer implements ClueView {
       this.clueContainer.classList.toggle("show-empty", !anyVisible);
     }
 
-    private renderEmptyState(clueCounts: ClueCounts) {
+    private renderEmptyState(clueCounts: ClueCounts): void {
       const {todoAcrossCount, todoDownCount, solvedAcrossCount,
         solvedDownCount} = clueCounts;
     
@@ -303,7 +339,7 @@ class ClueRenderer implements ClueView {
       this.setEmptyState(this.todoToggle, todoCount);
     }
 
-    private setEmptyState(element: HTMLElement, count: number) {
+    private setEmptyState(element: HTMLElement, count: number): void {
       const hasItems = (count > 0);
       element.classList.toggle("is-empty", !hasItems);
     } 
@@ -346,7 +382,11 @@ class ClueRenderer implements ClueView {
     private clearActiveClue(): void {
       if (this.activeClue) {
         this.activeClue.liElement.classList.remove(HIGHLIGHT);
-        hideCopyButton(this.activeClue.copyButton);
+        this.hideCurrentCopyButton(this.activeClue.copyButton);
+      }
+
+      if (this.visibleCopyButton) {
+        this.hideCurrentCopyButton(this.visibleCopyButton);
       }
         
       this.activeClue = null;
@@ -388,7 +428,7 @@ class ClueRenderer implements ClueView {
 
     // In single column view, clue_card is no longer scrollable.
     // Ensures the page does not scroll when clue is clicked.
-    private scrollClue(clue: HTMLLIElement) {
+    private scrollClue(clue: HTMLLIElement): void {
       const overflowY = getComputedStyle(this.clueContainer).overflowY;
       const canScroll = overflowY === "auto" || overflowY === "scroll";
       
@@ -398,7 +438,7 @@ class ClueRenderer implements ClueView {
       clue.scrollIntoView({block: "nearest"});
     }
 
-    private initClueLists() {
+    private initClueLists(): void {
       this.todoAcrossClues = this.clueContainer.querySelector(TODO_ACROSS_CLUES)!;
       this.todoDownClues = this.clueContainer.querySelector(TODO_DOWN_CLUES)!;
     
@@ -406,7 +446,7 @@ class ClueRenderer implements ClueView {
       this.solvedDownClues = this.clueContainer.querySelector(SOLVED_DOWN_CLUES)!;
     }
 
-    private initToggles() {
+    private initToggles(): void {
       this.todoToggle = this.clueContainer.querySelector(TODO_TOGGLE)!;
       this.todoAcrossToggle = this.clueContainer.querySelector(TODO_ACROSS_TOGGLE)!;
       this.todoDownToggle = this.clueContainer.querySelector(TODO_DOWN_TOGGLE)!;
@@ -416,7 +456,7 @@ class ClueRenderer implements ClueView {
       this.solvedDownToggle = this.clueContainer.querySelector(SOLVED_DOWN_TOGGLE)!;
     }
 
-    private initLabels() {
+    private initLabels(): void {
       this.todoCountLabel = this.todoToggle.querySelector(CLUE_COUNT)!;
       this.todoAcrossCountLabel = this.todoAcrossToggle.querySelector(CLUE_COUNT)!;
       this.todoDownCountLabel = this.todoDownToggle.querySelector(CLUE_COUNT)!;
@@ -426,12 +466,12 @@ class ClueRenderer implements ClueView {
       this.solvedDownCountLabel = this.solvedDownToggle.querySelector(CLUE_COUNT)!;
     }
 
-    private initSections() {
+    private initSections(): void {
       this.todoSection = this.clueContainer.querySelector(TODO_SECTION)!;
       this.solvedSection = this.clueContainer.querySelector(SOLVED_SECTION)!;
     }
 
-    private initPlacementClues() {
+    private initPlacementClues(): void {
       this.placementClueMap = this.createPlacementClueMap();
     }
 
@@ -441,4 +481,3 @@ class ClueRenderer implements ClueView {
 }
 
 export { ClueRenderer, ClueView };
-

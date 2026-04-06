@@ -30,21 +30,11 @@ const COPIED_ARIA = "Copied clue";
 const copyButtonTimeouts = new WeakMap<HTMLButtonElement, number>();
 
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
-    let currentlyVisibleCopyButton: HTMLButtonElement | null = null;
     initSolvedSection();
 
     const placements = boardView.getPlacements();
     const clueMap: Map<PlacementId, Clue> = boardView.getClueMap();
     createTodoSection(placements, clueMap);
-
-    function revealCurrentCopyButton(button: HTMLButtonElement): void {
-        if (currentlyVisibleCopyButton && currentlyVisibleCopyButton !== button) {
-            hideCopyButton(currentlyVisibleCopyButton);
-        }
-
-        revealCopyButton(button);
-        currentlyVisibleCopyButton = button;
-    }
 
     function createTodoSection(placements: Placement[], clueMap: Map<PlacementId, Clue>) {
         const { acrossTodoClues, downTodoClues } = createTodoClues(placements, clueMap);
@@ -91,7 +81,9 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const copyButton = createCopyButton(clue.question);
         liElement.append(labelSpan, textSpan, copyButton);
 
-        addLongPressListener(liElement, () => revealCurrentCopyButton(copyButton));
+        addLongPressListener(liElement, () => {
+            liElement.dispatchEvent(new CustomEvent("cluecopyreveal", { bubbles: true }));
+        });
 
         return liElement;
 
@@ -180,7 +172,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         }
 
         async function copyClue(): Promise<void> {
-            revealCurrentCopyButton(button);
+            revealCopyButton(button);
 
             try {
                 await navigator.clipboard.writeText(clueText);
