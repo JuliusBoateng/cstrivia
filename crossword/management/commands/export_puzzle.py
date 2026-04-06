@@ -7,10 +7,10 @@ from crossword.models import Board
 
 
 class Command(BaseCommand):
-    help = "Export one puzzle to compact JSON."
+    help = "Export one puzzle by puzzle_number to compact JSON."
 
     def add_arguments(self, parser):
-        parser.add_argument("board_id", type=int)
+        parser.add_argument("puzzle_number", type=int)
         parser.add_argument(
             "--out",
             type=str,
@@ -18,17 +18,17 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        board_id = options["board_id"]
+        puzzle_number = options["puzzle_number"]
         out_path = options.get("out")
 
         try:
             board = (
                 Board.objects
                 .prefetch_related("categories", "clue_placements__clue")
-                .get(id=board_id)
+                .get(puzzle_number=puzzle_number)
             )
         except Board.DoesNotExist:
-            raise CommandError(f"Board with id={board_id} does not exist.")
+            raise CommandError(f"Board with puzzle_number={puzzle_number} does not exist.")
 
         clue_entries = []
         placements = board.clue_placements.select_related("clue").all().order_by(
