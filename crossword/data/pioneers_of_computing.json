@@ -16,7 +16,7 @@
       "question": "Invented Quicksort; developed Hoare logic for reasoning about program correctness",
       "display_answer": "HOARE",
       "direction": "A",
-      "start_row": 1,
+      "start_row": 10,
       "start_col": 8
     },
     {
@@ -51,7 +51,7 @@
       "question": "Developed the first compiler; helped pioneer machine-independent programming languages such as COBOL",
       "display_answer": "HOPPER",
       "direction": "A",
-      "start_row": 10,
+      "start_row": 1,
       "start_col": 8
     },
     {
