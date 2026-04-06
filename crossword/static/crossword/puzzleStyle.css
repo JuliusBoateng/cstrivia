@@ -443,23 +443,27 @@ main {
     background: none;
     border: none;
     padding: 0;
-    margin: 0 0 0 4px;
+    margin: 0;
 
-    width: 16px;
-    height: 16px;
+    width: 32px;
+    height: 32px;
   
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
     cursor: pointer;
 }
 
-.clue-copy img {
-    width: 100%;
-    height: 100%;
+.copy-icon,
+.check-icon {
+    width: 16px;
+    height: 16px;
     display: block;
 }
 
 .check-icon {
     transform: scale(1.3);
-    overflow: visible;
 }
 
 .clue-copy .check-icon {

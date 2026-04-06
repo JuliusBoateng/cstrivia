@@ -195,8 +195,6 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const img = document.createElement("img");
         img.classList.add("copy-icon");
         img.src = "/static/crossword/icons/copy.svg";
-        img.width = 16;
-        img.height = 16;
         img.alt = "";
         return img;
     }
@@ -205,8 +203,6 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const img = document.createElement("img");
         img.classList.add("check-icon");
         img.src = "/static/crossword/icons/check.svg";
-        img.width = 16;
-        img.height = 16;
         img.alt = "";
         return img;
     }
