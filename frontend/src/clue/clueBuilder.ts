@@ -27,7 +27,10 @@ const COPIED_CLASS = "copied";
 const COPY_ARIA = "Copy clue";
 const COPIED_ARIA = "Copied clue";
 
+const CLUE_COPY_REVEAL_EVENT = "cluecopyreveal";
 const copyButtonTimeouts = new WeakMap<HTMLButtonElement, number>();
+
+const CAN_HOVER = window.matchMedia("(hover: hover)").matches;
 
 function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
     initSolvedSection();
@@ -82,7 +85,11 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         liElement.append(labelSpan, textSpan, copyButton);
 
         addLongPressListener(liElement, () => {
-            liElement.dispatchEvent(new CustomEvent("cluecopyreveal", { bubbles: true }));
+            liElement.dispatchEvent(new CustomEvent(CLUE_COPY_REVEAL_EVENT, { bubbles: true }));
+        });
+
+        liElement.addEventListener("mouseenter", () => {
+            if (CAN_HOVER) liElement.dispatchEvent(new CustomEvent("cluecopyreveal", { bubbles: true }));
         });
 
         return liElement;

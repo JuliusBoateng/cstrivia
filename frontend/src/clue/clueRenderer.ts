@@ -22,6 +22,8 @@ const CLUE_COUNT = ".clue-count";
 const TODO_SECTION = "#todo-section";
 const SOLVED_SECTION = "#solved-section";
 
+const CLUE_COPY_REVEAL_EVENT = "cluecopyreveal";
+
 type ClueCounts = {todoAcrossCount: number,
           todoDownCount: number,
           solvedAcrossCount: number,
@@ -94,9 +96,10 @@ class ClueRenderer implements ClueView {
       this.clueContainer.addEventListener("pointerdown", this.handleContainerPointerDown);
       this.clueContainer.addEventListener("click", this.handleContainerClick);
       this.clueContainer.addEventListener("keydown", this.handleContainerKeydown);
+      this.clueContainer.addEventListener("mouseleave", this.handleHoverLeave);
 
       // Custom event handler
-      this.clueContainer.addEventListener("cluecopyreveal", this.handleCopyReveal as EventListener);
+      this.clueContainer.addEventListener(CLUE_COPY_REVEAL_EVENT, this.handleCopyReveal as EventListener);
     }
 
     focusToggle(): void {
@@ -229,6 +232,11 @@ class ClueRenderer implements ClueView {
       this.revealCurrentCopyButton(copyButton);
     };
 
+    private handleHoverLeave = () => {
+      if (this.activeClue) this.revealCurrentCopyButton(this.activeClue.copyButton);
+      else if (this.visibleCopyButton) this.hideCurrentCopyButton(this.visibleCopyButton);
+    };
+
     private renderProgressCount(clueCounts: ClueCounts): void {
       this.renderMainProgressCount(clueCounts);
       this.renderSubProgressCount(clueCounts);
@@ -254,9 +262,7 @@ class ClueRenderer implements ClueView {
     }
 
     private revealCurrentCopyButton(button: HTMLButtonElement): void {
-      if (this.visibleCopyButton && this.visibleCopyButton !== button) {
-        hideCopyButton(this.visibleCopyButton);
-      }
+      if (this.visibleCopyButton && this.visibleCopyButton !== button) hideCopyButton(this.visibleCopyButton);
     
       revealCopyButton(button);
       this.visibleCopyButton = button;
@@ -265,9 +271,7 @@ class ClueRenderer implements ClueView {
     private hideCurrentCopyButton(button: HTMLButtonElement): void {
       hideCopyButton(button);
     
-      if (this.visibleCopyButton === button) {
-        this.visibleCopyButton = null;
-      }
+      if (this.visibleCopyButton === button) this.visibleCopyButton = null;
     }
 
     /*
