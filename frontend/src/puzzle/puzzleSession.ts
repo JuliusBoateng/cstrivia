@@ -8,6 +8,14 @@ type PlacementCheckResult = {
     incorrect: PlacementId[];
 }
 
+// Persisted puzzle state stored in sessionStorage.
+// Cleared automatically when the tab session ends.
+type PersistedPuzzleSession = {
+    version: 1;
+    puzzleNumber: number;
+    letterGrid: (string | null)[][];
+};
+
 class PuzzleSession {
     private coord!: Coord;
     private rows: number;
@@ -26,14 +34,18 @@ class PuzzleSession {
         this.cols = this.boardView.board.cols;
 
         this.puzzleValidator = puzzleValidator;
+
+        const restored = this.restoreSessionState();
+        if (restored) this.initRestoredSessionState();
+        else this.initSessionState();
+    }
+
+    clearPuzzleSession(): void {
+        sessionStorage.removeItem(this.storageKey);
         this.initSessionState();
     }
 
-    clearPuzzleSession() {
-        this.initSessionState()
-    }
-
-    setLetter(letter: string | null) {
+    setLetter(letter: string | null): void {
         if (this.isBlock()) throw Error("Unable to write to block cell.");
     
         letter = this.validateLetter(letter);
@@ -42,10 +54,12 @@ class PuzzleSession {
         if (prev === letter) return;
     
         this.letterGrid[this.coord.row][this.coord.col] = letter;
-        if (prev === null && letter !== null) this.adjustLetterCount(1);
-        if (prev !== null && letter === null) this.adjustLetterCount(-1);
+        if (prev === null && letter !== null) this.adjustFilledLetterCount(this.coord, 1);
+        if (prev !== null && letter === null) this.adjustFilledLetterCount(this.coord, -1);
         
-        this.invalidateSolvedPlacement(this.coord);
+        const placements = this.boardView.getCellPlacements(this.coord);
+        this.updateSolvedPlacements(placements);
+        this.saveSessionState();
     }
     
     advanceCursor() {
@@ -160,6 +174,10 @@ class PuzzleSession {
         return this.letterGrid[this.coord.row][this.coord.col]
     }
 
+    getLetterAt(coord: Coord): string | null {
+        return this.letterGrid[coord.row][coord.col]
+    }
+
     getActivePlacement(): Placement {
         return this.activePlacement;
     }
@@ -191,22 +209,30 @@ class PuzzleSession {
     getPlacementResults(coord: Coord): PlacementCheckResult {
         const solved = [];
         const incorrect = [];
-
+    
         const placements = this.boardView.getCellPlacements(coord);
+    
         for (const placement of placements) {
-            if (!this.isPlacementComplete(placement)) continue;
-            
-            const correct = this.puzzleValidator.checkPlacement(this.letterGrid, placement);
-            if (correct) {
-                this.solvedPlacementIds.add(placement.id);
-                solved.push(placement.id);
-            } else {
-                this.solvedPlacementIds.delete(placement.id);
-                incorrect.push(placement.id)
-            }
+            const isComplete = this.isPlacementComplete(placement);
+            if (!isComplete) continue;
+    
+            const isSolved = this.solvedPlacementIds.has(placement.id);
+    
+            if (isSolved) solved.push(placement.id);
+            else incorrect.push(placement.id);
         }
+    
+        return { solved, incorrect };
+    }
 
-        return {solved, incorrect} as PlacementCheckResult;
+    private updateSolvedPlacements(placements: Placement[]): void {
+        for (const placement of placements) {
+            const isSolved = this.isPlacementComplete(placement) &&
+                this.puzzleValidator.checkPlacement(this.letterGrid, placement);
+
+            if (isSolved) this.solvedPlacementIds.add(placement.id);
+            else this.solvedPlacementIds.delete(placement.id);
+        }
     }
 
     getSolvedPlacementIds() {
@@ -232,20 +258,14 @@ class PuzzleSession {
         this.activePlacementIndex = placementIndex;
     }
 
-    private adjustLetterCount(delta: number) {
-        const cell = this.boardView.getCell(this.coord);
+    private adjustFilledLetterCount(coord: Coord, delta: number): void {
+        const cell = this.boardView.getCell(coord);
         if (!cell) return;
     
-        const positions = cell.placement_positions;
+        for (const position of [cell.placement_positions.A, cell.placement_positions.D]) {
+            if (!position) continue;
     
-        if (positions.A) {
-            const id = positions.A.placement_id;
-            const value = this.filledLetterCount.get(id) ?? 0;
-            this.filledLetterCount.set(id, value + delta);
-        }
-    
-        if (positions.D) {
-            const id = positions.D.placement_id;
+            const id = position.placement_id;
             const value = this.filledLetterCount.get(id) ?? 0;
             this.filledLetterCount.set(id, value + delta);
         }
@@ -296,14 +316,92 @@ class PuzzleSession {
         return length === placement.length
     }
 
-    private initSessionState() {
+    private get storageKey(): string {
+        return `cstrivia:puzzle:${this.boardView.board.puzzle_number}`;
+    }
+
+    private saveSessionState(): void {
+        const state: PersistedPuzzleSession = {
+            version: 1,
+            puzzleNumber: this.boardView.board.puzzle_number,
+            letterGrid: this.letterGrid,
+        };
+    
+        try {
+            sessionStorage.setItem(this.storageKey, JSON.stringify(state));
+        } catch (err) {
+            console.error("Failed to save puzzle session:", err);
+        }
+    }
+
+    private restoreSessionState(): boolean {
+        try {
+            const raw = sessionStorage.getItem(this.storageKey);
+            if (!raw) return false;
+    
+            const parsed = JSON.parse(raw) as PersistedPuzzleSession;
+    
+            if (!this.isValidPersistedState(parsed)) {
+                sessionStorage.removeItem(this.storageKey);
+                return false;
+            }
+    
+            this.letterGrid = parsed.letterGrid.map((row) => [...row]);
+    
+            return true;
+        } catch (err) {
+            console.error("Failed to restore puzzle session:", err);
+            sessionStorage.removeItem(this.storageKey);
+            return false;
+        }
+    }
+
+    private initSessionState(): void {
         this.activePlacement = this.getInitialPlacement();
         this.activePlacementIndex = 0;
-        this.coord = {row: this.activePlacement.start_row, col: this.activePlacement.start_col}
-        this.filledLetterCount = this.createFilledLetterCount();
+        this.coord = {
+            row: this.activePlacement.start_row,
+            col: this.activePlacement.start_col
+        };
 
         this.letterGrid = this.createLetterGrid();
+        this.filledLetterCount = this.createFilledLetterCount();
         this.solvedPlacementIds = new Set();
+    }
+
+    private initRestoredSessionState(): void {
+        this.activePlacement = this.getInitialPlacement();
+        this.activePlacementIndex = 0;
+        this.coord = {
+            row: this.activePlacement.start_row,
+            col: this.activePlacement.start_col
+        };
+
+        this.rebuildFilledLetterCount();
+        this.rebuildSolvedPlacementIds();
+    }
+
+    private isValidPersistedState(state: unknown): state is PersistedPuzzleSession {
+        if (!state || typeof state !== "object") return false;
+    
+        const candidate = state as PersistedPuzzleSession;
+    
+        const validVersion = candidate.version === 1;
+        const validPuzzleNumber = candidate.puzzleNumber === this.boardView.board.puzzle_number;
+    
+        const grid = candidate.letterGrid;
+        const validGridRows = Array.isArray(grid) && grid.length === this.rows;
+    
+        const validGridCells =
+            validGridRows &&
+            grid.every(
+                (row) =>
+                    Array.isArray(row) &&
+                    row.length === this.cols &&
+                    row.every((cell) => cell === null || typeof cell === "string")
+            );
+    
+        return validVersion && validPuzzleNumber && validGridCells;
     }
 
     private getInitialPlacement(): Placement {
@@ -328,13 +426,31 @@ class PuzzleSession {
     }
 
     private createFilledLetterCount(): Map<PlacementId, letterCount> {
-        const map = new Map();
+        const map = new Map<PlacementId, letterCount>();
+
         const placements = this.boardView.getPlacements()
         for (const placement of placements) {
             map.set(placement.id, 0);
         }
     
         return map;
+    }
+
+    private rebuildFilledLetterCount(): void {
+        this.filledLetterCount = this.createFilledLetterCount();
+    
+        for (let row = 0; row < this.rows; row++) {
+            for (let col = 0; col < this.cols; col++) {
+                if (this.letterGrid[row][col] === null) continue;
+    
+                this.adjustFilledLetterCount({ row, col }, 1);
+            }
+        }
+    }
+
+    private rebuildSolvedPlacementIds() {
+        this.solvedPlacementIds = new Set();
+        this.updateSolvedPlacements(this.boardView.getPlacements());
     }
 }
 

@@ -53,7 +53,7 @@ class PuzzleController implements CursorController {
 
     public init(clueView: ClueView) {
         this.setClueView(clueView)
-        this.initActiveCursor();
+        this.renderInitialState();
 
         this.tableElement.addEventListener("focus", this.handleFocus, true);
         this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
@@ -61,13 +61,10 @@ class PuzzleController implements CursorController {
         this.tableElement.addEventListener("keydown", this.handleKeydown);
     }
 
-    private setClueView(clueView: ClueView) {
-        this.clueView = clueView;
-    }
-
-    private initActiveCursor() {
-        const coord = this.session.getCoord();
-        this.renderer.initActiveCursor(coord);
+    private renderInitialState(): void {
+        this.initLetters();
+        this.initClues();
+        this.initActiveCursor();
     }
 
     resetPuzzle() {
@@ -404,6 +401,31 @@ class PuzzleController implements CursorController {
         }
 
         return hasChanged;
+    }
+
+    private setClueView(clueView: ClueView) {
+        this.clueView = clueView;
+    }
+
+    private initLetters() {
+        for (let row = 0; row < this.boardView.board.rows; row++) {
+            for (let col = 0; col < this.boardView.board.rows; col++) {
+                const coord = { row, col };
+                const letter = this.session.getLetterAt(coord);
+
+                if (letter) this.renderer.renderLetter(coord, letter);
+            }
+        }
+    }
+
+    private initActiveCursor() {
+        const coord = this.session.getCoord();
+        this.renderer.initActiveCursor(coord);
+    }
+
+    private initClues() {
+        const currSolved = [...this.session.getSolvedPlacementIds()];
+        this.clueView.renderClues(currSolved);
     }
 
     private formatBoardHeader(label: number, direction: string, arrow:string, clue: string) {

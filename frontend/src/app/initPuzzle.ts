@@ -18,9 +18,9 @@ function initPuzzlePage(boardView: BoardView, solutionView: SolutionView) {
 function initPuzzleInteraction(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView, clueContainer: HTMLDivElement) {
   const puzzleController = createPuzzleController(tableElement, boardView, solutionView);
   const clueRenderer = createClueRenderer(boardView, clueContainer);
-
-  puzzleController.init(clueRenderer);
+  
   clueRenderer.init(puzzleController);
+  puzzleController.init(clueRenderer);
 
   initClearPuzzleButton(() => puzzleController.resetPuzzle());
 }
