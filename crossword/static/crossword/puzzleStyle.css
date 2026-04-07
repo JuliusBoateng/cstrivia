@@ -301,10 +301,7 @@ main {
 
     overflow-y: auto;
     scrollbar-gutter: stable;
-    /* provides separation from scrollbar and also makes text more scannable */
-    padding: clamp(10px, 1vw, 14px)
-             clamp(16px, 1.6vw, 20px);
-
+    padding: 14px 0px 14px 20px;
     font-size: 14px;
     line-height: 1.4;
 }
@@ -393,7 +390,7 @@ main {
     -webkit-tap-highlight-color: transparent;
 
     display: grid;
-    grid-template-columns: 2ch 1fr 0px;
+    grid-template-columns: 2ch minmax(0,1fr) 20px;
     gap: 0;
     width: 100%;
     align-items: start;
@@ -439,20 +436,24 @@ main {
 .clue-copy {
     appearance: none;
     -webkit-appearance: none;
-  
+
     background: none;
     border: none;
     padding: 0;
-    margin: 0;
 
-    width: 32px;
-    height: 32px;
-  
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    width: 16px;
+    height: 16px;
 
+    position: relative;
     cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+.clue-copy::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
 }
 
 .copy-icon,
