@@ -253,7 +253,7 @@ main {
 }
   
 .puzzle-toolbar .controls-toggle[aria-expanded="true"]::before {
-    content: "▼";
+    content: "\25BC";
 }
 
 .puzzle-toolbar .controls-toggle {
@@ -512,7 +512,7 @@ main {
 
 /* add separator between remaining items */
 .puzzle-metadata .meta-line > * + *::before {
-    content: " \2022 ";
+    content: "\00A0\2022\00A0";
 }
 
 .puzzle-metadata p {
