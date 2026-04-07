@@ -346,6 +346,20 @@ class PuzzleController implements CursorController {
     }
 
     private renderBoardHeader() {
+        if (this.session.isPuzzleComplete()) {
+            this.renderPuzzleCompleteHeader();
+            return;
+        }
+
+        this.renderStandardHeader();
+    }
+
+    private renderPuzzleCompleteHeader() {
+        const captionText = "Puzzle Complete. Good work.";
+        this.renderer.renderBoardHeader(captionText);
+    }
+
+    private renderStandardHeader() {
         const placement = this.session.getActivePlacement();
         if (!placement) return;
 
@@ -360,7 +374,7 @@ class PuzzleController implements CursorController {
         if (!clue) return;
 
         const direction = (clue.direction === Direction.A) ? "Across" : "Down";
-        const arrow = (clue.direction === Direction.A )? "→" : "↓";
+        const arrow = (clue.direction === Direction.A ) ? "\u2192" : "\u2193";
 
         const captionText = this.formatBoardHeader(label, direction, arrow, clue.question);
         this.renderer.renderBoardHeader(captionText);

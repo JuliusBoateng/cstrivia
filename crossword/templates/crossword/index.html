@@ -48,11 +48,11 @@
               </p>
           
               <div class="hero-meta">
-                <p id="tagline">No ads • No login • Just crosswords</p>
-                <p id="release-cadence">New puzzles every Tuesday<span>→ 12:00 UTC</span></p>
+                <p id="tagline">No ads &bull; No login &bull; Just crosswords</p>
+                <p id="release-cadence">New puzzles every Tuesday<span>&rarr; 12:00 UTC</span></p>
               </div>
               {% if latest_puzzle %}
-              <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle →</a>
+              <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle &rarr;</a>
 
                 <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" aria-label="Solve latest puzzle" class="hero-link">
                   <img src="{% static 'crossword/img/board.png' %}" alt="Solve latest puzzle" class="hero-screenshot">
@@ -94,7 +94,7 @@
             <p class="puzzle-note">Each crossword is manually constructed.</p>
             <section class="feature-list">
               <ul>
-                <li>Open source • No tracking • No data collection</li>
+                <li>Open source &bull; No tracking &bull; No data collection</li>
                 <li class="emphasis">No coding challenges or technical assessments. Just puzzles.</li>
               </ul>
             </section>

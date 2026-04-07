@@ -24,6 +24,7 @@
 
 html {
     font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+    overflow-y: scroll;
 }
 
 body {
@@ -247,7 +248,7 @@ main {
 }
 
 .puzzle-toolbar .controls-toggle::before {
-    content: "▶";
+    content: "\25B6";
     margin-right: 0.1rem;
 }
   
@@ -342,11 +343,11 @@ main {
 }
 
 .clue-toggle .clue-label.clue-across::before {
-    content: "→";
+    content: "\2192";
 }
 
 .clue-toggle .clue-label.clue-down::before {
-    content: "↓";
+    content: "\2193";
 }
 
 .clue-count {
@@ -511,7 +512,7 @@ main {
 
 /* add separator between remaining items */
 .puzzle-metadata .meta-line > * + *::before {
-    content: " • ";
+    content: " \2022 ";
 }
 
 .puzzle-metadata p {
@@ -625,3 +626,10 @@ p.board-desc {
       display: block;
     }
 }
+
+@media (min-width: 1800px) {
+    :root {
+      --board-max: 780px;
+      --clue-max-height: 800px;
+    }
+  }
