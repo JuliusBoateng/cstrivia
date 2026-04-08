@@ -198,6 +198,16 @@ main {
   text-wrap: pretty;
 }
 
+.feature-list a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.feature-list a:hover {
+  color: #374151;
+}
+
 .feature-list ul {
   list-style: none;
   padding: 0;
