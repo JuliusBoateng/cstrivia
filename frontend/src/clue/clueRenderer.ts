@@ -1,6 +1,6 @@
 import { Direction, PlacementId } from "../models/boardView.js";
 import { CursorController } from "../puzzle/puzzleController.js";
-import { revealCopyButton, hideCopyButton} from "./clueBuilder.js";
+import { revealCopyButton, hideCopyButton} from "../copyButton.js";
 
 const CLUE_TOGGLE = ".clue-toggle";
 const CLUE = ".clue"

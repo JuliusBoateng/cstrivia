@@ -6,6 +6,7 @@ import { PuzzleRenderer } from "../puzzle/puzzleRenderer.js";
 import { PuzzleSession } from "../puzzle/puzzleSession.js";
 import { PuzzleValidator } from "../puzzle/puzzleValidator.js";
 import { createClueRenderer } from "../clue/createClueRenderer.js";
+import { createCopyButton, attachCopyBehavior, revealCopyButton } from "../copyButton.js";
 
 function initPuzzlePage(boardView: BoardView, solutionView: SolutionView) {
   renderPuzzleHeader(boardView);
@@ -55,6 +56,7 @@ function renderPuzzleMetadata(boardView: BoardView) {
     const authorElement = puzzleMetadataElement.querySelector(".author")!;
     const publishedAtElement = puzzleMetadataElement.querySelector(".published-at")! as HTMLTimeElement;
     const puzzleNumberElement = puzzleMetadataElement.querySelector(".puzzle-number")!;
+    const puzzleUrlCopyButton = puzzleMetadataElement.querySelector(".puzzle-url-copy-button")!;
 
     const author = boardView.board.author || "Anonymous Contributor";
     const iso = boardView.board.published_at;
@@ -65,6 +67,12 @@ function renderPuzzleMetadata(boardView: BoardView) {
     publishedAtElement.setAttribute("datetime", iso);
     publishedAtElement.textContent = formatted;
     puzzleNumberElement.textContent = `Puzzle #${puzzleNumber}`;
+
+    const button = createCopyButton();
+    attachCopyBehavior(button, getCanonicalUrl());
+    revealCopyButton(button);
+    button.classList.add("puzzle-url-copy-button");
+    puzzleUrlCopyButton.replaceWith(button);
 
     boardDescElement.textContent = desc;
 }
@@ -171,6 +179,11 @@ function initClearPuzzleButton(resetPuzzle: () => void) {
     button.classList.remove(CONFIRM_CLASS);
     button.textContent = CLEAR_LABEL;
   }
+}
+
+function getCanonicalUrl(): string {
+  const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  return canonical?.href ?? window.location.href;
 }
 
 export { initPuzzlePage, initPuzzleInteraction };

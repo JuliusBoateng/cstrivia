@@ -511,12 +511,22 @@ main {
 }
 
 /* add separator between remaining items */
-.puzzle-metadata .meta-line > * + *::before {
+.puzzle-metadata .meta-line > :not(button) + :not(button)::before {
     content: "\00A0\2022\00A0";
 }
 
 .puzzle-metadata p {
     margin: 0;
+}
+
+.puzzle-url-copy-button {
+    margin-left: .4rem;
+    opacity: 0.55;
+    transform: translateY(2px);
+}
+
+.puzzle-url-copy-button:hover {
+    opacity: 0.9;
 }
 
 p.board-desc {
