@@ -15,3 +15,6 @@ def puzzle(request, puzzle_number: int):
         "solution_view_dto": views.serialized_solution_view
     }
     return render(request, "crossword/puzzle.html", data)
+
+def privacy(request):
+    return render(request, "crossword/privacy.html")

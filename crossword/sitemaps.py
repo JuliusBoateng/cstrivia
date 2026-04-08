@@ -14,11 +14,14 @@ class PuzzleSitemap(Sitemap):
         return obj.published_at
 
 class StaticSitemap(Sitemap):
-    priority = 0.8
-    changefreq = "weekly"
-
     def items(self):
-        return ["index"]
+        return ["index", "privacy"]
 
     def location(self, item):
         return reverse(item)
+
+    def priority(self, item):
+        return 0.8 if item == "index" else 0.3
+
+    def changefreq(self, item):
+        return "weekly" if item == "index" else "yearly"

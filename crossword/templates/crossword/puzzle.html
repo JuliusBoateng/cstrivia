@@ -48,16 +48,7 @@
     <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
   </head>
   <body class="off-white">
-    <header class="site-header">
-      <nav>
-        <a href="/" class="site-name">
-          <img src="{% static 'crossword/img/favicon-16.png' %}" class="nav-logo" alt="logo">
-          CS Trivia
-        </a>
-        <a href="https://github.com/JuliusBoateng/cstrivia" class="github" target="_blank"
-          rel="noopener noreferrer">GitHub</a>
-      </nav>
-    </header>
+    {% include "crossword/_header.html" %}
     <main>
       <article class="puzzle">
         <div class="puzzle-dynamic">
@@ -176,15 +167,6 @@
         </div>
       </article>
     </main>
-    <footer class="site-footer">
-      <p>
-        View on <a href="https://github.com/JuliusBoateng/cstrivia" target="_blank"
-          rel="noopener noreferrer">GitHub</a>
-      </p>
-      <p>Subscribe via <a href="/rss/">RSS</a></p>
-      <p>
-        Feedback or suggestions? Email <a href="mailto:julius@cstrivia.com">julius@cstrivia.com</a> or open an issue.
-      </p>
-    </footer>
+    {% include "crossword/_footer.html" %}
   </body>
 </html>
