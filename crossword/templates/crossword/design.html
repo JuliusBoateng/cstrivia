@@ -1,0 +1,33 @@
+{% load static %}
+{% load markdown_filters %}
+
+<article>
+  <h1>Design {{ note.design_number }}: {{ note.title }}</h1>
+
+  {% if note.published_at %}
+    <p>{{ note.published_at|date:"F j, Y" }}</p>
+  {% endif %}
+
+  {% if note.author %}
+    <p>By {{ note.author }}</p>
+  {% endif %}
+
+  <div>
+    {{ note.body|render_markdown }}
+  </div>
+
+  {% if note.boards.all %}
+    <section>
+      <h2>Related Puzzles</h2>
+      <ul>
+        {% for board in note.boards.all %}
+          <li>
+            <a href="{{ board.get_absolute_url }}">
+              Puzzle {{ board.puzzle_number }}: {{ board.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</article>

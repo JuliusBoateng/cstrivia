@@ -1,0 +1,25 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{% static 'crossword/css/site.css' %}">
+    <link rel="stylesheet" href="{% static 'crossword/css/index.css' %}">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Design Notes | CS Trivia</title>
+  </head>
+
+  <body>
+    {% include "crossword/_header.html" %}
+    <main>
+      <h1>Design Notes</h1>
+
+      <p>
+        Notes on puzzle construction, tradeoffs, and development of the site.
+      </p>
+
+      {% include "crossword/includes/design_list.html" %}
+    </main>
+    {% include "crossword/_footer.html" %}
+  </body>
+</html>

@@ -60,37 +60,7 @@
               {% endif %}
             </section>
 
-            <section class="puzzle-list">
-              <h2>Puzzles</h2>
-            
-              <ul>
-                {% for puzzle in puzzles %}
-                  <li>
-                    <a href="{% url 'puzzle' puzzle.puzzle_number %}" class="puzzle-row">
-                      <span class="puzzle-number">Puzzle {{ puzzle.puzzle_number }}:</span>
-                      <span class="puzzle-title">{{ puzzle.title }}</span>
-                      <span class="puzzle-date">
-                        {{ puzzle.published_at|date:"M j, Y" }}
-                      </span>
-                    </a>
-                  </li>
-                {% endfor %}
-              </ul>
-            
-              {% if is_paginated %}
-                <div class="pagination">
-                  {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                  {% endif %}
-            
-                  <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-            
-                  {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
-                  {% endif %}
-                </div>
-              {% endif %}
-            </section>
+            {% include "crossword/includes/puzzle_list.html" %}
             <p class="puzzle-note">Each crossword is manually constructed.</p>
             <section class="feature-list">
               <ul>

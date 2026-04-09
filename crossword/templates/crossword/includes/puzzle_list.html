@@ -1,0 +1,19 @@
+<section class="puzzle-list">
+    <h2>Puzzles</h2>
+  
+    <ul>
+      {% for puzzle in puzzles %}
+        <li>
+          <a href="{% url 'puzzle' puzzle.puzzle_number %}" class="puzzle-row">
+            <span class="puzzle-number">Puzzle {{ puzzle.puzzle_number }}:</span>
+            <span class="puzzle-title">{{ puzzle.title }}</span>
+            <span class="puzzle-date">
+              {{ puzzle.published_at|date:"M j, Y" }}
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  
+    {% include "crossword/includes/pagination.html" %}
+</section>

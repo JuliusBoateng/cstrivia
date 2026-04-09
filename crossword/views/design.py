@@ -25,11 +25,6 @@ class DesignNoteListView(ListView):
         )
 
 @never_cache
-def design_note_view(request, design_number: int):
+def design_view(request, design_number: int):
     note = get_design_note(design_number)
-    data = {
-        "note": note
-    }
-
-    return render(request, "crossword/design.html", data)
-
+    return render(request, "crossword/design.html", {"note": note})

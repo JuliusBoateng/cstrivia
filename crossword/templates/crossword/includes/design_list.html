@@ -1,0 +1,19 @@
+<section class="design-list">
+    <h2>Design</h2>
+  
+    <ul>
+      {% for note in notes %}
+        <li>
+          <a href="{% url 'design' note.design_number %}" class="design-row">
+            <span class="design-number">Design {{ note.design_number }}:</span>
+            <span class="design-title">{{ note.title }}</span>
+            <span class="design-date">
+              {{ note.published_at|date:"M j, Y" }}
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  
+    {% include "crossword/includes/pagination.html" %}
+</section>
