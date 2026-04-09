@@ -1,9 +1,12 @@
+from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import ListView
 
-from .models import DesignNote
+from ..models import DesignNote
+from ..service import get_design_note
+
 PAGINATION_LIMIT = 10
 
 @method_decorator(never_cache, name="dispatch")
@@ -20,3 +23,13 @@ class DesignNoteListView(ListView):
             .order_by("-design_number")
             .prefetch_related("boards", "categories")
         )
+
+@never_cache
+def design_note_view(request, design_number: int):
+    note = get_design_note(design_number)
+    data = {
+        "note": note
+    }
+
+    return render(request, "crossword/design.html", data)
+

@@ -3,10 +3,9 @@ from itertools import chain
 from django.contrib.syndication.views import Feed
 from django.utils import timezone
 
-from .models import Board, DesignNote
+from ..models import Board, DesignNote
 
 RSS_LIMIT = 20
-
 
 class LatestActivityFeed(Feed):
     title = "CS Trivia"

@@ -1,9 +1,12 @@
+from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import ListView
 
-from .models import Board
+from ..models import Board
+from ..service import get_puzzle_view
+
 PAGINATION_LIMIT = 10
 
 @method_decorator(never_cache, name="dispatch")
@@ -27,3 +30,16 @@ class PuzzleListView(ListView):
         context["latest_puzzle"] = puzzles[0] if puzzles else None
 
         return context
+
+@never_cache
+def puzzle_view(request, puzzle_number: int):
+    views = get_puzzle_view(puzzle_number)
+    data = {
+        "seo": views.seo,
+        "board_view_dto": views.serialized_board_view,
+        "solution_view_dto": views.serialized_solution_view
+    }
+    return render(request, "crossword/puzzle.html", data)
+
+def privacy_view(request):
+    return render(request, "crossword/privacy.html")

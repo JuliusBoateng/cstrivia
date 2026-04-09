@@ -19,7 +19,7 @@ class Views(NamedTuple):
     serialized_board_view: dict
     serialized_solution_view: dict
 
-def get_puzzle_views(puzzle_number: int) -> Views:
+def get_puzzle_view(puzzle_number: int) -> Views:
     board: Model = _fetch_board(puzzle_number)
 
     board_view = map_to_board_view_dto(board)
@@ -45,7 +45,7 @@ def _fetch_board(puzzle_number: int) -> Board:
     
     return get_object_or_404(queryset, puzzle_number=puzzle_number)
 
-def get_design_views(design_number: int) -> DesignNote:
+def get_design_note(design_number: int) -> DesignNote:
     return get_object_or_404(
         DesignNote.objects.prefetch_related("boards", "categories"),
         design_number=design_number,
