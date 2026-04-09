@@ -1,23 +1,30 @@
+{% extends "crossword/base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="en-US">
-  <head>
-    {{board_view_dto|json_script:"board-view-dto" }}
-    {{solution_view_dto|json_script:"solution-view-dto" }}
-    <link rel="stylesheet" href="{% static 'crossword/css/site.css' %}">
-    <link rel="stylesheet" href="{% static 'crossword/css/puzzle.css' %}">
-    <script type="module" src="{% static 'crossword/dist/main.js' %}"></script>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    
-    <link rel="icon" sizes="16x16" href="{% static 'crossword/img/favicon-16.png' %}">
-    <link rel="icon" sizes="48x48" href="{% static 'crossword/img/favicon-48.png' %}">
-    <link rel="canonical" href="https://cstrivia.com/puzzle/{{ seo.puzzle_number }}">
 
-    <title>Puzzle #{{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia</title>
-    <meta name="description" content="Solve '{{ seo.title|escape }}', a computer science crossword puzzle{% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}.">
-    
-    <script type="application/ld+json">
+{% block canonical %}
+  <link rel="canonical" href="https://cstrivia.com/puzzle/{{ seo.puzzle_number }}">
+{% endblock %}
+
+{% block title %}
+  Puzzle #{{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
+{% endblock %}
+
+{% block meta_description %}
+  <meta
+    name="description"
+    content="Solve '{{ seo.title|escape }}', a computer science crossword puzzle{% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}."
+  >
+{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'crossword/css/puzzle.css' %}">
+{% endblock %}
+
+{% block head_extra %}
+  {{ board_view_dto|json_script:"board-view-dto" }}
+  {{ solution_view_dto|json_script:"solution-view-dto" }}
+
+  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "CreativeWork",
@@ -31,142 +38,147 @@
       "datePublished": "{{ seo.published_at|date:'Y-m-d' }}",
       "url": "https://cstrivia.com/puzzle/{{ seo.puzzle_number }}"
     }
-    </script>
+  </script>
 
-    <!-- Open Graph (LinkedIn, Facebook, etc.) -->
-    <meta property="og:title" content="CS Trivia - Computer Science Crossword Puzzles" />
-    <meta property="og:description" content="Solve computer science crossword puzzles on CS Trivia." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://cstrivia.com{{ request.path }}" />
-    <meta property="og:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
-  
-    <!-- Twitter (also used by some platforms) -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CS Trivia - Computer Science Crossword Puzzles" />
-    <meta name="twitter:description" content="Solve computer science crossword puzzles on CS Trivia." />
-    <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
-  </head>
-  <body class="off-white">
-    {% include "crossword/_header.html" %}
-    <main>
-      <article class="puzzle">
-        <div class="puzzle-dynamic">
-          <h1 class="board-title"></h1>
+  <!-- Open Graph (LinkedIn, Facebook, etc.) -->
+  <meta property="og:title" content="CS Trivia - Computer Science Crossword Puzzles" />
+  <meta property="og:description" content="Solve computer science crossword puzzles on CS Trivia." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cstrivia.com{{ request.path }}" />
+  <meta property="og:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
 
-          <div class="board-instructions">
-            <p class="instructions-mobile">
-              Tap clues to jump &bull; Tap to type &bull; Tap again to switch direction
-            </p>
+  <!-- Twitter (also used by some platforms) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CS Trivia - Computer Science Crossword Puzzles" />
+  <meta name="twitter:description" content="Solve computer science crossword puzzles on CS Trivia." />
+  <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
+{% endblock %}
 
-            <p class="instructions-desktop">
-              Arrow keys to move &bull; Tab to jump between clues &bull; Space to switch direction
-            </p>
-          </div>
-        
-          <div class="toolbar-wrapper">
-            <div class="puzzle-toolbar" role="toolbar">
-              <button type="button" id="controls-toggle" class="controls-toggle" aria-expanded="false" aria-controls="controls-panel">
-                Controls
-              </button>
-              <span class="toolbar-separator" aria-hidden="true">|</span>
-              <button id="clear-puzzle" type="button" class="clear-puzzle">Clear puzzle</button>
-            </div>
+{% block body_class %}
+  off-white
+{% endblock %}
 
-            <div id="controls-panel" class="controls-panel" role="region" aria-labelledby="controls-toggle" hidden>
-              <ul class="controls-desktop">
-                <li>Tab / Shift+Tab to jump between clues.</li>
-                <li>Esc to leave board.</li>
-                <li>Double-click to switch direction.</li>
-                <li>Click headers to expand/collapse sections.</li>
-              </ul>
+{% block content %}
+  <article class="puzzle">
+    <div class="puzzle-dynamic">
+      <h1 class="board-title"></h1>
 
-              <ul class="controls-mobile">
-                <li>Tap headers to expand/collapse sections.</li>
-                <li>Press and hold a clue to show copy button.</li>
-              </ul>
-            </div>
-          </div>
+      <div class="board-instructions">
+        <p class="instructions-mobile">
+          Tap clues to jump &bull; Tap to type &bull; Tap again to switch direction
+        </p>
 
-          <div class="puzzle-panel">
-            <div class="board-wrapper">
-              <table id="board" class="board-card"></table>
-            </div>
-            <div class="clue-wrapper">
-              <div id="clues" class="clue-card">
-                <h2>
-                  <button id="todo-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="true"
-                    aria-controls="todo-section">
-                    <span class="clue-label">To Do</span>
-                    <span class="clue-count"></span>
-                  </button>
-                </h2>
-                <div id="todo-section" class="clue-section-body">
-                  <h3>
-                    <button id="todo-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
-                      aria-controls="todo-across-clues">
-                      <span class="clue-label clue-across">Across</span>
-                      <span class="clue-count"></span>
-                    </button>
-                  </h3>
-                  <ol id="todo-across-clues" class="clue-list" hidden></ol>
-                  <h3>
-                    <button id="todo-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
-                      aria-controls="todo-down-clues">
-                      <span class="clue-label clue-down">Down</span>
-                      <span class="clue-count"></span>
-                    </button>
-                  </h3>
-                  <ol id="todo-down-clues" class="clue-list" hidden></ol>
-                </div>
-                <h2>
-                  <button id="solved-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="false"
-                    aria-controls="solved-section">
-                    <span class="clue-label">Solved</span>
-                    <span class="clue-count"></span>
-                  </button>
-                </h2>
-                <div id="solved-section" class="clue-section-body" hidden>
-                  <h3>
-                    <button id="solved-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
-                      aria-controls="solved-across-clues">
-                      <span class="clue-label clue-across">Across</span>
-                      <span class="clue-count"></span>
-                    </button>
-                  </h3>
-                  <ol id="solved-across-clues" class="clue-list" hidden></ol>
-                  <h3>
-                    <button id="solved-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
-                      aria-controls="solved-down-clues">
-                      <span class="clue-label clue-down">Down</span>
-                      <span class="clue-count"></span>
-                    </button>
-                  </h3>
-                  <ol id="solved-down-clues" class="clue-list" hidden></ol>
-                </div>
-                <div class="clue-empty">No clues visible</div>
-              </div>
-            </div>
-          </div>
-          <section class="post-puzzle">
-            <div class="puzzle-metadata">
-              <p class="meta-line">
-                <span class="author"></span>
-                <time class="published-at"></time>
-                <span class="puzzle-number"></span>
-                <button class="puzzle-url-copy-button"></button>
-              </p>
-            </div>
+        <p class="instructions-desktop">
+          Arrow keys to move &bull; Tab to jump between clues &bull; Space to switch direction
+        </p>
+      </div>
 
-            <p class="board-desc"></p>
-
-            <details class="solution-panel">
-              <summary class="solution-toggle">solution.txt</summary>
-              <pre class="solution-json"><code></code></pre>
-            </details>
-          </section>
+      <div class="toolbar-wrapper">
+        <div class="puzzle-toolbar" role="toolbar">
+          <button type="button" id="controls-toggle" class="controls-toggle" aria-expanded="false" aria-controls="controls-panel">
+            Controls
+          </button>
+          <span class="toolbar-separator" aria-hidden="true">|</span>
+          <button id="clear-puzzle" type="button" class="clear-puzzle">Clear puzzle</button>
         </div>
-      </article>
-    </main>
-    {% include "crossword/_footer.html" %}
-  </body>
-</html>
+
+        <div id="controls-panel" class="controls-panel" role="region" aria-labelledby="controls-toggle" hidden>
+          <ul class="controls-desktop">
+            <li>Tab / Shift+Tab to jump between clues.</li>
+            <li>Esc to leave board.</li>
+            <li>Double-click to switch direction.</li>
+            <li>Click headers to expand/collapse sections.</li>
+          </ul>
+
+          <ul class="controls-mobile">
+            <li>Tap headers to expand/collapse sections.</li>
+            <li>Press and hold a clue to show copy button.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="puzzle-panel">
+        <div class="board-wrapper">
+          <table id="board" class="board-card"></table>
+        </div>
+        <div class="clue-wrapper">
+          <div id="clues" class="clue-card">
+            <h2>
+              <button id="todo-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="true"
+                aria-controls="todo-section">
+                <span class="clue-label">To Do</span>
+                <span class="clue-count"></span>
+              </button>
+            </h2>
+            <div id="todo-section" class="clue-section-body">
+              <h3>
+                <button id="todo-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                  aria-controls="todo-across-clues">
+                  <span class="clue-label clue-across">Across</span>
+                  <span class="clue-count"></span>
+                </button>
+              </h3>
+              <ol id="todo-across-clues" class="clue-list" hidden></ol>
+              <h3>
+                <button id="todo-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                  aria-controls="todo-down-clues">
+                  <span class="clue-label clue-down">Down</span>
+                  <span class="clue-count"></span>
+                </button>
+              </h3>
+              <ol id="todo-down-clues" class="clue-list" hidden></ol>
+            </div>
+            <h2>
+              <button id="solved-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="false"
+                aria-controls="solved-section">
+                <span class="clue-label">Solved</span>
+                <span class="clue-count"></span>
+              </button>
+            </h2>
+            <div id="solved-section" class="clue-section-body" hidden>
+              <h3>
+                <button id="solved-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                  aria-controls="solved-across-clues">
+                  <span class="clue-label clue-across">Across</span>
+                  <span class="clue-count"></span>
+                </button>
+              </h3>
+              <ol id="solved-across-clues" class="clue-list" hidden></ol>
+              <h3>
+                <button id="solved-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                  aria-controls="solved-down-clues">
+                  <span class="clue-label clue-down">Down</span>
+                  <span class="clue-count"></span>
+                </button>
+              </h3>
+              <ol id="solved-down-clues" class="clue-list" hidden></ol>
+            </div>
+            <div class="clue-empty">No clues visible</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="post-puzzle">
+        <div class="puzzle-metadata">
+          <p class="meta-line">
+            <span class="author"></span>
+            <time class="published-at"></time>
+            <span class="puzzle-number"></span>
+            <button class="puzzle-url-copy-button"></button>
+          </p>
+        </div>
+
+        <p class="board-desc"></p>
+
+        <details class="solution-panel">
+          <summary class="solution-toggle">solution.txt</summary>
+          <pre class="solution-json"><code></code></pre>
+        </details>
+      </section>
+    </div>
+  </article>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{% static 'crossword/dist/main.js' %}"></script>
+{% endblock %}
