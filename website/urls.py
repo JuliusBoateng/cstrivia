@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.http import HttpResponse
 from django.contrib.sitemaps.views import sitemap
-from crossword.sitemap import get_sitemap_view
+from crossword.views.sitemap import get_sitemap_view
 from django.conf import settings
 
 

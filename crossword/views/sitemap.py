@@ -1,5 +1,5 @@
 from django.contrib.sitemaps import Sitemap
-from .models import Board
+from ..models import Board
 from django.urls import reverse
 from django.utils import timezone
 

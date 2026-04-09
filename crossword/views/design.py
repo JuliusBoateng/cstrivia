@@ -5,7 +5,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import ListView
 
 from ..models import DesignNote
-from ..service import get_design_note
+from ..api.service import get_design_note
 
 PAGINATION_LIMIT = 10
 

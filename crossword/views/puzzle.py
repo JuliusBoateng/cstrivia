@@ -5,7 +5,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import ListView
 
 from ..models import Board
-from ..service import get_puzzle_view, PuzzleView
+from ..api.service import get_puzzle_view, PuzzleView
 
 PAGINATION_LIMIT = 10
 

@@ -4,14 +4,14 @@ from django.db.models import Model, Prefetch
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from .dto.mappers import (
+from ..dto.mappers import (
     SeoDTO,
     map_to_board_view_dto,
     map_to_seo_dto,
     map_to_solution_view_dto,
 )
-from .dto.serializers import serialize_board_view, serialize_solution_view
-from .models import Board, CluePlacement, DesignNote
+from ..dto.serializers import serialize_board_view, serialize_solution_view
+from ..models import Board, CluePlacement, DesignNote
 
 
 class PuzzleView(NamedTuple):
