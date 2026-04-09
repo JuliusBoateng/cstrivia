@@ -1,74 +1,81 @@
+{% extends "crossword/base.html" %}
 {% load static %}
-<!doctype html>
-<html>
-  <head>
-    <link rel="stylesheet" href="{% static 'crossword/css/site.css' %}">
-    <link rel="stylesheet" href="{% static 'crossword/css/index.css' %}">
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
 
-    <link rel="icon" sizes="16x16" href="{% static 'crossword/img/favicon-16.png' %}">
-    <link rel="icon" sizes="48x48" href="{% static 'crossword/img/favicon-48.png' %}">
-    <link rel="canonical" href="https://cstrivia.com/">
+{% block canonical %}
+<link rel="canonical" href="https://cstrivia.com/">
+{% endblock %}
 
-    <title>Computer Science Crossword Puzzles | CS Trivia</title>
-    <meta name="description" content="Computer science crossword puzzles for anyone curious about computer science.">
+{% block title %}
+Computer Science Crosswords | CS Trivia
+{% endblock %}
 
-    <script type="application/ld+json">
-      {
-       "@context": "https://schema.org",
-       "@type": "WebSite",
-       "name": "CS Trivia",
-       "url": "https://cstrivia.com",
-       "description": "Computer science crossword puzzles for anyone curious about computer science."
-      }
-      </script>
+{% block meta_description %}
+<meta name="description" content="Computer science crosswords for anyone curious about computer science.">
+{% endblock %}
 
-    <!-- Open Graph (LinkedIn, Facebook, etc.) -->
-    <meta property="og:title" content="CS Trivia - Computer Science Crossword Puzzles" />
-    <meta property="og:description" content="Computer science crossword puzzles for anyone curious about computer science. New puzzles every Tuesday." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://cstrivia.com/" />
-    <meta property="og:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
-  
-    <!-- Twitter (also used by some platforms) -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CS Trivia - Computer Science Crossword Puzzles" />
-    <meta name="twitter:description" content="Computer science crossword puzzles for anyone curious about computer science. New puzzles every Tuesday." />
-    <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
-  </head>
-    <body>
-        <main>
-            <section class="hero">
-              <h1>Computer Science Crosswords.</h1>
-          
-              <p class="subheadline">
-                For anyone curious about computer science
-              </p>
-          
-              <div class="hero-meta">
-                <p id="tagline">No ads &bull; No login &bull; Just crosswords</p>
-                <p id="release-cadence">New puzzles every Tuesday<span>&rarr; 12:00 UTC</span></p>
-              </div>
-              {% if latest_puzzle %}
-              <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle &rarr;</a>
+{% block styles %}
+<link rel="stylesheet" href="{% static 'crossword/css/index.css' %}">
+{% endblock %}
 
-                <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" aria-label="Solve latest puzzle" class="hero-link">
-                  <img src="{% static 'crossword/img/board.png' %}" alt="Solve latest puzzle" class="hero-screenshot">
-                </a>
-              {% endif %}
-            </section>
+{% block head_extra %}
+<link rel="alternate" type="application/rss+xml" title="RSS" href="/rss.xml">
 
-            {% include "crossword/includes/puzzle_list.html" %}
-            <p class="puzzle-note">Each crossword is manually constructed.</p>
-            <section class="feature-list">
-              <ul>
-                <li>Open source &bull; <a href="/privacy">No tracking</a> &bull; <a href="/privacy">No data collection</a></li>
-                <li class="emphasis">No coding challenges or technical assessments. Just puzzles.</li>
-              </ul>
-            </section>
-          </main>
-          {% include "crossword/_footer.html" %}
-    </body>
-</html>
+<script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "CS Trivia",
+  "url": "https://cstrivia.com",
+  "description": "Computer science crosswords for anyone curious about computer science."
+  }
+</script>
+
+<!-- Open Graph (LinkedIn, Facebook, etc.) -->
+<meta property="og:title" content="CS Trivia | Computer Science Crosswords" />
+<meta property="og:description" content="Computer science crosswords for anyone curious about computer science." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://cstrivia.com/" />
+<meta property="og:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
+
+<!-- Twitter (also used by some platforms) -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="CS Trivia | Computer Science Crosswords" />
+<meta name="twitter:description" content="Computer science crosswords for anyone curious about computer science." />
+<meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Computer Science Crosswords.</h1>
+
+  <p class="subheadline">
+    For anyone curious about computer science
+  </p>
+
+  <div class="hero-meta">
+    <p id="tagline">No ads &bull; No login &bull; Just crosswords</p>
+    <p id="release-cadence">New puzzles every Tuesday<span>&rarr; 12:00 UTC</span></p>
+  </div>
+
+  {% if latest_puzzle %}
+    <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle &rarr;</a>
+
+    <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" aria-label="Solve latest puzzle" class="hero-link">
+      <img src="{% static 'crossword/img/board.png' %}" alt="Solve latest puzzle" class="hero-screenshot">
+    </a>
+  {% endif %}
+</section>
+
+{% include "crossword/includes/puzzle_list.html" %}
+
+<p class="puzzle-note">Each crossword is manually constructed.</p>
+
+<section class="feature-list">
+  <ul>
+    <li>Open source &bull; <a href="/privacy">No tracking</a> &bull; <a href="/privacy">No data collection</a></li>
+    <li class="emphasis">No coding challenges or technical assessments. Just puzzles.</li>
+  </ul>
+</section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="stylesheet" href="{% static 'crossword/css/site.css' %}">
+    <link rel="icon" sizes="16x16" href="{% static 'crossword/img/favicon-16.png' %}">
+    <link rel="icon" sizes="48x48" href="{% static 'crossword/img/favicon-48.png' %}">
+
+    {% block canonical %}{% endblock %}
+
+    <title>{% block title %}{% endblock %}</title>
+    {% block meta_description %}{% endblock %}
+    {% block styles %}{% endblock %}
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body class="{% block body_class %}{% endblock %}">
+    {% block header %}
+      {% include "crossword/_header.html" %}
+    {% endblock %}
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    {% block footer %}
+      {% include "crossword/_footer.html" %}
+    {% endblock %}
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
