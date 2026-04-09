@@ -1,10 +1,18 @@
+from typing import NamedTuple
+
 from django.db.models import Model, Prefetch
 from django.shortcuts import get_object_or_404
-from .dto.mappers import map_to_board_view_dto, map_to_solution_view_dto, map_to_seo_dto, SeoDTO
-from .models import Board, CluePlacement
-from .dto.serializers import serialize_board_view, serialize_solution_view
-from typing import NamedTuple
 from django.utils import timezone
+
+from .dto.mappers import (
+    SeoDTO,
+    map_to_board_view_dto,
+    map_to_seo_dto,
+    map_to_solution_view_dto,
+)
+from .dto.serializers import serialize_board_view, serialize_solution_view
+from .models import Board, CluePlacement, DesignNote
+
 
 class Views(NamedTuple):
     seo: SeoDTO
@@ -36,3 +44,10 @@ def _fetch_board(puzzle_number: int) -> Board:
                 )
     
     return get_object_or_404(queryset, puzzle_number=puzzle_number)
+
+def get_design_views(design_number: int) -> DesignNote:
+    return get_object_or_404(
+        DesignNote.objects.prefetch_related("boards", "categories"),
+        design_number=design_number,
+        published_at__lte=timezone.now(),
+    )
