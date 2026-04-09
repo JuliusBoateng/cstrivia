@@ -15,7 +15,14 @@ class Category(models.Model):
         ordering = ["name"]
 
     def clean(self):
-        self.name = capwords(self.name)
+        self.name = capwords(self.name.strip())
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 class Board(models.Model):
     MIN_ROWS, MAX_ROWS = 5, 21
@@ -48,6 +55,9 @@ class Board(models.Model):
     
     def get_absolute_url(self):
         return reverse("puzzle", kwargs={"puzzle_number": self.puzzle_number})
+    
+    def __str__(self):
+        return self.title
 
     class Meta:
         ordering = ["puzzle_number"]
@@ -60,6 +70,10 @@ class Board(models.Model):
 
     def clean(self):
         self.title = self.title.strip()
+        self.description = self.description.strip()
+
+        if self.author:
+            self.author = self.author.strip()
 
         if self.rows != self.cols:
             raise ValidationError(
@@ -89,6 +103,9 @@ class Clue(models.Model):
     normalized_answer = models.CharField(max_length=21, editable=False) # derived field. diacritics removed
     categories = models.ManyToManyField(Category, related_name="clues", blank=True)
     
+    def __str__(self):
+        return self.question
+
     '''
     Filters allowed chars
     '''
@@ -148,6 +165,9 @@ class CluePlacement(models.Model):
             ("D", "Down"),
         ]
     )
+
+    def __str__(self):
+        return f"{self.direction} ({self.start_row}, {self.start_row})"
 
     class Meta:
         constraints = [
@@ -304,6 +324,9 @@ class ClueCell(models.Model):
     placement_index = models.PositiveIntegerField()
     letter = models.CharField(max_length=1)
 
+    def __str__(self):
+        return self.letter
+
     class Meta:
         ordering = ["placement_index"]
         constraints = [
@@ -324,3 +347,65 @@ class ClueCell(models.Model):
     # CluePlacement calls bulk_create which bypasses save()
     def save(self, *args, **kwargs):
         raise ValueError("ClueCell is a projection and cannot be saved directly.")
+
+### Design Notes Section
+class DesignCategory(models.Model):
+    name = models.CharField(max_length=32, unique=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def clean(self):
+        self.name = capwords(self.name.strip())
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class DesignNote(models.Model):
+    design_number = models.PositiveIntegerField(unique=True, null=True, blank=True)  # user visible design number
+    title = models.CharField(max_length=50, unique=True)
+    author = models.CharField(max_length=50, blank=True)
+    body = models.TextField()  # markdown
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    published_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
+
+    boards = models.ManyToManyField(
+        Board,
+        blank=True,
+        related_name="design_notes",
+    )
+
+    categories = models.ManyToManyField(
+        DesignCategory,
+        blank=True,
+        related_name="design_notes",
+    )
+
+    class Meta:
+        ordering = ["design_number"]
+
+    def get_absolute_url(self):
+        return reverse("design", kwargs={"design_number": self.design_number})
+
+    def clean(self):
+        self.title = self.title.strip()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+
+        if self.design_number is None:
+            with transaction.atomic():
+                current_design_number = DesignNote.objects.aggregate(
+                    max_num=models.Max("design_number", default=0)
+                )["max_num"]
+
+                self.design_number = current_design_number + 1
+
+        super().save(*args, **kwargs)
