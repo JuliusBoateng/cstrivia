@@ -1,7 +1,7 @@
 # CS Trivia
-Public repo for https://cstrivia.com
+Public repository for https://cstrivia.com
 
-A site centered around computer science crossword puzzles.
+A site for computer science crosswords.
 
 <img src="crossword/static/crossword/img/readme.png" width="860" />
 
@@ -102,19 +102,29 @@ DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/cstrivia
 python manage.py migrate
 ```
 
-Load sample puzzle data:
+Load puzzle data into postgres:
 
 ```bash
-python manage.py load_puzzle crossword/data/open_source_basics.json
+python manage.py load_puzzle crossword/fixtures/open_source_basics.json
 ```
 
 ---
 
-## Setup Frontend
+## Run Server
+
+```bash
+python manage.py runserver
+```
+
+The server should run without errors.
+
+---
+
+## Run Frontend
 
 This project uses **vanilla TypeScript** compiled with **esbuild** for bundling and minification (no frontend framework).
 
-Build the frontend assets before running the development server:
+Build frontend assets:
 
 ```bash
 npm install
@@ -127,23 +137,11 @@ For development (auto-rebuild on changes):
 npm run watch
 ```
 
-To run TypeScript type checking:
-
-```bash
-npm run typecheck
-```
----
-
-## Run the Server
-
-```bash
-python manage.py runserver
-```
-
 Visit: [http://localhost:8000/](http://localhost:8000/)
-
 > Make sure you're using **http**, not https.
 > Some browsers (like Chrome) may auto-redirect to https, which will cause errors.
+
+---
 
 ## Feedback
 

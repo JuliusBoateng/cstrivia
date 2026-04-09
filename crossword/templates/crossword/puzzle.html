@@ -12,12 +12,34 @@
 {% block meta_description %}
   <meta
     name="description"
-    content="Solve '{{ seo.title|escape }}', a computer science crossword puzzle{% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}."
+    content="Solve '{{ seo.title|escape }}', a computer science crossword {% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}."
   >
 {% endblock %}
 
 {% block styles %}
   <link rel="stylesheet" href="{% static 'crossword/css/puzzle.css' %}">
+{% endblock %}
+
+<!-- Open Graph (LinkedIn, Facebook, etc.) -->
+{% block og_title %}
+  Puzzle #{{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
+{% endblock %}
+
+{% block og_description %}
+  Solve '{{ seo.title|escape }}', a computer science crossword {% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}.
+{% endblock %}
+
+{% block og_url %}
+  https://cstrivia.com/puzzle/{{ seo.puzzle_number }}/
+{% endblock %}
+
+ <!-- Twitter (also used by some platforms) -->
+{% block twitter_title %}
+  Puzzle #{{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
+{% endblock %}
+
+{% block twitter_description %}
+  Solve '{{ seo.title|escape }}', a computer science crossword {% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}.
 {% endblock %}
 
 {% block head_extra %}
@@ -39,19 +61,6 @@
       "url": "https://cstrivia.com/puzzle/{{ seo.puzzle_number }}"
     }
   </script>
-
-  <!-- Open Graph (LinkedIn, Facebook, etc.) -->
-  <meta property="og:title" content="CS Trivia - Computer Science Crossword Puzzles" />
-  <meta property="og:description" content="Solve computer science crossword puzzles on CS Trivia." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://cstrivia.com{{ request.path }}" />
-  <meta property="og:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
-
-  <!-- Twitter (also used by some platforms) -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="CS Trivia - Computer Science Crossword Puzzles" />
-  <meta name="twitter:description" content="Solve computer science crossword puzzles on CS Trivia." />
-  <meta name="twitter:image" content="https://cstrivia.com/static/crossword/img/landing-page.png" />
 {% endblock %}
 
 {% block body_class %}

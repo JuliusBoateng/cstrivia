@@ -11,9 +11,23 @@
 
     {% block canonical %}{% endblock %}
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}CS Trivia{% endblock %}</title>
     {% block meta_description %}{% endblock %}
     {% block styles %}{% endblock %}
+
+    <!-- Open Graph (LinkedIn, Facebook, etc.) -->
+    <meta property="og:title" content="{% block og_title %}CS Trivia | Computer Science Crosswords{% endblock %}" />
+    <meta property="og:description" content="{% block og_description %}Computer science crosswords for anyone curious about computer science.{% endblock %}" />
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
+    <meta property="og:url" content="{% block og_url %}https://cstrivia.com{{ request.path }}{% endblock %}" />
+    <meta property="og:image" content="{% block og_image %}https://cstrivia.com/static/crossword/img/landing-page.png{% endblock %}" />
+
+     <!-- Twitter (also used by some platforms) -->
+    <meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock %}" />
+    <meta name="twitter:title" content="{% block twitter_title %}CS Trivia | Computer Science Crosswords{% endblock %}" />
+    <meta name="twitter:description" content="{% block twitter_description %}Computer science crosswords for anyone curious about computer science.{% endblock %}" />
+    <meta name="twitter:image" content="{% block twitter_image %}https://cstrivia.com/static/crossword/img/landing-page.png{% endblock %}" />
+
     {% block head_extra %}{% endblock %}
   </head>
   <body class="{% block body_class %}{% endblock %}">
