@@ -6,7 +6,7 @@ import { PuzzleRenderer } from "../puzzle/puzzleRenderer.js";
 import { PuzzleSession } from "../puzzle/puzzleSession.js";
 import { PuzzleValidator } from "../puzzle/puzzleValidator.js";
 import { createClueRenderer } from "../clue/createClueRenderer.js";
-import { createCopyButton, attachCopyBehavior, revealCopyButton } from "../copyButton.js";
+import { createCopyButton, attachCopyBehavior, revealCopyButton } from "./copyButton.js";
 
 function initPuzzlePage(boardView: BoardView, solutionView: SolutionView) {
   renderPuzzleHeader(boardView);

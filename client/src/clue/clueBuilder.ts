@@ -1,5 +1,5 @@
 import { BoardView, Clue, Direction, Placement, PlacementId } from "../models/boardView.js";
-import { createCopyButton, attachCopyBehavior } from "../copyButton.js";
+import { createCopyButton, attachCopyBehavior } from "../app/copyButton.js";
 
 const CLUE = "clue";
 const CLUE_TEXT = "clue-text";

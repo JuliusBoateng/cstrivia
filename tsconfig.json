@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ES2020",
-    "rootDir": "./frontend/src",
+    "rootDir": "./client/src",
     "outDir": "./crossword/static/crossword/dist",
     "strict": true
   },
-  "include": ["frontend/src/**/*"]
+  "include": ["client/src/**/*"]
 }

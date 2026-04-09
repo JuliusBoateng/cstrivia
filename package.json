@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "watch": "esbuild frontend/src/main.ts --bundle --sourcemap --outfile=crossword/static/crossword/dist/main.js --watch",
-    "build": "esbuild frontend/src/main.ts --bundle --minify --outfile=crossword/static/crossword/dist/main.js"
+    "watch": "esbuild client/src/main.ts --bundle --sourcemap --outfile=crossword/static/crossword/dist/main.js --watch",
+    "build": "esbuild client/src/main.ts --bundle --minify --outfile=crossword/static/crossword/dist/main.js"
   },
   "repository": {
     "type": "git",
