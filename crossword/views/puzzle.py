@@ -5,7 +5,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import ListView
 
 from ..models import Board
-from ..service import get_puzzle_view
+from ..service import get_puzzle_view, PuzzleView
 
 PAGINATION_LIMIT = 10
 
@@ -33,7 +33,7 @@ class PuzzleListView(ListView):
 
 @never_cache
 def puzzle_view(request, puzzle_number: int):
-    views = get_puzzle_view(puzzle_number)
+    views: PuzzleView = get_puzzle_view(puzzle_number)
     data = {
         "seo": views.seo,
         "board_view_dto": views.serialized_board_view,

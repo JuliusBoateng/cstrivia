@@ -14,12 +14,12 @@ from .dto.serializers import serialize_board_view, serialize_solution_view
 from .models import Board, CluePlacement, DesignNote
 
 
-class Views(NamedTuple):
+class PuzzleView(NamedTuple):
     seo: SeoDTO
     serialized_board_view: dict
     serialized_solution_view: dict
 
-def get_puzzle_view(puzzle_number: int) -> Views:
+def get_puzzle_view(puzzle_number: int) -> PuzzleView:
     board: Model = _fetch_board(puzzle_number)
 
     board_view = map_to_board_view_dto(board)
@@ -30,7 +30,7 @@ def get_puzzle_view(puzzle_number: int) -> Views:
 
     seo = map_to_seo_dto(board) # not serialized b/c used directly for django templates
 
-    return Views(seo, serialized_board_view, serialized_solution_view)
+    return PuzzleView(seo, serialized_board_view, serialized_solution_view)
 
 def _fetch_board(puzzle_number: int) -> Board:
     queryset = (Board.objects

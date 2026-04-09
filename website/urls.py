@@ -18,20 +18,16 @@ from django.contrib import admin
 from django.urls import include, path
 from django.http import HttpResponse
 from django.contrib.sitemaps.views import sitemap
-from crossword.sitemaps import PuzzleSitemap, StaticSitemap
+from crossword.sitemap import get_sitemap_view
 from django.conf import settings
 
-sitemaps = {
-    "static": StaticSitemap,
-    "puzzles": PuzzleSitemap,
-}
 
 def healthz(request):
     return HttpResponse("ok", content_type="text/plain")
 
 urlpatterns = [
     path("healthz/", healthz),
-    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
+    path("sitemap.xml", sitemap, {"sitemaps": get_sitemap_view()}, name="sitemap"),
     path('', include("crossword.urls")),
 ]
 

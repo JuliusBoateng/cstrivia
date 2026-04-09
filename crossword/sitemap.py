@@ -25,3 +25,9 @@ class StaticSitemap(Sitemap):
 
     def changefreq(self, item):
         return "weekly" if item == "index" else "yearly"
+
+def get_sitemap_view():
+    return {
+        "static": StaticSitemap,
+        "puzzles": PuzzleSitemap,
+    }
