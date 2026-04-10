@@ -105,7 +105,7 @@ python manage.py migrate
 Load puzzle data into postgres:
 
 ```bash
-python manage.py load_puzzle crossword/fixtures/open_source_basics.json
+python manage.py load_puzzle crossword/fixtures/puzzles/open_source_basics.json
 ```
 
 ---

@@ -4,7 +4,7 @@
     <ul>
       {% for note in notes %}
         <li>
-          <a href="{% url 'design' note.design_number %}" class="design-row">
+          <a href="{% url 'design_note' note.design_number %}" class="design-row">
             <span class="design-number">Design {{ note.design_number }}:</span>
             <span class="design-title">{{ note.title }}</span>
             <span class="design-date">

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views.design import DesignNoteListView, design_view
+from .views.design import DesignNoteListView, design_note_view
 from .views.rss import LatestActivityFeed
 from .views.puzzle import PuzzleListView, puzzle_view, privacy_view
 
@@ -10,5 +10,5 @@ urlpatterns = [
     path("privacy/", privacy_view, name="privacy"),
     path("rss.xml", LatestActivityFeed(), name="rss"),
     path("design/", DesignNoteListView.as_view(), name="design_index"),
-    path("design/<int:design_number>/", design_view, name="design")
+    path("design/<int:design_number>/", design_note_view, name="design_note")
 ]
