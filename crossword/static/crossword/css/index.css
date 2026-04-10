@@ -192,6 +192,18 @@ main {
   font-size: 1rem;
 }
 
+.design-note-link {
+  font-weight: 500;
+  color: #111827;
+  text-decoration: none;
+}
+
+.design-note-link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
 .feature-list {
   font-size: 1rem;
   color: #4b5563;
@@ -200,7 +212,12 @@ main {
 
 .feature-list a {
   color: inherit;
+  text-decoration: none;
+}
+
+.feature-list a:hover {
   text-decoration: underline;
+  text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
 

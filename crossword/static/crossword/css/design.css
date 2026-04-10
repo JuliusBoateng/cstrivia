@@ -1,0 +1,125 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --site-max-width: 1440px;
+  }
+
+html {
+    font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    min-height: 100vh;
+    color: #1f2937;
+    background: #f5f5f5;
+}
+
+main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    flex: 1;
+}
+
+/* Design Index */
+.design-list {
+    padding: 1.5rem 0 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    max-width: 50ch;
+  }
+  
+.design-list h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+  
+.design-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+  
+.design-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+
+    text-decoration: none;
+    color: inherit;
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.design-row:hover {
+    background: #f2f2f2;
+    border-radius: 8px;
+}
+  
+.design-number,
+.design-date {
+    flex-shrink: 0;
+    white-space: nowrap;
+    color: #7c8594;
+}
+
+.design-title {
+    flex: 1;
+    font-weight: 500;
+    min-width: 0;
+    text-wrap: pretty;
+}
+
+.design-date {
+    margin-left: auto;
+    font-size: 0.9em;
+}
+
+
+/* Design note */
+
+.design-note {
+    max-width: 65ch;
+}
+
+.design-note-header {
+    margin-bottom: 1.5rem;
+}
+
+.design-note-date,
+.design-note-author {
+    margin: 0;
+    color: #7c8594;
+}
+
+.design-note-body {
+    line-height: 1.2;
+}
+
+.design-note-related {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.design-note-related a {
+    color: #4b5563;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+.design-note-related a:hover {
+    color: #1f2937;
+}

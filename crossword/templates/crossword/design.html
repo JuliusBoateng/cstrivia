@@ -1,33 +1,59 @@
-{% load static %}
+{% extends "crossword/base.html" %}
 {% load markdown_filters %}
+{% load static %}
 
-<article>
-  <h1>Design {{ note.design_number }}: {{ note.title }}</h1>
+{% block canonical %}
+  <link rel="canonical" href="https://cstrivia.com/design/{{ note.design_number }}/">
+{% endblock %}
 
-  {% if note.published_at %}
-    <p>{{ note.published_at|date:"F j, Y" }}</p>
-  {% endif %}
+{% block title %}
+  Design {{ note.design_number }}: {{ note.title }} | CS Trivia
+{% endblock %}
 
-  {% if note.author %}
-    <p>By {{ note.author }}</p>
-  {% endif %}
+{% block meta_description %}
+  <meta
+    name="description"
+    content="Design note {{ note.design_number }} on puzzle construction, tradeoffs, and development on CS Trivia."
+  >
+{% endblock %}
 
-  <div>
-    {{ note.body|render_markdown }}
-  </div>
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'crossword/css/design.css' %}">
+{% endblock %}
 
-  {% if note.boards.all %}
-    <section>
-      <h2>Related Puzzles</h2>
-      <ul>
-        {% for board in note.boards.all %}
-          <li>
-            <a href="{{ board.get_absolute_url }}">
-              Puzzle {{ board.puzzle_number }}: {{ board.title }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    </section>
-  {% endif %}
-</article>
+{% block content %}
+  <article class="design-note">
+    <header class="design-note-header">
+      <h1>Design {{ note.design_number }}: {{ note.title }}</h1>
+
+      {% if note.published_at %}
+        <p class="design-note-date">
+          {{ note.published_at|date:"l, F j, Y" }}
+        </p>
+      {% endif %}
+
+      {% if note.author %}
+        <p class="design-note-author">By {{ note.author }}</p>
+      {% endif %}
+    </header>
+
+    <div class="design-note-body">
+      {{ note.body|render_markdown }}
+    </div>
+
+    {% if note.boards.exists %}
+      <section class="design-note-related">
+        <h2>Related Puzzles</h2>
+        <ul>
+          {% for board in note.boards.all %}
+            <li>
+              <a href="{{ board.get_absolute_url }}">
+                Puzzle {{ board.puzzle_number }}: {{ board.title }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+  </article>
+{% endblock %}
