@@ -4,7 +4,7 @@
     "author": "Julius Boateng",
     "puzzle_number": 3,
     "published_at": "2026-04-07T12:00:00Z",
-    "description": "The people in this puzzle helped shape our modern understanding of computing. They did not work in isolation; credit belongs to the unsung contributors who advanced the field.",
+    "description": "The people in this puzzle helped shape modern computing. They did not work alone; many unsung contributors helped advance the field.",
     "rows": 15,
     "cols": 15,
     "categories": [
@@ -20,7 +20,7 @@
       "start_col": 8
     },
     {
-      "question": "Described the stored-program computer architecture used by most modern computers; __________ architecture",
+      "question": "Proposed the stored-program architecture used by most modern computers; __________ architecture",
       "display_answer": "VONNEUMANN",
       "direction": "A",
       "start_row": 3,

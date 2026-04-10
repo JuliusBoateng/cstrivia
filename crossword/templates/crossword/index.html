@@ -43,11 +43,11 @@
 
     <div class="hero-meta">
       <p id="tagline">No ads &bull; No login &bull; Just crosswords</p>
-      <p id="release-cadence">New puzzles every Tuesday <span>12:00 UTC</span></p>
+      <p id="release-cadence">New puzzles every Tuesday <span>12:00&nbsp;UTC</span></p>
     </div>
 
     {% if latest_puzzle %}
-      <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle &rarr;</a>
+      <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" class="cta" aria-label="Solve latest puzzle">Solve&nbsp;latest&nbsp;puzzle&nbsp;&rarr;</a>
 
       <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" aria-label="Solve latest puzzle" class="hero-link">
         <img src="{% static 'crossword/img/board.png' %}" alt="Solve latest puzzle" class="hero-screenshot">
@@ -58,12 +58,12 @@
   {% include "crossword/includes/puzzle_list.html" %}
 
   <p class="puzzle-note">Each crossword is manually constructed. 
-    <a class="design-note-link" href="/design">Design notes &rarr;</a>
+    <a class="design-note-link" href="/design">Design&nbsp;notes&nbsp;&rarr;</a>
   </p>
 
   <section class="feature-list">
     <ul>
-      <li>Open source &bull; No tracking &bull; <a href="/privacy">Privacy &rarr;</a></li>
+      <li>Open source &bull; No tracking &bull; <a href="/privacy">Privacy&nbsp;policy&nbsp;&rarr;</a></li>
       <li class="emphasis">No coding challenges or technical assessments. Just puzzles.</li>
     </ul>
   </section>
