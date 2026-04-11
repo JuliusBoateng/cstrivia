@@ -174,12 +174,16 @@
         </div>
 
         <p class="board-desc"></p>
-
         <details class="solution-panel">
           <summary class="solution-toggle">solution.txt</summary>
           <pre class="solution-json"><code></code></pre>
         </details>
       </section>
+      {% if design_note %}
+      <p class="design-note-link">
+        <a href="{{ design_note.get_absolute_url }}">Design&nbsp;note&nbsp;&rarr;</a>
+      </p>
+    {% endif %}
     </div>
   </article>
 {% endblock %}

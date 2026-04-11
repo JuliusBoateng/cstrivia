@@ -18,6 +18,7 @@ class PuzzleView(NamedTuple):
     seo: SeoDTO
     serialized_board_view: dict
     serialized_solution_view: dict
+    design_note: DesignNote
 
 def get_puzzle_view(puzzle_number: int) -> PuzzleView:
     board: Model = _fetch_board(puzzle_number)
@@ -30,11 +31,14 @@ def get_puzzle_view(puzzle_number: int) -> PuzzleView:
 
     seo = map_to_seo_dto(board) # not serialized b/c used directly for django templates
 
-    return PuzzleView(seo, serialized_board_view, serialized_solution_view)
+    design_note = board.design_notes.order_by("design_number").first()
+    return PuzzleView(seo, serialized_board_view, serialized_solution_view, design_note)
 
 def _fetch_board(puzzle_number: int) -> Board:
     queryset = (Board.objects
-                .prefetch_related("categories",
+                .prefetch_related(
+                    "categories",
+                    "design_notes",
                     Prefetch("clue_placements",
                         queryset=CluePlacement.objects
                             .select_related("clue")

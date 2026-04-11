@@ -392,7 +392,7 @@ class DesignNote(models.Model):
         ordering = ["design_number"]
 
     def get_absolute_url(self):
-        return reverse("design", kwargs={"design_number": self.design_number})
+        return reverse("design_note", kwargs={"design_number": self.design_number})
 
     def clean(self):
         self.title = self.title.strip()
