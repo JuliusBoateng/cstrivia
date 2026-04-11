@@ -107,6 +107,17 @@ main {
     line-height: 1.6;
 }
 
+.design-note-body a {
+    color: #4b5563;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+.design-note-body a:hover {
+    color: #1f2937;
+}
+
 .design-note-related {
     margin-top: 2rem;
     padding-top: 1rem;
