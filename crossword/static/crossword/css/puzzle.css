@@ -537,10 +537,30 @@ p.board-desc {
     text-wrap: pretty;
 }
 
-.design-note-link {
+.puzzle-link-section {
     margin: 1.5rem 0 0;
 }
-  
+
+.puzzle-link-section p {
+    margin: 0;
+}
+
+.next-puzzle-link a {
+    color: black;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.design-note-link a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+.next-puzzle-link + .design-note-link {
+    margin-top: 0.4rem;
+}
+
 .design-note-link a {
     color: #4b5563;
     font-weight: 500;

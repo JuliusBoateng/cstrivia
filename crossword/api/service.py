@@ -1,6 +1,6 @@
 from typing import NamedTuple
 
-from django.db.models import Model, Prefetch
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
@@ -19,9 +19,11 @@ class PuzzleView(NamedTuple):
     serialized_board_view: dict
     serialized_solution_view: dict
     design_note: DesignNote
+    next_puzzle: Board
 
 def get_puzzle_view(puzzle_number: int) -> PuzzleView:
-    board: Model = _fetch_board(puzzle_number)
+    board: Board = _fetch_board(puzzle_number)
+    next_puzzle: Board =_fetch_next_board(puzzle_number)
 
     board_view = map_to_board_view_dto(board)
     serialized_board_view = serialize_board_view(board_view)
@@ -32,7 +34,7 @@ def get_puzzle_view(puzzle_number: int) -> PuzzleView:
     seo = map_to_seo_dto(board) # not serialized b/c used directly for django templates
 
     design_note = board.design_notes.order_by("design_number").first()
-    return PuzzleView(seo, serialized_board_view, serialized_solution_view, design_note)
+    return PuzzleView(seo, serialized_board_view, serialized_solution_view, design_note, next_puzzle)
 
 def _fetch_board(puzzle_number: int) -> Board:
     queryset = (Board.objects
@@ -48,6 +50,17 @@ def _fetch_board(puzzle_number: int) -> Board:
                 )
     
     return get_object_or_404(queryset, puzzle_number=puzzle_number)
+
+def _fetch_next_board(puzzle_number: int):
+    return (    
+        Board.objects
+        .filter(
+            puzzle_number__gt=puzzle_number,
+            published_at__lte=timezone.now(),
+        )
+        .order_by("puzzle_number")
+        .first()
+    )
 
 def get_design_note(design_number: int) -> DesignNote:
     return get_object_or_404(

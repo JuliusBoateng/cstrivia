@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block title %}
-  Puzzle #{{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
+  Puzzle {{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
 {% endblock %}
 
 {% block meta_description %}
@@ -22,7 +22,7 @@
 
 <!-- Open Graph (LinkedIn, Facebook, etc.) -->
 {% block og_title %}
-  Puzzle #{{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
+  Puzzle {{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
 {% endblock %}
 
 {% block og_description %}
@@ -35,7 +35,7 @@
 
  <!-- Twitter (also used by some platforms) -->
 {% block twitter_title %}
-  Puzzle #{{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
+  Puzzle {{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
 {% endblock %}
 
 {% block twitter_description %}
@@ -179,11 +179,24 @@
           <pre class="solution-json"><code></code></pre>
         </details>
       </section>
-      {% if design_note %}
-      <p class="design-note-link">
-        <a href="{{ design_note.get_absolute_url }}">Design&nbsp;note&nbsp;&rarr;</a>
-      </p>
-    {% endif %}
+      {% if next_puzzle or design_note %}
+        <section class="puzzle-link-section">
+          {% if next_puzzle %}
+            <p class="next-puzzle-link">
+              <a href="{{ next_puzzle.get_absolute_url }}">
+                Puzzle&nbsp;{{ next_puzzle.puzzle_number }}:&nbsp;{{ next_puzzle.title }}&nbsp;&rarr;
+              </a>
+            </p>
+          {% endif %}
+          {% if design_note %}
+            <p class="design-note-link">
+              <a href="{{ design_note.get_absolute_url }}">
+                Design&nbsp;note&nbsp;&rarr;
+              </a>
+            </p>
+          {% endif %}
+        </section>
+      {% endif %}
     </div>
   </article>
 {% endblock %}

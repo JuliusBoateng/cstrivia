@@ -31,7 +31,7 @@ class LatestActivityFeed(Feed):
 
     def item_title(self, item):
         if isinstance(item, Board):
-            return f"Puzzle #{item.puzzle_number}: {item.title}"
+            return f"Puzzle {item.puzzle_number}: {item.title}"
         return f"Design #{item.design_number}: {item.title}"
 
     def item_description(self, item):

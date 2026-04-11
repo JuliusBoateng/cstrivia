@@ -66,7 +66,7 @@ function renderPuzzleMetadata(boardView: BoardView) {
     authorElement.textContent = author;
     publishedAtElement.setAttribute("datetime", iso);
     publishedAtElement.textContent = formatted;
-    puzzleNumberElement.textContent = `Puzzle #${puzzleNumber}`;
+    puzzleNumberElement.textContent = `Puzzle ${puzzleNumber}`;
 
     const button = createCopyButton();
     attachCopyBehavior(button, getCanonicalUrl());
