@@ -10,7 +10,7 @@ RSS_LIMIT = 20
 class LatestActivityFeed(Feed):
     title = "CS Trivia"
     link = "/"
-    description = "New crossword puzzles and design notes"
+    description = "New computer science crosswords and design notes"
 
     def items(self):
         puzzles = Board.objects.filter(

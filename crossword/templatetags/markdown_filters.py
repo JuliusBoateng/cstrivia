@@ -1,6 +1,7 @@
 from django import template
 from django.utils.safestring import mark_safe
 import markdown
+import re
 
 register = template.Library()
 
@@ -13,6 +14,13 @@ def render_markdown(text):
     html = markdown.markdown(
         text,
         extensions=["fenced_code", "tables"]
+    )
+
+    # Add target="_blank" and rel attributes to links
+    html = re.sub(
+        r'<a href="(https?://.*?)">',
+        r'<a href="\1" target="_blank" rel="noopener noreferrer">',
+        html
     )
 
     return mark_safe(html)
