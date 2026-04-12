@@ -2,10 +2,20 @@ from django.contrib import admin
 from crossword import models
 
 # Register your models here.
+from django.contrib import admin
+from crossword import models
+
+
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
+
+
+class CluePlacementInline(admin.TabularInline):
+    model = models.CluePlacement
+    extra = 0
+    autocomplete_fields = ("clue",)
 
 
 @admin.register(models.Board)
@@ -21,6 +31,24 @@ class BoardAdmin(admin.ModelAdmin):
     list_filter = ("published_at", "categories")
     filter_horizontal = ("categories",)
     ordering = ("puzzle_number",)
+    inlines = [CluePlacementInline]
+
+
+@admin.register(models.Clue)
+class ClueAdmin(admin.ModelAdmin):
+    list_display = (
+        "display_answer",
+        "question",
+        "normalized_answer",
+    )
+    search_fields = (
+        "question",
+        "display_answer",
+        "normalized_answer",
+    )
+    list_filter = ("categories",)
+    filter_horizontal = ("categories",)
+    ordering = ("display_answer",)
 
 
 @admin.register(models.CluePlacement)

@@ -1,0 +1,107 @@
+{
+  "board": {
+    "title": "Early Internet",
+    "author": "Julius Boateng",
+    "puzzle_number": 4,
+    "published_at": "2026-04-14T12:00:00+00:00",
+    "description": "The Internet has become ubiquitous in modern life. This puzzle highlights key technologies and milestones that shaped the Internet and the World Wide Web from the late 1960s through the mid-1990s.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Internet"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Distributed naming system that translates domain names into IP addresses",
+      "display_answer": "DNS",
+      "direction": "A",
+      "start_row": 2,
+      "start_col": 7
+    },
+    {
+      "question": "Wired networking technology invented at Xerox PARC and used for local area networks",
+      "display_answer": "ETHERNET",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 5
+    },
+    {
+      "question": "Application-layer protocol used to transfer web pages between servers and browsers",
+      "display_answer": "HTTP",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 6
+    },
+    {
+      "question": "Computer scientist who invented the World Wide Web at CERN",
+      "display_answer": "BERNERSLEE",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 2
+    },
+    {
+      "question": "Internet protocol suite defining how data is packetized, addressed, transmitted, and routed; ultimately defeated the OSI model in the Protocol Wars",
+      "display_answer": "TCPIP",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 7
+    },
+    {
+      "question": "First graphical web browser to display images inline with text; developed at UIUC",
+      "display_answer": "MOSAIC",
+      "direction": "A",
+      "start_row": 7,
+      "start_col": 1
+    },
+    {
+      "question": "Early distributed discussion system where users posted articles to topic-based newsgroups, predating the World Wide Web",
+      "display_answer": "USENET",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 1
+    },
+    {
+      "question": "Research laboratory where the World Wide Web was invented to streamline communication between researchers",
+      "display_answer": "CERN",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 10
+    },
+    {
+      "question": "Digital mail system using addresses separated by \"@\"",
+      "display_answer": "EMAIL",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 8
+    },
+    {
+      "question": "Markup language defining the semantic structure of web pages",
+      "display_answer": "HTML",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 3
+    },
+    {
+      "question": "Company behind the early web browser Navigator and creator of JavaScript; later lost the browser wars to Internet Explorer",
+      "display_answer": "NETSCAPE",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 8
+    },
+    {
+      "question": "Early packet-switching network funded by DARPA and precursor to the modern Internet",
+      "display_answer": "ARPANET",
+      "direction": "D",
+      "start_row": 4,
+      "start_col": 4
+    },
+    {
+      "question": "Addressing system used to locate resources on the World Wide Web",
+      "display_answer": "URL",
+      "direction": "D",
+      "start_row": 7,
+      "start_col": 12
+    }
+  ]
+}
