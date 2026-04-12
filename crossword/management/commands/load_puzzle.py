@@ -9,17 +9,38 @@ from crossword.models import Board, Category, Clue, CluePlacement
 
 
 class Command(BaseCommand):
-    help = "Load or update one puzzle from compact JSON."
+    help = "Load or update one puzzle JSON file or all puzzle JSON files in a directory."
 
     def add_arguments(self, parser):
-        parser.add_argument("json_path", type=str)
+        parser.add_argument("path", type=str, help="Path to a puzzle JSON file or directory of puzzle JSON files")
+
+    def handle(self, *args, **options):
+        input_path = Path(options["path"])
+
+        if not input_path.exists():
+            raise CommandError(f"Path not found: {input_path}")
+
+        if input_path.is_file():
+            json_files = [input_path]
+        elif input_path.is_dir():
+            json_files = sorted(
+                p for p in input_path.iterdir()
+                if p.is_file() and p.suffix.lower() == ".json"
+            )
+            if not json_files:
+                raise CommandError(f"No JSON files found in directory: {input_path}")
+        else:
+            raise CommandError(f"Unsupported path type: {input_path}")
+
+        for json_file in json_files:
+            try:
+                action, board_title = self._load_puzzle_file(json_file)
+                self.stdout.write(self.style.SUCCESS(f"{action} puzzle: {board_title} ({json_file.name})"))
+            except Exception as exc:
+                raise CommandError(f"Failed loading {json_file}: {exc}") from exc
 
     @transaction.atomic
-    def handle(self, *args, **options):
-        json_path = Path(options["json_path"])
-        if not json_path.exists():
-            raise CommandError(f"File not found: {json_path}")
-
+    def _load_puzzle_file(self, json_path: Path) -> tuple[str, str]:
         data = json.loads(json_path.read_text(encoding="utf-8"))
 
         board_data = data.get("board")
@@ -84,4 +105,4 @@ class Command(BaseCommand):
             )
 
         action = "Updated" if board_by_number or board_by_title else "Created"
-        self.stdout.write(self.style.SUCCESS(f"{action} puzzle: {board.title}"))
+        return action, board.title

@@ -48,7 +48,7 @@ class Board(models.Model):
     title = models.CharField(max_length=50, unique=True)
     puzzle_number = models.PositiveIntegerField(unique=True, null=True, blank=True) # user visible puzzle number
     published_at = models.DateTimeField(null=True, blank=True)
-    description = models.CharField(max_length=200)
+    description = models.CharField(max_length=250)
     categories = models.ManyToManyField(Category, related_name="boards")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, editable=False) # also updates when saving CluePlacement
