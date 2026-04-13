@@ -1,0 +1,15 @@
+{
+  "design_note": {
+    "title": "Research Institutions Behind Modern Computing",
+    "design_number": 5,
+    "author": "Julius Boateng",
+    "published_at": "2026-04-13T07:00:00+00:00",
+    "body": "## Theme\r\n\r\nI often hear about notable computer science programs at prestigious universities, but I never had a clear understanding of their specific contributions. My understanding was mostly vague and general. In this puzzle, I wanted to explore notable research universities and industrial research centers to better understand their influence on modern computing.\r\n\r\n## Grid\r\n\r\nGrid construction was painful for this puzzle due to constant spelling mistakes on my end. The clues were typed perfectly, but when it came time to construct the grid I would suddenly misspell words and not notice until the end. This would throw off the entire construction. Stanford not Standford. DARPA not Darpas. Intersections that I thought I had due to spelling mistakes had to be fixed.\r\n\r\n## Clues\r\n\r\nCreating the right set of questions was somewhat challenging as well. Major universities and laboratories have many contributions, so it takes effort to narrow them down and determine which ones are the most historically relevant.\r\n\r\nOriginally the puzzle was going to contain specific labs within universities, but I decided to roll them up since it would be easier to solve. For example, instead of SRI (Stanford Research Institute) I decided to roll it up to Stanford. However, I did not roll up ISI (USC) or NCSA (UIUC) since those labs are strongly tied to their respective contributions.\r\n\r\nA decent amount of time was spent refining clues so they remained concise. For clues that contained two anchors, I separated them with semicolons so the information would not feel blended together. For example, the CMU clue reads: \"University where the Andrew File System (AFS) was developed; pioneered robotics and artificial intelligence research.\"\r\n\r\n## Tradeoffs\r\n\r\nMany of the answers were very short, which meant I had fewer intersections available than expected. Grid construction became somewhat constrained as a result. For example, I had trouble finding placements for ISI, NCSA, and CMU since few other answers shared their letters.\r\n\r\n## Notes\r\n\r\nCERN appeared in the previous *Early Internet* puzzle, and I decided to include the laboratory again in this puzzle with a slightly different clue. The reason for the double inclusion was because it simply felt wrong not to include CERN. Their contribution to the creation and release of the World Wide Web fits both the previous and current puzzle's theme.",
+    "categories": [
+      "Puzzle Design"
+    ],
+    "boards": [
+      5
+    ]
+  }
+}
