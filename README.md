@@ -143,6 +143,25 @@ Visit: [http://localhost:8000/](http://localhost:8000/)
 
 ---
 
+## Django Admin (Optional)
+
+The admin panel allows you to update puzzles and design notes without directly updating the database. 
+
+Create a superuser to access the Django admin interface:
+
+```bash
+python manage.py createsuperuser
+```
+Follow the prompts to set a username and password.
+
+Visit the admin interface:
+
+http://localhost:8000/admin
+
+From the admin panel, you can create and manage puzzles and design notes.
+
+---
+
 ## Feedback
 
 Feedback or suggestions? Open an issue or email julius@cstrivia.com

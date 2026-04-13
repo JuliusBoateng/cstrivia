@@ -1,0 +1,100 @@
+{
+  "board": {
+    "title": "Research Institutions Behind Modern Computing",
+    "author": "Julius Boateng",
+    "puzzle_number": 5,
+    "published_at": "2026-04-14T12:00:00Z",
+    "description": "Many foundational advances in computing originated at major universities and industrial research centers between the late 1960s and early 1990s. This period marked the transition to the modern computing infrastructure we rely on today.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Research Institutions"
+    ]
+  },
+  "clues": [
+    {
+      "question": "University where the Andrew File System (AFS) was developed; pioneered robotics and artificial intelligence research",
+      "display_answer": "CMU",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 7
+    },
+    {
+      "question": "Research company where Edgar F. Codd proposed the relational database model and SQL was developed",
+      "display_answer": "IBM",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 3
+    },
+    {
+      "question": "AT&T research laboratory where UNIX, C, and modern information theory were developed",
+      "display_answer": "BELL",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 9
+    },
+    {
+      "question": "University where Vint Cerf helped develop TCP/IP; the Sun workstation project originated here",
+      "display_answer": "STANFORD",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 4
+    },
+    {
+      "question": "Xerox research center that developed the graphical user interface (GUI), Ethernet networking, and early personal computers",
+      "display_answer": "PARC",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 5
+    },
+    {
+      "question": "USC research institute that helped design early Internet architecture and develop Domain Name System (DNS)",
+      "display_answer": "ISI",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 3
+    },
+    {
+      "question": "Research laboratory where Tim Berners-Lee created the World Wide Web and released it to the public for free",
+      "display_answer": "CERN",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 7
+    },
+    {
+      "question": "University where Project MAC developed the Multics time-sharing system; RSA was invented here",
+      "display_answer": "MIT",
+      "direction": "D",
+      "start_row": 4,
+      "start_col": 5
+    },
+    {
+      "question": "University whose BSD operating system popularized the TCP/IP networking stack used by many Unix systems",
+      "display_answer": "BERKELEY",
+      "direction": "D",
+      "start_row": 4,
+      "start_col": 10
+    },
+    {
+      "question": "U.S. research agency that funded ARPANET and early TCP/IP research",
+      "display_answer": "DARPA",
+      "direction": "D",
+      "start_row": 5,
+      "start_col": 6
+    },
+    {
+      "question": "Technology company that developed Java and the Network File System (NFS)",
+      "display_answer": "SUN",
+      "direction": "D",
+      "start_row": 6,
+      "start_col": 4
+    },
+    {
+      "question": "University of Illinois research center that created the Mosaic web browser and NCSA HTTP server",
+      "display_answer": "NCSA",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 8
+    }
+  ]
+}
