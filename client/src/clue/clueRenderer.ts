@@ -42,7 +42,8 @@ type ClueElement = {
 }
 
 const NullCursorController: CursorController = {
-  moveCursorToPlacement(_placementId: PlacementId): void {}
+  moveCursorToPlacement(_placementId: PlacementId): void {},
+  showPlacementAnswer(_placementId: PlacementId): void {}
 };
 
 class ClueRenderer implements ClueView {

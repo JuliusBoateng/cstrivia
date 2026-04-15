@@ -26,6 +26,7 @@ const SOLVED_SECTION = "#solved-section";
 const ARIA_EXPANDED = "aria-expanded";
 
 const CLUE_COPY_REVEAL_EVENT = "cluecopyreveal";
+const CLUE_SHOW_ANSWER_EVENT = "clueshowanswer";
 
 const CAN_HOVER = window.matchMedia("(hover: hover)").matches;
 
@@ -73,21 +74,15 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         liElement.dataset.placementId = placement.id.toString();
         liElement.dataset.placementDirection = placement.direction;
     
-        const textSpan = createLiText(clue);
-        const lengthSpan = createLenLabel(placement);
-        textSpan.appendChild(lengthSpan);
-
-        const labelSpan = createLabel(placement);
-        const copyButton = createCopyButton();
-        attachCopyBehavior(copyButton, clue.question);
-        liElement.append(labelSpan, textSpan, copyButton);
+        const fragment: DocumentFragment = createClueContent(placement, clue)
+        liElement.append(fragment);
 
         addLongPressListener(liElement, () => {
             liElement.dispatchEvent(new CustomEvent(CLUE_COPY_REVEAL_EVENT, { bubbles: true }));
         });
 
         liElement.addEventListener("mouseenter", () => {
-            if (CAN_HOVER) liElement.dispatchEvent(new CustomEvent("cluecopyreveal", { bubbles: true }));
+            if (CAN_HOVER) liElement.dispatchEvent(new CustomEvent(CLUE_COPY_REVEAL_EVENT, { bubbles: true }));
         });
 
         return liElement;
@@ -119,10 +114,38 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         }
     }
 
-    function createLenLabel(placement: Placement): HTMLSpanElement {
+    function createClueContent(placement: Placement, clue: Clue): DocumentFragment {
+        const fragment: DocumentFragment = document.createDocumentFragment();
+    
+        const labelSpan = createLabel(placement.start_row, placement.start_col);
+    
+        const textSpan = createLiText(clue);
+        const clueMeta = createClueMeta(placement.length);
+        textSpan.append(clueMeta);
+    
+        const copyButton = createCopyButton();
+        attachCopyBehavior(copyButton, clue.question);
+    
+        fragment.append(labelSpan, textSpan, copyButton);
+    
+        return fragment;
+    }
+
+    function createClueMeta(length: number): HTMLSpanElement {
+        const metaSpan = document.createElement("span");
+        metaSpan.classList.add("clue-meta");
+
+        const lengthSpan = createLenLabel(length);
+        const showAnswer = createShowAnswerControl();
+
+        metaSpan.append(lengthSpan, showAnswer);
+        return metaSpan;
+    }
+
+    function createLenLabel(length: number): HTMLSpanElement {
         const lengthSpan = document.createElement("span");
         lengthSpan.classList.add(CLUE_LENGTH_LABEL);
-        lengthSpan.textContent = `(${placement.length})`;
+        lengthSpan.textContent = `(${length})`;
 
         return lengthSpan;
     }
@@ -134,15 +157,48 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         return textSpan;
     }
 
-    function createLabel(placement: Placement): HTMLSpanElement {
+    function createLabel(start_row: number, start_col: number): HTMLSpanElement {
         const labelSpan = document.createElement("span");
         labelSpan.classList.add(CLUE_LABEL);
 
-        const coord = { row: placement.start_row, col: placement.start_col };
+        const coord = { row: start_row, col: start_col };
         const label = boardView.getLabel(coord);
         labelSpan.textContent = label.toString();
 
         return labelSpan;
+    }
+
+    function createShowAnswerControl(): HTMLSpanElement {
+        const showAnswerText = createShowAnswerText();
+    
+        showAnswerText.addEventListener("click", activate);
+    
+        showAnswerText.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (event.key === "Enter" || event.key === " ") activate(event);
+        });
+    
+        return showAnswerText;
+
+        function activate(event: Event): void {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            showAnswerText.dispatchEvent(
+                new CustomEvent(CLUE_SHOW_ANSWER_EVENT, { bubbles: true })
+            );
+        }
+
+        function createShowAnswerText(): HTMLSpanElement {
+            const span = document.createElement("span");
+
+            span.classList.add("clue-show-answer");
+            span.setAttribute("role", "button");
+            span.tabIndex = 0;
+            span.ariaLabel = "Show clue answer";
+            span.textContent = "show answer";
+    
+            return span;
+        }
     }
 
     function setToggleCount(button: HTMLButtonElement, count: number) {
