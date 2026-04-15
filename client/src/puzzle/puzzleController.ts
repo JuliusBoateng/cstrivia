@@ -6,6 +6,7 @@ import { PuzzleValidator } from "./puzzleValidator.js";
 
 interface CursorController {
     moveCursorToPlacement(placementId: PlacementId): void;
+    showPlacementAnswer(placementId: PlacementId): void;
   }
 
 function hasSetDifference<T>(a: T[], b: T[]): boolean {
@@ -71,6 +72,12 @@ class PuzzleController implements CursorController {
         this.session.clearPuzzleSession();
         this.renderer.clearRenderer();
         this.clueView.clearClues();
+    }
+
+    showPlacementAnswer(placementId: PlacementId): void {
+        this.session.moveCursorToPlacement(placementId);
+        this.session.fillActivePlacementAnswer();
+        this.renderCursorVisuals();
     }
 
     moveCursorToPlacement(placementId: PlacementId): void {

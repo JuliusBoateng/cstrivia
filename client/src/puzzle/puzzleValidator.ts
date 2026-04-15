@@ -14,9 +14,14 @@ class PuzzleValidator {
         this.solvedPlacements = new Set();
     }
 
-    checkPlacement(letterGrid: (string | null)[][], placement: Placement): boolean {
-        const placement_id = placement.id;
-        
+    getSolution(placement_id: number): string | undefined {
+        const solution = this.solutionView.getSolution(placement_id);
+        if (!solution) return undefined;
+
+        return solution.normalized_answer;
+    }
+
+    checkPlacement(letterGrid: (string | null)[][], placement_id: number): boolean {        
         const solution = this.solutionView.getSolution(placement_id);
         if (!solution) return false;
 
@@ -39,7 +44,7 @@ class PuzzleValidator {
 
         for (const placement of placements) {
             if (this.solvedPlacements.has(placement.id)) continue;
-            if (!this.checkPlacement(letterGrid, placement)) return false;
+            if (!this.checkPlacement(letterGrid, placement.id)) return false;
         }
 
         return true;

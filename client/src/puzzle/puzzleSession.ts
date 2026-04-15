@@ -45,21 +45,42 @@ class PuzzleSession {
         this.initSessionState();
     }
 
+    fillActivePlacementAnswer(): void {
+        const solution = this.puzzleValidator.getSolution(this.activePlacementIndex);
+        if (!solution) throw Error("Unable to write solution");
+
+        const direction: Direction = this.activePlacement.direction;
+        const delta_row = direction === Direction.D ? 1 : 0;
+        const delta_col = direction === Direction.A ? 1 : 0;
+
+        let currRow = this.activePlacement.start_row;
+        let currCol = this.activePlacement.start_col;
+        const placementSet = new Set<Placement>();
+
+        for (const char of solution) {
+            const coord: Coord = {row: currRow, col: currCol};
+
+            const placements = this.boardView.getCellPlacements(coord);
+            placements.forEach((p) => placementSet.add(p));
+
+            this.writeLetterAt(coord, char);
+
+            currRow += delta_row;
+            currCol += delta_col;
+        }
+
+        this.updateSolvedPlacements([...placementSet]);
+        this.saveSessionState();
+    }
+
     setLetter(letter: string | null): void {
-        if (this.isBlock()) throw Error("Unable to write to block cell.");
-    
-        letter = this.validateLetter(letter);
-        const prev = this.letterGrid[this.coord.row][this.coord.col];
-    
-        if (prev === letter) return;
-    
-        this.letterGrid[this.coord.row][this.coord.col] = letter;
-        if (prev === null && letter !== null) this.adjustFilledLetterCount(this.coord, 1);
-        if (prev !== null && letter === null) this.adjustFilledLetterCount(this.coord, -1);
-        
+        this.writeLetterAt(this.coord, letter);
+
         const placements = this.boardView.getCellPlacements(this.coord);
         this.updateSolvedPlacements(placements);
+
         this.saveSessionState();
+
     }
     
     advanceCursor() {
@@ -228,7 +249,7 @@ class PuzzleSession {
     private updateSolvedPlacements(placements: Placement[]): void {
         for (const placement of placements) {
             const isSolved = this.isPlacementComplete(placement) &&
-                this.puzzleValidator.checkPlacement(this.letterGrid, placement);
+                this.puzzleValidator.checkPlacement(this.letterGrid, placement.id);
 
             if (isSolved) this.solvedPlacementIds.add(placement.id);
             else this.solvedPlacementIds.delete(placement.id);
@@ -250,6 +271,18 @@ class PuzzleSession {
     isEndOfPlacement(): boolean {
         const next = this.getCellInActivePlacement(1);
         return !next;
+    }
+
+    private writeLetterAt(coord: Coord, letter: string | null): void {
+        if (this.isBlock(coord)) throw Error("Unable to write to block cell.");
+    
+        letter = this.validateLetter(letter);
+        const prev = this.letterGrid[coord.row][coord.col];
+        if (prev === letter) return;
+    
+        this.letterGrid[coord.row][coord.col] = letter;
+        if (prev === null && letter !== null) this.adjustFilledLetterCount(coord, 1);
+        if (prev !== null && letter === null) this.adjustFilledLetterCount(coord, -1);
     }
 
     private setCursorState(coord: Coord, placement: Placement, placementIndex: number) {
@@ -307,8 +340,8 @@ class PuzzleSession {
         return {row: cell.row, col: cell.col};
     }
 
-    private isBlock(): boolean {
-        return this.boardView.getCell(this.coord) === null;
+    private isBlock(coord: Coord): boolean {
+        return this.boardView.getCell(coord) === null;
     }
 
     private isPlacementComplete(placement: Placement): boolean {
