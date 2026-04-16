@@ -7,7 +7,7 @@ const CLUE = ".clue"
 const ARIA_CONTROLS = "aria-controls";
 const ARIA_EXPANDED = "aria-expanded";
 const HIDDEN = "hidden";
-const HIGHLIGHT = "highlight";
+const ACTIVE = "active";
 const TODO_ACROSS_CLUES = "#todo-across-clues";
 const TODO_DOWN_CLUES = "#todo-down-clues";
 const SOLVED_ACROSS_CLUES = "#solved-across-clues";
@@ -132,7 +132,7 @@ class ClueRenderer implements ClueView {
       this.clearActiveClue();
 
       this.activeClue = clueElement;
-      clueElement.liElement.classList.add(HIGHLIGHT);
+      clueElement.liElement.classList.add(ACTIVE);
       this.scrollClue(clueElement.liElement);
 
       this.revealCurrentCopyButton(clueElement.copyButton);
@@ -386,7 +386,7 @@ class ClueRenderer implements ClueView {
 
     private clearActiveClue(): void {
       if (this.activeClue) {
-        this.activeClue.liElement.classList.remove(HIGHLIGHT);
+        this.activeClue.liElement.classList.remove(ACTIVE);
         this.hideCurrentCopyButton(this.activeClue.copyButton);
       }
 

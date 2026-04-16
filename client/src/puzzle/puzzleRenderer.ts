@@ -4,7 +4,7 @@ import { Coord } from "../models/boardView.js";
 const ANIMATION_SUCCESS = "placement-success";
 const ANIMATION_ERROR = "placement-error";
 const HIGHLIGHT_CURSOR = "highlight-cursor";
-const HIGHLIGHT_WORD = "highlight-word";
+const HIGHLIGHT_PLACEMENT = "highlight-placement";
 const DIRECTION_REJECTION = "direction-reject";
 const BLOCK = "block";
 const BOARD_HEADER_DEFAULT = "Click a clue or cell to begin";
@@ -80,7 +80,7 @@ class PuzzleRenderer {
             const cell = this.cellGrid[row][col];
             if (cell.classList.contains(BLOCK)) return;
     
-            cell.classList.add(HIGHLIGHT_WORD);
+            cell.classList.add(HIGHLIGHT_PLACEMENT);
             cells.push(cell);
         }
         this.activePlacementCells = cells
@@ -176,7 +176,7 @@ class PuzzleRenderer {
 
     private clearActivePlacement() {
         for (const cell of this.activePlacementCells) {
-            cell.classList.remove(HIGHLIGHT_WORD);
+            cell.classList.remove(HIGHLIGHT_PLACEMENT);
         }
         this.activePlacementId = -1;
         this.activePlacementCells = [];

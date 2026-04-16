@@ -183,7 +183,7 @@ main {
     outline: none;
 }
 
-.board-card .cell.highlight-word {
+.board-card .cell.highlight-placement {
     background: #c9d0e6;
 }
 
@@ -239,8 +239,7 @@ main {
 }
 
 .puzzle-toolbar button:hover {
-    background: #f2f2f2;
-    border-radius: 8px;
+    text-decoration: underline;
 }
 
 .puzzle-toolbar .controls-toggle::before {
@@ -261,7 +260,7 @@ main {
 }
 
 .puzzle-toolbar .clear-puzzle.confirming {
-    color: #1f2937;
+    color: #374151
 }
 
 .toolbar-wrapper .controls-panel {
@@ -392,6 +391,7 @@ main {
     gap: 0;
     width: 100%;
     align-items: start;
+    text-wrap: pretty;
 
     cursor: pointer;
     transition: background-color 120ms ease;
@@ -405,7 +405,28 @@ main {
     background: #b6bddc;
 }
 
-.clue.highlight {
+.clue-meta {
+    display: inline-flex;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.clue-show-answer {
+    visibility: hidden;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+.clue.active .clue-show-answer,
+.clue:hover .clue-show-answer {
+    visibility: visible;
+}
+
+.clue-show-answer:hover {
+    color: #374151;
+}
+
+.clue.active {
     background: #c9d0e6;
 }
 
