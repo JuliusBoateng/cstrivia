@@ -361,10 +361,6 @@ main {
     margin-top: .5rem;
 }
 
-.clue-section-body ol + h3 {
-    padding-top: 0.5rem;
-}
-
 /* remove empty clue-list */
 .clue-list:empty {
     display: none;
@@ -372,7 +368,7 @@ main {
 
 /* vertical spacing between clues */
 .clue + .clue {
-    margin-top: .7rem;
+    margin-top: .3rem;
 }
   
 .clue {
@@ -391,7 +387,6 @@ main {
     gap: 0;
     width: 100%;
     align-items: start;
-    text-wrap: pretty;
 
     cursor: pointer;
     transition: background-color 120ms ease;
@@ -405,27 +400,6 @@ main {
     background: #b6bddc;
 }
 
-.clue-meta {
-    display: inline-flex;
-    gap: 4px;
-    white-space: nowrap;
-}
-
-.clue-show-answer {
-    visibility: hidden;
-    color: #6b7280;
-    cursor: pointer;
-}
-
-.clue.active .clue-show-answer,
-.clue:hover .clue-show-answer {
-    visibility: visible;
-}
-
-.clue-show-answer:hover {
-    color: #374151;
-}
-
 .clue.active {
     background: #c9d0e6;
 }
@@ -436,10 +410,42 @@ main {
     font-variant-numeric: tabular-nums;
 }
 
-.clue-text {
+.clue-content {
+    min-width: 0;
     margin-left: 0.5rem;
+}
+
+.clue-text {
     max-width: var(--clue-text);
     overflow-wrap: break-word;
+    text-wrap: pretty;
+}
+
+.clue-meta {
+    white-space: nowrap;
+}
+
+.clue-show-answer {
+    visibility: hidden;
+    pointer-events: none;
+    color: #6b7280;
+    font-size: 0.9em;
+}
+
+.clue-show-answer::before {
+    content: "\A";
+    white-space: pre;
+}
+
+.clue.active .clue-show-answer,
+.clue:hover .clue-show-answer {
+    visibility: visible;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.clue-show-answer:hover {
+    color: #374151;
 }
 
 /* prepend non-breakable space */

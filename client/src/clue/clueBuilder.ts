@@ -74,7 +74,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         liElement.dataset.placementId = placement.id.toString();
         liElement.dataset.placementDirection = placement.direction;
     
-        const fragment: DocumentFragment = createClueContent(placement, clue)
+        const fragment: DocumentFragment = createClueFragment(placement, clue)
         liElement.append(fragment);
 
         addLongPressListener(liElement, () => {
@@ -114,47 +114,18 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         }
     }
 
-    function createClueContent(placement: Placement, clue: Clue): DocumentFragment {
+    function createClueFragment(placement: Placement, clue: Clue): DocumentFragment {
         const fragment: DocumentFragment = document.createDocumentFragment();
     
         const labelSpan = createLabel(placement.start_row, placement.start_col);
     
-        const textSpan = createLiText(clue);
-        const clueMeta = createClueMeta(placement.length);
-        textSpan.append(clueMeta);
+        const clueContent = createClueContent(placement, clue);
     
         const copyButton = createCopyButton();
         attachCopyBehavior(copyButton, clue.question);
     
-        fragment.append(labelSpan, textSpan, copyButton);
-    
+        fragment.append(labelSpan, clueContent, copyButton);
         return fragment;
-    }
-
-    function createClueMeta(length: number): HTMLSpanElement {
-        const metaSpan = document.createElement("span");
-        metaSpan.classList.add("clue-meta");
-
-        const lengthSpan = createLenLabel(length);
-        const showAnswer = createShowAnswerControl();
-
-        metaSpan.append(lengthSpan, showAnswer);
-        return metaSpan;
-    }
-
-    function createLenLabel(length: number): HTMLSpanElement {
-        const lengthSpan = document.createElement("span");
-        lengthSpan.classList.add(CLUE_LENGTH_LABEL);
-        lengthSpan.textContent = `(${length})`;
-
-        return lengthSpan;
-    }
-
-    function createLiText(clue: Clue): HTMLSpanElement {
-        const textSpan = document.createElement("span");
-        textSpan.classList.add(CLUE_TEXT);
-        textSpan.textContent = clue.question;
-        return textSpan;
     }
 
     function createLabel(start_row: number, start_col: number): HTMLSpanElement {
@@ -166,6 +137,43 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         labelSpan.textContent = label.toString();
 
         return labelSpan;
+    }
+
+    function createClueContent(placement: Placement, clue: Clue): HTMLSpanElement {
+        const contentSpan = document.createElement("span");
+        contentSpan.classList.add("clue-content");
+
+        const textSpan = createLiText(clue);
+        const clueMeta = createClueMeta(placement.length);
+        textSpan.appendChild(clueMeta);
+
+        const showAnswer = createShowAnswerControl();
+        contentSpan.append(textSpan, showAnswer);
+        return contentSpan;
+    }
+
+    function createLiText(clue: Clue): HTMLSpanElement {
+        const textSpan = document.createElement("span");
+        textSpan.classList.add(CLUE_TEXT);
+        textSpan.textContent = clue.question;
+        return textSpan;
+    }
+
+    function createClueMeta(length: number): HTMLSpanElement {
+        const metaSpan = document.createElement("span");
+        metaSpan.classList.add("clue-meta");
+
+        const lengthSpan = createLenLabel(length);
+        metaSpan.appendChild(lengthSpan);
+        return metaSpan;
+    }
+
+    function createLenLabel(length: number): HTMLSpanElement {
+        const lengthSpan = document.createElement("span");
+        lengthSpan.classList.add(CLUE_LENGTH_LABEL);
+        lengthSpan.textContent = `(${length})`;
+
+        return lengthSpan;
     }
 
     function createShowAnswerControl(): HTMLSpanElement {
