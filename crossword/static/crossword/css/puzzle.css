@@ -437,8 +437,16 @@ main {
     white-space: pre;
 }
 
-.clue.active .clue-show-answer,
-.clue:hover .clue-show-answer {
+/* Hover that changes interaction causes double click on mobile */
+@media (hover: hover) {
+    .clue:hover .clue-show-answer {
+        visibility: visible;
+        pointer-events: auto;
+        cursor: pointer;
+    }
+}
+
+.clue.active .clue-show-answer {
     visibility: visible;
     pointer-events: auto;
     cursor: pointer;
@@ -578,12 +586,6 @@ p.board-desc {
     text-decoration: none;
 }
 
-.design-note-link a:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
-}
-
 .next-puzzle-link + .design-note-link {
     margin-top: 0.4rem;
 }
@@ -671,12 +673,15 @@ p.board-desc {
 
 /* .board-wrapper min is slightly below --board-min: 440px; */
 @media (max-width: 900px) {
+    :root {
+        --board-min: 400px;
+    }
     .puzzle-panel {
       flex-direction: column;
       align-items: center;
     }
     .board-wrapper {
-        width: clamp(400px, 85vw, 720px);
+        width: clamp(var(--board-min), 85vw, var(--board-max));
     }
     .post-puzzle {
         margin: 2rem auto 0;
