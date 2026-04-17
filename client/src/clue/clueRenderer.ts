@@ -23,6 +23,7 @@ const TODO_SECTION = "#todo-section";
 const SOLVED_SECTION = "#solved-section";
 
 const CLUE_COPY_REVEAL_EVENT = "cluecopyreveal";
+const CLUE_SHOW_ANSWER_EVENT = "clueshowanswer";
 
 type ClueCounts = {todoAcrossCount: number,
           todoDownCount: number,
@@ -43,7 +44,7 @@ type ClueElement = {
 
 const NullCursorController: CursorController = {
   moveCursorToPlacement(_placementId: PlacementId): void {},
-  showPlacementAnswer(_placementId: PlacementId): void {}
+  showPlacementSolution(_placementId: PlacementId): void {}
 };
 
 class ClueRenderer implements ClueView {
@@ -101,6 +102,7 @@ class ClueRenderer implements ClueView {
 
       // Custom event handler
       this.clueContainer.addEventListener(CLUE_COPY_REVEAL_EVENT, this.handleCopyReveal as EventListener);
+      this.clueContainer.addEventListener(CLUE_SHOW_ANSWER_EVENT, this.handleShowClueAnswer as EventListener);
     }
 
     focusToggle(): void {
@@ -214,10 +216,10 @@ class ClueRenderer implements ClueView {
     }
 
     private handleClue(clue: HTMLLIElement): void {
-      const placementId = clue.dataset.placementId;
-      if (!placementId) return;
+      const placementId = this.getPlacementId(clue);
+      if (placementId === null) return;
   
-      this.cursorController.moveCursorToPlacement(Number(placementId));
+      this.cursorController.moveCursorToPlacement(placementId);
     };
 
     private handleCopyReveal = (event: Event) => {
@@ -231,6 +233,19 @@ class ClueRenderer implements ClueView {
       if (!copyButton) return;
     
       this.revealCurrentCopyButton(copyButton);
+    };
+
+    private handleShowClueAnswer = (event: Event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+    
+      const clue = this.getClue(target);
+      if (!clue) return;
+
+      const placementId = this.getPlacementId(clue);
+      if (placementId === null) return;
+
+      this.cursorController.showPlacementSolution(placementId);
     };
 
     private handleHoverLeave = () => {
@@ -397,6 +412,14 @@ class ClueRenderer implements ClueView {
       this.activeClue = null;
     }
 
+    private getPlacementId(clue: HTMLElement): number | null {
+      const id = clue.dataset.placementId;
+      if (!id) return null;
+    
+      const parsed = Number(id);
+      return Number.isNaN(parsed) ? null : parsed;
+    }
+
     private getToggle(target: HTMLElement): HTMLButtonElement | null {
       const toggle = target.closest(CLUE_TOGGLE) as HTMLButtonElement | null;
       if (!toggle || !this.clueContainer.contains(toggle)) return null;
@@ -414,8 +437,8 @@ class ClueRenderer implements ClueView {
 
       const clues = this.clueContainer.querySelectorAll<HTMLLIElement>(CLUE);
       for (const clue of clues) {
-        const placementId = clue.dataset.placementId;
-        if (!placementId) continue;
+        const placementId = this.getPlacementId(clue);
+        if (placementId === null) continue;
 
         const copyButton = clue.querySelector<HTMLButtonElement>(".clue-copy");
         if (!copyButton) continue;
@@ -425,7 +448,7 @@ class ClueRenderer implements ClueView {
           copyButton: copyButton
         } as ClueElement
     
-        placementClueMap.set(Number(placementId), clueElement);
+        placementClueMap.set(placementId, clueElement);
       }
 
       return placementClueMap;

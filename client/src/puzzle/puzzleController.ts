@@ -6,7 +6,7 @@ import { PuzzleValidator } from "./puzzleValidator.js";
 
 interface CursorController {
     moveCursorToPlacement(placementId: PlacementId): void;
-    showPlacementAnswer(placementId: PlacementId): void;
+    showPlacementSolution(placementId: PlacementId): void;
   }
 
 function hasSetDifference<T>(a: T[], b: T[]): boolean {
@@ -74,10 +74,19 @@ class PuzzleController implements CursorController {
         this.clueView.clearClues();
     }
 
-    showPlacementAnswer(placementId: PlacementId): void {
+    showPlacementSolution(placementId: PlacementId): void {
         this.session.moveCursorToPlacement(placementId);
-        this.session.fillActivePlacementAnswer();
+        const updatedCoords = this.session.applyPlacementSolution(placementId);
+
+        for (const coord of updatedCoords) {            
+            const letter = this.session.getLetterAt(coord);
+            this.renderer.renderLetter(coord, letter);
+        }
+
         this.renderCursorVisuals();
+
+        const solvedPlacements = [...this.session.getSolvedPlacementIds()];
+        this.clueView.renderClues(solvedPlacements);
     }
 
     moveCursorToPlacement(placementId: PlacementId): void {
@@ -416,11 +425,12 @@ class PuzzleController implements CursorController {
 
     private initLetters() {
         for (let row = 0; row < this.boardView.board.rows; row++) {
-            for (let col = 0; col < this.boardView.board.rows; col++) {
-                const coord = { row, col };
-                const letter = this.session.getLetterAt(coord);
+            for (let col = 0; col < this.boardView.board.cols; col++) {
+                const coord: Coord = { row, col };
+                if (this.session.isBlock(coord)) continue;
 
-                if (letter) this.renderer.renderLetter(coord, letter);
+                const letter = this.session.getLetterAt(coord);
+                this.renderer.renderLetter(coord, letter);
             }
         }
     }

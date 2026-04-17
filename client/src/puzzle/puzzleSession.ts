@@ -45,32 +45,53 @@ class PuzzleSession {
         this.initSessionState();
     }
 
-    fillActivePlacementAnswer(): void {
-        const solution = this.puzzleValidator.getSolution(this.activePlacementIndex);
-        if (!solution) throw Error("Unable to write solution");
-
-        const direction: Direction = this.activePlacement.direction;
-        const delta_row = direction === Direction.D ? 1 : 0;
-        const delta_col = direction === Direction.A ? 1 : 0;
-
-        let currRow = this.activePlacement.start_row;
-        let currCol = this.activePlacement.start_col;
-        const placementSet = new Set<Placement>();
-
-        for (const char of solution) {
-            const coord: Coord = {row: currRow, col: currCol};
-
-            const placements = this.boardView.getCellPlacements(coord);
-            placements.forEach((p) => placementSet.add(p));
-
-            this.writeLetterAt(coord, char);
-
-            currRow += delta_row;
-            currCol += delta_col;
-        }
-
-        this.updateSolvedPlacements([...placementSet]);
+    applyPlacementSolution(placementId: number): Coord[] {
+        const { placement, solution } = this.getPlacementSolution(placementId);
+        const { affectedPlacements, updatedCoords } = this.writePlacementSolution(placement, solution);
+    
+        this.updateSolvedPlacements(affectedPlacements);
         this.saveSessionState();
+    
+        return updatedCoords;
+    }
+    
+    private writePlacementSolution(placement: Placement, solution: string): { affectedPlacements: Placement[], updatedCoords: Coord[] } {
+        const placementSet = new Set<Placement>();
+        const updatedCoords: Coord[] = this.getPlacementCoords(placement);
+
+        for (let i = 0; i < updatedCoords.length; i++) {
+            const coord = updatedCoords[i];        
+            const placements = this.boardView.getCellPlacements(coord);
+            for (const p of placements) {
+                placementSet.add(p);
+            }
+        
+            const letter = solution[i];
+            this.writeLetterAt(coord, letter);
+        }
+    
+        return {
+            affectedPlacements: [...placementSet],
+            updatedCoords
+        };
+    }
+    
+    private getPlacementCoords(placement: Placement): Coord[] {
+        const coords: Coord[] = [];
+    
+        const deltaRow = placement.direction === Direction.D ? 1 : 0;
+        const deltaCol = placement.direction === Direction.A ? 1 : 0;
+    
+        let row = placement.start_row;
+        let col = placement.start_col;
+    
+        for (let i = 0; i < placement.length; i++) {
+            coords.push({ row, col });
+            row += deltaRow;
+            col += deltaCol;
+        }
+    
+        return coords;
     }
 
     setLetter(letter: string | null): void {
@@ -273,6 +294,24 @@ class PuzzleSession {
         return !next;
     }
 
+    isBlock(coord: Coord): boolean {
+        return this.boardView.getCell(coord) === null;
+    }
+
+    private getPlacementSolution(placementId: number): { placement: Placement, solution: string } {
+        const placement = this.boardView.getPlacement(placementId);
+        if (!placement) throw new Error("Unable to retrieve placement");
+    
+        const solution = this.puzzleValidator.getSolution(placementId);
+        if (!solution) throw new Error("Unable to retrieve solution");
+    
+        if (solution.length !== placement.length) {
+            throw new Error("Solution does not match placement");
+        }
+    
+        return { placement, solution };
+    }
+
     private writeLetterAt(coord: Coord, letter: string | null): void {
         if (this.isBlock(coord)) throw Error("Unable to write to block cell.");
     
@@ -320,14 +359,6 @@ class PuzzleSession {
         return char;
     }
 
-    private invalidateSolvedPlacement(coord: Coord) {
-        const placements = this.boardView.getCellPlacements(coord);
-    
-        for (const placement of placements) {
-            this.solvedPlacementIds.delete(placement.id);
-        }
-    }
-
     // positive offset provides next cell in placement. negative offset provides previous cell.
     private getCellInActivePlacement(offset: number): Coord | null {
         const cells = this.boardView.getCellsWithPlacementId(this.activePlacement.id);
@@ -338,10 +369,6 @@ class PuzzleSession {
     
         const cell = cells[relativeIndex]; // cells are sorted
         return {row: cell.row, col: cell.col};
-    }
-
-    private isBlock(coord: Coord): boolean {
-        return this.boardView.getCell(coord) === null;
     }
 
     private isPlacementComplete(placement: Placement): boolean {
