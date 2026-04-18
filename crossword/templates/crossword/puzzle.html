@@ -79,25 +79,27 @@
       </div>
 
       <div class="puzzle-region">
-        <div class="puzzle-toolbar" role="toolbar">
-          <button type="button" id="controls-toggle" class="controls-toggle" aria-expanded="false" aria-controls="controls-panel">
-            Controls
-          </button>
-          <span class="toolbar-separator" aria-hidden="true">|</span>
-          <button id="clear-puzzle" type="button" class="clear-puzzle">Clear puzzle</button>
-        </div>
+        <div class="toolbar-wrapper">
+          <div class="puzzle-toolbar" role="toolbar">
+            <button type="button" id="controls-toggle" class="controls-toggle" aria-expanded="false" aria-controls="controls-panel">
+              Controls
+            </button>
+            <span class="toolbar-separator" aria-hidden="true">|</span>
+            <button id="clear-puzzle" type="button" class="clear-puzzle">Clear puzzle</button>
+          </div>
 
-        <div id="controls-panel" class="controls-panel" role="region" aria-labelledby="controls-toggle" hidden>
-          <ul class="controls-desktop">
-            <li>Tab / Shift+Tab to jump between clues.</li>
-            <li>Esc to leave board.</li>
-            <li>Double-click to switch direction.</li>
-            <li>Click headers to expand/collapse sections.</li>
-          </ul>
+          <div id="controls-panel" class="controls-panel" role="region" aria-labelledby="controls-toggle" hidden>
+            <ul class="controls-desktop">
+              <li>Tab / Shift+Tab to jump between clues.</li>
+              <li>Esc to leave board.</li>
+              <li>Double-click to switch direction.</li>
+              <li>Click headers to expand/collapse sections.</li>
+            </ul>
 
-          <ul class="controls-mobile">
-            <li>Tap headers to expand/collapse sections.</li>
-          </ul>
+            <ul class="controls-mobile">
+              <li>Tap headers to expand/collapse sections.</li>
+            </ul>
+          </div>
         </div>
 
         <div class="puzzle-panel">
@@ -177,26 +179,26 @@
             <pre class="solution-json"><code></code></pre>
           </details>
         </section>
+
+        {% if next_puzzle or design_note %}
+          <section class="puzzle-link-section">
+            {% if next_puzzle %}
+              <p class="next-puzzle-link">
+                <a href="{{ next_puzzle.get_absolute_url }}">
+                  Puzzle&nbsp;{{ next_puzzle.puzzle_number }}:&nbsp;{{ next_puzzle.title }}&nbsp;&rarr;
+                </a>
+              </p>
+            {% endif %}
+            {% if design_note %}
+              <p class="design-note-link">
+                <a href="{{ design_note.get_absolute_url }}">
+                  Design&nbsp;note&nbsp;&rarr;
+                </a>
+              </p>
+            {% endif %}
+          </section>
+        {% endif %}
       </div>
-      
-      {% if next_puzzle or design_note %}
-        <section class="puzzle-link-section">
-          {% if next_puzzle %}
-            <p class="next-puzzle-link">
-              <a href="{{ next_puzzle.get_absolute_url }}">
-                Puzzle&nbsp;{{ next_puzzle.puzzle_number }}:&nbsp;{{ next_puzzle.title }}&nbsp;&rarr;
-              </a>
-            </p>
-          {% endif %}
-          {% if design_note %}
-            <p class="design-note-link">
-              <a href="{{ design_note.get_absolute_url }}">
-                Design&nbsp;note&nbsp;&rarr;
-              </a>
-            </p>
-          {% endif %}
-        </section>
-      {% endif %}
     </div>
   </article>
 {% endblock %}
