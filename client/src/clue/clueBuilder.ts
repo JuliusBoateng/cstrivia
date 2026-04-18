@@ -77,41 +77,11 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
         const fragment: DocumentFragment = createClueFragment(placement, clue)
         liElement.append(fragment);
 
-        addLongPressListener(liElement, () => {
-            liElement.dispatchEvent(new CustomEvent(CLUE_COPY_REVEAL_EVENT, { bubbles: true }));
-        });
-
         liElement.addEventListener("mouseenter", () => {
             if (CAN_HOVER) liElement.dispatchEvent(new CustomEvent(CLUE_COPY_REVEAL_EVENT, { bubbles: true }));
         });
 
         return liElement;
-
-        function addLongPressListener(liElement: HTMLLIElement, onLongPress: () => void) {
-            let timer: number | null = null;
-            const LONG_PRESS_MS = 500;
-
-            function start() {
-                cancel();
-
-                timer = window.setTimeout(() => {
-                    onLongPress();
-                    timer = null;
-                }, LONG_PRESS_MS);
-            }
-
-            function cancel() {
-                if (timer !== null) {
-                    clearTimeout(timer);
-                    timer = null;
-                }
-            }
-
-            liElement.addEventListener("touchstart", start, { passive: true });
-            liElement.addEventListener("touchend", cancel);
-            liElement.addEventListener("touchcancel", cancel);
-            liElement.addEventListener("touchmove", cancel);
-        }
     }
 
     function createClueFragment(placement: Placement, clue: Clue): DocumentFragment {

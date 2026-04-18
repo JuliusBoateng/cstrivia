@@ -6,12 +6,13 @@
 
 :root {
     /* Board sizing */
-    --board-min: 440px;
+    --board-min: 400px;
     --board-max: 720px;
   
     /* Clue sizing */
-    --clue-width: 420px;
-    --clue-min: 320px;
+    --clue-min-width: 400px;
+    --clue-max-width: 440px;
+    --clue-min-height: 320px;
     --clue-max-height: 760px;
 
     /* Site sizing */
@@ -69,7 +70,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    gap: clamp(14px, 2.5vw, 28px);
+    gap: 8px;
     margin: 0 auto;
 }
 
@@ -287,18 +288,22 @@ main {
     border-radius: 20px;
     border: 1px solid rgba(0,0,0,0.04);
     box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+
+    flex-shrink: 0;
+    width: min(100%, var(--clue-max-width));
+    min-width: var(--clue-min-width);
+    height: min(80vh, var(--clue-max-height));
+    min-height: var(--clue-min-height);
 }
 
 .clue-card {
-    width: var(--clue-width);
-    min-width: var(--clue-width);
-    max-width: 100%;
-    height: min(80vh, var(--clue-max-height));
-    min-height: var(--clue-min);
+    width: 100%;
+    height: 100%;
 
     overflow-y: auto;
     scrollbar-gutter: stable;
-    padding: 14px 0px 14px 20px;
+
+    padding: 14px 10px 14px 10px;
     font-size: 14px;
     line-height: 1.4;
 }
@@ -671,40 +676,40 @@ p.board-desc {
     animation: direction-reject 90ms ease-out;
 }
 
-/* .board-wrapper min is slightly below --board-min: 440px; */
-@media (max-width: 900px) {
-    :root {
-        --board-min: 400px;
-    }
-    .puzzle-panel {
-      flex-direction: column;
-      align-items: center;
-    }
-    .board-wrapper {
-        width: clamp(var(--board-min), 85vw, var(--board-max));
-    }
-    .post-puzzle {
-        margin: 2rem auto 0;
-    }
-    .clue-card {
-        height: auto;
-        max-height: none;
-        overflow-y: visible;
-    }
-    .instructions-desktop,
-    .controls-desktop {
-      display: none;
-    }
-  
-    .instructions-mobile,
-    .controls-mobile {
-      display: block;
-    }
-}
-
+/* Large desktop */
 @media (min-width: 1800px) {
     :root {
       --board-max: 780px;
       --clue-max-height: 800px;
     }
-  }
+}
+
+/* Tablet / Mobile */
+@media (max-width: 900px) {
+    :root {
+        --clue-max-width: 600px;
+    }
+
+    .puzzle-panel {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .board-wrapper {
+        width: clamp(var(--board-min), 85vw, var(--board-max));
+    }
+
+    .post-puzzle {
+        margin: 2rem auto 0;
+    }
+
+    .instructions-desktop,
+    .controls-desktop {
+      display: none;
+    }
+
+    .instructions-mobile,
+    .controls-mobile {
+      display: block;
+    }
+}
