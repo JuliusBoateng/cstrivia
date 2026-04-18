@@ -78,7 +78,7 @@
         </p>
       </div>
 
-      <div class="toolbar-wrapper">
+      <div class="puzzle-region">
         <div class="puzzle-toolbar" role="toolbar">
           <button type="button" id="controls-toggle" class="controls-toggle" aria-expanded="false" aria-controls="controls-panel">
             Controls
@@ -99,85 +99,86 @@
             <li>Tap headers to expand/collapse sections.</li>
           </ul>
         </div>
-      </div>
 
-      <div class="puzzle-panel">
-        <div class="board-wrapper">
-          <table id="board" class="board-card"></table>
-        </div>
-        <div class="clue-wrapper">
-          <div id="clues" class="clue-card">
-            <h2>
-              <button id="todo-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="true"
-                aria-controls="todo-section">
-                <span class="clue-label">To Do</span>
-                <span class="clue-count"></span>
-              </button>
-            </h2>
-            <div id="todo-section" class="clue-section-body">
-              <h3>
-                <button id="todo-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
-                  aria-controls="todo-across-clues">
-                  <span class="clue-label clue-across">Across</span>
+        <div class="puzzle-panel">
+          <div class="board-wrapper">
+            <table id="board" class="board-card"></table>
+          </div>
+          <div class="clue-wrapper">
+            <div id="clues" class="clue-card">
+              <h2>
+                <button id="todo-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="true"
+                  aria-controls="todo-section">
+                  <span class="clue-label">To Do</span>
                   <span class="clue-count"></span>
                 </button>
-              </h3>
-              <ol id="todo-across-clues" class="clue-list" hidden></ol>
-              <h3>
-                <button id="todo-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
-                  aria-controls="todo-down-clues">
-                  <span class="clue-label clue-down">Down</span>
+              </h2>
+              <div id="todo-section" class="clue-section-body">
+                <h3>
+                  <button id="todo-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                    aria-controls="todo-across-clues">
+                    <span class="clue-label clue-across">Across</span>
+                    <span class="clue-count"></span>
+                  </button>
+                </h3>
+                <ol id="todo-across-clues" class="clue-list" hidden></ol>
+                <h3>
+                  <button id="todo-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                    aria-controls="todo-down-clues">
+                    <span class="clue-label clue-down">Down</span>
+                    <span class="clue-count"></span>
+                  </button>
+                </h3>
+                <ol id="todo-down-clues" class="clue-list" hidden></ol>
+              </div>
+              <h2>
+                <button id="solved-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="false"
+                  aria-controls="solved-section">
+                  <span class="clue-label">Solved</span>
                   <span class="clue-count"></span>
                 </button>
-              </h3>
-              <ol id="todo-down-clues" class="clue-list" hidden></ol>
+              </h2>
+              <div id="solved-section" class="clue-section-body" hidden>
+                <h3>
+                  <button id="solved-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                    aria-controls="solved-across-clues">
+                    <span class="clue-label clue-across">Across</span>
+                    <span class="clue-count"></span>
+                  </button>
+                </h3>
+                <ol id="solved-across-clues" class="clue-list" hidden></ol>
+                <h3>
+                  <button id="solved-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
+                    aria-controls="solved-down-clues">
+                    <span class="clue-label clue-down">Down</span>
+                    <span class="clue-count"></span>
+                  </button>
+                </h3>
+                <ol id="solved-down-clues" class="clue-list" hidden></ol>
+              </div>
+              <div class="clue-empty">No clues visible</div>
             </div>
-            <h2>
-              <button id="solved-toggle" type="button" class="clue-toggle section-toggle" aria-expanded="false"
-                aria-controls="solved-section">
-                <span class="clue-label">Solved</span>
-                <span class="clue-count"></span>
-              </button>
-            </h2>
-            <div id="solved-section" class="clue-section-body" hidden>
-              <h3>
-                <button id="solved-across-toggle" type="button" class="clue-toggle" aria-expanded="false"
-                  aria-controls="solved-across-clues">
-                  <span class="clue-label clue-across">Across</span>
-                  <span class="clue-count"></span>
-                </button>
-              </h3>
-              <ol id="solved-across-clues" class="clue-list" hidden></ol>
-              <h3>
-                <button id="solved-down-toggle" type="button" class="clue-toggle" aria-expanded="false"
-                  aria-controls="solved-down-clues">
-                  <span class="clue-label clue-down">Down</span>
-                  <span class="clue-count"></span>
-                </button>
-              </h3>
-              <ol id="solved-down-clues" class="clue-list" hidden></ol>
-            </div>
-            <div class="clue-empty">No clues visible</div>
           </div>
         </div>
+      
+        <section class="post-puzzle">
+          <div class="puzzle-metadata">
+            <p class="meta-line">
+              <span class="author"></span>
+              <time class="published-at"></time>
+              <span class="puzzle-number"></span>
+              <button class="puzzle-url-copy-button"></button>
+            </p>
+          </div>
+
+          <p class="board-desc"></p>
+          <details class="solution-panel">
+            <summary class="solution-toggle">solution.txt</summary>
+            <pre class="solution-json"><code></code></pre>
+          </details>
+        </section>
       </div>
-
-      <section class="post-puzzle">
-        <div class="puzzle-metadata">
-          <p class="meta-line">
-            <span class="author"></span>
-            <time class="published-at"></time>
-            <span class="puzzle-number"></span>
-            <button class="puzzle-url-copy-button"></button>
-          </p>
-        </div>
-
-        <p class="board-desc"></p>
-        <details class="solution-panel">
-          <summary class="solution-toggle">solution.txt</summary>
-          <pre class="solution-json"><code></code></pre>
-        </details>
-      </section>
+      
       {% if next_puzzle or design_note %}
         <section class="puzzle-link-section">
           {% if next_puzzle %}

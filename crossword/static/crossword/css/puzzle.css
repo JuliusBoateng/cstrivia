@@ -59,6 +59,101 @@ main {
     min-height: auto;
 }
 
+.board-instructions {
+    width: min(100%, var(--board-max));
+    margin-inline: auto;
+    text-align: center;
+
+    font-size: clamp(0.85rem, 1.05vw, 0.95rem);
+    font-weight: 400;
+    line-height: 1.4;
+
+    color: #4b5563;
+}
+
+.board-instructions p {
+    margin: 0;
+}
+
+.instructions-mobile,
+.controls-mobile {
+  display: none;
+}
+
+.puzzle-region {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+}
+
+.puzzle-toolbar {
+    display: flex;
+    align-items: center;
+    letter-spacing: 0em;
+    font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+    color: #6b7280;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.toolbar-separator {
+    margin: 0 0.4rem;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.puzzle-toolbar button {
+    background: none;
+    border: none;
+    padding: 0.3rem 0.2rem;
+    font: inherit;
+    cursor: pointer;
+}
+
+.puzzle-toolbar button:hover {
+    text-decoration: underline;
+}
+
+.puzzle-toolbar .controls-toggle::before {
+    content: "\25B6";
+    margin-right: 0.1rem;
+}
+  
+.puzzle-toolbar .controls-toggle[aria-expanded="true"]::before {
+    content: "\25BC";
+}
+
+.puzzle-toolbar .controls-toggle {
+    color: #374151;
+}
+
+.puzzle-toolbar .clear-puzzle {
+    color: #6b7280;
+}
+
+.puzzle-toolbar .clear-puzzle.confirming {
+    color: #374151
+}
+
+.controls-panel {
+    width: var(--clue-text);
+    max-width: 100%;
+    margin-bottom: 0.3rem;
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    line-height: 1.4;
+    color: #4b5563;
+}
+
+.controls-panel ul {
+    margin: 0;
+}
+
+.controls-panel li + li {
+    margin-top: 0.3rem;
+}
+
 .board-title {
     text-align: center;
     font-size: clamp(1.4rem, 2.2vw, 2rem);
@@ -68,10 +163,8 @@ main {
 
 .puzzle-panel {
     display: flex;
-    justify-content: center;
     align-items: flex-start;
     gap: 8px;
-    margin: 0 auto;
 }
 
 .board-wrapper {
@@ -193,96 +286,6 @@ main {
     box-shadow: inset 0 0 0 2px #6A6D8F;
 }
 
-.instructions-mobile,
-.controls-mobile {
-  display: none;
-}
-
-.board-instructions {
-    width: min(100%, var(--board-max));
-    margin-inline: auto;
-    text-align: center;
-
-    font-size: clamp(0.85rem, 1.05vw, 0.95rem);
-    font-weight: 400;
-    line-height: 1.4;
-
-    color: #4b5563;
-}
-
-.board-instructions p {
-    margin: 0;
-}
-
-.puzzle-toolbar {
-    display: flex;
-    align-items: center;
-    letter-spacing: 0em;
-    font-size: clamp(0.95rem, 1.05vw, 1.05rem);
-    color: #6b7280;
-
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-.toolbar-separator {
-    margin: 0 0.4rem;
-    color: #9ca3af;
-    pointer-events: none;
-}
-
-.puzzle-toolbar button {
-    background: none;
-    border: none;
-    padding: 0.3rem 0.2rem;
-    font: inherit;
-    cursor: pointer;
-}
-
-.puzzle-toolbar button:hover {
-    text-decoration: underline;
-}
-
-.puzzle-toolbar .controls-toggle::before {
-    content: "\25B6";
-    margin-right: 0.1rem;
-}
-  
-.puzzle-toolbar .controls-toggle[aria-expanded="true"]::before {
-    content: "\25BC";
-}
-
-.puzzle-toolbar .controls-toggle {
-    color: #374151;
-}
-
-.puzzle-toolbar .clear-puzzle {
-    color: #6b7280;
-}
-
-.puzzle-toolbar .clear-puzzle.confirming {
-    color: #374151
-}
-
-.toolbar-wrapper .controls-panel {
-    width: min(100%, var(--clue-text));
-    font-size: clamp(0.9rem, 1vw, 1rem);
-    line-height: 1.4;
-    color: #4b5563;
-}
-
-.controls-panel {
-    margin-bottom: 0.3rem;
-}
-
-.controls-panel ul {
-    margin: 0;
-}
-
-.controls-panel li + li {
-    margin-top: 0.3rem;
-}
-
 .clue-wrapper {
     background: #f3f3f3;
     border-radius: 20px;
@@ -290,7 +293,7 @@ main {
     box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
 
     flex-shrink: 0;
-    width: min(100%, var(--clue-max-width));
+    width: min(45vw, var(--clue-max-width));
     min-width: var(--clue-min-width);
     height: min(80vh, var(--clue-max-height));
     min-height: var(--clue-min-height);
@@ -697,6 +700,10 @@ p.board-desc {
 
     .board-wrapper {
         width: clamp(var(--board-min), 85vw, var(--board-max));
+    }
+
+    .clue-wrapper {
+        width: min(85vw, var(--clue-max-width));
     }
 
     .post-puzzle {
