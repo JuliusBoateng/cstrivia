@@ -471,29 +471,23 @@ class ClueRenderer implements ClueView {
     }
 
     private scrollClue(clue: HTMLLIElement): void {
+      const PADDING = 8;
       const container = this.clueContainer;
 
-      const clueTop = clue.offsetTop;
-      const clueBottom = clueTop + clue.offsetHeight;
-
-      const viewTop = container.scrollTop;
-      const viewBottom = viewTop + container.clientHeight;
-
-      // clue is above visible area
-      if (clueTop < viewTop) {
-        container.scrollTo({
-            top: clueTop,
-            behavior: "auto"
-        });
-        return;
+      const clueRect = clue.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+  
+      const isAbove = clueRect.top < (containerRect.top + PADDING);
+      const isBelow = clueRect.bottom > (containerRect.bottom - PADDING);
+  
+      if (isAbove) {
+          container.scrollTop += clueRect.top - (containerRect.top + PADDING);
+          return;
       }
-
-      // clue is below visible area
-      if (clueBottom > viewBottom) {
-        container.scrollTo({
-            top: clueBottom - container.clientHeight,
-            behavior: "auto"
-        });
+  
+      if (isBelow) {
+          container.scrollTop += clueRect.bottom - (containerRect.bottom - PADDING);
+          return;
       }
     }
 
