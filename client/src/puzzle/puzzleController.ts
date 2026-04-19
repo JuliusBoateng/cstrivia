@@ -165,20 +165,22 @@ class PuzzleController implements CursorController {
 
         else if (this.isShowAnswerShortcut(event)) {
             event.preventDefault();
+            this.suppressNextBeforeInput = true;
             this.handleShowAnswerShortcut();
             return;
         }
     
         else if (this.isCopyShortcut(event)) {
             event.preventDefault();
+            this.suppressNextBeforeInput = true;
             this.handleCopyClueShortcut();
             return;
         }
 
-        else if (this.isSpace(event)) {
+        else if (this.isDirectionShortcut(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
-            this.handleSpacebar();
+            this.handleDirectionShortcut();
             return;
         }
 
@@ -241,7 +243,7 @@ class PuzzleController implements CursorController {
         this.clueView.copyClueText(placement.id);
     }
 
-    private handleSpacebar() {    
+    private handleDirectionShortcut() {    
         const hasChanged = this.toggleDirection();
         if (hasChanged) this.renderCursorVisuals();
     }
@@ -339,7 +341,7 @@ class PuzzleController implements CursorController {
         return event.key === "Escape";
     }
 
-    private isSpace(event: KeyboardEvent) {
+    private isDirectionShortcut(event: KeyboardEvent) {
         return event.code === "Space";
     }
 
