@@ -697,10 +697,6 @@ p.board-desc {
 
 /* Tablet / Mobile */
 @media (max-width: 900px) {
-    /* Test to see if button is stealing focus */
-    .clue-copy {
-        display: none !important;
-    }
     :root {
         --clue-max-width: 600px;
         --puzzle-dynamic-loading-min-height: 1800px;
