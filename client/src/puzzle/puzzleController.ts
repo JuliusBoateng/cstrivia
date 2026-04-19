@@ -57,10 +57,6 @@ class PuzzleController implements CursorController {
         this.setClueView(clueView)
         this.renderInitialState();
 
-        document.addEventListener("focusin", (event) => { // Delete later
-            console.log("focusin", event.target);
-        });
-
         this.tableElement.addEventListener("focus", this.handleFocus, true);
         this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
         this.tableElement.addEventListener("beforeinput", this.handleBeforeInput);
@@ -107,7 +103,6 @@ class PuzzleController implements CursorController {
       };
 
     private handlePointerInput = (event: PointerEvent) => {
-        console.log("pointer start", document.activeElement); // Delete later
         if (!event.isPrimary) return; // ignore multi-touch / secondary stylus
         if (event.button !== 0) return; // ignore right/middle clicks
 
@@ -396,7 +391,6 @@ class PuzzleController implements CursorController {
     }
 
     private renderCursorVisuals() {
-        console.log("before renderCursorVisuals", document.activeElement); // Delete later
         const placement = this.session.getActivePlacement();
         const placementCoords = this.session.getActivePlacementCoords();    
         this.renderer.renderActivePlacement(placement.id, placementCoords);
@@ -405,13 +399,6 @@ class PuzzleController implements CursorController {
         this.renderer.renderActiveCursor(coord);
         this.clueView.renderClue(placement.id);
         this.renderBoardHeader();
-
-        console.log("after renderCursorVisuals", document.activeElement); // Delete later
-
-        setTimeout(() => { // Delete later
-            console.log("after renderCursorVisuals tick", document.activeElement);
-    
-        }, 0);
     }
 
     private renderBoardHeader() {
