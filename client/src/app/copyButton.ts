@@ -39,6 +39,18 @@ function createCopyButton(): HTMLButtonElement {
     }
 }
 
+async function copyClueToClipboard(button: HTMLButtonElement, textToCopy: string, timeoutMs: number): Promise<void> {
+    revealCopyButton(button);
+
+    try {
+        await navigator.clipboard.writeText(textToCopy);
+        setCopiedState(button);
+        setCopyButtonResetTimeout(button, timeoutMs);
+    } catch (err) {
+        console.error("Failed to copy:", err);
+    }
+}
+
 function attachCopyBehavior(button: HTMLButtonElement, textToCopy: string): void {
     const TIMEOUT_MS = 800;
 
@@ -50,20 +62,8 @@ function attachCopyBehavior(button: HTMLButtonElement, textToCopy: string): void
 
     button.addEventListener("click", (event) => {
         event.stopPropagation();
-        void copyText();
+        void copyClueToClipboard(button, textToCopy, TIMEOUT_MS);
     });
-
-    async function copyText(): Promise<void> {
-        revealCopyButton(button);
-
-        try {
-            await navigator.clipboard.writeText(textToCopy);
-            setCopiedState(button);
-            setCopyButtonResetTimeout(button, TIMEOUT_MS);
-        } catch (err) {
-            console.error("Failed to copy:", err);
-        }
-    }
 }
 
 function revealCopyButton(button: HTMLButtonElement): void {
@@ -104,4 +104,4 @@ function setCopyButtonResetTimeout(button: HTMLButtonElement, timeoutMs: number)
     copyButtonTimeouts.set(button, timeoutId);
 }
 
-export { createCopyButton, attachCopyBehavior, revealCopyButton, hideCopyButton }
+export { createCopyButton, attachCopyBehavior, revealCopyButton, hideCopyButton, copyClueToClipboard }

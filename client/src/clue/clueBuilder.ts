@@ -171,7 +171,7 @@ function createClue(boardView: BoardView, clueContainer: HTMLDivElement) {
 
             span.classList.add("clue-show-answer");
             span.setAttribute("role", "button");
-            span.tabIndex = 0;
+            span.tabIndex = -1;
             span.ariaLabel = "Show clue answer";
             span.textContent = "show answer";
     

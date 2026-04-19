@@ -1,6 +1,6 @@
 import { Direction, PlacementId } from "../models/boardView.js";
 import { CursorController } from "../puzzle/puzzleController.js";
-import { revealCopyButton, hideCopyButton} from "../app/copyButton.js";
+import { revealCopyButton, hideCopyButton, copyClueToClipboard} from "../app/copyButton.js";
 
 const CLUE_TOGGLE = ".clue-toggle";
 const CLUE = ".clue"
@@ -34,7 +34,8 @@ interface ClueView {
   focusToggle(): void;
   renderClues(solved: PlacementId[]): void;
   clearClues(): void;
-  renderActiveClue(placementId: PlacementId): void;
+  renderClue(placementId: PlacementId): void;
+  copyClueText(placementId: PlacementId): void;
 }
 
 type ClueElement = {
@@ -118,6 +119,21 @@ class ClueRenderer implements ClueView {
       this.renderClueVisibility()
     }
 
+    copyClueText(placementId: PlacementId): void {
+      const TIMEOUT_MS = 800;
+
+      const clueElement = this.placementClueMap.get(placementId);
+      if (!clueElement?.copyButton) return;
+
+      const clueTextNode = clueElement.liElement.querySelector(".clue-text");
+      if (!clueTextNode) return;
+
+      const clueText = clueTextNode.firstChild?.textContent?.trim() ?? "";
+      if (!clueText) return;
+
+      void copyClueToClipboard(clueElement.copyButton, clueText, TIMEOUT_MS);
+    }
+
     clearClues(): void {
       const clueCounts: ClueCounts = this.renderClueList(new Set<number>());      
       this.renderProgressCount(clueCounts);
@@ -127,7 +143,7 @@ class ClueRenderer implements ClueView {
       this.clearActiveClue();
     }
 
-    renderActiveClue(placementId: PlacementId): void {
+    renderClue(placementId: PlacementId): void {
       const clueElement = this.placementClueMap.get(placementId);
       if (!clueElement) return;
 

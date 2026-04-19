@@ -27,7 +27,8 @@ const NullClueView: ClueView = {
     focusToggle(): void {},
     renderClues(_solved: PlacementId[]): void {},
     clearClues(): void {},
-    renderActiveClue(_placementId: PlacementId): void {},
+    renderClue(_placementId: PlacementId): void {},
+    copyClueText(_placementId: PlacementId): void {}
 };
 
 class PuzzleController implements CursorController {
@@ -162,14 +163,26 @@ class PuzzleController implements CursorController {
             return;
         }
 
-        if (this.isSpace(event)) {
+        else if (this.isShowAnswerShortcut(event)) {
+            event.preventDefault();
+            this.handleShowAnswerShortcut();
+            return;
+        }
+    
+        else if (this.isCopyShortcut(event)) {
+            event.preventDefault();
+            this.handleCopyClueShortcut();
+            return;
+        }
+
+        else if (this.isSpace(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.handleSpacebar();
             return;
         }
 
-        if (this.isTypingKey(event)) {
+        else if (this.isTypingKey(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.commitChar(event.key);
@@ -180,32 +193,52 @@ class PuzzleController implements CursorController {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.handleDeleteInput(event);
+            return;
         }
 
         else if (this.isEnterKey(event)) {
             event.preventDefault();
             this.handleEnterInput(event);
+            return;
         }
 
         else if (this.isTabKey(event)) {
             event.preventDefault();
             this.handleTabInput(event);
+            return;
         }
         
         else if (this.isEscapeKey(event)) {
             event.preventDefault();
             this.handleEscapeInput();
+            return;
         }
 
         else if (this.isHorizontalArrow(event)) {
             event.preventDefault();
             this.handleHorizontalArrowInput(event);
+            return;
         }
         
         else if (this.isVerticalArrow(event)) {
             event.preventDefault();
             this.handleVerticalArrowInput(event);
+            return;
         }
+    }
+
+    private handleShowAnswerShortcut(): void {
+        const placement = this.session.getActivePlacement();
+        if (!placement) return;
+    
+        this.showPlacementSolution(placement.id);
+    }
+    
+    private handleCopyClueShortcut(): void {
+        const placement = this.session.getActivePlacement();
+        if (!placement) return;
+    
+        this.clueView.copyClueText(placement.id);
     }
 
     private handleSpacebar() {    
@@ -272,6 +305,14 @@ class PuzzleController implements CursorController {
 
     private isModifierKey(event: KeyboardEvent) {
         return (event.ctrlKey || event.metaKey || event.altKey);
+    }
+
+    private isShowAnswerShortcut(event: KeyboardEvent): boolean {
+        return event.shiftKey && event.key.toLowerCase() === "s";
+    }
+    
+    private isCopyShortcut(event: KeyboardEvent): boolean {
+        return event.shiftKey && event.key.toLowerCase() === "c";
     }
 
     private isEnterKey(event: KeyboardEvent) {
@@ -354,7 +395,7 @@ class PuzzleController implements CursorController {
 
         const coord = this.session.getCoord();
         this.renderer.renderActiveCursor(coord);
-        this.clueView.renderActiveClue(placement.id);
+        this.clueView.renderClue(placement.id);
         this.renderBoardHeader();
     }
 
