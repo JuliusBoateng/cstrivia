@@ -395,6 +395,7 @@ main {
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 
     display: grid;
     grid-template-columns: 2ch minmax(0,1fr) 20px;
@@ -444,6 +445,7 @@ main {
     pointer-events: none;
     color: #6b7280;
     font-size: 0.9em;
+    touch-action: manipulation;
 }
 
 .clue-show-answer::before {
@@ -695,6 +697,10 @@ p.board-desc {
 
 /* Tablet / Mobile */
 @media (max-width: 900px) {
+    /* Test to see if button is stealing focus */
+    .clue-copy {
+        display: none !important;
+    }
     :root {
         --clue-max-width: 600px;
         --puzzle-dynamic-loading-min-height: 1800px;
