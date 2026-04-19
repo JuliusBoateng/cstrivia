@@ -473,13 +473,14 @@ class ClueRenderer implements ClueView {
     // In single column view, clue_card is no longer scrollable.
     // Ensures the page does not scroll when clue is clicked.
     private scrollClue(clue: HTMLLIElement): void {
-      const overflowY = getComputedStyle(this.clueContainer).overflowY;
-      const canScroll = overflowY === "auto" || overflowY === "scroll";
+      return;
+      // const overflowY = getComputedStyle(this.clueContainer).overflowY;
+      // const canScroll = overflowY === "auto" || overflowY === "scroll";
       
-      const isScrollable = canScroll && (this.clueContainer.scrollHeight > this.clueContainer.clientHeight);
-      if (!isScrollable) return;
+      // const isScrollable = canScroll && (this.clueContainer.scrollHeight > this.clueContainer.clientHeight);
+      // if (!isScrollable) return;
     
-      clue.scrollIntoView({block: "nearest"});
+      // clue.scrollIntoView({block: "nearest"});
     }
 
     private initClueLists(): void {
