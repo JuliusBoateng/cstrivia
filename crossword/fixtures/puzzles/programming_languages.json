@@ -1,0 +1,135 @@
+{
+  "board": {
+    "title": "Programming Languages",
+    "author": "Julius Boateng",
+    "puzzle_number": 6,
+    "published_at": "2026-04-20T05:22:26+00:00",
+    "description": "Programming languages aren't reducible to syntax. They reflect different paradigms, ecosystems, and design philosophies. \"A language that doesn't affect the way you think about programming is not worth knowing.\" — Alan Perlis",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Programming Languages"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Language prototyped in 10 days by Brendan Eich at Netscape; modern browsers have dedicated engines to execute it",
+      "display_answer": "JAVASCRIPT",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 1
+    },
+    {
+      "question": "Developed in 1958 for symbolic AI research; functional language known for recursion and symbolic expressions; short for List Processing",
+      "display_answer": "LISP",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 4
+    },
+    {
+      "question": "Early language backed by the U.S. Department of Defense; still used for banking and finance; short for Common Business-Oriented Language",
+      "display_answer": "COBOL",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 9
+    },
+    {
+      "question": "Systems language known for high performance and memory safety without garbage collection; later sponsored by Mozilla",
+      "display_answer": "RUST",
+      "direction": "A",
+      "start_row": 7,
+      "start_col": 2
+    },
+    {
+      "question": "Early procedural language created by Niklaus Wirth at ETH Zürich; influential in structured programming and university-level computer science courses",
+      "display_answer": "PASCAL",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 8
+    },
+    {
+      "question": "Modern JVM language interoperable with Java; adds null safety, coroutines, and concise syntax; preferred for Android development",
+      "display_answer": "KOTLIN",
+      "direction": "A",
+      "start_row": 11,
+      "start_col": 5
+    },
+    {
+      "question": "Created by Bjarne Stroustrup as \"C with Classes\"; an object-oriented extension of C used for high-performance applications (letters only)",
+      "display_answer": "CPP",
+      "direction": "A",
+      "start_row": 12,
+      "start_col": 9
+    },
+    {
+      "question": "Object-oriented language designed to be architecture-neutral and garbage-collected; known for \"write once, run anywhere\"",
+      "display_answer": "JAVA",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 3
+    },
+    {
+      "question": "Dynamically typed language emphasizing readability and simplicity; widely used for machine learning; Zen of ______",
+      "display_answer": "PYTHON",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 10
+    },
+    {
+      "question": "Strongly typed language commissioned by the U.S. Department of Defense; based on Steelman requirements; named after Lovelace",
+      "display_answer": "ADA",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 2
+    },
+    {
+      "question": "Created by Apple to replace Objective-C; introduced cleaner syntax, type inference, and null safety for iOS development",
+      "display_answer": "SWIFT",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 5
+    },
+    {
+      "question": "Developed by IBM in 1957; one of the earliest major high-level languages; short for Formula Translating System",
+      "display_answer": "FORTRAN",
+      "direction": "D",
+      "start_row": 4,
+      "start_col": 12
+    },
+    {
+      "question": "General-purpose scripting language widely used for early web development; notable for text processing, regular expressions, and automation",
+      "display_answer": "PERL",
+      "direction": "D",
+      "start_row": 5,
+      "start_col": 7
+    },
+    {
+      "question": "Programming language created in Japan with worldwide adoption; treats nearly all values as objects; designed for readability and developer ergonomics",
+      "display_answer": "RUBY",
+      "direction": "D",
+      "start_row": 6,
+      "start_col": 3
+    },
+    {
+      "question": "Created at Dartmouth College to make computing accessible to students outside science; short for Beginner's All-purpose Symbolic Instruction Code",
+      "display_answer": "BASIC",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 9
+    },
+    {
+      "question": "Created by Dennis Ritchie at Bell Labs in 1972; low-level systems language with direct memory access",
+      "display_answer": "C",
+      "direction": "D",
+      "start_row": 9,
+      "start_col": 11
+    },
+    {
+      "question": "Statically typed language created at Google known for goroutines and channels for lightweight concurrency",
+      "display_answer": "GO",
+      "direction": "D",
+      "start_row": 10,
+      "start_col": 6
+    }
+  ]
+}
