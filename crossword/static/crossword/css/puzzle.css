@@ -580,9 +580,9 @@ p.board-desc {
 }
 
 .board-desc {
-    max-width: var(--clue-text);
+    max-width: 60ch;
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 1.4;
     color: #4b5563;
     overflow-wrap: break-word;
     text-wrap: pretty;
@@ -622,6 +622,7 @@ p.board-desc {
 .solution-panel {
     width: clamp(320px, 28vw, 460px);
     max-width: 100%;
+    margin-top: 0.5rem;
 }
   
 .solution-toggle {
