@@ -5,8 +5,8 @@ import { PuzzleSession } from "./puzzleSession.js";
 import { PuzzleValidator } from "./puzzleValidator.js";
 
 interface CursorController {
-    moveCursorToPlacement(placementId: PlacementId): void;
-    showPlacementSolution(placementId: PlacementId): void;
+    handleClueClick(placementId: PlacementId): void;
+    handleShowAnswerClick(placementId: PlacementId): void;
   }
 
 function hasSetDifference<T>(a: T[], b: T[]): boolean {
@@ -74,23 +74,26 @@ class PuzzleController implements CursorController {
         this.clueView.clearClues();
     }
 
-    showPlacementSolution(placementId: PlacementId): void {
+    handleShowAnswerClick(placementId: PlacementId): void {
         this.session.moveCursorToPlacement(placementId);
-        const updatedCoords = this.session.applyPlacementSolution(placementId);
 
+        const updatedCoords = this.session.applyPlacementSolution(placementId);
         for (const coord of updatedCoords) {            
             const letter = this.session.getLetterAt(coord);
             this.renderer.renderLetter(coord, letter);
         }
 
+        this.renderActiveState();
+        this.setActiveFocus();
+
         const solvedPlacements = [...this.session.getSolvedPlacementIds()];
         this.clueView.renderClues(solvedPlacements);
     }
 
-    moveCursorToPlacement(placementId: PlacementId): void {
+    handleClueClick(placementId: PlacementId): void {
         this.session.moveCursorToPlacement(placementId);
         this.renderActiveState();
-        this.setActiveFocus();
+        this.forceActiveFocus();
     }
 
     private handlePointerInput = (event: PointerEvent) => {
@@ -227,7 +230,7 @@ class PuzzleController implements CursorController {
         const placement = this.session.getActivePlacement();
         if (!placement) return;
     
-        this.showPlacementSolution(placement.id);
+        this.handleShowAnswerClick(placement.id);
     }
     
     private handleCopyClueShortcut(): void {
@@ -344,7 +347,7 @@ class PuzzleController implements CursorController {
     private applyLetter(letter: string | null) {
         const prevSolved = [...this.session.getSolvedPlacementIds()];
         this.session.setLetter(letter);
-    
+
         const coord = this.session.getActiveCoord();
         const currentLetter = this.session.getLetter();
         this.renderer.renderLetter(coord, currentLetter);
@@ -392,6 +395,12 @@ class PuzzleController implements CursorController {
     private setActiveFocus() {
         const activeCoord: Coord = this.session.getActiveCoord();
         this.renderer.setFocus(activeCoord);
+    }
+
+    // allows mobile keyboard and scroll to occur again even if already focused
+    private forceActiveFocus() {
+        const activeCoord: Coord = this.session.getActiveCoord();
+        this.renderer.refocus(activeCoord);
     }
 
     private renderActiveState() {

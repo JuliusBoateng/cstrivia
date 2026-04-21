@@ -152,7 +152,7 @@ class PuzzleRenderer {
         }
     
         inputElement.tabIndex = 0;
-    
+
         if (document.activeElement !== inputElement) {
             inputElement.focus();
         }
@@ -162,6 +162,35 @@ class PuzzleRenderer {
             inputElement.setSelectionRange(0, 1);
         }
     
+        this.focusedInput = inputElement;
+    }
+
+    // force a real focus transition so mobile browsers can reopen keyboard / scroll again
+    refocus(coord: Coord) {
+        const inputElement = this.inputGrid[coord.row][coord.col];
+        if (!inputElement) return;
+    
+        if (this.focusedInput && this.focusedInput !== inputElement) {
+            this.focusedInput.tabIndex = -1;
+        }
+    
+        inputElement.tabIndex = 0;
+
+        if (document.activeElement === inputElement) {
+            inputElement.blur();
+        }
+
+        // animation frame gives browser time to commit blur
+        requestAnimationFrame(() => {
+            if (!inputElement.isConnected) return;
+        
+            inputElement.focus();
+        
+            if (document.activeElement === inputElement) {
+                inputElement.setSelectionRange(0, 1);
+            }
+        });
+
         this.focusedInput = inputElement;
     }
 

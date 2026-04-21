@@ -44,8 +44,8 @@ type ClueElement = {
 }
 
 const NullCursorController: CursorController = {
-  moveCursorToPlacement(_placementId: PlacementId): void {},
-  showPlacementSolution(_placementId: PlacementId): void {}
+  handleClueClick(_placementId: PlacementId): void {},
+  handleShowAnswerClick(_placementId: PlacementId): void {}
 };
 
 class ClueRenderer implements ClueView {
@@ -235,7 +235,7 @@ class ClueRenderer implements ClueView {
       const placementId = this.getPlacementId(clue);
       if (placementId === null) return;
   
-      this.cursorController.moveCursorToPlacement(placementId);
+      this.cursorController.handleClueClick(placementId);
     };
 
     private handleCopyReveal = (event: Event) => {
@@ -261,7 +261,7 @@ class ClueRenderer implements ClueView {
       const placementId = this.getPlacementId(clue);
       if (placementId === null) return;
 
-      this.cursorController.showPlacementSolution(placementId);
+      this.cursorController.handleShowAnswerClick(placementId);
     };
 
     private handleHoverLeave = () => {
