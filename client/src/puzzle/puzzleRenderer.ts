@@ -165,7 +165,7 @@ class PuzzleRenderer {
         this.focusedInput = inputElement;
     }
 
-    // force a real focus transition so mobile browsers can reopen keyboard / scroll again
+    // force a real focus transition so mobile browsers reopen keyboard / scroll again
     refocus(coord: Coord) {
         const inputElement = this.inputGrid[coord.row][coord.col];
         if (!inputElement) return;
@@ -179,21 +179,15 @@ class PuzzleRenderer {
         if (document.activeElement === inputElement) {
             inputElement.blur();
         }
-
-        // animation frame gives browser time to commit blur
-        requestAnimationFrame(() => {
-            if (!inputElement.isConnected) return;
         
-            inputElement.focus();
-        
-            if (document.activeElement === inputElement) {
-                inputElement.setSelectionRange(0, 1);
-            }
-        });
+        inputElement.focus();
+    
+        if (document.activeElement === inputElement) {
+            inputElement.setSelectionRange(0, 1);
+        }
 
         this.focusedInput = inputElement;
     }
-
 
     private clearFocus(): void {
         if (!this.focusedInput) return;
