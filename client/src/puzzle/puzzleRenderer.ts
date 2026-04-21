@@ -33,9 +33,7 @@ class PuzzleRenderer {
 
     renderLetter(coord: Coord, letter: string | null) {
         const inputElement: HTMLInputElement | null = this.inputGrid[coord.row][coord.col];
-        if (!inputElement) {
-            throw new Error("Input element not found for coord");
-        }
+        if (!inputElement) throw new Error("Input element not found for coord");
 
         inputElement.value = letter ?? ""
     }
@@ -67,8 +65,6 @@ class PuzzleRenderer {
         this.clearActiveCursor();
         cell.classList.add(HIGHLIGHT_CURSOR);
         this.activeCursor = cell;
-
-        this.setFocus(coord);
     }
 
     renderActivePlacement(placementId: number, coords: Coord[]) {
@@ -147,15 +143,28 @@ class PuzzleRenderer {
         return fills;
     }
 
-    private setFocus(coord: Coord) {
-        const inputElement: HTMLInputElement | null = this.inputGrid[coord.row][coord.col];
+    setFocus(coord: Coord) {
+        const inputElement = this.inputGrid[coord.row][coord.col];
         if (!inputElement) return;
-
+    
+        if (this.focusedInput && (this.focusedInput !== inputElement)) {
+            this.focusedInput.tabIndex = -1;
+        }
+    
         inputElement.tabIndex = 0;
-        inputElement.focus();
-        inputElement.setSelectionRange(0, 1);
+    
+        if (document.activeElement !== inputElement) {
+            inputElement.focus();
+        }
+    
+        // set range only if focus succeeds
+        if (document.activeElement === inputElement) {
+            inputElement.setSelectionRange(0, 1);
+        }
+    
         this.focusedInput = inputElement;
     }
+
 
     private clearFocus(): void {
         if (!this.focusedInput) return;

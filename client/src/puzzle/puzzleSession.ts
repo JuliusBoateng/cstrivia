@@ -17,7 +17,7 @@ type PersistedPuzzleSession = {
 };
 
 class PuzzleSession {
-    private coord!: Coord;
+    private activeCoord!: Coord;
     private rows: number;
     private cols: number;
     private activePlacement!: Placement;
@@ -95,9 +95,9 @@ class PuzzleSession {
     }
 
     setLetter(letter: string | null): void {
-        this.writeLetterAt(this.coord, letter);
+        this.writeLetterAt(this.activeCoord, letter);
 
-        const placements = this.boardView.getCellPlacements(this.coord);
+        const placements = this.boardView.getCellPlacements(this.activeCoord);
         this.updateSolvedPlacements(placements);
 
         this.saveSessionState();
@@ -139,7 +139,7 @@ class PuzzleSession {
     }
 
     moveCursorRelative(rowDelta: number, colDelta: number) {
-        const coord = this.getCoord();
+        const coord = this.getActiveCoord();
         const relativeCoord = {row: coord.row + rowDelta, col: coord.col + colDelta}
         if (!this.boardView.isValidCoord(relativeCoord)) return;
 
@@ -181,7 +181,7 @@ class PuzzleSession {
     }
 
     setDirection(desired: Direction) {
-        const cell = this.boardView.getCell(this.coord);
+        const cell = this.boardView.getCell(this.activeCoord);
         if (!cell) return;
     
         // Already in the desired direction.
@@ -191,7 +191,7 @@ class PuzzleSession {
     }
 
     toggleDirection(): boolean {
-        const cell = this.boardView.getCell(this.coord);
+        const cell = this.boardView.getCell(this.activeCoord);
         if (!cell) return false;
 
         const currentDirection = this.activePlacement.direction;
@@ -208,12 +208,12 @@ class PuzzleSession {
         return true
     }
 
-    getCoord(): Coord {
-        return this.coord;
+    getActiveCoord(): Coord {
+        return this.activeCoord;
     }
 
     getLetter(): string | null {
-        return this.letterGrid[this.coord.row][this.coord.col]
+        return this.letterGrid[this.activeCoord.row][this.activeCoord.col]
     }
 
     getLetterAt(coord: Coord): string | null {
@@ -286,7 +286,7 @@ class PuzzleSession {
     }
 
     isCellEmpty(): boolean {
-        return this.letterGrid[this.coord.row][this.coord.col] === null;
+        return this.letterGrid[this.activeCoord.row][this.activeCoord.col] === null;
     }
 
     isEndOfPlacement(): boolean {
@@ -325,7 +325,7 @@ class PuzzleSession {
     }
 
     private setCursorState(coord: Coord, placement: Placement, placementIndex: number) {
-        this.coord = coord;
+        this.activeCoord = coord;
         this.activePlacement = placement;
         this.activePlacementIndex = placementIndex;
     }
@@ -419,7 +419,7 @@ class PuzzleSession {
     private initSessionState(): void {
         this.activePlacement = this.getInitialPlacement();
         this.activePlacementIndex = 0;
-        this.coord = {
+        this.activeCoord = {
             row: this.activePlacement.start_row,
             col: this.activePlacement.start_col
         };
@@ -432,7 +432,7 @@ class PuzzleSession {
     private initRestoredSessionState(): void {
         this.activePlacement = this.getInitialPlacement();
         this.activePlacementIndex = 0;
-        this.coord = {
+        this.activeCoord = {
             row: this.activePlacement.start_row,
             col: this.activePlacement.start_col
         };

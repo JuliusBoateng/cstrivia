@@ -107,7 +107,7 @@ class ClueRenderer implements ClueView {
     }
 
     focusToggle(): void {
-      this.todoToggle.focus();
+      if (document.activeElement !== this.todoToggle) this.todoToggle.focus();  
     }
 
     renderClues(solved: PlacementId[]): void {
