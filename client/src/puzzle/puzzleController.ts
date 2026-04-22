@@ -115,8 +115,8 @@ class PuzzleController implements CursorController {
 
         const prevCoord = this.session.getActiveCoord();
         if ((prevCoord.row === row) && (prevCoord.col === col)) {
-            const hasChanged = this.toggleDirection();
-            if (hasChanged) this.renderActiveState();    
+            this.toggleDirection();
+            this.renderActiveState();    
             return;
         }
         
@@ -241,8 +241,8 @@ class PuzzleController implements CursorController {
     }
 
     private handleDirectionShortcut() {    
-        const hasChanged = this.toggleDirection();
-        if (hasChanged) this.renderActiveState();
+        this.toggleDirection();
+        this.renderActiveState();
     }
 
     private handleTabInput(event: KeyboardEvent) {
