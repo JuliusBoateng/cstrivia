@@ -1,0 +1,114 @@
+{
+  "board": {
+    "title": "Operating Systems",
+    "author": "Julius Boateng",
+    "puzzle_number": 7,
+    "published_at": "2026-04-22T00:50:17+00:00",
+    "description": "As computers became more powerful, operating systems became more complex. Abstractions like virtualization, time-sharing, and dynamic scheduling help modern computers run smoothly while hiding significant complexity from end users.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Operating Systems"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Single-tasking microcomputer OS; preceded DOS and became the late-1970s industry standard; short for Control Program for Microcomputers",
+      "display_answer": "CPM",
+      "direction": "A",
+      "start_row": 1,
+      "start_col": 4
+    },
+    {
+      "question": "Linux-based mobile OS developed by Google; has the largest installed base of any operating system",
+      "display_answer": "ANDROID",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 5
+    },
+    {
+      "question": "Microkernel OS optimized for resource-constrained mobile devices; dominant in the 2000s before iOS and Android",
+      "display_answer": "SYMBIAN",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 2
+    },
+    {
+      "question": "IBM's flagship Unix OS for POWER architecture servers; short for Advanced Interactive eXecutive",
+      "display_answer": "AIX",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 4
+    },
+    {
+      "question": "Unix distribution that helped popularize TCP/IP networking; short for Berkeley Software Distribution",
+      "display_answer": "BSD",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 8
+    },
+    {
+      "question": "Developed by Microsoft and IBM as a replacement for DOS; brought protected memory and preemptive multitasking to many PCs",
+      "display_answer": "OS2",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 10
+    },
+    {
+      "question": "Single-tasking command-line OS that powered 1980s IBM PCs and early Windows releases; short for Disk Operating System",
+      "display_answer": "DOS",
+      "direction": "A",
+      "start_row": 7,
+      "start_col": 3
+    },
+    {
+      "question": "Unix-based OS released in 1992 by Sun Microsystems for enterprise servers; introduced DTrace and ZFS",
+      "display_answer": "SOLARIS",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 4
+    },
+    {
+      "question": "Pioneered capacitive multi-touch screens; popularized smartphone app distribution through the App Store",
+      "display_answer": "IOS",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 6
+    },
+    {
+      "question": "Portable operating system developed at Bell Labs; known for modular design and simple tools",
+      "display_answer": "UNIX",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 5
+    },
+    {
+      "question": "Unix-like microkernel OS designed to teach operating systems internals; central to the Tanenbaum–Torvalds kernel debate",
+      "display_answer": "MINIX",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 6
+    },
+    {
+      "question": "OS family released in 1985 that came to define the PC era; preinstalled on most PCs and later drew antitrust scrutiny",
+      "display_answer": "WINDOWS",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 10
+    },
+    {
+      "question": "Unix-based OS descended from NeXTSTEP, built for Apple computers",
+      "display_answer": "MACOS",
+      "direction": "D",
+      "start_row": 4,
+      "start_col": 4
+    },
+    {
+      "question": "Open-source Unix-like kernel packaged in distributions such as Ubuntu and Debian; powers nearly all top supercomputers",
+      "display_answer": "LINUX",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 6
+    }
+  ]
+}
