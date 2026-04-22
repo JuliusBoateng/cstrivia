@@ -1,0 +1,15 @@
+{
+  "design_note": {
+    "title": "Programming Languages",
+    "design_number": 6,
+    "author": "Julius Boateng",
+    "published_at": "2026-04-22T06:58:50+00:00",
+    "body": "## Theme\r\n\r\nLearning a programming language is a fundamental step in computer science. For many people, it's the first step. During this process, you start to understand how things work within a language. You may assume all languages work this way, and you'll generally be correct. Eventually, you are exposed to other languages and begin to notice meaningful differences.\r\n\r\nI'm still going through this process, but along the way I've learned that understanding a language extends beyond basic syntax. Each language carries its own paradigms, tooling, and design philosophies that influence how it's used. Similar to spoken languages, programming languages are not simply reducible to syntax, nor can a language be a complete 1:1 translation of another.\r\n\r\n## Grid\r\n\r\nC++ and C were tricky to place because intersections containing \"C\" were limited. Since C is a single character, I intersected it with Pascal in hopes that users wouldn't solve Pascal first. If they did, they would miss C and its clue. I chose Pascal because it's more niche than the other clues, making it more likely to be skipped first and solved later. I also had to convert C++ to CPP, since my grid only accepts alphanumeric characters.\r\n\r\n## Clues\r\n\r\nWhile reviewing the previous puzzle, *Research Institutions Behind Modern Computing*, I noticed that I frequently began clues with \"University where\" and \"Research company where,\" which made the clues feel repetitive even though the content differed. For this puzzle, I made an effort to diversify how I structured the clues. I also tried to balance historical context, specific technical examples, and summaries of why it mattered.\r\n\r\nPersonally, the most interesting clues were those for Ruby and Pascal. There is less mainstream recognition of programming languages created outside the U.S., so it was nice to include Ruby, created in Japan, and Pascal, created in Switzerland, as languages that achieved worldwide adoption.\r\n\r\n## Tradeoffs\r\n\r\nI wanted the puzzle to include languages like C, C++, Ada, and Go because of their importance to programming, even though they made grid construction more challenging due to the lack of intersections. It took quite some time figuring out placements so that all the clues fit.\r\n\r\n## Notes\r\n\r\nI was initially hesitant to write a puzzle about programming languages since I felt the topic was overly generic. However, I realized that the questions make the puzzle interesting, not necessarily the topic.",
+    "categories": [
+      "Puzzle Design"
+    ],
+    "boards": [
+      6
+    ]
+  }
+}
