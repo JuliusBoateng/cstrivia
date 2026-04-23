@@ -10,7 +10,7 @@ RSS_LIMIT = 20
 
 class LatestActivityFeed(Feed):
     content_type = "application/rss+xml; charset=utf-8"
-    image_url = static("crossword/img/favicon-48.png")
+    image_url = "/static/crossword/img/favicon-48.png"
 
     title = "CS Trivia"
     link = "/"

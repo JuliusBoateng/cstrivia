@@ -32,7 +32,7 @@ urlpatterns = [
     path("healthz/", healthz),
     path("sitemap.xml", sitemap, {"sitemaps": get_sitemap_view()}, name="sitemap"),
     path('', include("crossword.urls")),
-    path("favicon.ico", RedirectView.as_view(url=static("crossword/img/favicon-48.png"), permanent=True))
+    path("favicon.ico", RedirectView.as_view(url="/static/crossword/img/favicon-48.png", permanent=True))
 ]
 
 if settings.DEBUG:
