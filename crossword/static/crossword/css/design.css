@@ -140,3 +140,12 @@ main {
 .design-note-related a:hover {
     color: #1f2937;
 }
+
+.design-note img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    border-radius: 8px;
+}
