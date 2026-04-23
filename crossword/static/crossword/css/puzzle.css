@@ -713,11 +713,11 @@ p.board-desc {
     }
 
     .board-wrapper {
-        width: clamp(var(--board-min), 85vw, var(--board-max));
+        width: clamp(var(--board-min), 90vw, var(--board-max));
     }
 
     .clue-wrapper {
-        width: min(85vw, var(--clue-max-width));
+        width: min(90vw, var(--clue-max-width));
     }
 
     .instructions-desktop,
