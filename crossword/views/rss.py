@@ -1,7 +1,6 @@
 from itertools import chain
 
 from django.contrib.syndication.views import Feed
-from django.templatetags.static import static
 from django.utils import timezone
 
 from ..models import Board, DesignNote

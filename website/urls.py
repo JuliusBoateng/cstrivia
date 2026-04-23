@@ -20,7 +20,6 @@ from django.http import HttpResponse
 from django.contrib.sitemaps.views import sitemap
 from django.conf import settings
 from django.views.generic import RedirectView
-from django.templatetags.static import static
 
 from crossword.views.sitemap import get_sitemap_view
 
