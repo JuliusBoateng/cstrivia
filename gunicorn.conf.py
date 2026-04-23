@@ -9,3 +9,6 @@ loglevel = "debug"
 capture_output = True
 
 preload_app = False
+
+timeout = 120
+graceful_timeout = 120
