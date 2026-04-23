@@ -8,6 +8,8 @@ from ..models import Board, DesignNote
 RSS_LIMIT = 20
 
 class LatestActivityFeed(Feed):
+    content_type = "application/rss+xml; charset=utf-8"
+
     title = "CS Trivia"
     link = "/"
     description = "New computer science crosswords and design notes"
