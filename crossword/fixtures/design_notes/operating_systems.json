@@ -1,0 +1,15 @@
+{
+  "design_note": {
+    "title": "Operating Systems",
+    "design_number": 7,
+    "author": "Julius Boateng",
+    "published_at": "2026-04-23T04:02:46+00:00",
+    "body": "## Theme\r\n\r\nOperating systems seemed like a natural progression after the previous *Programming Languages* puzzle. University computer science courses often progress from Intro to Programming to Operating Systems to Theory of Computing. I wanted to loosely mirror that sequence through this “mini puzzle progression.” The next puzzle will be about Theory of Computing.\r\n\r\nI feel operating systems are not typically talked about in terms of how they shape user experiences. They play a huge role in how responsive, stable, and interactive a computer feels. In many ways, the operating system is the main UX of a computer.\r\n\r\n## Grid\r\n\r\nI find the final grid very visually interesting. It’s not balanced, it has rough edges and various indents, but I think that gives it a unique look.\r\n\r\nMost of the clues were short, which made it easier to keep the grid self-contained. Once I created the core shape, it was easy to add additional clues.\r\n\r\n## Clues\r\n\r\nI made an initial list of 9 clues and gradually expanded it as I filled the grid. The additional clues I added were Symbian, AIX, and OS2.\r\n\r\nI added Symbian because it was the dominant mobile OS in the early 2000s, and I felt the puzzle was missing representation for the pre-Android and iOS mobile era.\r\n\r\nAIX was added to include more enterprise operating systems. AIX is also unique because it supported IBM’s POWER architecture, which differs from common x86 and ARM architectures.\r\n\r\nOS2 was added because I thought it was interesting that IBM and Microsoft once worked together on an operating system.\r\n\r\n## Tradeoffs\r\n\r\nI included specific technical elements in many clues and had to balance depth with keeping the clues understandable and accessible.\r\n\r\nI also wanted to preserve nuance in areas where shorthand can become misleading, such as Linux being packaged through distributions, or Android Inc. being acquired by Google and becoming the Android OS we know today.\r\n\r\n## Notes\r\n\r\nI feel the quality of my clues has improved over the last two puzzles.\r\n\r\nI’m using more varied language to start clues without sounding repetitive, and I’m providing more specific historical context and technical achievements. I hope to continue this improvement going forward.",
+    "categories": [
+      "Puzzle Design"
+    ],
+    "boards": [
+      7
+    ]
+  }
+}
