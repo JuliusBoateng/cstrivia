@@ -18,8 +18,11 @@ from django.contrib import admin
 from django.urls import include, path
 from django.http import HttpResponse
 from django.contrib.sitemaps.views import sitemap
-from crossword.views.sitemap import get_sitemap_view
 from django.conf import settings
+from django.views.generic import RedirectView
+from django.templatetags.static import static
+
+from crossword.views.sitemap import get_sitemap_view
 
 
 def healthz(request):
@@ -29,6 +32,7 @@ urlpatterns = [
     path("healthz/", healthz),
     path("sitemap.xml", sitemap, {"sitemaps": get_sitemap_view()}, name="sitemap"),
     path('', include("crossword.urls")),
+    path("favicon.ico", RedirectView.as_view(url=static("crossword/img/favicon-48.png"), permanent=True))
 ]
 
 if settings.DEBUG:
