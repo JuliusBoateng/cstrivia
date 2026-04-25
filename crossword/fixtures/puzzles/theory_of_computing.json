@@ -49,7 +49,7 @@
     },
     {
       "question": "Published incompleteness theorems showing formal systems cannot decide all truths about natural numbers or prove themselves consistent",
-      "display_answer": "GODEL",
+      "display_answer": "GÖDEL",
       "direction": "A",
       "start_row": 9,
       "start_col": 9

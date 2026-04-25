@@ -1,0 +1,15 @@
+{
+  "design_note": {
+    "title": "Theory of Computing",
+    "design_number": 8,
+    "author": "Julius Boateng",
+    "published_at": "2026-04-25T21:30:38+00:00",
+    "body": "## Theme\r\n\r\nI liked taking Theory of Computing in university, even though I wasn’t great at writing proofs and often struggled with understanding some of the lower-level concepts. Even so, the high-level ideas were interesting and helped me develop an appreciation for the subject.\r\n\r\nSince graduating, I haven’t encountered many situations that required a deep understanding of theory. It would likely be more directly applicable in areas like natural language processing, algorithms, compilers, and similar fields. Still, theory shows up indirectly in regular software engineering work, such as when using regular expressions, designing efficient algorithms, and parsing input.\r\n\r\nI created this puzzle to revisit important contributors to computing theory and explore the subject a bit more.\r\n\r\n## Grid\r\n\r\nGrid construction was relatively smooth for this puzzle. Undecidable, recursion, and halting served as the main anchors. Since these clues have a lot of commonly repeated letters, it made finding intersections easier.\r\n\r\nI was a bit apprehensive about finding a placement for Kleene near the end of construction. Not because e’s are uncommon, but because it was a moderately long word with three e’s. At that point, many of the available e’s were already unavailable or covered by other words.\r\n\r\nI felt similarly about oracle, since late in construction the remaining open space with the correct intersections became limited.\r\n\r\n## Clues\r\n\r\nI did not want this puzzle to be too name-heavy, so I limited the number of people clues to 4. As a result, I did not include Emil Post, George Boole, and Claude Shannon, even though they were important to the subject.\r\n\r\nI didn’t include DFA because it may cause confusion with NFA. I also did not want to include too many acronyms, so I decided not to include things like Pushdown Automata (PDA).\r\n\r\nI wanted the clue list to be distributed across different categories: Foundational Figures (4), Computability (4), Complexity Theory (3), and Automata Theory (3).\r\n\r\n## Tradeoffs\r\n\r\nThe puzzle contains abstract ideas, so I tried to make the clues extremely clear and specific. I also avoided clues that felt too in the weeds, focusing instead on concepts that were more high-level.\r\n\r\nThe result is that even though the theme is somewhat abstract, the clues are still relatively accessible given the subject.\r\n\r\n## Notes\r\n\r\nWorking on this puzzle was particularly fun since it covers a more abstract topic that I hadn’t revisited since university. The most enjoyable part of the project was writing the clues in a way that felt direct and understandable.\r\n\r\nNext puzzle will be about Compilers! It feels like the next logical progression after theory.",
+    "categories": [
+      "Puzzle Design"
+    ],
+    "boards": [
+      8
+    ]
+  }
+}
