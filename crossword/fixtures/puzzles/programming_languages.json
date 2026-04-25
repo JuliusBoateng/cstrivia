@@ -69,7 +69,7 @@
       "start_col": 3
     },
     {
-      "question": "Dynamically typed language emphasizing readability and simplicity; widely used for machine learning; Zen of ______",
+      "question": "Dynamically typed language emphasizing readability and simplicity; widely used for machine learning; Zen of ___",
       "display_answer": "PYTHON",
       "direction": "D",
       "start_row": 1,

@@ -84,7 +84,7 @@
       "start_col": 2
     },
     {
-      "question": "Inventor of the relational model; Turing Award winner; Boyce-____ normal form",
+      "question": "Inventor of the relational model; Turing Award winner; Boyce-___ normal form",
       "display_answer": "CODD",
       "direction": "D",
       "start_row": 8,

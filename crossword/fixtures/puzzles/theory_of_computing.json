@@ -1,0 +1,107 @@
+{
+  "board": {
+    "title": "Theory of Computing",
+    "author": "Julius Boateng",
+    "puzzle_number": 8,
+    "published_at": "2026-04-25T03:26:17+00:00",
+    "description": "This puzzle explores abstract ideas about the limits of computation. Theory rarely appears directly in practical software work, though it often shows up indirectly, making these ideas interesting to explore at a high level with the heavy math removed",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Theory Of Computing"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Invented lambda calculus and proved no algorithm can solve the Entscheidungsproblem",
+      "display_answer": "CHURCH",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 8
+    },
+    {
+      "question": "Sequence of characters specifying a match pattern in text; formal notation for regular languages in automata theory",
+      "display_answer": "REGEX",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 3
+    },
+    {
+      "question": "Decision problem where no algorithm always provides the correct yes-or-no answer; shows some formally defined problems are not computable",
+      "display_answer": "UNDECIDABLE",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 0
+    },
+    {
+      "question": "Introduced the Turing machine as a universal model of computation and proved the halting problem undecidable",
+      "display_answer": "TURING",
+      "direction": "A",
+      "start_row": 7,
+      "start_col": 2
+    },
+    {
+      "question": "Short for nondeterministic finite automaton; allows multiple next states for one input symbol unlike a deterministic machine",
+      "display_answer": "NFA",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 9
+    },
+    {
+      "question": "Published incompleteness theorems showing formal systems cannot decide all truths about natural numbers or prove themselves consistent",
+      "display_answer": "GODEL",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 9
+    },
+    {
+      "question": "Abstract machines used to study formal languages and computation; includes finite-state machines",
+      "display_answer": "AUTOMATA",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 1
+    },
+    {
+      "question": "Mathematician and logician who founded recursion theory and created regular expressions, including the ___ star",
+      "display_answer": "KLEENE",
+      "direction": "A",
+      "start_row": 11,
+      "start_col": 0
+    },
+    {
+      "question": "Unsolved problem asking whether problems verifiable in polynomial time can also be solved efficiently; one of the Millennium Prize Problems",
+      "display_answer": "PVSNP",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 1
+    },
+    {
+      "question": "Defining a function through smaller versions of itself with a base case and recursive step; foundational to early computability theory",
+      "display_answer": "RECURSION",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 4
+    },
+    {
+      "question": "Famous decision problem of whether a program halts or runs forever; shows some functions are mathematically definable but not computable",
+      "display_answer": "HALTING",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 9
+    },
+    {
+      "question": "Theoretical black box that can instantly answer selected problems for a Turing machine, including undecidable or NP-complete problems",
+      "display_answer": "ORACLE",
+      "direction": "D",
+      "start_row": 5,
+      "start_col": 13
+    },
+    {
+      "question": "Class of problems solvable in polynomial time by a nondeterministic Turing machine and verifiable deterministically in polynomial time",
+      "display_answer": "NP",
+      "direction": "D",
+      "start_row": 7,
+      "start_col": 6
+    }
+  ]
+}
