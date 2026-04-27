@@ -13,7 +13,7 @@
   },
   "clues": [
     {
-      "question": "Invented lambda calculus and proved no algorithm can solve the Entscheidungsproblem",
+      "question": "Invented lambda calculus and proved no algorithm can solve the Entscheidungsproblem (decision problem)",
       "display_answer": "CHURCH",
       "direction": "A",
       "start_row": 3,
