@@ -29,7 +29,7 @@ body {
 main {
   max-width: 720px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2rem 1rem 0rem 1rem;
   flex: 1;
 }
 
@@ -186,7 +186,7 @@ main {
 }
 
 .puzzle-note {
-  margin: 1rem 0 1.2rem;
+  margin: 1rem 0 1rem;
   color: #6b7280;
   font-size: 1rem;
 }
@@ -203,20 +203,7 @@ main {
   text-underline-offset: 2px;
 }
 
-.feature-list {
-  font-size: 1rem;
-  color: #52525b;
-  text-wrap: pretty;
-}
-
-.feature-list ul {
-  list-style: none;
-  padding: 0;
+.site-values {
   margin: 0;
-}
-
-.feature-list .emphasis {
-  margin-top: .5rem;
-  color: #27272a;
-  font-weight: 600;
+  color: #52525b;
 }
