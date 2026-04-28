@@ -91,7 +91,7 @@
       "start_col": 10
     },
     {
-      "question": "Named entities like variables, functions, and classes stored in ___ tables used for compiler name resolution and type-checking",
+      "question": "Named entities like variables, functions, and classes; stored in ___ tables for name resolution and type checking",
       "display_answer": "SYMBOL",
       "direction": "D",
       "start_row": 7,

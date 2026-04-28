@@ -1,0 +1,15 @@
+{
+  "design_note": {
+    "title": "Compilers",
+    "design_number": 9,
+    "author": "Julius Boateng",
+    "published_at": "2026-04-28T21:31:26+00:00",
+    "body": "## Theme\r\n\r\nCompilers felt like a natural next topic after Theory of Computing. Theory focused on the more abstract side of computer science through high-level explanations of automata and decision problems. Compilers are more tangible, which let me provide more concrete examples in the clues. I use compilers regularly as a developer, though my understanding of their internals is limited since it isn't something I analyze deeply as I write code.\r\n\r\n## Grid\r\n\r\nThe clues didn't vary much in length, as a result there weren't clues that strongly defined the shape of the grid compared to previous puzzles. Clues also contained a lot of shared letters, as a result it was generally not too difficult to find intersections. I did have particular trouble finding crossings for Backus and Allen near the end of construction. I originally had 13 clues, but added Syntax as the 14th clue at the end of construction, to help the grid feel more complete.\r\n\r\n## Clues\r\n\r\nInitially when creating the clue list, it may include broader clues that are adjacent to the theme but not central to it. It’s then a process of removing and adding stronger clues relative to the theme until I reach a final set I’m happy with. Some clues I considered but removed included compile, optimize, bytecode, object code, unroll, and binary. Some, like object code, fit the theme, but I felt were already represented with assembly. Syntax was originally removed from the list, but added after grid construction. I felt it was worth including it to help fill the grid and also add a more approachable clue.\r\n\r\n## Tradeoffs\r\n\r\n5 of the clues were on frontend parsing, 2 on semantic analysis, 2 on optimization, 2 on backend code generation, and 3 on people. The split was fairly even, though frontend parsing had a disproportionate amount of representation. I initially wanted to reduce the number of frontend parsing clues, but felt that each one deserved its place in the puzzle. This category included lexer, token, parser, grammar, and syntax. A lot of time in compilers is spent on the parsing side, so it being overrepresented did not feel like a bad thing.\r\n\r\n## Notes\r\n\r\nWhen reviewing this puzzle, I realized I wouldn’t be able to solve it without external help. I have a rudimentary understanding of compilers, and these clues require a somewhat deeper level of familiarity. Writing them involved researching compilers and reading Wikipedia entries, but that isn’t enough to build the kind of understanding needed to solve everything on my own.\r\n\r\nI think the clues achieve the goal of not being shallow, and that’s reflected in me not being able to solve them independently. The clues aren’t esoteric, but they do require some depth in knowledge of the theme.",
+    "categories": [
+      "Puzzle Design"
+    ],
+    "boards": [
+      9
+    ]
+  }
+}
