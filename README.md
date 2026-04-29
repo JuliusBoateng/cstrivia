@@ -1,9 +1,21 @@
 # CS Trivia
-Public repository for https://cstrivia.com
 
-A site for computer science crosswords.
+A lightweight site for computer science crosswords.
+
+https://cstrivia.com
 
 <img src="crossword/static/crossword/img/readme.png" width="860" />
+
+## Design Approach
+
+This app minimizes server interaction after puzzle is loaded:
+
+- django server renders and serves complete puzzle data upfront
+- all puzzle interaction (input, validation, navigation) happens client-side
+- no additional HTTP requests are made during solving
+- progress is stored locally in session storage
+
+This keeps the backend simple and reduces runtime load, at the cost of server-side validation and persistence.
 
 ## Tech Stack
 - Backend: Python, Django
