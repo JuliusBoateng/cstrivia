@@ -248,20 +248,21 @@ class PuzzleSession {
         return coords;
     }
 
+    getPlacements(coord: Coord): Placement[] {
+        return this.boardView.getCellPlacements(coord);
+    }
+
     getPlayableCells(): Coord[] {
         return this.boardView.getCells()
             .map(cell => ({ row: cell.row, col: cell.col } as Coord));
     }
 
-    getPlacementResults(coord: Coord): PlacementCheckResult {
+    getPlacementResults(placements: Placement[]): PlacementCheckResult {
         const solved = [];
         const incorrect = [];
     
-        const placements = this.boardView.getCellPlacements(coord);
-    
         for (const placement of placements) {
-            const isComplete = this.isPlacementComplete(placement);
-            if (!isComplete) continue;
+            if (!this.isPlacementComplete(placement)) continue;
     
             const isSolved = this.solvedPlacementIds.has(placement.id);
     
@@ -270,6 +271,11 @@ class PuzzleSession {
         }
     
         return { solved, incorrect };
+    }
+    
+    getPlacementResultsForCoord(coord: Coord): PlacementCheckResult {
+        const placements = this.boardView.getCellPlacements(coord);
+        return this.getPlacementResults(placements);
     }
 
     private updateSolvedPlacements(placements: Placement[]): void {

@@ -1,5 +1,5 @@
 import { ClueView } from "../clue/clueRenderer.js";
-import { BoardView, Coord, Direction, PlacementId } from "../models/boardView.js";
+import { BoardView, Coord, Direction, Placement, PlacementId } from "../models/boardView.js";
 import { PuzzleRenderer } from "./puzzleRenderer.js";
 import { PuzzleSession } from "./puzzleSession.js";
 import { PuzzleValidator } from "./puzzleValidator.js";
@@ -267,7 +267,7 @@ class PuzzleController implements CursorController {
     private handleEnterInput(event: KeyboardEvent) {
         if (this.session.isEndOfPlacement() && !event.repeat) {
             const coord = this.session.getActiveCoord();
-            this.renderPlacementFeedback(coord)
+            this.renderPlacementFeedbackForCoord(coord)
             return;
         }
 
@@ -315,31 +315,6 @@ class PuzzleController implements CursorController {
         if (!normalized) return;
         
         this.applyPastedText(normalized);
-    }
-
-    private applyPastedText(normalized: string) {
-        const prevSolved = [...this.session.getSolvedPlacementIds()];
-
-        const changedCoords: Coord[] = [];
-        for (const letter of normalized) {
-            if (!this.isAllowedCharacter(letter)) continue;
-    
-            this.writeLetter(letter);
-            changedCoords.push(this.session.getActiveCoord());
-
-            if (!this.session.canAdvanceCursor()) break;
-            this.session.advanceCursor();
-        }
-    
-        for (const coord of changedCoords) {
-            this.renderPlacementFeedback(coord);
-        }
-
-        const currSolved = [...this.session.getSolvedPlacementIds()];
-        if (hasSetDifference(prevSolved, currSolved)) this.clueView.renderClues(currSolved);
-
-        this.renderActiveState();
-        this.setActiveFocus();
     }
 
     private isAllowedCharacter(value: string) {
@@ -408,10 +383,43 @@ class PuzzleController implements CursorController {
     }
     
     private applyLetterFeedback(coord: Coord, currentLetter: string | null, prevSolved: number[]) {
-        if (currentLetter) this.renderPlacementFeedback(coord);
+        if (currentLetter) this.renderPlacementFeedbackForCoord(coord);
     
         const currSolved = [...this.session.getSolvedPlacementIds()];
         if (hasSetDifference(prevSolved, currSolved)) this.clueView.renderClues(currSolved);
+    }
+
+    private applyPastedText(normalized: string) {
+        const prevSolved = [...this.session.getSolvedPlacementIds()];
+
+        const affectedPlacements = this.writePastedText(normalized);       
+        this.renderPlacementFeedback([...affectedPlacements]);
+
+        const currSolved = [...this.session.getSolvedPlacementIds()];
+        if (hasSetDifference(prevSolved, currSolved)) this.clueView.renderClues(currSolved);
+
+        this.renderActiveState();
+        this.setActiveFocus();
+    }
+
+    private writePastedText(normalized: string): Set<Placement> {
+        const affectedPlacements = new Set<Placement>();
+
+        for (const letter of normalized) {
+            this.writeLetter(letter);
+    
+            const coord = this.session.getActiveCoord();
+            const placements = this.session.getPlacements(coord);
+    
+            for (const placement of placements) {
+                affectedPlacements.add(placement);
+            }
+    
+            if (!this.session.canAdvanceCursor()) break;
+            this.session.advanceCursor();
+        }
+    
+        return affectedPlacements;
     }
 
     private commitChar(rawChar: string) {
@@ -502,8 +510,13 @@ class PuzzleController implements CursorController {
         this.renderer.renderBoardHeader(captionText);
     }
 
-    private renderPlacementFeedback(coord: Coord) {
-        const result = this.session.getPlacementResults(coord);
+    private renderPlacementFeedbackForCoord(coord: Coord) {
+        const placements = this.session.getPlacements(coord);
+        this.renderPlacementFeedback(placements);
+    }
+
+    private renderPlacementFeedback(placements: Placement[]) {
+        const result = this.session.getPlacementResults(placements);
 
         for (const placementId of result.solved) {
             const coords = this.session.getPlacementCells(placementId);
