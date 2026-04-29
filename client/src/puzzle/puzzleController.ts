@@ -113,17 +113,24 @@ class PuzzleController implements CursorController {
 
         if (Number.isNaN(row) || Number.isNaN(col)) return;
 
-        const prevCoord = this.session.getActiveCoord();
-        if ((prevCoord.row === row) && (prevCoord.col === col)) {
-            this.toggleDirection();
-            this.renderActiveState();    
-            return;
-        }
+        if (this.handleDirectionToggle(row, col)) return;
         
         const newCoord = {row, col};
         this.session.moveCursor(newCoord);
         this.renderActiveState();
-        this.setActiveFocus();
+        this.forceActiveFocus();
+    }
+
+    private handleDirectionToggle(row: number, col: number): boolean {
+        const prevCoord = this.session.getActiveCoord();
+        if ((prevCoord.row === row) && (prevCoord.col === col)) {
+            this.toggleDirection();
+            this.renderActiveState();
+            this.forceActiveFocus();
+            return true;
+        }
+
+        return false;
     }
 
     private handleBeforeInput = (event: InputEvent) => {
@@ -397,7 +404,7 @@ class PuzzleController implements CursorController {
         this.renderer.setFocus(activeCoord);
     }
 
-    // allows mobile keyboard and scroll to occur again even if already focused
+    // force focus so mobile keyboards reopen even if the cell is already focused
     private forceActiveFocus() {
         const activeCoord: Coord = this.session.getActiveCoord();
         this.renderer.refocus(activeCoord);
