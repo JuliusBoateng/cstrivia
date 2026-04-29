@@ -103,6 +103,11 @@ class PuzzleSession {
         this.saveSessionState();
 
     }
+
+    canAdvanceCursor(): boolean {
+        const next = this.getCellInActivePlacement(1);
+        return (next !== null);
+    }
     
     advanceCursor() {
         const next = this.getCellInActivePlacement(1);

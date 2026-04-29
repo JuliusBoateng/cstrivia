@@ -60,6 +60,7 @@ class PuzzleController implements CursorController {
         this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
         this.tableElement.addEventListener("beforeinput", this.handleBeforeInput);
         this.tableElement.addEventListener("keydown", this.handleKeydown);
+        this.tableElement.addEventListener("paste", this.handlePasteEvent);
     }
 
     private renderInitialState(): void {
@@ -303,6 +304,44 @@ class PuzzleController implements CursorController {
         this.setActiveFocus();
     }
 
+    private handlePasteEvent = (event: ClipboardEvent) => {
+        event.preventDefault();
+        if (!event.clipboardData) return;
+
+        const raw = event.clipboardData.getData("text");
+        if (!raw) return;
+
+        const normalized = PuzzleValidator.normalizeAnswer(raw);
+        if (!normalized) return;
+        
+        this.applyPastedText(normalized);
+    }
+
+    private applyPastedText(normalized: string) {
+        const prevSolved = [...this.session.getSolvedPlacementIds()];
+
+        const changedCoords: Coord[] = [];
+        for (const letter of normalized) {
+            if (!this.isAllowedCharacter(letter)) continue;
+    
+            this.writeLetter(letter);
+            changedCoords.push(this.session.getActiveCoord());
+
+            if (!this.session.canAdvanceCursor()) break;
+            this.session.advanceCursor();
+        }
+    
+        for (const coord of changedCoords) {
+            this.renderPlacementFeedback(coord);
+        }
+
+        const currSolved = [...this.session.getSolvedPlacementIds()];
+        if (hasSetDifference(prevSolved, currSolved)) this.clueView.renderClues(currSolved);
+
+        this.renderActiveState();
+        this.setActiveFocus();
+    }
+
     private isAllowedCharacter(value: string) {
         return value.length === 1 && PuzzleValidator.isLetterOrDigit(value);
     }
@@ -353,15 +392,22 @@ class PuzzleController implements CursorController {
 
     private applyLetter(letter: string | null) {
         const prevSolved = [...this.session.getSolvedPlacementIds()];
-        this.session.setLetter(letter);
+        this.writeLetter(letter);
+    
+        const coord = this.session.getActiveCoord();
+        const currentLetter = this.session.getLetter();
+        this.applyLetterFeedback(coord, currentLetter, prevSolved);
+    }
 
+    private writeLetter(letter: string | null) {
+        this.session.setLetter(letter);
+    
         const coord = this.session.getActiveCoord();
         const currentLetter = this.session.getLetter();
         this.renderer.renderLetter(coord, currentLetter);
-        this.renderLetterSideEffects(coord, currentLetter, prevSolved);
     }
     
-    private renderLetterSideEffects(coord: Coord, currentLetter: string | null, prevSolved: number[]) {
+    private applyLetterFeedback(coord: Coord, currentLetter: string | null, prevSolved: number[]) {
         if (currentLetter) this.renderPlacementFeedback(coord);
     
         const currSolved = [...this.session.getSolvedPlacementIds()];
