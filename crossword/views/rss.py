@@ -15,6 +15,11 @@ class LatestActivityFeed(Feed):
     link = "/"
     description = "New computer science crosswords and design notes"
 
+    def __call__(self, request, *args, **kwargs):
+        response = super().__call__(request, *args, **kwargs)
+        response["X-Robots-Tag"] = "noindex"
+        return response
+
     def items(self):
         puzzles = Board.objects.filter(
             published_at__lte=timezone.now()
