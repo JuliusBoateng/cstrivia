@@ -4,7 +4,7 @@
     "author": "Julius Boateng",
     "puzzle_number": 9,
     "published_at": "2026-04-27T08:18:01+00:00",
-    "description": "In the 1940s, programmers wrote assembly by hand. FORTRAN arrived in 1957 as one of the first high-level compiled languages. Since then, compiler optimization techniques have advanced, turning high-level code into more efficient machine instructions.",
+    "description": "In the 1940s, programmers wrote assembly. FORTRAN arrived in 1957 as an early high-level compiled language. Since then, compilers use techniques like static single assignment and register allocation to produce more efficient machine code.",
     "rows": 15,
     "cols": 15,
     "categories": [
