@@ -8,14 +8,14 @@ https://cstrivia.com
 
 ## Design Approach
 
-This app minimizes server interaction after puzzle is loaded:
+The backend delivers all necessary puzzle data in the initial HTTP response:
 
-- django server renders and serves complete puzzle data upfront
-- all puzzle interaction (input, validation, navigation) happens client-side
-- no additional HTTP requests are made during solving
-- progress is stored locally in session storage
+- The Django server sends the complete puzzle state upfront, including the solution  
+- Solving logic (input handling, validation, and navigation) runs entirely in the client  
+- No additional HTTP requests are made during solving (zero round-trips after load)  
+- User progress is stored locally via session storage  
 
-This keeps the backend simple and reduces runtime load, at the cost of server-side validation and persistence.
+This design keeps the backend simple and makes solving feel more responsive by eliminating network round-trips, at the cost of server-side validation and persistence.
 
 ## Tech Stack
 - Backend: Python, Django
