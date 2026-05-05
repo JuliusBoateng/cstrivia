@@ -1,11 +1,33 @@
+import re
 from itertools import chain
 
 from django.contrib.syndication.views import Feed
 from django.utils import timezone
+from django.utils.text import Truncator
 
 from ..models import Board, DesignNote
 
 RSS_LIMIT = 20
+
+def extract_intro(markdown):
+    for line in markdown.splitlines():
+        line = line.strip()
+        if line and not line.startswith("#"):
+            return line
+    return ""
+
+def strip_markdown(text):
+    # links: [text](url) -> text
+    text = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', text)
+
+    # emphasis: *, _, `
+    text = re.sub(r'[*_`]', '', text)
+
+    # collapse whitespace
+    text = re.sub(r'\s+', ' ', text)
+
+    return text.strip()
+
 
 class LatestActivityFeed(Feed):
     content_type = "application/rss+xml; charset=utf-8"
@@ -40,15 +62,24 @@ class LatestActivityFeed(Feed):
     def item_title(self, item):
         if isinstance(item, Board):
             return f"Puzzle {item.puzzle_number}: {item.title}"
-        return f"Design #{item.design_number}: {item.title}"
+        return f"Design {item.design_number}: {item.title}"
 
     def item_description(self, item):
         if isinstance(item, Board):
             return item.description or ""
+
+        if isinstance(item, DesignNote):
+            intro = extract_intro(item.body)
+            intro = strip_markdown(intro)
+            return Truncator(intro).words(50)
+
         return ""
 
     def item_link(self, item):
         return item.get_absolute_url()
+
+    def item_guid_is_permalink(self, item):
+        return True
 
     def item_pubdate(self, item):
         return item.published_at
