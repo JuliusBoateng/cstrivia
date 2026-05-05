@@ -17,10 +17,10 @@ def extract_intro(markdown):
     return ""
 
 def strip_markdown(text):
-    # links: [text](url) -> text
+     # converts markdown links to plain text
     text = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', text)
 
-    # emphasis: *, _, `
+    # removes basic formatting like *italic*, **bold**, and `code`
     text = re.sub(r'[*_`]', '', text)
 
     # collapse whitespace
