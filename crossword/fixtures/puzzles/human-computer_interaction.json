@@ -1,0 +1,114 @@
+{
+  "board": {
+    "title": "Human-Computer Interaction",
+    "author": "Julius Boateng",
+    "puzzle_number": 10,
+    "published_at": "2026-05-05T05:32:12+00:00",
+    "description": "The term Human-Computer Interaction was popularized by the 1983 book \"The Psychology of Human–Computer Interaction.\" It's now an established field at the intersection of computer science, behavioral science, and design.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Human-computer Interaction"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Design principle where essential functions and system state are apparent to users",
+      "display_answer": "VISIBILITY",
+      "direction": "A",
+      "start_row": 1,
+      "start_col": 4
+    },
+    {
+      "question": "Predictive model where decision time increases logarithmically with number of choices; models selecting from a menu",
+      "display_answer": "HICKSLAW",
+      "direction": "A",
+      "start_row": 2,
+      "start_col": 6
+    },
+    {
+      "question": "Elements that restrict a user's possible actions; include physical, semantic, and logical elements",
+      "display_answer": "CONSTRAINT",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 4
+    },
+    {
+      "question": "Usability researcher who defined the 10 heuristics used to evaluate user interfaces; emphasized users expect interfaces to match prior experiences",
+      "display_answer": "NIELSEN",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 4
+    },
+    {
+      "question": "Cues that indicate a user's possible actions and how to perform them",
+      "display_answer": "SIGNIFIER",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 5
+    },
+    {
+      "question": "Possible actions readily perceived by users based on context and prior experience",
+      "display_answer": "AFFORDANCE",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 1
+    },
+    {
+      "question": "System response that informs users of actions, results, and state; reduces the gulf of evaluation",
+      "display_answer": "FEEDBACK",
+      "direction": "A",
+      "start_row": 7,
+      "start_col": 4
+    },
+    {
+      "question": "Researcher at Xerox PARC who co-authored \"The Psychology of Human-Computer Interaction\" and developed models like GOMS and the Model Human Processor",
+      "display_answer": "CARD",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 4
+    },
+    {
+      "question": "Relationship between controls and their effects",
+      "display_answer": "MAPPING",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 6
+    },
+    {
+      "question": "Delay between a user's action and system response",
+      "display_answer": "LATENCY",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 5
+    },
+    {
+      "question": "Cognitive scientist who formalized user-centered design in \"User-Centered System Design\" and popularized concepts like affordances and signifiers",
+      "display_answer": "NORMAN",
+      "direction": "A",
+      "start_row": 11,
+      "start_col": 6
+    },
+    {
+      "question": "CS scientist who defined direct manipulation interfaces, letting users interact with visible objects; developed Eight Golden Rules of Interface Design",
+      "display_answer": "SHNEIDERMAN",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 6
+    },
+    {
+      "question": "Current condition of a system that determines its behavior and user interactions",
+      "display_answer": "STATE",
+      "direction": "D",
+      "start_row": 4,
+      "start_col": 1
+    },
+    {
+      "question": "Predictive model where time to reach a target depends on distance and size; models pointing to on-screen targets",
+      "display_answer": "FITTSLAW",
+      "direction": "D",
+      "start_row": 6,
+      "start_col": 2
+    }
+  ]
+}
