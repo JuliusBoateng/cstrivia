@@ -596,6 +596,10 @@ p.board-desc {
     margin: 0;
 }
 
+.next-puzzle-link {
+    white-space: nowrap;
+}
+
 .next-puzzle-link a {
     color: black;
     font-weight: 600;
@@ -604,6 +608,10 @@ p.board-desc {
 
 .next-puzzle-link + .design-note-link {
     margin-top: 0.4rem;
+}
+
+.design-note-link {
+    white-space: nowrap;
 }
 
 .design-note-link a {

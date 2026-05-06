@@ -188,14 +188,14 @@
             {% if next_puzzle %}
               <p class="next-puzzle-link">
                 <a href="{{ next_puzzle.get_absolute_url }}">
-                  Puzzle&nbsp;{{ next_puzzle.puzzle_number }}:&nbsp;{{ next_puzzle.title }}&nbsp;&rarr;
+                  Puzzle {{ next_puzzle.puzzle_number }}: {{ next_puzzle.title }} &rarr;
                 </a>
               </p>
             {% endif %}
             {% if design_note %}
               <p class="design-note-link">
                 <a href="{{ design_note.get_absolute_url }}">
-                  Design&nbsp;note&nbsp;&rarr;
+                  Design note &rarr;
                 </a>
               </p>
             {% endif %}

@@ -45,14 +45,14 @@ main {
 .hero h1 {
     font-size: clamp(1.9rem, 3.1vw, 2.3rem);
     font-weight: 600;
-    margin-bottom: .8rem;
+    margin-bottom: .5rem;
     text-wrap: pretty;
 }
 
 .hero p.subheadline {
   font-size: clamp(1.1rem, 1.4vw, 1.2rem);
   color: #52525b;
-  margin-bottom: 1.3rem;
+  margin-bottom: 1rem;
   text-wrap: pretty;
 }
 
@@ -67,24 +67,18 @@ main {
   font-size: 1.05rem;
 }
 
-.hero-meta #tagline {
-  color: #27272a;
-  font-weight: 500;
-}
-
 .hero-meta #release-cadence {
-  color: #7c8594;
-  font-size: 0.95em;
-}
-
-#release-cadence span {
   color: #3f3f46;
   font-weight: 500;
 }
 
+#release-cadence span {
+  white-space: nowrap;
+}
+
 .cta {
   display: inline-block;
-  margin: var(--space-md) 0 0.2rem 0;
+  margin: 0.4rem 0 0.2rem 0;
 
   padding: 0.55rem 1rem;
   border-radius: 8px;
@@ -93,6 +87,7 @@ main {
   color: white;
   text-decoration: none;
   font-weight: 600;
+  white-space: nowrap;
 
   transition: background 120ms ease, transform 120ms ease;
 }
@@ -185,10 +180,9 @@ main {
   font-size: 0.9em;
 }
 
-.puzzle-note {
+.design-note {
   margin: 1rem 0 1rem;
-  color: #6b7280;
-  font-size: 1rem;
+  white-space: nowrap;
 }
 
 .design-note-link {
@@ -201,9 +195,4 @@ main {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
-}
-
-.site-values {
-  margin: 0;
-  color: #52525b;
 }
