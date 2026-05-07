@@ -104,7 +104,7 @@ main {
 .hero-link {
   max-width: 100%;
   display: block;
-  width: 330px;
+  width: 400px;
 }
 
 .hero-link:hover .hero-screenshot {
