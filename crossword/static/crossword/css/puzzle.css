@@ -80,6 +80,12 @@ main {
   display: none;
 }
 
+.controls-desktop h3 {
+    margin: 0 0 2px 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
 .puzzle-region {
     display: flex;
     justify-content: center;
@@ -222,7 +228,7 @@ main {
     padding-bottom: clamp(6px, 1.5vw, 10px);
 }
 
-.board-card .cell {
+.cell {
     border: 1px solid #18181b;
     background: white;
     padding: 0;
@@ -230,13 +236,22 @@ main {
     transition: background-color 120ms ease, box-shadow 120ms ease;
 }
 
-.board-card .cell.block {
+.cell.block {
     background: #18181b;
     border-color: #18181b;
     box-shadow: inset 0 0 0 clamp(2px, 0.5vw, 4px) #111;
 }
 
-.board-card .fill {
+.cell.highlight-placement {
+    background: #c9d0e6;
+}
+
+.cell.highlight-cursor {
+    background: #b1b9db;
+    box-shadow: inset 0 0 0 2px #6A6D8F;
+}
+
+.cell .fill {
     position: relative;
     width: 100%;
     font-size: clamp(12px, 1vw, 20px);
@@ -246,7 +261,7 @@ main {
     align-items: center;
 }
 
-.board-card .label {
+.fill .label {
     position: absolute;
     top: 2px;
     left: 2px;
@@ -258,7 +273,7 @@ main {
     font-weight: 600;
 }
 
-.board-card .letter {
+.fill .letter {
     width: 100%;
     height: 100%;
     border: none;
@@ -277,17 +292,12 @@ main {
     -webkit-tap-highlight-color: transparent;
 }
 
-.board-card .letter:focus {
+.fill .letter:focus {
     outline: none;
 }
 
-.board-card .cell.highlight-placement {
-    background: #c9d0e6;
-}
-
-.board-card .cell.highlight-cursor {
-    background: #b1b9db;
-    box-shadow: inset 0 0 0 2px #6A6D8F;
+.fill .letter::selection {
+    background: transparent;
 }
 
 .clue-wrapper {

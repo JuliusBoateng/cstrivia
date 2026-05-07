@@ -70,11 +70,11 @@
 
       <div class="board-instructions">
         <p class="instructions-mobile">
-          Tap clues to jump &bull; Tap to type &bull; Tap again to switch direction
+          Tap clues to jump &bull; Tap cells to type &bull; Tap again to switch
         </p>
 
         <p class="instructions-desktop">
-          Arrow keys to move &bull; Tab to jump clues &bull; Space to switch direction
+          Arrow keys to move &bull; Tab to jump clues &bull; Space to switch
         </p>
       </div>
 
@@ -89,19 +89,43 @@
           </div>
 
           <div id="controls-panel" class="controls-panel" role="region" aria-labelledby="controls-toggle" hidden>
-            <ul class="controls-desktop">
-              <li><strong>Tab</strong> / <strong>Shift+Tab</strong> to jump between clues.</li>
-              <li><strong>Spacebar</strong> to switch direction.</li>
-              <li><strong>Shift+S</strong> to show answer for active clue.</li>
-              <li><strong>Shift+C</strong> to copy active clue.</li>
-              <li><strong>Esc</strong> to leave board.</li>
-              <li>Double-click to switch direction.</li>
-              <li>Click <strong>To Do</strong>, <strong>Solved</strong>, <strong>Across</strong>, or <strong>Down</strong> to expand/collapse.</li>
-            </ul>
+            <div class="controls-desktop">
+              <section>
+                <h3>Navigation</h3>
+                <ul>
+                  <li><strong>Tab</strong> / <strong>Shift+Tab</strong> to jump between clues</li>
+                  <li><strong>Spacebar</strong> to switch direction</li>
+                  <li><strong>Esc</strong> to exit board</li>
+                </ul>
+              </section>
+            
+              <section>
+                <h3>Copy & Paste</h3>
+                <ul>
+                  <li><strong>Shift+K</strong> to copy current clue</li>
+                  <li><strong>Shift+C</strong> to copy current answer</li>
+                  <li><strong>Ctrl+C</strong> to copy current cell</li>
+                  <li><strong>Ctrl+V</strong> to paste into current answer</li>
+                </ul>
+              </section>
+            
+              <section>
+                <h3>Solving</h3>
+                <ul>
+                  <li><strong>Shift+S</strong> to show answer for current clue</li>
+                  <li>Double-click a cell to switch direction</li>
+                  <li>Click <strong>To Do</strong>, <strong>Solved</strong>, or <strong>Across</strong> to expand/collapse</li>
+                </ul>
+              </section>
+            </div>
 
-            <ul class="controls-mobile">
-              <li>Tap <strong>To Do</strong>, <strong>Solved</strong>, <strong>Across</strong>, or <strong>Down</strong> to expand/collapse.</li>
-            </ul>
+            <div class="controls-mobile">
+              <section>
+                <ul>
+                  <li>Tap <strong>To Do</strong>, <strong>Solved</strong>, or <strong>Across</strong> to expand/collapse</li>
+                </ul>
+              </section>
+            </div>
           </div>
         </div>
 
