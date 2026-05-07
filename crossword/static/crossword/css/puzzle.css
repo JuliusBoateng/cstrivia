@@ -59,33 +59,6 @@ main {
     min-height: auto;
 }
 
-.board-instructions {
-    width: min(100%, var(--board-max));
-    margin-inline: auto;
-    text-align: center;
-
-    font-size: clamp(0.85rem, 1.05vw, 0.95rem);
-    font-weight: 400;
-    line-height: 1.4;
-
-    color: #4b5563;
-}
-
-.board-instructions p {
-    margin: 0;
-}
-
-.instructions-mobile,
-.controls-mobile {
-  display: none;
-}
-
-.controls-desktop h3 {
-    margin: 0 0 2px 0;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
 .puzzle-region {
     display: flex;
     justify-content: center;
@@ -148,19 +121,65 @@ main {
     color: #374151
 }
 
+.board-instructions {
+    width: min(100%, var(--board-max));
+    margin-inline: auto;
+    text-align: center;
+
+    font-size: clamp(0.85rem, 1.05vw, 0.95rem);
+    font-weight: 400;
+    line-height: 1.4;
+
+    color: #4b5563;
+}
+
+.board-instructions p {
+    margin: 0;
+}
+
+.instructions-mobile,
+.controls-mobile {
+  display: none;
+}
+
 .controls-panel {
-    width: min(100%, var(--clue-text));
+    width: 100%;
     margin-bottom: 0.3rem;
     font-size: clamp(0.9rem, 1vw, 1rem);
     line-height: 1.4;
     color: #4b5563;
 }
 
-.controls-panel ul {
+.controls-desktop {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.controls-desktop section {
+    min-width: 0;
+}
+
+.controls-desktop h3 {
+    margin: 0 0 2px 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.controls-desktop ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.controls-desktop li + li {
+    margin-top: 0.3rem;
+}
+
+.controls-mobile ul {
     margin: 0;
 }
 
-.controls-panel li + li {
+.controls-mobile li + li {
     margin-top: 0.3rem;
 }
 
