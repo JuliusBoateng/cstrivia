@@ -60,6 +60,7 @@ class PuzzleController implements CursorController {
         this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
         this.tableElement.addEventListener("beforeinput", this.handleBeforeInput);
         this.tableElement.addEventListener("keydown", this.handleKeydown);
+        this.tableElement.addEventListener("copy", this.handleCopyEvent);
         this.tableElement.addEventListener("paste", this.handlePasteEvent);
         this.tableElement.addEventListener("focusin", this.handleFocusIn);
     }
@@ -180,7 +181,14 @@ class PuzzleController implements CursorController {
             return;
         }
     
-        else if (this.isCopyShortcut(event)) {
+        else if (this.isCopyPlacementShortcut(event)) {
+            event.preventDefault();
+            this.suppressNextBeforeInput = true;
+            this.handleCopyPlacementShortcut();
+            return;
+        }
+
+        else if (this.isCopyClueShortcut(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.handleCopyClueShortcut();
@@ -314,6 +322,26 @@ class PuzzleController implements CursorController {
         this.setActiveFocus();
     }
 
+    private handleCopyEvent = (event: ClipboardEvent) => {
+        const letter = this.session.getLetter();
+        if (!event.clipboardData || !letter) return;
+    
+        event.preventDefault();
+    
+        event.clipboardData.setData("text/plain", letter);
+    }
+    
+    private async handleCopyPlacementShortcut(): Promise<void> {
+        const text = this.getActivePlacementText();
+        if (!text) return;
+
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch {
+            // noop
+        }
+    }
+
     private handlePasteEvent = (event: ClipboardEvent) => {
         event.preventDefault();
         if (!event.clipboardData) return;
@@ -343,8 +371,12 @@ class PuzzleController implements CursorController {
         return event.shiftKey && event.key.toLowerCase() === "s";
     }
     
-    private isCopyShortcut(event: KeyboardEvent): boolean {
+    private isCopyPlacementShortcut(event: KeyboardEvent): boolean {
         return event.shiftKey && event.key.toLowerCase() === "c";
+    }
+
+    private isCopyClueShortcut(event: KeyboardEvent): boolean {
+        return event.shiftKey && event.key.toLowerCase() === "k";
     }
 
     private isEnterKey(event: KeyboardEvent) {
@@ -430,6 +462,21 @@ class PuzzleController implements CursorController {
         }
     
         return affectedPlacements;
+    }
+
+    private getActivePlacementText(): string | null {
+        const coords = this.session.getActivePlacementCoords();
+        if (!coords) return null;
+    
+        const letters: string[] = [];
+        for (const coord of coords) {
+            const letter = this.session.getLetterAt(coord);
+            if (!letter) continue;
+    
+            letters.push(letter);
+        }
+    
+        return letters.join("") || null;
     }
 
     private commitChar(rawChar: string) {
