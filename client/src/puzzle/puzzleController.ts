@@ -37,12 +37,13 @@ class PuzzleController implements CursorController {
     private clueView: ClueView;
     private boardView: BoardView;
     private tableElement: HTMLTableElement;
+    private isActiveStateVisible: boolean = false;
     
     /*  keydown is the primary input handler.
         beforeinput is secondary.
         sometimes both events are triggered at the same time.
     */
-    private suppressNextBeforeInput: boolean;
+    private suppressNextBeforeInput: boolean = false;
 
     constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardView: BoardView) {
         this.tableElement = tableElement;
@@ -50,7 +51,6 @@ class PuzzleController implements CursorController {
         this.renderer = renderer;
         this.boardView = boardView;
         this.clueView = NullClueView;
-        this.suppressNextBeforeInput = false;
     }
 
     public init(clueView: ClueView) {
@@ -61,18 +61,21 @@ class PuzzleController implements CursorController {
         this.tableElement.addEventListener("beforeinput", this.handleBeforeInput);
         this.tableElement.addEventListener("keydown", this.handleKeydown);
         this.tableElement.addEventListener("paste", this.handlePasteEvent);
-    }
-
-    private renderInitialState(): void {
-        this.initLetters();
-        this.initClues();
-        this.initActiveCursor();
+        this.tableElement.addEventListener("focusin", this.handleFocusIn);
     }
 
     resetPuzzle() {
         this.session.clearPuzzleSession();
         this.renderer.clearRenderer();
         this.clueView.clearClues();
+
+        this.initInteractionState();
+    }
+
+    // reveals active state when keyboard focus enters the board
+    private handleFocusIn = () => {
+        if (this.isActiveStateVisible) return;
+        this.renderActiveState();
     }
 
     handleShowAnswerClick(placementId: PlacementId): void {
@@ -123,6 +126,8 @@ class PuzzleController implements CursorController {
     }
 
     private handleDirectionToggle(row: number, col: number): boolean {
+        if (!this.isActiveStateVisible) return false;
+        
         const prevCoord = this.session.getActiveCoord();
         if ((prevCoord.row === row) && (prevCoord.col === col)) {
             this.toggleDirection();
@@ -249,6 +254,11 @@ class PuzzleController implements CursorController {
     }
 
     private handleDirectionShortcut() {    
+        if (!this.isActiveStateVisible) {
+            this.renderActiveState();
+            return;
+        }
+
         this.toggleDirection();
         this.renderActiveState();
     }
@@ -473,6 +483,8 @@ class PuzzleController implements CursorController {
         this.renderer.renderActiveCursor(coord);
         this.clueView.renderClue(placement.id);
         this.renderBoardHeader();
+
+        this.isActiveStateVisible = true;
     }
 
     private renderBoardHeader() {
@@ -506,7 +518,7 @@ class PuzzleController implements CursorController {
         const direction = (clue.direction === Direction.A) ? "Across" : "Down";
         const arrow = (clue.direction === Direction.A ) ? "\u2192" : "\u2193";
 
-        const captionText = this.formatBoardHeader(label, direction, arrow, clue.question);
+        const captionText = this.createBoardCaption(label, direction, arrow, clue.question);
         this.renderer.renderBoardHeader(captionText);
     }
 
@@ -557,9 +569,25 @@ class PuzzleController implements CursorController {
         }
     }
 
-    private initActiveCursor() {
+    private renderInitialState(): void {
+        this.initPuzzleContent();
+        this.initInteractionState();
+    }
+
+    private initPuzzleContent(): void {
+        this.initLetters();
+        this.initClues();
+    }
+
+    private initInteractionState(): void {
+        this.initFocusableCursor();
+        this.suppressNextBeforeInput = false;
+        this.isActiveStateVisible = false;
+    }
+
+    private initFocusableCursor() {
         const coord = this.session.getActiveCoord();
-        this.renderer.initActiveCursor(coord);
+        this.renderer.initFocusableCursor(coord);
     }
 
     private initClues() {
@@ -567,7 +595,7 @@ class PuzzleController implements CursorController {
         this.clueView.renderClues(currSolved);
     }
 
-    private formatBoardHeader(label: number, direction: string, arrow:string, clue: string) {
+    private createBoardCaption(label: number, direction: string, arrow: string, clue: string) {
         return `${label} ${arrow} ${direction}: ${clue}`;
     }
 }

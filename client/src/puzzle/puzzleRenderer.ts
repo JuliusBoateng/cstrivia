@@ -41,7 +41,7 @@ class PuzzleRenderer {
     /*
         Does not highlight or focus cell. Makes cell tab-able
     */
-    initActiveCursor(coord: Coord) {
+    initFocusableCursor(coord: Coord) {
         const cell = this.cellGrid[coord.row][coord.col];
         if (cell.classList.contains(BLOCK)) return;
 
@@ -87,6 +87,7 @@ class PuzzleRenderer {
         this.clearAllAnimations()
         this.clearInput();
         this.clearActiveCursor();
+        this.clearFocus();
         this.clearActivePlacement();
         this.clearBoardHeader();
     }
@@ -147,8 +148,8 @@ class PuzzleRenderer {
         const inputElement = this.inputGrid[coord.row][coord.col];
         if (!inputElement) return;
     
-        if (this.focusedInput && (this.focusedInput !== inputElement)) {
-            this.focusedInput.tabIndex = -1;
+        if (this.focusedInput && this.focusedInput !== inputElement) {
+            this.clearTrackedFocus();
         }
     
         inputElement.tabIndex = 0;
@@ -171,7 +172,7 @@ class PuzzleRenderer {
         if (!inputElement) return;
     
         if (this.focusedInput && this.focusedInput !== inputElement) {
-            this.focusedInput.tabIndex = -1;
+            this.clearTrackedFocus();
         }
     
         inputElement.tabIndex = 0;
@@ -189,11 +190,20 @@ class PuzzleRenderer {
         this.focusedInput = inputElement;
     }
 
+    // fully exits board focus
     private clearFocus(): void {
         if (!this.focusedInput) return;
 
         this.focusedInput.tabIndex = -1;
         this.focusedInput.blur();
+        this.focusedInput = null;
+    }
+
+    // clears input without changing browser focus
+    private clearTrackedFocus(): void {
+        if (!this.focusedInput) return;
+
+        this.focusedInput.tabIndex = -1;
         this.focusedInput = null;
     }
 
@@ -218,7 +228,6 @@ class PuzzleRenderer {
         if (!this.activeCursor) return;
         this.activeCursor.classList.remove(HIGHLIGHT_CURSOR);
         this.activeCursor = null;
-        this.clearFocus();
     }
 
     private clearAllAnimations() {
