@@ -248,7 +248,7 @@ class PuzzleRenderer {
     }
 
     private initializeBoardHeader(): HTMLParagraphElement {
-        const boardWrapper = document.querySelector(".board-wrapper")!;
+        const boardWrapper = document.querySelector(".board-layout")!;
 
         const boardHeader = document.createElement("p");
         boardHeader.classList.add("board-header");
