@@ -1,0 +1,51 @@
+.puzzle-list {
+    padding: 1.5rem 0 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    max-width: 50ch;
+  }
+  
+.puzzle-list h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+  
+.puzzle-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+  
+.puzzle-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+
+    text-decoration: none;
+    color: inherit;
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.puzzle-row:hover {
+    background: #f2f2f2;
+    border-radius: 8px;
+}
+  
+.puzzle-number,
+.puzzle-date {
+    flex-shrink: 0;
+    white-space: nowrap;
+    color: #7c8594;
+}
+
+.puzzle-title {
+    flex: 1;
+    font-weight: 500;
+    min-width: 0;
+    text-wrap: pretty;
+}
+
+.puzzle-date {
+    margin-left: auto;
+    font-size: 0.9em;
+}

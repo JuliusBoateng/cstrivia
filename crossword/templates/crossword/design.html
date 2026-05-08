@@ -1,4 +1,4 @@
-{% extends "crossword/base.html" %}
+{% extends "crossword/includes/_base.html" %}
 {% load static %}
 
 {% block canonical %}
@@ -17,7 +17,8 @@
 {% endblock %}
 
 {% block styles %}
-  <link rel="stylesheet" href="{% static 'crossword/css/design.css' %}">
+  <link rel="stylesheet" href="{% static 'crossword/css/includes/_layout.css' %}">
+  <link rel="stylesheet" href="{% static 'crossword/css/includes/_design_list.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -27,5 +28,5 @@
     Notes on how puzzles are constructed and the ideas behind them.
   </p>
 
-  {% include "crossword/includes/design_list.html" %}
+  {% include "crossword/includes/_design_list.html" %}
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "crossword/base.html" %}
+{% extends "crossword/includes/_base.html" %}
 {% load static %}
 
 {% block canonical %}
@@ -15,6 +15,8 @@
 
 {% block styles %}
   <link rel="stylesheet" href="{% static 'crossword/css/index.css' %}">
+  <link rel="stylesheet" href="{% static 'crossword/css/includes/_layout.css' %}">
+  <link rel="stylesheet" href="{% static 'crossword/css/includes/_puzzle_list.css' %}">
 {% endblock %}
 
 {% block head_extra %}
@@ -54,7 +56,7 @@
     {% endif %}
   </section>
 
-  {% include "crossword/includes/puzzle_list.html" %}
+  {% include "crossword/includes/_puzzle_list.html" %}
 
   <p class="design-note">
     <a class="design-note-link" href="/design">Design Notes &rarr;</a>

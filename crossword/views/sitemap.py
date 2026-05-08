@@ -25,7 +25,7 @@ class DesignNoteSitemap(Sitemap):
 
 class StaticSitemap(Sitemap):
     def items(self):
-        return ["index", "design_index"]
+        return ["index", "design"]
 
     def location(self, item):
         return reverse(item)
@@ -34,11 +34,11 @@ class StaticSitemap(Sitemap):
         if item == "index":
             return 0.8
         
-        if item == "design_index":
+        if item == "design":
             return 0.6
 
     def changefreq(self, item):
-        if (item == "index") or (item == "design_index"):
+        if (item == "index") or (item == "design"):
             return "weekly"
 
 def get_sitemap_view():

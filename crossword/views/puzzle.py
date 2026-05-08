@@ -9,10 +9,33 @@ from ..api.service import get_puzzle_view, PuzzleView
 
 PAGINATION_LIMIT = 10
 
+
 @method_decorator(never_cache, name="dispatch")
 class PuzzleListView(ListView):
     model = Board
     template_name = "crossword/index.html"
+    context_object_name = "puzzles"
+
+    def get_queryset(self):
+        return (
+            Board.objects
+            .filter(published_at__lte=timezone.now())
+            .order_by("-puzzle_number")[:PAGINATION_LIMIT]
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_archive"] = False
+
+        puzzles = context.get("puzzles")  # this is your page object
+        context["latest_puzzle"] = puzzles[0] if puzzles else None
+        return context
+
+
+@method_decorator(never_cache, name="dispatch")
+class PuzzleArchiveView(ListView):
+    model = Board
+    template_name = "crossword/archive.html"
     context_object_name = "puzzles"
     paginate_by = PAGINATION_LIMIT
 
@@ -25,10 +48,7 @@ class PuzzleListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        puzzles = context.get("puzzles")  # this is your page object
-        context["latest_puzzle"] = puzzles[0] if puzzles else None
-
+        context["is_archive"] = True
         return context
 
 @never_cache
