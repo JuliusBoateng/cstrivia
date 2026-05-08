@@ -14,6 +14,10 @@
         </li>
       {% endfor %}
     </ul>
-  
+
+    {% if not is_archive %}
+      <a href="{% url 'archive' %}" class="archive-link">Archive &rarr;</a>
+    {% endif %}
+    
     {% include "crossword/includes/_pagination.html" %}
 </section>
