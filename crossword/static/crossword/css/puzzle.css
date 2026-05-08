@@ -615,7 +615,7 @@ p.board-desc {
 }
 
 .next-puzzle-link {
-    white-space: nowrap;
+    word-break: break-word;
 }
 
 .next-puzzle-link a {
