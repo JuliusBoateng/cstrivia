@@ -34,7 +34,7 @@
       "start_col": 0
     },
     {
-      "question": "Graphics program computing color, lighting, and texture during rendering",
+      "question": "Specialized program computing color, lighting, and texture during rendering",
       "display_answer": "SHADER",
       "direction": "A",
       "start_row": 5,
@@ -55,7 +55,7 @@
       "start_col": 5
     },
     {
-      "question": "Polygon primitive most efficiently rendered by GPUs; foundational to 3D graphics",
+      "question": "Polygon primitive GPUs are optimized to render; foundational to 3D graphics",
       "display_answer": "TRIANGLE",
       "direction": "A",
       "start_row": 9,
@@ -83,7 +83,7 @@
       "start_col": 6
     },
     {
-      "question": "Mathematical object storing direction and magnitude",
+      "question": "Quantity storing direction and magnitude",
       "display_answer": "VECTOR",
       "direction": "D",
       "start_row": 0,
@@ -118,7 +118,7 @@
       "start_col": 7
     },
     {
-      "question": "Collection of primitives defining a 3D object",
+      "question": "Collection of vertices and faces defining a 3D object",
       "display_answer": "MESH",
       "direction": "D",
       "start_row": 8,

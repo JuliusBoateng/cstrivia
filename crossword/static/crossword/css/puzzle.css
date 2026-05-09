@@ -194,6 +194,7 @@ main {
     display: flex;
     align-items: flex-start;
     gap: 8px;
+    margin-top: .5rem;
 }
 
 .board-layout {
