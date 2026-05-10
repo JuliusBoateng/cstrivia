@@ -215,6 +215,12 @@
                   Puzzle {{ next_puzzle.puzzle_number }}: {{ next_puzzle.title }} &rarr;
                 </a>
               </p>
+              {% else %}
+                <p class="next-puzzle-link">
+                  <a href="{% url 'archive' %}">
+                    All Puzzles &rarr;
+                  </a>
+                </p>
             {% endif %}
             {% if design_note %}
               <p class="design-note-link">
