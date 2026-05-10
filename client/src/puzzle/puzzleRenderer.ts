@@ -155,7 +155,7 @@ class PuzzleRenderer {
         inputElement.tabIndex = 0;
 
         if (document.activeElement !== inputElement) {
-            inputElement.focus();
+            inputElement.focus({ preventScroll: true });
         }
     
         // set range only if focus succeeds
@@ -181,7 +181,7 @@ class PuzzleRenderer {
             inputElement.blur();
         }
         
-        inputElement.focus();
+        inputElement.focus({ preventScroll: true });
     
         if (document.activeElement === inputElement) {
             inputElement.setSelectionRange(0, 1);
