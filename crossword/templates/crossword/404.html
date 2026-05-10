@@ -1,0 +1,13 @@
+{% extends "crossword/includes/_base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'crossword/css/includes/_puzzle_list.css' %}">
+    <link rel="stylesheet" href="{% static 'crossword/css/includes/_layout.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Puzzle not found</h1>
+    <p>Check out these puzzles in the meantime:</p>
+    {% include "crossword/includes/_puzzle_list.html" %}
+{% endblock %}

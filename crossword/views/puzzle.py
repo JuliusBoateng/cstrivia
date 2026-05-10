@@ -66,3 +66,7 @@ def puzzle_view(request, puzzle_number: int):
 
 def privacy_view(request):
     return render(request, "crossword/privacy.html")
+
+def custom_404(request, exception):
+    board = Board.objects.filter(published_at__lte=timezone.now()).order_by("-puzzle_number")[:PAGINATION_LIMIT]
+    return render(request,"crossword/404.html", {"puzzles": board, "is_archive": False}, status=404)

@@ -27,6 +27,8 @@ from crossword.views.sitemap import get_sitemap_view
 def healthz(request):
     return HttpResponse("ok", content_type="text/plain")
 
+handler404 = "crossword.views.puzzle.custom_404"
+
 urlpatterns = [
     path("healthz/", healthz),
     path("sitemap.xml", sitemap, {"sitemaps": get_sitemap_view()}, name="sitemap"),
