@@ -59,7 +59,8 @@ def puzzle_view(request, puzzle_number: int):
         "board_view_dto": views.serialized_board_view,
         "solution_view_dto": views.serialized_solution_view,
         "design_note": views.design_note,
-        "next_puzzle": views.next_puzzle
+        "next_puzzle": views.next_puzzle,
+        "show_header": False
     }
     return render(request, "crossword/puzzle.html", data)
 

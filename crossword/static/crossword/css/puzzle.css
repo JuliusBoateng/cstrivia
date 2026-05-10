@@ -137,7 +137,6 @@ main {
     margin: 0;
 }
 
-.instructions-mobile,
 .controls-mobile {
   display: none;
 }
@@ -745,6 +744,7 @@ p.board-desc {
 
     .clue-wrapper {
         width: min(90vw, var(--clue-max-width));
+        height: 50vh;
     }
 
     .instructions-desktop,
@@ -752,7 +752,6 @@ p.board-desc {
       display: none;
     }
 
-    .instructions-mobile,
     .controls-mobile {
       display: block;
     }

@@ -31,9 +31,11 @@
     {% block head_extra %}{% endblock %}
   </head>
   <body class="{% block body_class %}{% endblock %}">
-    {% block header %}
-      {% include "crossword/includes/_header.html" %}
-    {% endblock %}
+    {% if show_header != False %}
+      {% block header %}
+        {% include "crossword/includes/_header.html" %}
+      {% endblock %}
+    {% endif %}
 
     <main>
       {% block content %}{% endblock %}
