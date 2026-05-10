@@ -134,7 +134,7 @@ function initClearPuzzleButton(resetPuzzle: () => void) {
   const clearButton = document.getElementById("clear-puzzle");
   if (!(clearButton instanceof HTMLButtonElement)) return;
 
-  const CLEAR_LABEL = "Clear puzzle";
+  const CLEAR_LABEL = "Clear";
   const CONFIRM_LABEL = "Click again to clear";
   const CONFIRM_CLASS = "confirming";
   const CONFIRM_TIMEOUT_MS = 2000;
