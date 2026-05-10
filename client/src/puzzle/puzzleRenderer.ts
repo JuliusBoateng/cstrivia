@@ -17,7 +17,7 @@ class PuzzleRenderer {
     private activePlacementCells: HTMLTableCellElement[];
     private activeCursor: HTMLTableCellElement | null;
     private focusedInput: HTMLInputElement | null;
-    private boardHeader: HTMLParagraphElement;
+    private boardHeaderText: HTMLSpanElement;
 
     constructor(boardDom: BoardDom) {
         this.cellGrid = boardDom.cellGrid;
@@ -28,7 +28,7 @@ class PuzzleRenderer {
         this.activeCursor = null;
         this.focusedInput = null;
 
-        this.boardHeader = this.initializeBoardHeader();
+        this.boardHeaderText = this.initializeBoardHeader();
     }
 
     renderLetter(coord: Coord, letter: string | null) {
@@ -116,8 +116,8 @@ class PuzzleRenderer {
     }
 
     renderBoardHeader(captionText: string) {
-        this.boardHeader.textContent = captionText;    
-        this.boardHeader.title = captionText;
+        this.boardHeaderText.textContent = captionText;
+        this.boardHeaderText.title = captionText;
     }
 
     private animateElements(elements: HTMLElement[], className: string) {
@@ -247,22 +247,26 @@ class PuzzleRenderer {
         element.classList.remove(ANIMATION_SUCCESS, ANIMATION_ERROR, DIRECTION_REJECTION)
     }
 
-    private initializeBoardHeader(): HTMLParagraphElement {
+    private initializeBoardHeader(): HTMLSpanElement {
         const boardWrapper = document.querySelector(".board-layout")!;
-
-        const boardHeader = document.createElement("p");
+    
+        const boardHeader = document.createElement("div");
         boardHeader.classList.add("board-header");
-
-        boardHeader.textContent = BOARD_HEADER_DEFAULT;
-        boardHeader.title = BOARD_HEADER_DEFAULT;
-
+    
+        const boardHeaderText = document.createElement("span");
+        boardHeaderText.classList.add("board-header-text");
+    
+        boardHeaderText.textContent = BOARD_HEADER_DEFAULT;
+        boardHeaderText.title = BOARD_HEADER_DEFAULT;
+    
+        boardHeader.appendChild(boardHeaderText);
         boardWrapper.prepend(boardHeader);
-        return boardHeader;
+        return boardHeaderText;
     }
 
     private clearBoardHeader() {
-        this.boardHeader.textContent = BOARD_HEADER_DEFAULT;
-        this.boardHeader.title = BOARD_HEADER_DEFAULT;
+        this.boardHeaderText.textContent = BOARD_HEADER_DEFAULT;
+        this.boardHeaderText.title = BOARD_HEADER_DEFAULT;
     }
 }
 

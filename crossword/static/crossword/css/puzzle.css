@@ -221,6 +221,14 @@ main {
     line-height: var(--board-header-line-height);
     letter-spacing: 0.02em;
 
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.board-header-text {
     display: -webkit-box;
     line-clamp: 2;
     -webkit-line-clamp: 2;
