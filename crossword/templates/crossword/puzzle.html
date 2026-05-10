@@ -219,7 +219,13 @@
             {% if design_note %}
               <p class="design-note-link">
                 <a href="{{ design_note.get_absolute_url }}">
-                  Design note &rarr;
+                  Design Note &rarr;
+                </a>
+              </p>
+            {% else %}
+              <p class="design-note-link">
+                <a href="{% url 'design' %}">
+                  All Design Notes &rarr;
                 </a>
               </p>
             {% endif %}
