@@ -207,36 +207,34 @@
           </details>
         </section>
 
-        {% if next_puzzle or design_note %}
-          <section class="puzzle-link-section">
-            {% if next_puzzle %}
+        <section class="puzzle-link-section">
+          {% if next_puzzle %}
+            <p class="next-puzzle-link">
+              <a href="{{ next_puzzle.get_absolute_url }}">
+                Puzzle {{ next_puzzle.puzzle_number }}: {{ next_puzzle.title }} &rarr;
+              </a>
+            </p>
+          {% else %}
               <p class="next-puzzle-link">
-                <a href="{{ next_puzzle.get_absolute_url }}">
-                  Puzzle {{ next_puzzle.puzzle_number }}: {{ next_puzzle.title }} &rarr;
+                <a href="{% url 'archive' %}">
+                  All Puzzles &rarr;
                 </a>
               </p>
-              {% else %}
-                <p class="next-puzzle-link">
-                  <a href="{% url 'archive' %}">
-                    All Puzzles &rarr;
-                  </a>
-                </p>
-            {% endif %}
-            {% if design_note %}
-              <p class="design-note-link">
-                <a href="{{ design_note.get_absolute_url }}">
-                  Design Note &rarr;
-                </a>
-              </p>
-            {% else %}
-              <p class="design-note-link">
-                <a href="{% url 'design' %}">
-                  All Design Notes &rarr;
-                </a>
-              </p>
-            {% endif %}
-          </section>
-        {% endif %}
+          {% endif %}
+          {% if design_note %}
+            <p class="design-note-link">
+              <a href="{{ design_note.get_absolute_url }}">
+                Design Note &rarr;
+              </a>
+            </p>
+          {% else %}
+            <p class="design-note-link">
+              <a href="{% url 'design' %}">
+                All Design Notes &rarr;
+              </a>
+            </p>
+          {% endif %}
+        </section>
       </div>
     </div>
   </article>
