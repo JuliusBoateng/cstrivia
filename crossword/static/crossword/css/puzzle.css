@@ -403,6 +403,12 @@ main {
     font-variant-numeric: tabular-nums;
 }
 
+.clue-help-text {
+    margin: .5rem 0 .5rem 1rem;
+    color: #777;
+    font-size: 0.9em;
+}
+
 .clue-list:not([hidden]) {
     list-style: none;
     padding: 0;
@@ -571,7 +577,6 @@ main {
     text-align: center;
     padding: 24px 12px;
     color: #777;
-    font-style: italic;
 }
 
 /* Hide clue-count from UX when expanded */
