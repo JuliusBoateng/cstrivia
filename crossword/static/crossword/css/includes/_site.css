@@ -6,9 +6,10 @@
 .site-header nav {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
     max-width: var(--site-max-width);
     margin: 0 auto;
+    font-size: 0.95rem;
 
     color: #4b5563;
     white-space: nowrap;
