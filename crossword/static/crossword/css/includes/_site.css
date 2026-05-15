@@ -51,6 +51,15 @@
     padding: 0.4rem 0.5rem;
 }
 
+.alt-site-header nav {
+    display: flex;
+    align-items: center;
+    max-width: var(--site-max-width);
+    margin: 0 auto;
+
+    white-space: nowrap;
+}
+
 .alt-site-header a:hover {
     text-decoration: underline;
     text-underline-offset: 2px;
