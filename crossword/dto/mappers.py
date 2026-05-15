@@ -1,19 +1,20 @@
 from django.db.models.query import QuerySet
+from django.utils.text import Truncator
 
+from ..models import Board, ClueCell, CluePlacement
 from .dto_classes import (
     BoardDTO,
+    BoardMetadataDTO,
     BoardViewDTO,
     CellDTO,
     ClueDTO,
     Direction,
-    PlacementDTO,
     LetterDTO,
+    PlacementDTO,
+    PlacementPositionDTO,
     SolutionDTO,
     SolutionViewDTO,
-    PlacementPositionDTO,
-    SeoDTO
 )
-from ..models import Board, ClueCell, CluePlacement
 
 '''
 Purpose of mappers is to provide a way to transform Django models into their respective data objects.
@@ -124,11 +125,24 @@ def _map_to_solution_dto(placement: CluePlacement) -> SolutionDTO:
 def _map_to_letter_dto(c: ClueCell) -> LetterDTO:
     return LetterDTO(c.row_index, c.col_index, c.letter)
 
-def map_to_seo_dto(board: Board) -> SeoDTO:
-    return SeoDTO(
+def map_to_board_metadata_dto(board: Board) -> BoardMetadataDTO:
+    meta_description = build_board_description(board)
+    
+    return BoardMetadataDTO(
         puzzle_number=board.puzzle_number,
         title=board.title,
         author=board.author,
         published_at=board.published_at,
-        categories=[c.name for c in board.categories.all()]
+        meta_description=meta_description
+    )
+
+def build_board_description(board: Board) -> str:
+    description = " ".join(board.description.split())
+
+    if description:
+        return Truncator(description).words(50)
+
+    return (
+        f"Puzzle {board.puzzle_number}: '{board.title}', "
+        "a themed computer science crossword."
     )

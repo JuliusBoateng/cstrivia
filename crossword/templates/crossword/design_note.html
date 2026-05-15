@@ -7,14 +7,54 @@
 {% endblock %}
 
 {% block title %}
-  Design {{ note.design_number }}: {{ note.title }} | CS Trivia
+  Design Note {{ note.design_number }}: {{ note.title|escape }} | CS Trivia
 {% endblock %}
 
 {% block meta_description %}
   <meta
     name="description"
-    content="Design note {{ note.design_number }} on puzzle construction, tradeoffs, and development on CS Trivia."
+    content="{{ meta_description|escape }}"
   >
+{% endblock %}
+
+<!-- Open Graph (LinkedIn, Facebook, etc.) -->
+{% block og_title %}
+  Design Note {{ note.design_number }}: {{ note.title|escape }} | CS Trivia
+{% endblock %}
+
+{% block og_description %}
+  {{ meta_description|escape }}
+{% endblock %}
+
+{% block og_url %}
+  https://cstrivia.com/design/{{ note.design_number }}/
+{% endblock %}
+
+ <!-- Twitter (also used by some platforms) -->
+{% block twitter_title %}
+  Design Note {{ note.design_number }}: {{ note.title|escape }} | CS Trivia
+{% endblock %}
+
+{% block twitter_description %}
+  {{ meta_description|escape }}
+{% endblock %}
+
+{% block head_extra %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": "{{ note.title|escapejs }}",
+      {% if note.author %}
+      "author": {
+        "@type": "Person",
+        "name": "{{ note.author|escapejs }}"
+      },
+      {% endif %}
+      "datePublished": "{{ note.published_at|date:'Y-m-d' }}",
+      "url": "https://cstrivia.com/design/{{ note.design_number }}/"
+    }
+  </script>
 {% endblock %}
 
 {% block styles %}
@@ -25,7 +65,7 @@
 {% block content %}
   <article class="design-note">
     <header class="design-note-header">
-      <h1>Design {{ note.design_number }}: {{ note.title }}</h1>
+      <h1>Design {{ note.design_number }}: {{ note.title|escape }}</h1>
 
       {% if note.published_at %}
         <p class="design-note-date">
@@ -34,7 +74,7 @@
       {% endif %}
 
       {% if note.author %}
-        <p class="design-note-author">By {{ note.author }}</p>
+        <p class="design-note-author">By {{ note.author|escape }}</p>
       {% endif %}
     </header>
 
@@ -49,7 +89,7 @@
           {% for board in note.boards.all %}
             <li>
               <a href="{{ board.get_absolute_url }}">
-                Puzzle {{ board.puzzle_number }}: {{ board.title }}
+                Puzzle {{ board.puzzle_number }}: {{ board.title|escape }}
               </a>
             </li>
           {% endfor %}

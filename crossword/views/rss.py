@@ -1,4 +1,3 @@
-import re
 from itertools import chain
 
 from django.contrib.syndication.views import Feed
@@ -6,27 +5,9 @@ from django.utils import timezone
 from django.utils.text import Truncator
 
 from ..models import Board, DesignNote
+from .design import build_design_note_description
 
 RSS_LIMIT = 20
-
-def extract_intro(markdown):
-    for line in markdown.splitlines():
-        line = line.strip()
-        if line and not line.startswith("#"):
-            return line
-    return ""
-
-def strip_markdown(text):
-     # converts markdown links to plain text
-    text = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', text)
-
-    # removes basic formatting like *italic*, **bold**, and `code`
-    text = re.sub(r'[*_`]', '', text)
-
-    # collapse whitespace
-    text = re.sub(r'\s+', ' ', text)
-
-    return text.strip()
 
 
 class LatestActivityFeed(Feed):
@@ -69,9 +50,7 @@ class LatestActivityFeed(Feed):
             return item.description or ""
 
         if isinstance(item, DesignNote):
-            intro = extract_intro(item.body)
-            intro = strip_markdown(intro)
-            return Truncator(intro).words(50)
+            return build_design_note_description(item)
 
         return ""
 

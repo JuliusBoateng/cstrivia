@@ -84,9 +84,9 @@ class SolutionViewDTO(DTO):
     letters: list[LetterDTO]
 
 @dataclass
-class SeoDTO(DTO):
+class BoardMetadataDTO(DTO):
     puzzle_number: int
     title: str
     author: str
     published_at: datetime
-    categories: str | None
+    meta_description: str

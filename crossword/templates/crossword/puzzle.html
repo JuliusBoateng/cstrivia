@@ -2,17 +2,17 @@
 {% load static %}
 
 {% block canonical %}
-  <link rel="canonical" href="https://cstrivia.com/puzzle/{{ seo.puzzle_number }}/">
+  <link rel="canonical" href="https://cstrivia.com/puzzle/{{ board_metadata.puzzle_number }}/">
 {% endblock %}
 
 {% block title %}
-  Puzzle {{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
+  Puzzle {{ board_metadata.puzzle_number }}: {{ board_metadata.title|escape }} | CS Trivia
 {% endblock %}
 
 {% block meta_description %}
   <meta
     name="description"
-    content="Solve '{{ seo.title|escape }}', a computer science crossword {% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}."
+    content="{{ board_metadata.meta_description|escape }}"
   >
 {% endblock %}
 
@@ -22,24 +22,24 @@
 
 <!-- Open Graph (LinkedIn, Facebook, etc.) -->
 {% block og_title %}
-  Puzzle {{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
+  Puzzle {{ board_metadata.puzzle_number }}: {{ board_metadata.title|escape }} | CS Trivia
 {% endblock %}
 
 {% block og_description %}
-  Solve '{{ seo.title|escape }}', a computer science crossword {% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}.
+  {{ board_metadata.meta_description|escape }}
 {% endblock %}
 
 {% block og_url %}
-  https://cstrivia.com/puzzle/{{ seo.puzzle_number }}/
+  https://cstrivia.com/puzzle/{{ board_metadata.puzzle_number }}/
 {% endblock %}
 
  <!-- Twitter (also used by some platforms) -->
 {% block twitter_title %}
-  Puzzle {{ seo.puzzle_number }}: {{ seo.title|escape }} | CS Trivia
+  Puzzle {{ board_metadata.puzzle_number }}: {{ board_metadata.title|escape }} | CS Trivia
 {% endblock %}
 
 {% block twitter_description %}
-  Solve '{{ seo.title|escape }}', a computer science crossword {% if seo.categories %} about {{ seo.categories|join:', '|lower }}{% endif %}.
+  {{ board_metadata.meta_description|escape }}
 {% endblock %}
 
 {% block head_extra %}
@@ -50,15 +50,15 @@
     {
       "@context": "https://schema.org",
       "@type": "CreativeWork",
-      "name": "{{ seo.title|escapejs }}",
-      {% if seo.author %}
+      "name": "{{ board_metadata.title|escapejs }}",
+      {% if board_metadata.author %}
       "author": {
         "@type": "Person",
-        "name": "{{ seo.author|escapejs }}"
+        "name": "{{ board_metadata.author|escapejs }}"
       },
       {% endif %}
-      "datePublished": "{{ seo.published_at|date:'Y-m-d' }}",
-      "url": "https://cstrivia.com/puzzle/{{ seo.puzzle_number }}/"
+      "datePublished": "{{ board_metadata.published_at|date:'Y-m-d' }}",
+      "url": "https://cstrivia.com/puzzle/{{ board_metadata.puzzle_number }}/"
     }
   </script>
 {% endblock %}
