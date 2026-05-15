@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -54,15 +56,31 @@ class PuzzleArchiveView(ListView):
 @never_cache
 def puzzle_view(request, puzzle_number: int):
     views: PuzzleView = get_puzzle_view(puzzle_number)
+    back_href = puzzle_back_href(request)
     data = {
         "board_metadata": views.board_metadata,
         "board_view_dto": views.serialized_board_view,
         "solution_view_dto": views.serialized_solution_view,
         "design_note": views.design_note,
         "next_puzzle": views.next_puzzle,
-        "show_header": False
+        "alt_header_href": back_href
     }
     return render(request, "crossword/puzzle.html", data)
+
+def puzzle_back_href(request):
+    referer = request.META.get("HTTP_REFERER", "")
+
+    path = urlparse(referer).path
+    current_path = request.path
+
+    if path.endswith("/puzzle/"):
+        back_href = "/puzzle/"
+    elif path.startswith("/puzzle/") and path != current_path:
+        back_href = path
+    else:
+        back_href = "/"
+
+    return back_href
 
 def privacy_view(request):
     return render(request, "crossword/privacy.html")

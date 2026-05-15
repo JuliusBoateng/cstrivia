@@ -191,6 +191,7 @@ main {
 .board-title {
     text-align: center;
     font-size: clamp(1.4rem, 2.2vw, 2rem);
+    margin-top: 0;
     margin-bottom: clamp(0.5rem, 0.8vw, 0.9rem);
     font-weight: 600;
 }
