@@ -13,35 +13,35 @@
   },
   "clues": [
     {
-      "question": "Natural language processing subfield focused on interpreting meaning in language beyond surface-level syntax",
+      "question": "Subfield of NLP focused on interpreting meaning beyond surface-level syntax",
       "display_answer": "SEMANTICS",
       "direction": "A",
       "start_row": 1,
       "start_col": 3
     },
     {
-      "question": "Smallest unit of sound that distinguishes meaning between spoken words in a language; foundational to speech recognition",
+      "question": "Smallest unit of sound that changes meaning in spoken language; foundational to speech recognition",
       "display_answer": "PHONEME",
       "direction": "A",
       "start_row": 2,
       "start_col": 6
     },
     {
-      "question": "Formalized language as a structured rule-based system in his 1957 landmark paper \"Syntactic Structures\"; often called the father of modern linguistics",
+      "question": "Changed the framework for understanding language as a structured rule-based system in his 1957 landmark paper \"Syntactic Structures\"",
       "display_answer": "CHOMSKY",
       "direction": "A",
       "start_row": 3,
       "start_col": 3
     },
     {
-      "question": "Tree representation showing the syntactic structure of a string according to a context-free grammar",
+      "question": "Tree representing the syntactic structure of a string according to a context-free grammar",
       "display_answer": "PARSETREE",
       "direction": "A",
       "start_row": 4,
       "start_col": 4
     },
     {
-      "question": "Early natural language processing program developed at MIT in 1964; simulated conversation by reflecting users' statements back as questions",
+      "question": "Simulated conversational program developed at MIT in 1964 that reflected users' statements back as questions; origin of the ___ effect",
       "display_answer": "ELIZA",
       "direction": "A",
       "start_row": 6,
@@ -55,7 +55,7 @@
       "start_col": 1
     },
     {
-      "question": "Published \"Computing Machinery and Intelligence\" in 1950, introducing a test for whether computers could convincingly imitate human language",
+      "question": "Created a test for whether computers could convincingly imitate human conversation in his 1950 paper \"Computing Machinery and Intelligence\"",
       "display_answer": "TURING",
       "direction": "A",
       "start_row": 10,
@@ -83,7 +83,7 @@
       "start_col": 2
     },
     {
-      "question": "Collection of authentic text or audio used to analyze patterns in language",
+      "question": "Collection of authentic text used to analyze patterns in language; the 1961 Brown Corpus was an early influential digital text collection",
       "display_answer": "CORPUS",
       "direction": "D",
       "start_row": 6,
@@ -97,7 +97,7 @@
       "start_col": 3
     },
     {
-      "question": "Contiguous sequence of N words or characters used in statistical language modeling and text prediction",
+      "question": "Contiguous sequence of N words or characters used in statistical language modeling",
       "display_answer": "NGRAM",
       "direction": "D",
       "start_row": 7,
