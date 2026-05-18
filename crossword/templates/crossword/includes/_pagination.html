@@ -1,7 +1,11 @@
 {% if is_paginated %}
   <div class="pagination">
     {% if page_obj.has_previous %}
-      <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+      {% if page_obj.previous_page_number == 1 %}
+        <a href="{{ request.path }}">Prev</a>
+      {% else %}
+        <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+      {% endif %}
     {% endif %}
 
     <span>

@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block canonical %}
-  <link rel="canonical" href="https://cstrivia.com/design/">
+  {% if page_obj.number == 1 %}
+    <link rel="canonical" href="https://cstrivia.com/design/">
+  {% else %}
+    <link rel="canonical" href="https://cstrivia.com/design/?page={{ page_obj.number }}">
+  {% endif %}
 {% endblock %}
 
 {% block title %}

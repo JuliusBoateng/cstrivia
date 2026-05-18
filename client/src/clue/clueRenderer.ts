@@ -4,7 +4,6 @@ import { CursorController } from "../puzzle/puzzleController.js";
 
 const CLUE_TOGGLE = ".clue-toggle";
 const CLUE = ".clue"
-const SHOW_ANSWER = ".clue-show-answer";
 const ARIA_CONTROLS = "aria-controls";
 const ARIA_EXPANDED = "aria-expanded";
 const HIDDEN = "hidden";
