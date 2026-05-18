@@ -175,81 +175,73 @@ class PuzzleController implements CursorController {
             return;
         }
 
-        const desktopOnlyShortcut = this.isShowAnswerShortcut(event) ||
-            this.isCopyPlacementShortcut(event) ||
-            this.isCopyClueShortcut(event);
-
-        if (desktopOnlyShortcut && isTouchDevice()) {
-            return;
-        }
-
-        if (this.isShowAnswerShortcut(event)) {
+        else if (!isTouchDevice() && this.isShowAnswerShortcut(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.handleShowAnswerShortcut();
             return;
         }
     
-        if (this.isCopyPlacementShortcut(event)) {
+        else if (!isTouchDevice() && this.isCopyPlacementShortcut(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.handleCopyPlacementShortcut();
             return;
         }
 
-        if (this.isCopyClueShortcut(event)) {
+        else if (!isTouchDevice() && this.isCopyClueShortcut(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.handleCopyClueShortcut();
             return;
         }
 
-        if (this.isDirectionShortcut(event)) {
+        else if (this.isDirectionShortcut(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.handleDirectionShortcut();
             return;
         }
 
-        if (this.isTypingKey(event)) {
+        else if (this.isTypingKey(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.commitChar(event.key);
             return;
         }
         
-        if (this.isDeleteKey(event)) {
+        else if (this.isDeleteKey(event)) {
             event.preventDefault();
             this.suppressNextBeforeInput = true;
             this.handleDeleteInput(event);
             return;
         }
 
-        if (this.isEnterKey(event)) {
+        else if (this.isEnterKey(event)) {
             event.preventDefault();
             this.handleEnterInput(event);
             return;
         }
 
-        if (this.isTabKey(event)) {
+        else if (this.isTabKey(event)) {
             event.preventDefault();
             this.handleTabInput(event);
             return;
         }
         
-        if (this.isEscapeKey(event)) {
+        else if (this.isEscapeKey(event)) {
             event.preventDefault();
             this.handleEscapeInput();
             return;
         }
 
-        if (this.isHorizontalArrow(event)) {
+        else if (this.isHorizontalArrow(event)) {
             event.preventDefault();
             this.handleHorizontalArrowInput(event);
             return;
         }
         
-        if (this.isVerticalArrow(event)) {
+        else if (this.isVerticalArrow(event)) {
             event.preventDefault();
             this.handleVerticalArrowInput(event);
             return;
