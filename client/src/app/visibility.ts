@@ -3,6 +3,15 @@ function isElementFullyVisible(element: HTMLElement): boolean {
     const rect = element.getBoundingClientRect();
     const visibleHeight = window.visualViewport?.height ?? window.innerHeight;
   
+    console.log({
+        element,
+        rectTop: rect.top,
+        rectBottom: rect.bottom,
+        visibleHeight,
+        innerHeight: window.innerHeight,
+        visualViewportHeight: window.visualViewport?.height,
+    });
+    
     return rect.top >= 0 && rect.bottom <= visibleHeight;
   }
 
