@@ -1,5 +1,4 @@
 import { copyClueToClipboard, hideCopyButton, revealCopyButton } from "../app/copyButton.js";
-import { isElementFullyVisible } from "../app/visibility.js";
 import { Direction, PlacementId } from "../models/boardView.js";
 import { CursorController } from "../puzzle/puzzleController.js";
 
@@ -259,12 +258,7 @@ class ClueRenderer implements ClueView {
     
       const clue = this.getClue(target);
       if (!clue) return;
-
-      const showAnswer = this.getShowAnswer(clue);
-      if (!showAnswer) return;
       
-      if (!isElementFullyVisible(showAnswer)) return;
-
       const placementId = this.getPlacementId(clue);
       if (placementId === null) return;
 
@@ -453,12 +447,6 @@ class ClueRenderer implements ClueView {
       const clue = target.closest(CLUE) as HTMLLIElement | null;
       if (!clue || !this.clueContainer.contains(clue)) return null;
       return clue;
-    }
-
-    private getShowAnswer(clue: HTMLLIElement): HTMLSpanElement | null {
-      const showAnswer = clue.querySelector(SHOW_ANSWER);
-      if (!(showAnswer instanceof HTMLSpanElement)) return null;
-      return showAnswer;
     }
 
     private createPlacementClueMap(): Map<PlacementId, ClueElement> {
