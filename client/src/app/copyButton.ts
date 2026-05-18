@@ -1,3 +1,5 @@
+import { isElementFullyVisible } from "../app/visibility.js";
+
 const COPIED_CLASS = "copied";
 const COPY_ARIA = "Copy clue";
 const COPIED_ARIA = "Copied clue";
@@ -61,6 +63,8 @@ function attachCopyBehavior(button: HTMLButtonElement, textToCopy: string): void
     });
 
     button.addEventListener("click", (event) => {
+        if (!isElementFullyVisible(button)) return;
+        
         event.stopPropagation();
         void copyClueToClipboard(button, textToCopy, TIMEOUT_MS);
     });
@@ -104,4 +108,4 @@ function setCopyButtonResetTimeout(button: HTMLButtonElement, timeoutMs: number)
     copyButtonTimeouts.set(button, timeoutId);
 }
 
-export { createCopyButton, attachCopyBehavior, revealCopyButton, hideCopyButton, copyClueToClipboard }
+export { attachCopyBehavior, copyClueToClipboard, createCopyButton, hideCopyButton, revealCopyButton };

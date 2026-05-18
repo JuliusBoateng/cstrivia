@@ -1,9 +1,11 @@
+import { copyClueToClipboard, hideCopyButton, revealCopyButton } from "../app/copyButton.js";
+import { isElementFullyVisible } from "../app/visibility.js";
 import { Direction, PlacementId } from "../models/boardView.js";
 import { CursorController } from "../puzzle/puzzleController.js";
-import { revealCopyButton, hideCopyButton, copyClueToClipboard} from "../app/copyButton.js";
 
 const CLUE_TOGGLE = ".clue-toggle";
 const CLUE = ".clue"
+const SHOW_ANSWER = ".clue-show-answer";
 const ARIA_CONTROLS = "aria-controls";
 const ARIA_EXPANDED = "aria-expanded";
 const HIDDEN = "hidden";
@@ -258,6 +260,11 @@ class ClueRenderer implements ClueView {
       const clue = this.getClue(target);
       if (!clue) return;
 
+      const showAnswer = this.getShowAnswer(clue);
+      if (!showAnswer) return;
+      
+      if (!isElementFullyVisible(showAnswer)) return;
+
       const placementId = this.getPlacementId(clue);
       if (placementId === null) return;
 
@@ -446,6 +453,12 @@ class ClueRenderer implements ClueView {
       const clue = target.closest(CLUE) as HTMLLIElement | null;
       if (!clue || !this.clueContainer.contains(clue)) return null;
       return clue;
+    }
+
+    private getShowAnswer(clue: HTMLLIElement): HTMLSpanElement | null {
+      const showAnswer = clue.querySelector(SHOW_ANSWER);
+      if (!(showAnswer instanceof HTMLSpanElement)) return null;
+      return showAnswer;
     }
 
     private createPlacementClueMap(): Map<PlacementId, ClueElement> {
