@@ -12,7 +12,9 @@ function isElementFullyVisible(element: HTMLElement): boolean {
         visualViewportHeight: window.visualViewport?.height,
     });
     
-    return rect.top >= 0 && rect.bottom <= visibleHeight;
+    // Testing
+    return true;
+    // return rect.top >= 0 && rect.bottom <= visibleHeight;
   }
 
 export { isElementFullyVisible }
