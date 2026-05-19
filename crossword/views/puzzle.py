@@ -71,16 +71,10 @@ def puzzle_back_href(request):
     referer = request.META.get("HTTP_REFERER", "")
 
     path = urlparse(referer).path
-    current_path = request.path
-
     if path.endswith("/puzzle/"):
-        back_href = "/puzzle/"
-    elif path.startswith("/puzzle/") and path != current_path:
-        back_href = path
-    else:
-        back_href = "/"
+        return "/puzzle/"
 
-    return back_href
+    return "/"
 
 def privacy_view(request):
     return render(request, "crossword/privacy.html")
