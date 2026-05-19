@@ -1,0 +1,115 @@
+{
+  "board": {
+    "title": "Computer Networks",
+    "author": "Julius Boateng",
+    "puzzle_number": 14,
+    "published_at": "2026-05-19T07:33:01+00:00",
+    "description": "Networks underpin how computers communicate with each other. Infrastructure like submarine cables, content delivery networks, and Internet exchange points allow us to video call across the world, stream media, and exchange information in real time.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Computer Networks",
+      "Internet"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Method of forwarding data hop-by-hop between directly connected devices; foundational to packet-switched networks",
+      "display_answer": "SWITCHING",
+      "direction": "A",
+      "start_row": 2,
+      "start_col": 2
+    },
+    {
+      "question": "Maximum theoretical data transfer rate across a network; measured in bits/second",
+      "display_answer": "BANDWIDTH",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 4
+    },
+    {
+      "question": "Direct exchange of traffic between separate networks; the Commercial Internet eXchange enabled commercial networks to exchange TCP/IP traffic in 1992",
+      "display_answer": "PEERING",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 3
+    },
+    {
+      "question": "Actual achieved data transfer rate across a network; measured in bits/second",
+      "display_answer": "THROUGHPUT",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 2
+    },
+    {
+      "question": "Process of selecting paths for data transmission across a network; uses algorithms like distance-vector or link-state",
+      "display_answer": "ROUTING",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 3
+    },
+    {
+      "question": "Protocol responsible for inter-domain routing between autonomous systems; called the \"Two-Napkin Protocol\" because design was recorded on two napkins",
+      "display_answer": "BGP",
+      "direction": "A",
+      "start_row": 7,
+      "start_col": 2
+    },
+    {
+      "question": "Time it takes data to travel between network endpoints",
+      "display_answer": "LATENCY",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 2
+    },
+    {
+      "question": "Switching to backup infrastructure after network failure; early fault-tolerant systems used hot and cold standby architectures",
+      "display_answer": "FAILOVER",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 2
+    },
+    {
+      "question": "Reduced network performance that occurs when traffic exceeds capacity; mitigated through control algorithms like AIMD or exponential backoff",
+      "display_answer": "CONGESTION",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 4
+    },
+    {
+      "question": "Connectionless transport protocol designed for low-latency communication; provides minimal overhead with no delivery or ordering guarantees",
+      "display_answer": "UDP",
+      "direction": "A",
+      "start_row": 12,
+      "start_col": 8
+    },
+    {
+      "question": "Cable that transmits data as light and enables high-bandwidth long-distance communication; foundational to modern Internet infrastructure",
+      "display_answer": "FIBEROPTICS",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 4
+    },
+    {
+      "question": "Class of algorithms that delay retransmission attempts after repeated failures to reduce congestion; implemented with exponential or linear delays",
+      "display_answer": "BACKOFF",
+      "direction": "D",
+      "start_row": 6,
+      "start_col": 12
+    },
+    {
+      "question": "Geographically distributed servers designed to reduce latency by serving content physically closer to users; emerged in the 1990s as Internet traffic",
+      "display_answer": "CDN",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 13
+    },
+    {
+      "question": "Transport protocol that establishes a connection through a three-way handshake; guarantees in-order byte delivery; created by Cerf and Kahn in 1973",
+      "display_answer": "TCP",
+      "direction": "D",
+      "start_row": 10,
+      "start_col": 10
+    }
+  ]
+}
