@@ -39,12 +39,6 @@ class PuzzleController implements CursorController {
     private boardView: BoardView;
     private tableElement: HTMLTableElement;
     private isActiveStateVisible: boolean = false;
-    
-    /*  keydown is the primary input handler.
-        beforeinput is secondary.
-        sometimes both events are triggered at the same time.
-    */
-    private suppressNextBeforeInput: boolean = false;
 
     constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardView: BoardView) {
         this.tableElement = tableElement;
@@ -142,28 +136,21 @@ class PuzzleController implements CursorController {
     }
 
     private handleBeforeInput = (event: InputEvent) => {
-        if (this.suppressNextBeforeInput) {
-            this.suppressNextBeforeInput = false;
+        if (this.isTextInput(event)) {
             event.preventDefault();
-            return;
-        }
-
-        if (event.inputType === "insertText") {
-            event.preventDefault();
-    
-            if (event.data && this.isAllowedCharacter(event.data)) {
-                this.commitChar(event.data);
+            if (this.isTypingKey(event)) {
+                this.commitChar(event.data!);
             }
             return;
         }
     
-        if (event.inputType === "deleteContentBackward") {
+        else if (this.isBackDelete(event)) {
             event.preventDefault();
             this.commitBackDelete();
             return;
         }
     
-        if (event.inputType === "deleteContentForward") {
+        else if (this.isForwardDelete(event)) {
             event.preventDefault();
             this.commitForwardDelete();
             return;
@@ -177,43 +164,25 @@ class PuzzleController implements CursorController {
 
         else if (!isTouchDevice() && this.isShowAnswerShortcut(event)) {
             event.preventDefault();
-            this.suppressNextBeforeInput = true;
             this.handleShowAnswerShortcut();
             return;
         }
     
         else if (!isTouchDevice() && this.isCopyPlacementShortcut(event)) {
             event.preventDefault();
-            this.suppressNextBeforeInput = true;
             this.handleCopyPlacementShortcut();
             return;
         }
 
         else if (!isTouchDevice() && this.isCopyClueShortcut(event)) {
             event.preventDefault();
-            this.suppressNextBeforeInput = true;
             this.handleCopyClueShortcut();
             return;
         }
 
         else if (this.isDirectionShortcut(event)) {
             event.preventDefault();
-            this.suppressNextBeforeInput = true;
             this.handleDirectionShortcut();
-            return;
-        }
-
-        else if (this.isTypingKey(event)) {
-            event.preventDefault();
-            this.suppressNextBeforeInput = true;
-            this.commitChar(event.key);
-            return;
-        }
-        
-        else if (this.isDeleteKey(event)) {
-            event.preventDefault();
-            this.suppressNextBeforeInput = true;
-            this.handleDeleteInput(event);
             return;
         }
 
@@ -294,18 +263,6 @@ class PuzzleController implements CursorController {
         this.renderActiveState();
         this.setActiveFocus();
     }
-    
-    private handleDeleteInput(event: KeyboardEvent) {    
-        if (event.key === "Backspace") {
-            this.commitBackDelete();
-            return;
-        }
-    
-        if (event.key === "Delete") {
-            this.commitForwardDelete();
-            return;
-        }
-    }
 
     private handleHorizontalArrowInput(event: KeyboardEvent) {    
         const delta = event.key === "ArrowLeft" ? -1 : 1;
@@ -356,12 +313,24 @@ class PuzzleController implements CursorController {
         this.applyPastedText(normalized);
     }
 
-    private isAllowedCharacter(value: string) {
-        return value.length === 1 && PuzzleValidator.isLetterOrDigit(value);
+    private isTextInput(event: InputEvent) {
+        return event.inputType === "insertText";
     }
 
-    private isTypingKey(event: KeyboardEvent) {
-        return event.key.length === 1 && PuzzleValidator.isLetterOrDigit(event.key);
+    private isTypingKey(event: InputEvent) {
+        return event.data && this.isAllowedCharacter(event.data);
+    }
+
+    private isBackDelete(event: InputEvent) {
+        return event.inputType === "deleteContentBackward";
+    }
+
+    private isForwardDelete(event: InputEvent) {
+        return event.inputType === "deleteContentForward";
+    }
+
+    private isAllowedCharacter(value: string) {
+        return value.length === 1 && PuzzleValidator.isLetterOrDigit(value);
     }
 
     private isModifierKey(event: KeyboardEvent) {
@@ -382,10 +351,6 @@ class PuzzleController implements CursorController {
 
     private isEnterKey(event: KeyboardEvent) {
         return event.key === "Enter";
-    }
-    
-    private isDeleteKey(event: KeyboardEvent) {
-        return event.key === "Delete" || event.key === "Backspace";
     }
     
     private isHorizontalArrow(event: KeyboardEvent) {
@@ -629,7 +594,6 @@ class PuzzleController implements CursorController {
 
     private initInteractionState(): void {
         this.initFocusableCursor();
-        this.suppressNextBeforeInput = false;
         this.isActiveStateVisible = false;
     }
 
