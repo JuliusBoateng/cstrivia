@@ -254,17 +254,6 @@ main {
 }
 
 
-.cell,
-.cell .fill,
-.cell .letter {
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.cell .letter {
-  -webkit-touch-callout: none;
-}
-
 .cell {
     border: 2px solid #18181b;
     background: white;
@@ -326,6 +315,10 @@ main {
     caret-color: transparent;
 
     appearance: none;
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
 }
 
