@@ -86,6 +86,7 @@ main {
 
     user-select: none;
     -webkit-user-select: none;
+    touch-action: manipulation;
 }
 
 .toolbar-separator {
@@ -250,9 +251,18 @@ main {
     border-collapse: collapse;
     touch-action: manipulation;
     contain: layout style paint;
+}
 
-    user-select: none;
-    -webkit-user-select: none;
+
+.cell,
+.cell .fill,
+.cell .letter {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cell .letter {
+  -webkit-touch-callout: none;
 }
 
 .cell {
