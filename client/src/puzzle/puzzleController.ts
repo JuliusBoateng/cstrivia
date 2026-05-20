@@ -465,10 +465,8 @@ class PuzzleController implements CursorController {
     private commitBackDelete() {
         if (this.session.isCellEmpty()) {
             this.session.reverseCursor();
-            this.applyLetter(null);
             this.renderActiveState();
             this.setActiveFocus();
-            return;
         }
     
         this.applyLetter(null);
