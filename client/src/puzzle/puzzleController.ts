@@ -162,6 +162,7 @@ class PuzzleController implements CursorController {
             return;
         }
 
+        // preventDefault prevents the corresponding beforeinput from firing for keyboard shortcuts
         else if (!isTouchDevice() && this.isShowAnswerShortcut(event)) {
             event.preventDefault();
             this.handleShowAnswerShortcut();
@@ -464,6 +465,7 @@ class PuzzleController implements CursorController {
     private commitBackDelete() {
         if (this.session.isCellEmpty()) {
             this.session.reverseCursor();
+            this.applyLetter(null);
             this.renderActiveState();
             this.setActiveFocus();
             return;
