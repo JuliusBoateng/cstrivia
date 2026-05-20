@@ -162,6 +162,14 @@ class PuzzleController implements CursorController {
             return;
         }
 
+        // mobile browsers may not emit beforeinput delete events when the focused input is already empty.
+        // handle empty-cell backspace here as a fallback.
+        if (this.isDeleteKey(event) && this.session.isCellEmpty()) {
+            event.preventDefault();
+            this.commitBackDelete();
+            return;
+        }
+
         // preventDefault prevents the corresponding beforeinput from firing for keyboard shortcuts
         else if (!isTouchDevice() && this.isShowAnswerShortcut(event)) {
             event.preventDefault();
@@ -328,6 +336,10 @@ class PuzzleController implements CursorController {
 
     private isForwardDelete(event: InputEvent) {
         return event.inputType === "deleteContentForward";
+    }
+
+    private isDeleteKey(event: KeyboardEvent) {
+        return event.key === "Delete" || event.key === "Backspace";
     }
 
     private isAllowedCharacter(value: string) {
