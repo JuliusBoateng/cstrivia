@@ -704,10 +704,22 @@ p.board-desc {
 }
 
 @keyframes success-pulse {
-    0% {transform: scale(1); background-color: var(--cell-bg);}
-    30% {transform: scale(1.04); background-color: #c7cff0;}
-    60% {transform: scale(1.02); background-color: #c7cff0;}
-    100% {transform: scale(1); background-color: var(--cell-bg);}
+    0% {
+        background-color: var(--cell-bg);
+        transform: translateY(0);
+    }
+    30% {
+        background-color: #dbe3ff;
+        transform: translateY(-1px);
+    }
+    70% {
+        background-color: #dbe3ff;
+        transform: translateY(-1px);
+    }
+    100% {
+        background-color: var(--cell-bg);
+        transform: translateY(0);
+    }
 }
 .placement-success {
     transform-origin: center;
@@ -731,7 +743,10 @@ p.board-desc {
     0% {
         background-color: transparent;
     }
-    50% {
+    30% {
+        background-color: rgba(125, 137, 187, 0.5);
+    }
+    70% {
         background-color: rgba(125, 137, 187, 0.5);
     }
     100% {
@@ -740,7 +755,7 @@ p.board-desc {
 }
 
 .direction-reject {
-    animation: direction-reject 160ms ease-out;
+    animation: direction-reject 200ms ease-out;
 }
 
 /* Large desktop */
