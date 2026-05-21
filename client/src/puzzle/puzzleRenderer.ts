@@ -120,12 +120,7 @@ class PuzzleRenderer {
         this.boardHeaderText.title = captionText;
     }
 
-    private animationId = 0;
-
     private animateElements(elements: HTMLElement[], className: string) {
-        const id = ++this.animationId;
-        console.log("animation clear", id, performance.now(), className);
-
         this.clearAnimations(elements);
 
         // Double requestAnimationFrame ensures the browser processes the class
@@ -133,7 +128,6 @@ class PuzzleRenderer {
         // changes may be batched together and the animation will not restart.
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                console.log("animation add", id, performance.now(), className);
                 elements.forEach(element => element.classList.add(className));
             });
         });
