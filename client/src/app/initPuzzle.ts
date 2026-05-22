@@ -41,7 +41,6 @@ function createPuzzleController(tableElement: HTMLTableElement, boardView: Board
 
 
 function renderPuzzleHeader(boardView: BoardView) {
-    const puzzleNumber = boardView.board.puzzle_number;
     const title = boardView.board.title;
 
     const boardTitle = document.querySelector("h1.board-title")!;

@@ -507,44 +507,8 @@ class PuzzleController implements CursorController {
         const coord = this.session.getActiveCoord();
         this.renderer.renderActiveCursor(coord);
         this.clueView.renderClue(placement.id);
-        this.renderBoardHeader();
 
         this.isActiveStateVisible = true;
-    }
-
-    private renderBoardHeader() {
-        if (this.session.isPuzzleComplete()) {
-            this.renderPuzzleCompleteHeader();
-            return;
-        }
-
-        this.renderStandardHeader();
-    }
-
-    private renderPuzzleCompleteHeader() {
-        const captionText = "Puzzle Complete. Good work.";
-        this.renderer.renderBoardHeader(captionText);
-    }
-
-    private renderStandardHeader() {
-        const placement = this.session.getActivePlacement();
-        if (!placement) return;
-
-        const coord: Coord = {
-            row: placement.start_row,
-            col: placement.start_col
-        };
-        const label = this.boardView.getLabel(coord)
-        if (label < 0) return;
-        
-        const clue = this.boardView.getClue(placement.id);
-        if (!clue) return;
-
-        const direction = (clue.direction === Direction.A) ? "Across" : "Down";
-        const arrow = (clue.direction === Direction.A ) ? "\u2192" : "\u2193";
-
-        const captionText = this.createBoardCaption(label, direction, arrow, clue.question);
-        this.renderer.renderBoardHeader(captionText);
     }
 
     private renderPlacementFeedbackForCoord(coord: Coord) {
@@ -617,10 +581,6 @@ class PuzzleController implements CursorController {
     private initClues() {
         const currSolved = [...this.session.getSolvedPlacementIds()];
         this.clueView.renderClues(currSolved);
-    }
-
-    private createBoardCaption(label: number, direction: string, arrow: string, clue: string) {
-        return `${label} ${arrow} ${direction}: ${clue}`;
     }
 }
 
