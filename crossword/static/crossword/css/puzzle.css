@@ -370,12 +370,6 @@ main {
     font-variant-numeric: tabular-nums;
 }
 
-.clue-help-text {
-    margin: .5rem 0 .5rem 1rem;
-    color: #777;
-    font-size: 0.9em;
-}
-
 .clue-list:not([hidden]) {
     list-style: none;
     padding: 0;
