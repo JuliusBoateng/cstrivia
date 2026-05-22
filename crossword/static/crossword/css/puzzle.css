@@ -735,7 +735,7 @@ p.board-desc {
     }
 
     .puzzle-panel {
-      flex-direction: column;
+      flex-direction: column-reverse;
       align-items: center;
     }
 
