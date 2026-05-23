@@ -310,6 +310,8 @@ main {
 .clue-card {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -320,6 +322,14 @@ main {
 
     padding: 14px 10px;
     line-height: 1.4;
+}
+
+.todo-wrapper {
+    order: 1;
+}
+
+.solved-wrapper {
+    order: 2;
 }
 
 .clue-card :is(h2, h3) {
@@ -373,7 +383,7 @@ main {
 .clue-list:not([hidden]) {
     list-style: none;
     padding: 0;
-    margin: 0.5rem 0;
+    margin: 0.5rem 0 0 0;
 }
 
 .clue-card h2 + .clue-section-body {
@@ -538,6 +548,7 @@ main {
     text-align: center;
     padding: 24px 12px;
     color: #777;
+    order: 3;
 }
 
 /* Hide clue-count from UX when expanded */
@@ -747,6 +758,14 @@ p.board-desc {
         margin-top: 0;
         width: min(90vw, var(--clue-max-width));
         height: 50vh;
+    }
+
+    .solved-wrapper {
+        order: 1;
+    }
+
+    .todo-wrapper {
+        order: 2;
     }
 
     .instructions-desktop,

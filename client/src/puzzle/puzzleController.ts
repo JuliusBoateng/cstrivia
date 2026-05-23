@@ -93,7 +93,11 @@ class PuzzleController implements CursorController {
     handleClueClick(placementId: PlacementId): void {
         this.session.moveCursorToPlacement(placementId);
         this.renderActiveState();
-        this.forceActiveFocus();
+
+        // Mobile clue clicks should be explaratory and not shift focus / call keyboard
+        if (!isTouchDevice()) {
+            this.forceActiveFocus();
+        }
     }
 
     private handlePointerInput = (event: PointerEvent) => {
