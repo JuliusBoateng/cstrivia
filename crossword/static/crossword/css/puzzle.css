@@ -781,11 +781,13 @@ p.board-desc {
         appearance: none;
         border: 0;
         background: transparent;
+        color: inherit;
         font: inherit;
-        font-size: clamp(1rem, 0.9rem + 0.5vw, 1.2rem);
+        font-size: clamp(1.2rem, 1rem + 0.6vw, 1.4rem);
 
         padding: 4px 6px;
         cursor: pointer;
+        touch-action: manipulation;
     }
 
     .mobile-nav button:active {
