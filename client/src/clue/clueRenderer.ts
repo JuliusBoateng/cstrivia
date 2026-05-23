@@ -36,6 +36,7 @@ interface ClueView {
   renderClues(solved: PlacementId[]): void;
   clearClues(): void;
   renderClue(placementId: PlacementId): void;
+  scrollActiveClue(): void;
   copyClueText(placementId: PlacementId): void;
 }
 
@@ -147,19 +148,21 @@ class ClueRenderer implements ClueView {
     renderClue(placementId: PlacementId): void {
       const clueElement = this.placementClueMap.get(placementId);
       if (!clueElement) return;
-
+  
       this.clearActiveClue();
-
       this.activeClue = clueElement;
       clueElement.liElement.classList.add(ACTIVE);
-
-      if (isTouchDevice()) {
-        this.scrollClueMobile(clueElement.liElement);
-      } else {
-        this.scrollClue(clueElement.liElement);
-      }
-
       this.revealCurrentCopyButton(clueElement.copyButton);
+    }
+
+    scrollActiveClue(): void {
+      if (!this.activeClue) return;
+  
+      if (isTouchDevice()) {
+          this.scrollClueMobile(this.activeClue.liElement);
+      } else {
+          this.scrollClue(this.activeClue.liElement);
+      }
     }
 
     private handleContainerKeydown = (event: KeyboardEvent) => {

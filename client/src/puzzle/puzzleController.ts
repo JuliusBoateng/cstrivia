@@ -29,6 +29,7 @@ const NullClueView: ClueView = {
     renderClues(_solved: PlacementId[]): void {},
     clearClues(): void {},
     renderClue(_placementId: PlacementId): void {},
+    scrollActiveClue(): void {},
     copyClueText(_placementId: PlacementId): void {}
 };
 
@@ -72,6 +73,7 @@ class PuzzleController implements CursorController {
     private handleFocusIn = () => {
         if (this.isActiveStateVisible) return;
         this.renderActiveState();
+        this.clueView.scrollActiveClue();
     }
 
     handleShowAnswerClick(placementId: PlacementId): void {
@@ -126,6 +128,7 @@ class PuzzleController implements CursorController {
         const newCoord = {row, col};
         this.session.moveCursor(newCoord);
         this.renderActiveState();
+        this.clueView.scrollActiveClue();
         this.forceActiveFocus();
     }
 
@@ -136,6 +139,7 @@ class PuzzleController implements CursorController {
         if ((prevCoord.row === row) && (prevCoord.col === col)) {
             this.toggleDirection();
             this.renderActiveState();
+            this.clueView.scrollActiveClue();
             this.forceActiveFocus();
             return true;
         }
@@ -251,17 +255,20 @@ class PuzzleController implements CursorController {
     private handleDirectionShortcut() {    
         if (!this.isActiveStateVisible) {
             this.renderActiveState();
+            this.clueView.scrollActiveClue();
             return;
         }
 
         this.toggleDirection();
         this.renderActiveState();
+        this.clueView.scrollActiveClue();
     }
 
     private handleTabInput(event: KeyboardEvent) {
         const offset = event.shiftKey ? -1 : 1;
         this.session.movePlacementBy(offset);
         this.renderActiveState();
+        this.clueView.scrollActiveClue();
         this.setActiveFocus();
     }
 
@@ -278,6 +285,7 @@ class PuzzleController implements CursorController {
 
         this.session.advanceCursor();
         this.renderActiveState();
+        this.clueView.scrollActiveClue();
         this.setActiveFocus();
     }
 
@@ -286,6 +294,7 @@ class PuzzleController implements CursorController {
         this.session.moveCursorRelative(0, delta);
         this.session.setDirection(Direction.A);
         this.renderActiveState();
+        this.clueView.scrollActiveClue();
         this.setActiveFocus();
     }
     
@@ -294,6 +303,7 @@ class PuzzleController implements CursorController {
         this.session.moveCursorRelative(delta, 0);
         this.session.setDirection(Direction.D);
         this.renderActiveState();
+        this.clueView.scrollActiveClue();
         this.setActiveFocus();
     }
 
@@ -428,6 +438,7 @@ class PuzzleController implements CursorController {
         if (hasSetDifference(prevSolved, currSolved)) this.clueView.renderClues(currSolved);
 
         this.renderActiveState();
+        this.clueView.scrollActiveClue();
         this.setActiveFocus();
     }
 
@@ -479,6 +490,7 @@ class PuzzleController implements CursorController {
     
         this.session.advanceCursor();
         this.renderActiveState();
+        this.clueView.scrollActiveClue();
         this.setActiveFocus();
     }
 
@@ -486,6 +498,7 @@ class PuzzleController implements CursorController {
         if (this.session.isCellEmpty()) {
             this.session.reverseCursor();
             this.renderActiveState();
+            this.clueView.scrollActiveClue();
             this.setActiveFocus();
         }
     
