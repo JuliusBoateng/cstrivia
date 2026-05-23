@@ -1,5 +1,5 @@
 import { copyClueToClipboard, hideCopyButton, revealCopyButton } from "../app/copyButton.js";
-import { isTouchDevice } from "../app/device.js";
+import { isMobileLayout } from "../app/device.js";
 import { Direction, PlacementId } from "../models/boardView.js";
 import { CursorController } from "../puzzle/puzzleController.js";
 
@@ -158,7 +158,7 @@ class ClueRenderer implements ClueView {
     scrollActiveClue(): void {
       if (!this.activeClue) return;
   
-      if (isTouchDevice()) {
+      if (isMobileLayout()) {
           this.scrollClueMobile(this.activeClue.liElement);
       } else {
           this.scrollClue(this.activeClue.liElement);

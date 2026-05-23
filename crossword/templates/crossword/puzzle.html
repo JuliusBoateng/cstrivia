@@ -117,7 +117,7 @@
             <div class="controls-mobile">
               <section>
                 <ul>
-                  <li>Tap <strong>clues</strong> to jump</li>
+                  <li>Tap <strong>clues</strong> to highlight</li>
                   <li>Tap <strong>cells</strong> to type &bull; Tap again to switch</li>
                   <li>Tap <strong>To Do</strong>, <strong>Solved</strong>, or <strong>Across</strong> to collapse</li>
                   <li><strong>Spacebar</strong> to switch direction</li>
@@ -131,6 +131,10 @@
           <div class="board-layout">
             <table id="board" class="board-card"></table>
           </div>
+          <nav class="mobile-nav" aria-label="Placement navigation">
+            <button type="button" id="mobile-prev">&larr; Prev</button>
+            <button type="button" id="mobile-next">Next &rarr;</button>
+          </nav>
           <div class="clue-wrapper">
             <div id="clues" class="clue-card">
               <section class="todo-wrapper" aria-labelledby="todo-toggle">

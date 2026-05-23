@@ -69,13 +69,6 @@ class PuzzleController implements CursorController {
         this.initInteractionState();
     }
 
-    // reveals active state when keyboard focus enters the board
-    private handleFocusIn = () => {
-        if (this.isActiveStateVisible) return;
-        this.renderActiveState();
-        this.clueView.scrollActiveClue();
-    }
-
     handleShowAnswerClick(placementId: PlacementId): void {
         this.session.moveCursorToPlacement(placementId);
 
@@ -104,6 +97,21 @@ class PuzzleController implements CursorController {
         if (!isTouchDevice()) {
             this.forceActiveFocus();
         }
+    }
+
+    handleMobileNext(): void {
+        this.movePlacement(1);
+    }
+    
+    handleMobilePrev(): void {
+        this.movePlacement(-1);
+    }
+
+    // reveals active state when keyboard focus enters the board
+    private handleFocusIn = () => {
+        if (this.isActiveStateVisible) return;
+        this.renderActiveState();
+        this.clueView.scrollActiveClue();
     }
 
     private handlePointerInput = (event: PointerEvent) => {
@@ -266,10 +274,7 @@ class PuzzleController implements CursorController {
 
     private handleTabInput(event: KeyboardEvent) {
         const offset = event.shiftKey ? -1 : 1;
-        this.session.movePlacementBy(offset);
-        this.renderActiveState();
-        this.clueView.scrollActiveClue();
-        this.setActiveFocus();
+        this.movePlacement(offset);
     }
 
     private handleEscapeInput() {    
@@ -548,6 +553,16 @@ class PuzzleController implements CursorController {
         for (const placementId of result.incorrect) {
             const coords = this.session.getPlacementCells(placementId);
             this.renderer.renderPlacementIncorrect(coords);
+        }
+    }
+
+    private movePlacement(offset: number): void {
+        this.session.movePlacementBy(offset);
+        this.renderActiveState();
+        this.clueView.scrollActiveClue();
+
+        if (!isTouchDevice()) {
+            this.setActiveFocus();
         }
     }
 

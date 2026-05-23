@@ -24,6 +24,21 @@ function initPuzzleInteraction(tableElement: HTMLTableElement, boardView: BoardV
   puzzleController.init(clueRenderer);
 
   initClearPuzzleButton(() => puzzleController.resetPuzzle());
+  initMobileNav(
+    () => puzzleController.handleMobilePrev(),
+    () => puzzleController.handleMobileNext()
+  );
+}
+
+function initMobileNav(handleMobilePrev: () => void, handleMobileNext: () => void) {
+  const mobileNav = document.querySelector<HTMLElement>(".mobile-nav");
+  if (!mobileNav) return;
+
+  const mobilePrevButton = mobileNav.querySelector<HTMLButtonElement>("#mobile-prev")!;
+  mobilePrevButton.addEventListener("click", handleMobilePrev);
+
+  const mobileNextButton = mobileNav.querySelector<HTMLButtonElement>("#mobile-next")!;
+  mobileNextButton.addEventListener("click", handleMobileNext);
 }
 
 function createPuzzleController(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
