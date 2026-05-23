@@ -1,4 +1,5 @@
 import { copyClueToClipboard, hideCopyButton, revealCopyButton } from "../app/copyButton.js";
+import { isTouchDevice } from "../app/device.js";
 import { Direction, PlacementId } from "../models/boardView.js";
 import { CursorController } from "../puzzle/puzzleController.js";
 
@@ -151,7 +152,12 @@ class ClueRenderer implements ClueView {
 
       this.activeClue = clueElement;
       clueElement.liElement.classList.add(ACTIVE);
-      this.scrollClue(clueElement.liElement);
+
+      if (isTouchDevice()) {
+        this.scrollClueMobile(clueElement.liElement);
+      } else {
+        this.scrollClue(clueElement.liElement);
+      }
 
       this.revealCurrentCopyButton(clueElement.copyButton);
     }
@@ -491,6 +497,18 @@ class ClueRenderer implements ClueView {
       }
     }
 
+    private scrollClueMobile(clue: HTMLLIElement): void {
+      const PADDING = 8;
+      const container = this.clueContainer;
+  
+      const clueRect = clue.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+  
+      const delta = clueRect.bottom - (containerRect.bottom - PADDING);
+  
+      container.scrollTop += delta;
+    }
+  
     private initClueLists(): void {
       this.todoAcrossClues = this.clueContainer.querySelector(TODO_ACROSS_CLUES)!;
       this.todoDownClues = this.clueContainer.querySelector(TODO_DOWN_CLUES)!;

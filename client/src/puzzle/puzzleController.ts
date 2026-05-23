@@ -84,7 +84,11 @@ class PuzzleController implements CursorController {
         }
 
         this.renderActiveState();
-        this.setActiveFocus();
+        
+        // Mobile clue clicks should be exploratory and not shift focus / call keyboard
+        if (!isTouchDevice()) {
+            this.setActiveFocus();
+        }
 
         const solvedPlacements = [...this.session.getSolvedPlacementIds()];
         this.clueView.renderClues(solvedPlacements);
