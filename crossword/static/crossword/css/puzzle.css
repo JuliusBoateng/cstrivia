@@ -121,22 +121,6 @@ main {
     color: #374151
 }
 
-.board-instructions {
-    width: min(100%, var(--board-max));
-    margin-inline: auto;
-    text-align: center;
-
-    font-size: clamp(0.85rem, 1.05vw, 0.95rem);
-    font-weight: 400;
-    line-height: 1.4;
-
-    color: #4b5563;
-}
-
-.board-instructions p {
-    margin: 0;
-}
-
 .controls-mobile {
   display: none;
 }
