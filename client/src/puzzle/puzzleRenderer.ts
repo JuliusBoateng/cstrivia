@@ -34,10 +34,8 @@ class PuzzleRenderer {
         inputElement.value = letter ?? ""
     }
 
-    /*
-        Does not highlight or focus cell. Makes cell tab-able
-    */
-    initFocusableCursor(coord: Coord) {
+    // Makes the active input tabbable for keyboard navigation without rendering active state or applying DOM focus
+    initTabbableCursor(coord: Coord) {
         const cell = this.cellGrid[coord.row][coord.col];
         if (cell.classList.contains(BLOCK)) return;
 

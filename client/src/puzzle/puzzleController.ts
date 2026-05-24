@@ -605,13 +605,20 @@ class PuzzleController implements CursorController {
     }
 
     private initInteractionState(): void {
-        this.initFocusableCursor();
-        this.isActiveStateVisible = false;
+        if (isTouchDevice()) {
+            // Touch devices separate selection from focus
+            this.renderActiveState();
+        } else {
+            this.initTabbableCursor();
+            this.isActiveStateVisible = false;
+        }
     }
 
-    private initFocusableCursor() {
+
+    // Prepares the active cell for keyboard navigation without visually activating or focusing the input
+    private initTabbableCursor() {
         const coord = this.session.getActiveCoord();
-        this.renderer.initFocusableCursor(coord);
+        this.renderer.initTabbableCursor(coord);
     }
 
     private initClues() {
