@@ -40,6 +40,7 @@ class PuzzleController implements CursorController {
     private boardView: BoardView;
     private tableElement: HTMLTableElement;
     private isActiveStateVisible: boolean = false;
+    private allowTouchDirectionToggle: boolean = false;
 
     constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardView: BoardView) {
         this.tableElement = tableElement;
@@ -93,7 +94,7 @@ class PuzzleController implements CursorController {
         this.session.moveCursorToPlacement(placementId);
         this.renderActiveState();
 
-        // Mobile clue clicks should be explaratory and not shift focus / call keyboard
+        // Mobile clue clicks should be exploratory and not shift focus / call keyboard
         if (!isTouchDevice()) {
             this.forceActiveFocus();
         }
@@ -132,7 +133,8 @@ class PuzzleController implements CursorController {
         if (Number.isNaN(row) || Number.isNaN(col)) return;
 
         if (this.handlePointerDirectionToggle(row, col)) return;
-        
+        this.allowTouchDirectionToggle = true;
+
         const newCoord = {row, col};
         this.session.moveCursor(newCoord);
         this.renderActiveState();
@@ -158,7 +160,7 @@ class PuzzleController implements CursorController {
 
     // Touch devices separate selection from DOM focus. Ignore direction toggles until the active input is focused.
     private shouldIgnoreTouchDirectionToggle(): boolean {
-        return isTouchDevice() && !this.renderer.isActiveInputDomFocused();
+        return isTouchDevice() && !this.allowTouchDirectionToggle;
     }
 
     private handleBeforeInput = (event: InputEvent) => {
@@ -618,6 +620,7 @@ class PuzzleController implements CursorController {
             this.initTabbableCursor();
             this.isActiveStateVisible = false;
         }
+        this.allowTouchDirectionToggle = false;
     }
 
 
