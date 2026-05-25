@@ -131,7 +131,7 @@ class PuzzleController implements CursorController {
 
         if (Number.isNaN(row) || Number.isNaN(col)) return;
 
-        if (this.handleDirectionToggle(row, col)) return;
+        if (this.handlePointerDirectionToggle(row, col)) return;
         
         const newCoord = {row, col};
         this.session.moveCursor(newCoord);
@@ -140,9 +140,10 @@ class PuzzleController implements CursorController {
         this.forceActiveFocus();
     }
 
-    private handleDirectionToggle(row: number, col: number): boolean {
+    private handlePointerDirectionToggle(row: number, col: number): boolean {
         if (!this.isActiveStateVisible) return false;
-        
+        if (this.shouldIgnoreTouchDirectionToggle()) return false;
+
         const prevCoord = this.session.getActiveCoord();
         if ((prevCoord.row === row) && (prevCoord.col === col)) {
             this.toggleDirection();
@@ -153,6 +154,11 @@ class PuzzleController implements CursorController {
         }
 
         return false;
+    }
+
+    // Touch devices separate selection from DOM focus. Ignore direction toggles until the active input is focused.
+    private shouldIgnoreTouchDirectionToggle(): boolean {
+        return isTouchDevice() && !this.renderer.isActiveInputDomFocused();
     }
 
     private handleBeforeInput = (event: InputEvent) => {

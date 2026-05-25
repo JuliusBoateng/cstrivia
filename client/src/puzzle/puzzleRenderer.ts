@@ -178,6 +178,10 @@ class PuzzleRenderer {
         this.focusedInput = inputElement;
     }
 
+    isActiveInputDomFocused(): boolean {
+        return this.focusedInput === document.activeElement;
+    }
+
     // fully exits board focus
     private clearFocus(): void {
         if (!this.focusedInput) return;
