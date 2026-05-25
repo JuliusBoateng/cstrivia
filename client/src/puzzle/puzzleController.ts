@@ -40,6 +40,8 @@ class PuzzleController implements CursorController {
     private boardView: BoardView;
     private tableElement: HTMLTableElement;
     private isActiveStateVisible: boolean = false;
+
+    // Touch-only interaction state. False for exploratory selection, true after direct cell interaction
     private allowTouchDirectionToggle: boolean = false;
 
     constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardView: BoardView) {
@@ -80,7 +82,8 @@ class PuzzleController implements CursorController {
         }
 
         this.renderActiveState();
-        
+        this.allowTouchDirectionToggle = false;
+
         // Mobile clue clicks should be exploratory and not shift focus / call keyboard
         if (!isTouchDevice()) {
             this.setActiveFocus();
@@ -93,6 +96,7 @@ class PuzzleController implements CursorController {
     handleClueClick(placementId: PlacementId): void {
         this.session.moveCursorToPlacement(placementId);
         this.renderActiveState();
+        this.allowTouchDirectionToggle = false;
 
         // Mobile clue clicks should be exploratory and not shift focus / call keyboard
         if (!isTouchDevice()) {
@@ -568,6 +572,7 @@ class PuzzleController implements CursorController {
         this.session.movePlacementBy(offset);
         this.renderActiveState();
         this.clueView.scrollActiveClue();
+        this.allowTouchDirectionToggle = false;
 
         if (!isTouchDevice()) {
             this.setActiveFocus();
