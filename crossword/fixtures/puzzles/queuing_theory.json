@@ -1,0 +1,107 @@
+{
+  "board": {
+    "title": "Queuing Theory",
+    "author": "Julius Boateng",
+    "puzzle_number": 15,
+    "published_at": "2026-05-26T07:37:47+00:00",
+    "description": "Queueing theory sits at the intersection of computer science, operations research, and statistics. It's extremely applicable to operating system scheduling, network congestion modeling, and load balancing in distributed systems.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Queuing Theory"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Process used to model random, independent customer arrivals over time; independently discovered across multiple scientific fields",
+      "display_answer": "POISSON",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 6
+    },
+    {
+      "question": "Model where future queue states depend only on the current system state; foundational to M/M/1 queue analysis",
+      "display_answer": "MARKOV",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 4
+    },
+    {
+      "question": "Continuous-time Markov process where states increase or decrease one step at a time; used to represent populations or waiting lines",
+      "display_answer": "BIRTHDEATH",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 0
+    },
+    {
+      "question": "Scheduling policy where tasks are served in first-in, first-out order",
+      "display_answer": "FIFO",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 11
+    },
+    {
+      "question": "Theorem where the average number of items in a system depends on arrival rate and time spent in the system; broadly applicable across queueing systems",
+      "display_answer": "LITTLE",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 5
+    },
+    {
+      "question": "System where customers move through queues sequentially; commonly used to model production pipelines",
+      "display_answer": "TANDEM",
+      "direction": "A",
+      "start_row": 11,
+      "start_col": 8
+    },
+    {
+      "question": "Customers switching queues for perceived faster service",
+      "display_answer": "JOCKEYING",
+      "direction": "A",
+      "start_row": 12,
+      "start_col": 2
+    },
+    {
+      "question": "Customers leaving a queue after waiting too long",
+      "display_answer": "RENEGING",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 12
+    },
+    {
+      "question": "Scheduling policy where shorter tasks are served first; ___ job first",
+      "display_answer": "SHORTEST",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 2
+    },
+    {
+      "question": "Scheduling policy where tasks are served based on urgency rather than arrival order; ___ queue",
+      "display_answer": "PRIORITY",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 1
+    },
+    {
+      "question": "Scheduling policy where running tasks can be interrupted by more urgent ones; requires context switching between tasks",
+      "display_answer": "PREEMPTIVE",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 6
+    },
+    {
+      "question": "Customers avoiding queues because of perceived long wait times",
+      "display_answer": "BALKING",
+      "direction": "D",
+      "start_row": 5,
+      "start_col": 0
+    },
+    {
+      "question": "Researcher whose 1909 paper \"The Theory of Probabilities and Telephone Conversations\" helped establish queueing theory",
+      "display_answer": "ERLANG",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 9
+    }
+  ]
+}
