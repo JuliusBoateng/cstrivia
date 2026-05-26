@@ -4,7 +4,7 @@
     "author": "Julius Boateng",
     "puzzle_number": 15,
     "published_at": "2026-05-26T07:37:47+00:00",
-    "description": "Queueing theory sits at the intersection of computer science, operations research, and statistics. It's extremely applicable to operating system scheduling, network congestion modeling, and load balancing in distributed systems.",
+    "description": "Queuing theory sits at the intersection of CS and operations research. It appears in OS resource scheduling, network congestion, and distributed load balancing. Many performance optimizations reduce to managing computation under limited resources.",
     "rows": 15,
     "cols": 15,
     "categories": [
