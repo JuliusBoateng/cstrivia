@@ -1,10 +1,10 @@
 {
   "board": {
-    "title": "Operating Systems",
+    "title": "A History of Operating Systems",
     "author": "Julius Boateng",
     "puzzle_number": 7,
     "published_at": "2026-04-22T00:50:17+00:00",
-    "description": "As computers became more powerful, operating systems became more complex. Abstractions like virtualization, time-sharing, and dynamic scheduling help modern computers run smoothly while hiding significant complexity from end users.",
+    "description": "Between the 1970s and 2010s, a wide range of operating systems were released with different architectures and goals. This puzzle explores some of the operating systems that emerged during different eras of computing.",
     "rows": 15,
     "cols": 15,
     "categories": [
