@@ -51,7 +51,7 @@
       <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" class="cta" aria-label="Solve latest puzzle">Solve latest puzzle &rarr;</a>
 
       <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}" aria-label="Solve latest puzzle" class="hero-link">
-        <img src="{% static 'crossword/img/board.png' %}" alt="Solve latest puzzle" class="hero-screenshot">
+        <img src="{% static 'crossword/img/board.webp' %}" alt="Solve latest puzzle" class="hero-screenshot" fetchpriority="high">
       </a>
     {% endif %}
   </section>
