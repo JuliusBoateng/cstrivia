@@ -8,6 +8,7 @@
     /* Board sizing */
     --board-min: 400px;
     --board-max: 720px;
+    --board-size: clamp(var(--board-min), 50vw, var(--board-max));
   
     /* Clue sizing */
     --clue-min-width: 400px;
@@ -181,7 +182,7 @@ main {
 }
 
 .board-layout {
-    width: clamp(var(--board-min), 50vw, var(--board-max));
+    width: var(--board-size);
     max-width: 100%;
     min-width: var(--board-min);
     flex: 0 0 auto;
@@ -238,11 +239,12 @@ main {
 
 .fill .label {
     position: absolute;
-    top: 2px;
-    left: 2px;
+    /* Scale clue number offset from 0px at min board size to 2px at max board size. */
+    top: clamp(0px, calc((var(--board-size) - 400px) / 160), 2px);
+    left: clamp(0px, calc((var(--board-size) - 400px) / 160), 2px);
     pointer-events: none;
 
-    font-size: clamp(11px, 0.5rem + 0.35vw, 15px);
+    font-size: clamp(14px, calc(var(--board-size) * 0.025), 16px);
     line-height: 1;
     color: #374151;
     font-weight: 600;
@@ -730,6 +732,7 @@ p.board-desc {
     :root {
         --clue-max-width: 600px;
         --puzzle-dynamic-loading-min-height: 1800px;
+        --board-size: clamp(var(--board-min), 90vw, var(--board-max));
     }
 
     .toolbar-wrapper {
@@ -739,10 +742,6 @@ p.board-desc {
     .puzzle-panel {
       flex-direction: column;
       align-items: center;
-    }
-
-    .board-layout {
-        width: clamp(var(--board-min), 90vw, var(--board-max));
     }
 
     .clue-wrapper {
