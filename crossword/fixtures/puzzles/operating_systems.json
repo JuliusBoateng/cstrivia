@@ -1,0 +1,114 @@
+{
+  "board": {
+    "title": "Operating Systems",
+    "author": "Julius Boateng",
+    "puzzle_number": 16,
+    "published_at": "2026-06-02T06:19:11+00:00",
+    "description": "Operating systems manage limited resources and hide significant complexity by providing useful abstractions. Techniques like multitasking and virtual memory allow many programs to share hardware resources efficiently.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Operating Systems"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Allocates limited CPU time among competing threads; made time-sharing systems practical in the 1970s and 1980s",
+      "display_answer": "SCHEDULER",
+      "direction": "A",
+      "start_row": 1,
+      "start_col": 2
+    },
+    {
+      "question": "Signal that forces the CPU to pause the current thread to handle an event; enables async hardware communication",
+      "display_answer": "INTERRUPT",
+      "direction": "A",
+      "start_row": 2,
+      "start_col": 5
+    },
+    {
+      "question": "Divides a process' address space into variable-sized segments; separates code, data, and stack regions",
+      "display_answer": "SEGMENTATION",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 1
+    },
+    {
+      "question": "Rewrote Unix in C in 1973; enabled Unix to run on different hardware architectures",
+      "display_answer": "RITCHIE",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 0
+    },
+    {
+      "question": "Request from a process to the operating system for privileged operations like file I/O",
+      "display_answer": "SYSCALL",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 8
+    },
+    {
+      "question": "Translates operating system requests into hardware device-specific operations",
+      "display_answer": "DRIVER",
+      "direction": "A",
+      "start_row": 11,
+      "start_col": 3
+    },
+    {
+      "question": "Running instance of a program with its own memory and resources",
+      "display_answer": "PROCESS",
+      "direction": "A",
+      "start_row": 13,
+      "start_col": 6
+    },
+    {
+      "question": "Created the original Unix operating system at Bell Labs in 1969",
+      "display_answer": "THOMPSON",
+      "direction": "A",
+      "start_row": 14,
+      "start_col": 7
+    },
+    {
+      "question": "Lock that ensures only one thread can access shared data at a time",
+      "display_answer": "MUTEX",
+      "direction": "D",
+      "start_row": 0,
+      "start_col": 7
+    },
+    {
+      "question": "Divides a process' address space into fixed-sized pages; foundational to modern virtual memory implementation",
+      "display_answer": "PAGING",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 12
+    },
+    {
+      "question": "Limits the number of threads allowed to access a shared resource; introduced by Dijkstra in 1962",
+      "display_answer": "SEMAPHORE",
+      "direction": "D",
+      "start_row": 4,
+      "start_col": 4
+    },
+    {
+      "question": "Abstraction that organizes persistent storage as files and directories; hierarchical directories were introduced in Multics in the 1960s",
+      "display_answer": "FILESYSTEM",
+      "direction": "D",
+      "start_row": 5,
+      "start_col": 10
+    },
+    {
+      "question": "State where threads wait indefinitely for resources held by other threads",
+      "display_answer": "DEADLOCK",
+      "direction": "D",
+      "start_row": 5,
+      "start_col": 14
+    },
+    {
+      "question": "Smallest unit of execution within a process",
+      "display_answer": "THREAD",
+      "direction": "D",
+      "start_row": 7,
+      "start_col": 0
+    }
+  ]
+}
