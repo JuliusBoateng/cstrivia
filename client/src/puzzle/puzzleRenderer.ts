@@ -1,4 +1,4 @@
-import { BoardDom } from "../board/boardBuilder.js";
+import { BoardRefs } from "../board/boardBuilder.js";
 import { Coord } from "../models/boardView.js";
 
 const ANIMATION_SUCCESS = "placement-success";
@@ -17,10 +17,10 @@ class PuzzleRenderer {
     private activeCursor: HTMLTableCellElement | null;
     private focusedInput: HTMLInputElement | null;
 
-    constructor(boardDom: BoardDom) {
-        this.cellGrid = boardDom.cellGrid;
-        this.fillGrid = boardDom.fillGrid;
-        this.inputGrid = boardDom.inputGrid;
+    constructor(boardRefs: BoardRefs) {
+        this.cellGrid = boardRefs.cellGrid;
+        this.fillGrid = boardRefs.fillGrid;
+        this.inputGrid = boardRefs.inputGrid;
         this.activePlacementId = -1;
         this.activePlacementCells = [];
         this.activeCursor = null;

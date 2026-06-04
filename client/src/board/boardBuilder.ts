@@ -1,58 +1,46 @@
-import { BoardView, Coord, Direction } from "../models/boardView.js";
+import { BoardView, Cell, Coord, Direction } from "../models/boardView.js";
 
-interface BoardDom {
+interface BoardRefs {
     cellGrid: HTMLTableCellElement[][];
-    fillGrid: (HTMLElement | null)[][];
+    fillGrid: HTMLDivElement[][];
     inputGrid: (HTMLInputElement | null)[][];
 }
 
 const BLOCK = "block";
 const CELL = "cell";
 const FILL = "fill";
+const LABEL = "label";
+const LETTER = "letter";
 
-function createBoard(boardView: BoardView, tableElement: HTMLTableElement): BoardDom {
-    const cellGrid = initializeGrid<HTMLTableCellElement | null>();
-    const fillGrid = initializeGrid<HTMLElement | null>();
-    const inputGrid = initializeGrid<HTMLInputElement | null>();
+function createBoard(boardView: BoardView, tableElement: HTMLTableElement): BoardRefs {
+    const rows = boardView.board.rows;
+    const cols = boardView.board.cols;
 
-    const tbodyElement = createTableBodyElement();
-    tableElement.appendChild(tbodyElement);
-    
-    const dom: BoardDom = {
-        cellGrid: cellGrid as HTMLTableCellElement[][],
-        fillGrid,
-        inputGrid
-    }
-    
-    return dom;
-    
-    function initializeGrid<T>(): (T | null)[][] {
-        const rows = boardView.board.rows;
-        const cols = boardView.board.cols;
-        
-        return Array.from({ length: rows }, () => Array(cols).fill(null))
-    }
+    const cellGrid = createGrid<HTMLTableCellElement>(rows, cols);
+    const fillGrid = createGrid<HTMLDivElement>(rows, cols);
+    const inputGrid = createGrid<HTMLInputElement | null>(rows, cols, null);
+
+    tableElement.replaceChildren(createTableBodyElement());
+
+    return { cellGrid, fillGrid, inputGrid };
 
     function createTableBodyElement(): HTMLTableSectionElement {
-        const rows = boardView.board.rows;
-        const cols = boardView.board.cols;
-    
         const tbodyElement = document.createElement("tbody");
+
         for (let row = 0; row < rows; row++) {
-            const rowElement = createTableRowElement(row, cols)
-            tbodyElement.appendChild(rowElement);
+            tbodyElement.appendChild(createTableRowElement(row));
         }
-    
+
         return tbodyElement;
     }
 
-    function createTableRowElement(row: number, cols: number): HTMLTableRowElement {
-        const rowElement = document.createElement("tr")
+    function createTableRowElement(row: number): HTMLTableRowElement {
+        const rowElement = document.createElement("tr");
         rowElement.dataset.row = row.toString();
-        
+
         for (let col = 0; col < cols; col++) {
-            const coord = {row, col};
-            const cellElement =  createTableCellElement(coord)
+            const coord = { row, col };
+            const cellElement = createTableCellElement(coord);
 
             cellGrid[row][col] = cellElement;
             rowElement.appendChild(cellElement);
@@ -63,66 +51,59 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
 
     function createTableCellElement(coord: Coord): HTMLTableCellElement {
         const cellElement = document.createElement("td");
-        cellElement.classList.add(CELL)
-        cellElement.dataset.col = coord.col.toString();
+        cellElement.classList.add(CELL);
         cellElement.dataset.row = coord.row.toString();
-        
-        const cell = boardView.getCell(coord)
+        cellElement.dataset.col = coord.col.toString();
+
+        const fillElement = createFillElement(coord);
+        cellElement.appendChild(fillElement);
+
+        const cell: Cell | null = boardView.getCell(coord);
+
         if (!cell) {
+            // non-interactive cell
             cellElement.classList.add(BLOCK);
-            const fillContainer = createEmptyFillContainer(coord)
-            cellElement.appendChild(fillContainer)
-            
             return cellElement;
         }
 
-        if (Direction.A in cell.placement_positions) {
-            let placement_id = cell.placement_positions[Direction.A].placement_id
-            cellElement.dataset.acrossPlacementId = placement_id.toString();
-        }
+        setPlacementDataset(cellElement, cell);
 
-        if (Direction.D in cell.placement_positions) {
-            let placement_id = cell.placement_positions[Direction.D].placement_id
-            cellElement.dataset.downPlacementId = placement_id.toString();
-        }
-        
-        const fillContainer = createFillContainer(coord);
-        cellElement.appendChild(fillContainer);
-        
-        return cellElement;
-    }
-
-    function createEmptyFillContainer(coord: Coord): HTMLDivElement {
-        const divElement = document.createElement("div");
-        divElement.classList.add(FILL)
-        fillGrid[coord.row][coord.col] = divElement;
-        return divElement
-    }
-
-    function createFillContainer(coord: Coord): HTMLDivElement {
-        const divElement = createEmptyFillContainer(coord);
-
-        const startingCell = boardView.isStartingCell(coord);
-        if (startingCell) {
-            const labelNumber = boardView.getLabel(coord);
-
-            const spanElement = createSpanElement(labelNumber)
-            divElement.appendChild(spanElement);
+        if (boardView.isStartingCell(coord)) {
+            // add labels to placement starting cells
+            fillElement.appendChild(createLabelElement(boardView.getLabel(coord)));
         }
 
         const inputElement = createInputElement();
         inputGrid[coord.row][coord.col] = inputElement;
-        divElement.appendChild(inputElement);
+        fillElement.appendChild(inputElement);
 
-        return divElement;
+        return cellElement;
     }
 
-    function createSpanElement(labelNumber: number): HTMLSpanElement {
-        const spanElement = document.createElement("span");
-        spanElement.classList.add("label");
+    function createFillElement(coord: Coord): HTMLDivElement {
+        const fillElement = document.createElement("div");
+        fillElement.classList.add(FILL);
+        fillGrid[coord.row][coord.col] = fillElement;
 
-        spanElement.textContent = labelNumber.toString();
-        return spanElement
+        return fillElement;
+    }
+
+    function setPlacementDataset(cellElement: HTMLTableCellElement, cell: Cell): void {
+        if (Direction.A in cell.placement_positions) {
+            cellElement.dataset.acrossPlacementId = cell.placement_positions[Direction.A].placement_id.toString();
+        }
+
+        if (Direction.D in cell.placement_positions) {
+            cellElement.dataset.downPlacementId = cell.placement_positions[Direction.D].placement_id.toString();
+        }
+    }
+
+    function createLabelElement(labelNumber: number): HTMLSpanElement {
+        const labelElement = document.createElement("span");
+        labelElement.classList.add(LABEL);
+        labelElement.textContent = labelNumber.toString();
+
+        return labelElement;
     }
 
     function createInputElement(): HTMLInputElement {
@@ -132,12 +113,19 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
         inputElement.autocomplete = "off";
         inputElement.spellcheck = false;
         inputElement.autocapitalize = "characters";
-        inputElement.inputMode="text";
-        inputElement.classList.add("letter");
+        inputElement.inputMode = "text";
+        inputElement.classList.add(LETTER);
 
         return inputElement;
     }
 }
 
-export { BoardDom, createBoard };
+function createGrid<T>(rows: number, cols: number, initialValue?: T): T[][] {
+    // Construction-time placeholders.
+    // Callers are responsible for filling required entries before use.
+    return Array.from({ length: rows }, () =>
+        Array.from({ length: cols }, () => initialValue as T)
+    );
+}
 
+export { BoardRefs, createBoard };

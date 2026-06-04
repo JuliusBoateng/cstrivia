@@ -276,5 +276,5 @@ class Clue {
     }
 }
 
-export { BoardView, Clue, Coord, CoordKey, Direction, Placement, PlacementId };
+export { BoardView, Cell, Clue, Coord, CoordKey, Direction, Placement, PlacementId };
 

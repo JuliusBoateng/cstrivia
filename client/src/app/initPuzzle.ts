@@ -1,4 +1,4 @@
-import { BoardDom, createBoard } from "../board/boardBuilder.js";
+import { BoardRefs, createBoard } from "../board/boardBuilder.js";
 import { BoardView, Direction } from "../models/boardView.js";
 import { SolutionView } from "../models/solutionView.js";
 import { PuzzleController } from "../puzzle/puzzleController.js";
@@ -45,11 +45,11 @@ function createPuzzleController(tableElement: HTMLTableElement, boardView: Board
     const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);
     const puzzleSession: PuzzleSession = new PuzzleSession(boardView, puzzleValidator)
 
-    const boardDom: BoardDom = createBoard(boardView, tableElement);
+    const boardRefs: BoardRefs = createBoard(boardView, tableElement);
     const puzzleDynamic = document.querySelector(".puzzle-dynamic")!;
     puzzleDynamic.classList.add("is-ready");
 
-    const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardDom)
+    const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardRefs)
 
     return new PuzzleController(tableElement, puzzleSession, puzzleRenderer, boardView);
 }
