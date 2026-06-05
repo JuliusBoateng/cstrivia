@@ -4,7 +4,7 @@ A lightweight site for computer science crosswords.
 
 https://cstrivia.com
 
-<img src="crossword/static/crossword/img/readme.png" width="860" />
+<img src="crossword/docs/img/readme.png" width="1300" />
 
 ## Design Approach
 
