@@ -1,35 +1,55 @@
 import { copyClueToClipboard, hideCopyButton, revealCopyButton } from "../app/copyButton.js";
 import { isMobileLayout } from "../app/device.js";
+import { queryRequired } from "../app/query.js";
 import { Direction, PlacementId } from "../models/boardView.js";
 import { CursorController } from "../puzzle/puzzleController.js";
 
-const CLUE_TOGGLE = ".clue-toggle";
-const CLUE = ".clue"
-const ARIA_CONTROLS = "aria-controls";
-const ARIA_EXPANDED = "aria-expanded";
-const HIDDEN = "hidden";
-const ACTIVE = "active";
-const TODO_ACROSS_CLUES = "#todo-across-clues";
-const TODO_DOWN_CLUES = "#todo-down-clues";
-const SOLVED_ACROSS_CLUES = "#solved-across-clues";
-const SOLVED_DOWN_CLUES = "#solved-down-clues";
-const TODO_ACROSS_TOGGLE = "#todo-across-toggle";
-const TODO_DOWN_TOGGLE = "#todo-down-toggle";
-const SOLVED_ACROSS_TOGGLE = "#solved-across-toggle";
-const SOLVED_DOWN_TOGGLE = "#solved-down-toggle";
-const TODO_TOGGLE = "#todo-toggle";
-const SOLVED_TOGGLE = "#solved-toggle";
-const CLUE_COUNT = ".clue-count";
-const TODO_SECTION = "#todo-section";
-const SOLVED_SECTION = "#solved-section";
+const CLASSES = {
+  active: "active",
+  isEmpty: "is-empty",
+  showEmpty: "show-empty",
+} as const;
 
-const CLUE_COPY_REVEAL_EVENT = "cluecopyreveal";
-const CLUE_SHOW_ANSWER_EVENT = "clueshowanswer";
+const SELECTORS = {
+  clueToggle: ".clue-toggle",
+  clue: ".clue",
+  clueText: ".clue-text",
+  clueCopy: ".clue-copy",
+  clueCount: ".clue-count",
 
-type ClueCounts = {todoAcrossCount: number,
-          todoDownCount: number,
-          solvedAcrossCount: number,
-          solvedDownCount: number}
+  todoAcrossClues: "#todo-across-clues",
+  todoDownClues: "#todo-down-clues",
+  solvedAcrossClues: "#solved-across-clues",
+  solvedDownClues: "#solved-down-clues",
+
+  todoToggle: "#todo-toggle",
+  todoAcrossToggle: "#todo-across-toggle",
+  todoDownToggle: "#todo-down-toggle",
+  solvedToggle: "#solved-toggle",
+  solvedAcrossToggle: "#solved-across-toggle",
+  solvedDownToggle: "#solved-down-toggle",
+
+  todoSection: "#todo-section",
+  solvedSection: "#solved-section",
+} as const;
+
+const ATTRIBUTES = {
+  ariaControls: "aria-controls",
+  ariaExpanded: "aria-expanded",
+  hidden: "hidden",
+} as const;
+
+const EVENTS = {
+  clueCopyReveal: "cluecopyreveal",
+  clueShowAnswer: "clueshowanswer",
+} as const;
+
+type ClueCounts = {
+  todoAcrossCount: number;
+  todoDownCount: number;
+  solvedAcrossCount: number;
+  solvedDownCount: number;
+};
 
 interface ClueView {
   focusToggle(): void;
@@ -43,7 +63,7 @@ interface ClueView {
 type ClueElement = {
   liElement: HTMLLIElement;
   copyButton: HTMLButtonElement;
-}
+};
 
 const NullCursorController: CursorController = {
   handleClueClick(_placementId: PlacementId): void {},
@@ -104,8 +124,8 @@ class ClueRenderer implements ClueView {
       this.clueContainer.addEventListener("mouseleave", this.handleHoverLeave);
 
       // Custom event handler
-      this.clueContainer.addEventListener(CLUE_COPY_REVEAL_EVENT, this.handleCopyReveal as EventListener);
-      this.clueContainer.addEventListener(CLUE_SHOW_ANSWER_EVENT, this.handleShowClueAnswer as EventListener);
+      this.clueContainer.addEventListener(EVENTS.clueCopyReveal, this.handleCopyReveal as EventListener);
+      this.clueContainer.addEventListener(EVENTS.clueShowAnswer, this.handleShowClueAnswer as EventListener);
     }
 
     focusToggle(): void {
@@ -118,7 +138,7 @@ class ClueRenderer implements ClueView {
       
       this.renderProgressCount(clueCounts);
       this.renderEmptyState(clueCounts);
-      this.renderClueVisibility()
+      this.renderClueVisibility();
     }
 
     copyClueText(placementId: PlacementId): void {
@@ -127,8 +147,7 @@ class ClueRenderer implements ClueView {
       const clueElement = this.placementClueMap.get(placementId);
       if (!clueElement?.copyButton) return;
 
-      const clueTextNode = clueElement.liElement.querySelector(".clue-text");
-      if (!clueTextNode) return;
+      const clueTextNode = queryRequired(clueElement.liElement, SELECTORS.clueText, HTMLSpanElement);
 
       const clueText = clueTextNode.firstChild?.textContent?.trim() ?? "";
       if (!clueText) return;
@@ -137,11 +156,11 @@ class ClueRenderer implements ClueView {
     }
 
     clearClues(): void {
-      const clueCounts: ClueCounts = this.renderClueList(new Set<number>());      
+      const clueCounts: ClueCounts = this.renderClueList(new Set<PlacementId>());      
       this.renderProgressCount(clueCounts);
       this.renderEmptyState(clueCounts);
 
-      this.renderClueVisibility()
+      this.renderClueVisibility();
       this.clearActiveClue();
     }
 
@@ -151,7 +170,7 @@ class ClueRenderer implements ClueView {
   
       this.clearActiveClue();
       this.activeClue = clueElement;
-      clueElement.liElement.classList.add(ACTIVE);
+      clueElement.liElement.classList.add(CLASSES.active);
       this.revealCurrentCopyButton(clueElement.copyButton);
     }
 
@@ -174,8 +193,8 @@ class ClueRenderer implements ClueView {
     }
 
     /*
-      Preserves boad input focus when pressing a clue.
-      Without this focus falls to <body>, interrupting input focus.
+      Preserves board input focus when pressing a clue.
+      Without this, focus falls to <body>, interrupting input focus.
     */
     private handleContainerPointerDown = (event: PointerEvent) => {
       const target = event.target;
@@ -205,10 +224,10 @@ class ClueRenderer implements ClueView {
     };
     
     private isActionKey(event: KeyboardEvent): boolean {
-      return ((event.key === "Enter") || (event.key === " "))
+      return ((event.key === "Enter") || (event.key === " "));
     }
 
-    private handleAction(event: KeyboardEvent) {
+    private handleAction(event: KeyboardEvent): void {
       const target = event.target;
       if (!(target instanceof HTMLElement)) return;
 
@@ -226,16 +245,16 @@ class ClueRenderer implements ClueView {
     }
 
     private handleToggle(button: HTMLButtonElement): void {
-      const sectionId = button.getAttribute(ARIA_CONTROLS);
+      const sectionId = button.getAttribute(ATTRIBUTES.ariaControls);
       if (!sectionId) return;
     
       const section = document.getElementById(sectionId);
       if (!section) return;
     
-      const expanded = (button.getAttribute(ARIA_EXPANDED) === "true");
+      const expanded = (button.getAttribute(ATTRIBUTES.ariaExpanded) === "true");
     
-      button.setAttribute(ARIA_EXPANDED, String(!expanded));
-      section.toggleAttribute(HIDDEN, expanded);
+      button.setAttribute(ATTRIBUTES.ariaExpanded, String(!expanded));
+      section.toggleAttribute(ATTRIBUTES.hidden, expanded);
 
       this.renderClueVisibility();
     }
@@ -254,8 +273,7 @@ class ClueRenderer implements ClueView {
       const clue = this.getClue(target);
       if (!clue) return;
     
-      const copyButton = clue.querySelector<HTMLButtonElement>(".clue-copy");
-      if (!copyButton) return;
+      const copyButton = queryRequired(clue, SELECTORS.clueCopy, HTMLButtonElement);
     
       this.revealCurrentCopyButton(copyButton);
     };
@@ -321,33 +339,17 @@ class ClueRenderer implements ClueView {
       and neither the section nor the list is marked as `.is-empty`.
     */
     private renderClueVisibility(): void {
-      const todoSectionVisible =
-        !this.todoSection.hidden &&
-        !this.todoSection.classList.contains("is-empty");
+      const todoSectionVisible = this.isVisible(this.todoSection);
 
-      const solvedSectionVisible =
-        !this.solvedSection.hidden &&
-        !this.solvedSection.classList.contains("is-empty");
+      const solvedSectionVisible = this.isVisible(this.solvedSection);
 
-      const todoAcrossVisible =
-        todoSectionVisible &&
-        !this.todoAcrossClues.hidden &&
-        !this.todoAcrossClues.classList.contains("is-empty");
+      const todoAcrossVisible = todoSectionVisible && this.isVisible(this.todoAcrossClues);
 
-      const todoDownVisible =
-        todoSectionVisible &&
-        !this.todoDownClues.hidden &&
-        !this.todoDownClues.classList.contains("is-empty");
+      const todoDownVisible = todoSectionVisible && this.isVisible(this.todoDownClues);
 
-      const solvedAcrossVisible =
-        solvedSectionVisible &&
-        !this.solvedAcrossClues.hidden &&
-        !this.solvedAcrossClues.classList.contains("is-empty");
+      const solvedAcrossVisible = solvedSectionVisible && this.isVisible(this.solvedAcrossClues);
 
-      const solvedDownVisible =
-        solvedSectionVisible &&
-        !this.solvedDownClues.hidden &&
-        !this.solvedDownClues.classList.contains("is-empty");
+      const solvedDownVisible = solvedSectionVisible && this.isVisible(this.solvedDownClues);
 
       const anyVisible =
         todoAcrossVisible ||
@@ -355,7 +357,11 @@ class ClueRenderer implements ClueView {
         solvedAcrossVisible ||
         solvedDownVisible;
 
-      this.clueContainer.classList.toggle("show-empty", !anyVisible);
+      this.clueContainer.classList.toggle(CLASSES.showEmpty, !anyVisible);
+    }
+
+    private isVisible(element: HTMLElement): boolean {
+      return !element.hidden && !element.classList.contains(CLASSES.isEmpty);
     }
 
     private renderEmptyState(clueCounts: ClueCounts): void {
@@ -386,7 +392,7 @@ class ClueRenderer implements ClueView {
 
     private setEmptyState(element: HTMLElement, count: number): void {
       const hasItems = (count > 0);
-      element.classList.toggle("is-empty", !hasItems);
+      element.classList.toggle(CLASSES.isEmpty, !hasItems);
     } 
 
     private renderClueList(solvedSet: Set<PlacementId>): ClueCounts {
@@ -409,12 +415,12 @@ class ClueRenderer implements ClueView {
         documentFrag.appendChild(clueLiElement);
       }
 
-      const clueCounts = {
+      const clueCounts: ClueCounts = {
         todoAcrossCount: todoAcrossFrag.childElementCount,
         todoDownCount: todoDownFrag.childElementCount,
         solvedAcrossCount: solvedAcrossFrag.childElementCount,
-        solvedDownCount: solvedDownFrag.childElementCount
-      } as ClueCounts;
+        solvedDownCount: solvedDownFrag.childElementCount,
+      };
 
       this.todoAcrossClues.replaceChildren(todoAcrossFrag);
       this.todoDownClues.replaceChildren(todoDownFrag);
@@ -426,7 +432,7 @@ class ClueRenderer implements ClueView {
 
     private clearActiveClue(): void {
       if (this.activeClue) {
-        this.activeClue.liElement.classList.remove(ACTIVE);
+        this.activeClue.liElement.classList.remove(CLASSES.active);
         this.hideCurrentCopyButton(this.activeClue.copyButton);
       }
 
@@ -446,13 +452,13 @@ class ClueRenderer implements ClueView {
     }
 
     private getToggle(target: HTMLElement): HTMLButtonElement | null {
-      const toggle = target.closest(CLUE_TOGGLE) as HTMLButtonElement | null;
+      const toggle = target.closest(SELECTORS.clueToggle) as HTMLButtonElement | null;
       if (!toggle || !this.clueContainer.contains(toggle)) return null;
       return toggle;
     }
 
     private getClue(target: HTMLElement): HTMLLIElement | null {
-      const clue = target.closest(CLUE) as HTMLLIElement | null;
+      const clue = target.closest(SELECTORS.clue) as HTMLLIElement | null;
       if (!clue || !this.clueContainer.contains(clue)) return null;
       return clue;
     }
@@ -460,18 +466,17 @@ class ClueRenderer implements ClueView {
     private createPlacementClueMap(): Map<PlacementId, ClueElement> {
       const placementClueMap = new Map<PlacementId, ClueElement>();
 
-      const clues = this.clueContainer.querySelectorAll<HTMLLIElement>(CLUE);
+      const clues = this.clueContainer.querySelectorAll<HTMLLIElement>(SELECTORS.clue);
       for (const clue of clues) {
         const placementId = this.getPlacementId(clue);
         if (placementId === null) continue;
 
-        const copyButton = clue.querySelector<HTMLButtonElement>(".clue-copy");
-        if (!copyButton) continue;
+        const copyButton = queryRequired(clue, SELECTORS.clueCopy, HTMLButtonElement);
 
-        const clueElement = {
+        const clueElement: ClueElement = {
           liElement: clue,
-          copyButton: copyButton
-        } as ClueElement
+          copyButton,
+        };
     
         placementClueMap.set(placementId, clueElement);
       }
@@ -513,43 +518,43 @@ class ClueRenderer implements ClueView {
     }
   
     private initClueLists(): void {
-      this.todoAcrossClues = this.clueContainer.querySelector(TODO_ACROSS_CLUES)!;
-      this.todoDownClues = this.clueContainer.querySelector(TODO_DOWN_CLUES)!;
+      this.todoAcrossClues = queryRequired(this.clueContainer, SELECTORS.todoAcrossClues, HTMLOListElement);
+      this.todoDownClues = queryRequired(this.clueContainer, SELECTORS.todoDownClues, HTMLOListElement);
     
-      this.solvedAcrossClues = this.clueContainer.querySelector(SOLVED_ACROSS_CLUES)!;
-      this.solvedDownClues = this.clueContainer.querySelector(SOLVED_DOWN_CLUES)!;
+      this.solvedAcrossClues = queryRequired(this.clueContainer, SELECTORS.solvedAcrossClues, HTMLOListElement);
+      this.solvedDownClues = queryRequired(this.clueContainer, SELECTORS.solvedDownClues, HTMLOListElement);
     }
-
+    
     private initToggles(): void {
-      this.todoToggle = this.clueContainer.querySelector(TODO_TOGGLE)!;
-      this.todoAcrossToggle = this.clueContainer.querySelector(TODO_ACROSS_TOGGLE)!;
-      this.todoDownToggle = this.clueContainer.querySelector(TODO_DOWN_TOGGLE)!;
+      this.todoToggle = queryRequired(this.clueContainer, SELECTORS.todoToggle, HTMLButtonElement);
+      this.todoAcrossToggle = queryRequired(this.clueContainer, SELECTORS.todoAcrossToggle, HTMLButtonElement);
+      this.todoDownToggle = queryRequired(this.clueContainer, SELECTORS.todoDownToggle, HTMLButtonElement);
     
-      this.solvedToggle = this.clueContainer.querySelector(SOLVED_TOGGLE)!;
-      this.solvedAcrossToggle = this.clueContainer.querySelector(SOLVED_ACROSS_TOGGLE)!;
-      this.solvedDownToggle = this.clueContainer.querySelector(SOLVED_DOWN_TOGGLE)!;
+      this.solvedToggle = queryRequired(this.clueContainer, SELECTORS.solvedToggle, HTMLButtonElement);
+      this.solvedAcrossToggle = queryRequired(this.clueContainer, SELECTORS.solvedAcrossToggle, HTMLButtonElement);
+      this.solvedDownToggle = queryRequired(this.clueContainer, SELECTORS.solvedDownToggle, HTMLButtonElement);
     }
-
+    
     private initLabels(): void {
-      this.todoCountLabel = this.todoToggle.querySelector(CLUE_COUNT)!;
-      this.todoAcrossCountLabel = this.todoAcrossToggle.querySelector(CLUE_COUNT)!;
-      this.todoDownCountLabel = this.todoDownToggle.querySelector(CLUE_COUNT)!;
+      this.todoCountLabel = queryRequired(this.todoToggle, SELECTORS.clueCount, HTMLSpanElement);
+      this.todoAcrossCountLabel = queryRequired(this.todoAcrossToggle, SELECTORS.clueCount, HTMLSpanElement);
+      this.todoDownCountLabel = queryRequired(this.todoDownToggle, SELECTORS.clueCount, HTMLSpanElement);
     
-      this.solvedCountLabel = this.solvedToggle.querySelector(CLUE_COUNT)!;
-      this.solvedAcrossCountLabel = this.solvedAcrossToggle.querySelector(CLUE_COUNT)!;
-      this.solvedDownCountLabel = this.solvedDownToggle.querySelector(CLUE_COUNT)!;
+      this.solvedCountLabel = queryRequired(this.solvedToggle, SELECTORS.clueCount, HTMLSpanElement);
+      this.solvedAcrossCountLabel = queryRequired(this.solvedAcrossToggle, SELECTORS.clueCount, HTMLSpanElement);
+      this.solvedDownCountLabel = queryRequired(this.solvedDownToggle, SELECTORS.clueCount, HTMLSpanElement);
     }
-
+    
     private initSections(): void {
-      this.todoSection = this.clueContainer.querySelector(TODO_SECTION)!;
-      this.solvedSection = this.clueContainer.querySelector(SOLVED_SECTION)!;
+      this.todoSection = queryRequired(this.clueContainer, SELECTORS.todoSection, HTMLDivElement);
+      this.solvedSection = queryRequired(this.clueContainer, SELECTORS.solvedSection, HTMLDivElement);
     }
 
     private initPlacementClues(): void {
       this.placementClueMap = this.createPlacementClueMap();
     }
 
-    private setCursorController(cursorController: CursorController) {
+    private setCursorController(cursorController: CursorController): void {
       this.cursorController = cursorController;
     }
 }

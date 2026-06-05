@@ -1,5 +1,7 @@
+import { attachCopyBehavior, createCopyButton } from "../app/copyButton.js";
+import { queryRequired } from "../app/query.js";
 import { BoardView, Clue, Direction, Placement, PlacementId } from "../models/boardView.js";
-import { createCopyButton, attachCopyBehavior } from "../app/copyButton.js";
+
 
 const CLASSES = {
     clue: "clue",
@@ -239,19 +241,6 @@ function queryCluePanelElements(clueContainer: HTMLDivElement): CluePanelElement
     };
 }
 
-// Constructor function that produces a DOM element.
-type ElementConstructor<T extends Element> = {
-    new (...args: any[]): T;
-};
-
-// Uses the constructor for both runtime instanceof checks and compile-time type inference.
-function queryRequired<T extends Element>(root: ParentNode, selector: string, elementType: ElementConstructor<T>): T {
-    const element = root.querySelector(selector);
-    if (!(element instanceof elementType)) throw new Error(`Missing expected element: ${selector}`);
-
-    return element;
-}
-
 function renderTodoClues(section: ClueSectionElements, todoClues: HTMLLIElement[]): void {
     const hasItems = todoClues.length > 0;
 
@@ -299,7 +288,7 @@ function initSolvedSection(elements: CluePanelElements): void {
 }
 
 function setToggleCount(button: HTMLButtonElement, count: number): void {
-    const spanElement = button.querySelector(SELECTORS.clueCount);
+    const spanElement = queryRequired(button, SELECTORS.clueCount, HTMLSpanElement);
     if (!spanElement) return;
 
     spanElement.textContent = count > 0 ? String(count) : "";
