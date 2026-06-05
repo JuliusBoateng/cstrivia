@@ -177,3 +177,11 @@ From the admin panel, you can create and manage puzzles and design notes.
 ## Feedback
 
 Feedback or suggestions? Open an issue or email julius@cstrivia.com
+
+---
+
+## Licensing
+
+Source code is licensed under the MIT License. See LICENSE for details.
+
+Puzzle content (including puzzle grids, clues, answers, puzzle metadata, and design notes) is licensed under CC BY 4.0. See LICENSE-CONTENT for details.
