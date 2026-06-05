@@ -222,12 +222,11 @@ main {
 }
 
 .cell.highlight-placement {
-    background: #c9d0e6;
+    background: #AEB9DB;
 }
 
 .cell.highlight-cursor {
-    background: #b1b9db;
-    box-shadow: inset 0 0 0 2px #6A6D8F;
+    background: #848FBE;
 }
 
 .cell .fill {
@@ -708,10 +707,10 @@ p.board-desc {
         background-color: transparent;
     }
     30% {
-        background-color: rgba(125, 137, 187, 0.5);
+        background-color: rgba(132, 143, 190, 0.7);
     }
     70% {
-        background-color: rgba(125, 137, 187, 0.5);
+        background-color: rgba(132, 143, 190, 0.7);
     }
     100% {
         background-color: transparent;
