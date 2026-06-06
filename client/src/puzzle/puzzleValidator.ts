@@ -40,7 +40,7 @@ class PuzzleValidator {
   }
 
   isPuzzleComplete(letterGrid: (string | null)[][]): boolean {
-    const placements = this.boardView.getPlacements();
+    const placements = this.boardView.placements;
 
     for (const placement of placements) {
       if (this.solvedPlacements.has(placement.id)) continue;

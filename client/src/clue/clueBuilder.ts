@@ -72,8 +72,8 @@ function createClues(boardView: BoardView, clueContainer: HTMLDivElement): void 
 
   initSolvedSection(elements);
 
-  const placements = boardView.getPlacements();
-  const clueMap = boardView.getClueMap();
+  const placements = boardView.placements;
+  const clueMap = boardView.clueMap;
   createTodoSection(placements, clueMap, elements);
 
   function createTodoSection(

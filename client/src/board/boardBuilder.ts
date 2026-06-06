@@ -89,12 +89,14 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
   }
 
   function setPlacementDataset(cellElement: HTMLTableCellElement, cell: Cell): void {
-    if (Direction.A in cell.placement_positions) {
-      cellElement.dataset.acrossPlacementId = cell.placement_positions[Direction.A].placement_id.toString();
+    const acrossPosition = cell.placement_positions[Direction.A];
+    if (acrossPosition) {
+      cellElement.dataset.acrossPlacementId = acrossPosition.placement_id.toString();
     }
 
-    if (Direction.D in cell.placement_positions) {
-      cellElement.dataset.downPlacementId = cell.placement_positions[Direction.D].placement_id.toString();
+    const downPosition = cell.placement_positions[Direction.D];
+    if (downPosition) {
+      cellElement.dataset.downPlacementId = downPosition.placement_id.toString();
     }
   }
 

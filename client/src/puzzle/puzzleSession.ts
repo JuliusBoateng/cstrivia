@@ -168,7 +168,7 @@ class PuzzleSession {
   }
 
   movePlacementBy(offset: number) {
-    const placements = this.boardView.getPlacements();
+    const placements = this.boardView.placements;
 
     const index = placements.findIndex((placement) => placement.id === this.activePlacement.id);
     if (index < 0) return;
@@ -255,7 +255,7 @@ class PuzzleSession {
   }
 
   getPlayableCells(): Coord[] {
-    return this.boardView.getCells().map((cell) => ({ row: cell.row, col: cell.col }) as Coord);
+    return this.boardView.cells.map((cell) => ({ row: cell.row, col: cell.col }) as Coord);
   }
 
   getPlacementResults(placements: Placement[]): PlacementCheckResult {
@@ -294,7 +294,7 @@ class PuzzleSession {
   }
 
   isPuzzleComplete() {
-    return this.solvedPlacementIds.size === this.boardView.getPlacements().length;
+    return this.solvedPlacementIds.size === this.boardView.placements.length;
   }
 
   isCellEmpty(): boolean {
@@ -477,7 +477,7 @@ class PuzzleSession {
   }
 
   private getInitialPlacement(): Placement {
-    const placements = this.boardView.getPlacements();
+    const placements = this.boardView.placements;
     if (placements.length === 0) {
       throw new Error("Puzzle contains no placements.");
     }
@@ -500,7 +500,7 @@ class PuzzleSession {
   private createFilledLetterCount(): Map<PlacementId, letterCount> {
     const map = new Map<PlacementId, letterCount>();
 
-    const placements = this.boardView.getPlacements();
+    const placements = this.boardView.placements;
     for (const placement of placements) {
       map.set(placement.id, 0);
     }
@@ -522,7 +522,7 @@ class PuzzleSession {
 
   private rebuildSolvedPlacementIds() {
     this.solvedPlacementIds = new Set();
-    this.updateSolvedPlacements(this.boardView.getPlacements());
+    this.updateSolvedPlacements(this.boardView.placements);
   }
 }
 

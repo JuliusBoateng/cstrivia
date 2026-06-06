@@ -103,7 +103,7 @@ function renderSolutionJson(boardView: BoardView, solutionView: SolutionView) {
     down: {} as Record<string, string>,
   };
 
-  const placements = boardView.getPlacements();
+  const placements = boardView.placements;
   for (const placement of placements) {
     const coord = { row: placement.start_row, col: placement.start_col };
     const label = boardView.getLabel(coord);
@@ -204,4 +204,4 @@ function getCanonicalUrl(): string {
   return canonical?.href ?? window.location.href;
 }
 
-export { initPuzzlePage, initPuzzleInteraction };
+export { initPuzzleInteraction, initPuzzlePage };
