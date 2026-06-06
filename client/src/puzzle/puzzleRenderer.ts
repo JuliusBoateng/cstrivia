@@ -1,4 +1,4 @@
-import { BoardRefs } from "../board/boardBuilder.js";
+import { BoardRefs, CellGrid, FillGrid, InputGrid } from "../board/boardBuilder.js";
 import { Coord } from "../app/coords.js";
 
 const ANIMATION_SUCCESS = "placement-success";
@@ -9,9 +9,9 @@ const DIRECTION_REJECTION = "direction-reject";
 const BLOCK = "block";
 
 class PuzzleRenderer {
-  private cellGrid: HTMLTableCellElement[][];
-  private fillGrid: (HTMLElement | null)[][];
-  private inputGrid: (HTMLInputElement | null)[][];
+  private cellGrid: CellGrid;
+  private fillGrid: FillGrid;
+  private inputGrid: InputGrid;
   private activePlacementId: number;
   private activePlacementCells: HTMLTableCellElement[];
   private activeCursor: HTMLTableCellElement | null;
@@ -121,12 +121,11 @@ class PuzzleRenderer {
     });
   }
 
-  private getFillFromCoords(coords: Coord[]): HTMLElement[] {
-    const fills: HTMLElement[] = [];
+  private getFillFromCoords(coords: Coord[]): HTMLDivElement[] {
+    const fills: HTMLDivElement[] = [];
 
     for (const coord of coords) {
-      const fill = this.fillGrid[coord.row][coord.col];
-      if (fill !== null) fills.push(fill);
+      fills.push(this.fillGrid[coord.row][coord.col]);
     }
 
     return fills;
@@ -221,7 +220,6 @@ class PuzzleRenderer {
   private clearAllAnimations(): void {
     for (const row of this.fillGrid) {
       for (const fill of row) {
-        if (!fill) continue;
         this.clearAnimationClasses(fill);
       }
     }

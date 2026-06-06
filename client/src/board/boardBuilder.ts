@@ -1,10 +1,14 @@
 import { BoardView, Cell, Direction } from "../models/boardView.js";
 import { Coord } from "../app/coords.js";
 
+type CellGrid = HTMLTableCellElement[][];
+type FillGrid = HTMLDivElement[][];
+type InputGrid = (HTMLInputElement | null)[][];
+
 interface BoardRefs {
-  cellGrid: HTMLTableCellElement[][];
-  fillGrid: HTMLDivElement[][];
-  inputGrid: (HTMLInputElement | null)[][];
+  cellGrid: CellGrid;
+  fillGrid: FillGrid;
+  inputGrid: InputGrid;
 }
 
 const BLOCK = "block";
@@ -129,4 +133,4 @@ function createGrid<T>(rows: number, cols: number, initialValue?: T): T[][] {
   return Array.from({ length: rows }, () => Array.from({ length: cols }, () => initialValue as T));
 }
 
-export { BoardRefs, createBoard };
+export { BoardRefs, CellGrid, FillGrid, InputGrid, createBoard };

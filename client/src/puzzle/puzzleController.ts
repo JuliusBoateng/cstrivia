@@ -6,23 +6,6 @@ import { PuzzleRenderer } from "./puzzleRenderer.js";
 import { PuzzleSession } from "./puzzleSession.js";
 import { PuzzleValidator } from "./puzzleValidator.js";
 
-interface CursorController {
-  handleClueClick(placementId: PlacementId): void;
-  handleShowAnswerClick(placementId: PlacementId): void;
-}
-
-function hasDifferentItems<T>(a: T[], b: T[]): boolean {
-  if (a.length !== b.length) return true;
-
-  const setB = new Set(b);
-
-  for (const item of a) {
-    if (!setB.has(item)) return true;
-  }
-
-  return false;
-}
-
 const BLOCK = "block";
 
 const NullClueView: ClueView = {
@@ -33,6 +16,11 @@ const NullClueView: ClueView = {
   scrollActiveClue(): void {},
   copyClueText(_placementId: PlacementId): void {},
 };
+
+interface CursorController {
+  handleClueClick(placementId: PlacementId): void;
+  handleShowAnswerClick(placementId: PlacementId): void;
+}
 
 class PuzzleController implements CursorController {
   private session: PuzzleSession;
@@ -619,6 +607,18 @@ class PuzzleController implements CursorController {
     const currSolved = [...this.session.getSolvedPlacementIds()];
     this.clueView.renderClues(currSolved);
   }
+}
+
+function hasDifferentItems<T>(a: T[], b: T[]): boolean {
+  if (a.length !== b.length) return true;
+
+  const setB = new Set(b);
+
+  for (const item of a) {
+    if (!setB.has(item)) return true;
+  }
+
+  return false;
 }
 
 export { CursorController, PuzzleController };
