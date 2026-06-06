@@ -8,12 +8,10 @@ type LetterGrid = (string | null)[][];
 class PuzzleValidator {
   private boardView: BoardView;
   private solutionView: SolutionView;
-  private solvedPlacements: Set<PlacementId>;
 
   constructor(boardView: BoardView, solutionView: SolutionView) {
     this.boardView = boardView;
     this.solutionView = solutionView;
-    this.solvedPlacements = new Set();
   }
 
   getSolution(placement_id: PlacementId): string | undefined {
@@ -27,29 +25,11 @@ class PuzzleValidator {
     const solution = this.solutionView.getSolution(placement_id);
     if (!solution) return false;
 
-    const cells = this.boardView.getCellsWithPlacementId(placement_id); // cells are sorted
-    if (!cells) return false;
+    const answer = this.getPlacementAnswer(letterGrid, placement_id);
+    if (answer === undefined) return false;
 
-    const answer = cells.map((cell) => letterGrid[cell.row][cell.col]).join("");
     const normalized = PuzzleValidator.normalizeAnswer(answer);
-
-    if (normalized === solution.normalized_answer) {
-      this.solvedPlacements.add(placement_id); // placement input is locked once solved.
-      return true;
-    }
-
-    return false;
-  }
-
-  isPuzzleComplete(letterGrid: LetterGrid): boolean {
-    const placements = this.boardView.placements;
-
-    for (const placement of placements) {
-      if (this.solvedPlacements.has(placement.id)) continue;
-      if (!this.checkPlacement(letterGrid, placement.id)) return false;
-    }
-
-    return true;
+    return normalized === solution.normalized_answer;
   }
 
   // Checks if char is a Unicode letter or decimal digit
@@ -71,6 +51,13 @@ class PuzzleValidator {
 
     return stripped.toUpperCase();
   }
+
+  private getPlacementAnswer(letterGrid: LetterGrid, placement_id: PlacementId): string | undefined {
+    const cells = this.boardView.getCellsWithPlacementId(placement_id); // cells are stored sorted by (row, col)
+    if (!cells) return undefined;
+
+    return cells.map((cell) => letterGrid[cell.row][cell.col]).join("");
+  }
 }
 
-export { PuzzleValidator };
+export { PuzzleValidator, LetterGrid };

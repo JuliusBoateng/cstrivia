@@ -61,4 +61,4 @@ class SolutionView {
   }
 }
 
-export { SolutionView };
+export { SolutionView, SolutionViewDTO };

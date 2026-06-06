@@ -111,6 +111,7 @@ class BoardView {
     return this.labelGrid[coord.row][coord.col];
   }
 
+  // cells are stored sorted by (row, col)
   getCellsWithPlacementId(placement_id: PlacementId): Cell[] | undefined {
     return this.placementCellMap.get(placement_id);
   }
@@ -212,4 +213,4 @@ class BoardView {
   }
 }
 
-export { BoardView, Direction, Cell, Clue, Placement, PlacementId };
+export { BoardView, BoardViewDTO, Direction, Cell, Clue, Placement, PlacementId };

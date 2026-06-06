@@ -1,8 +1,6 @@
 import { Direction, Placement, BoardView, PlacementId } from "../models/boardView.js";
 import { Coord } from "../app/coords.js";
-import { PuzzleValidator } from "./puzzleValidator.js";
-
-type LetterGrid = (string | null)[][];
+import { PuzzleValidator, LetterGrid } from "./puzzleValidator.js";
 
 type PlacementCheckResult = {
   solved: PlacementId[];
