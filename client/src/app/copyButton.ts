@@ -4,22 +4,17 @@ const COPIED_ARIA = "Copied clue";
 const copyButtonTimeouts = new WeakMap<HTMLButtonElement, number>();
 
 function createCopyButton(): HTMLButtonElement {
-  const button = buildButton();
+  const button = document.createElement("button");
+  button.classList.add("clue-copy");
+  button.ariaLabel = COPY_ARIA;
+  button.tabIndex = -1;
+  button.hidden = true;
+
+  const copyImg = createCopyImg();
+  const checkImg = createCheckImg();
+  button.append(copyImg, checkImg);
+
   return button;
-
-  function buildButton(): HTMLButtonElement {
-    const button = document.createElement("button");
-    button.classList.add("clue-copy");
-    button.ariaLabel = COPY_ARIA;
-    button.tabIndex = -1;
-    button.hidden = true;
-
-    const copyImg = createCopyImg();
-    const checkImg = createCheckImg();
-    button.append(copyImg, checkImg);
-
-    return button;
-  }
 
   function createCopyImg(): HTMLImageElement {
     const img = document.createElement("img");

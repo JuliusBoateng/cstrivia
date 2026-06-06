@@ -8,7 +8,7 @@ import { PuzzleValidator } from "../puzzle/puzzleValidator.js";
 import { createClueRenderer } from "../clue/createClueRenderer.js";
 import { createCopyButton, attachCopyBehavior, revealCopyButton } from "./copyButton.js";
 
-function initPuzzlePage(boardView: BoardView, solutionView: SolutionView) {
+function initPuzzlePage(boardView: BoardView, solutionView: SolutionView): void {
   renderPuzzleHeader(boardView);
   renderPuzzleMetadata(boardView);
   renderSolutionJson(boardView, solutionView);
@@ -21,7 +21,7 @@ function initPuzzleInteraction(
   boardView: BoardView,
   solutionView: SolutionView,
   clueContainer: HTMLDivElement
-) {
+): void {
   const puzzleController = createPuzzleController(boardElement, boardView, solutionView);
   const clueRenderer = createClueRenderer(boardView, clueContainer);
 
@@ -35,18 +35,24 @@ function initPuzzleInteraction(
   );
 }
 
-function initMobileNav(handleMobilePrev: () => void, handleMobileNext: () => void) {
+function initMobileNav(handleMobilePrev: () => void, handleMobileNext: () => void): void {
   const mobileNav = document.querySelector<HTMLElement>(".mobile-nav");
   if (!mobileNav) return;
 
-  const mobilePrevButton = mobileNav.querySelector<HTMLButtonElement>("#mobile-prev")!;
-  mobilePrevButton.addEventListener("click", handleMobilePrev);
+  const mobilePrevButton = mobileNav.querySelector<HTMLButtonElement>("#mobile-prev");
+  const mobileNextButton = mobileNav.querySelector<HTMLButtonElement>("#mobile-next");
 
-  const mobileNextButton = mobileNav.querySelector<HTMLButtonElement>("#mobile-next")!;
+  if (!mobilePrevButton || !mobileNextButton) return;
+
+  mobilePrevButton.addEventListener("click", handleMobilePrev);
   mobileNextButton.addEventListener("click", handleMobileNext);
 }
 
-function createPuzzleController(boardElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
+function createPuzzleController(
+  boardElement: HTMLTableElement,
+  boardView: BoardView,
+  solutionView: SolutionView
+): PuzzleController {
   const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);
   const puzzleSession: PuzzleSession = new PuzzleSession(boardView, puzzleValidator);
 
@@ -59,14 +65,14 @@ function createPuzzleController(boardElement: HTMLTableElement, boardView: Board
   return new PuzzleController(boardElement, puzzleSession, puzzleRenderer, boardView);
 }
 
-function renderPuzzleHeader(boardView: BoardView) {
+function renderPuzzleHeader(boardView: BoardView): void {
   const title = boardView.board.title;
 
   const boardTitle = document.querySelector("h1.board-title")!;
   boardTitle.textContent = title;
 }
 
-function renderPuzzleMetadata(boardView: BoardView) {
+function renderPuzzleMetadata(boardView: BoardView): void {
   const boardDescElement = document.querySelector(".board-desc")!;
   const desc = boardView.board.description || "";
 
@@ -95,7 +101,7 @@ function renderPuzzleMetadata(boardView: BoardView) {
   boardDescElement.textContent = desc;
 }
 
-function renderSolutionJson(boardView: BoardView, solutionView: SolutionView) {
+function renderSolutionJson(boardView: BoardView, solutionView: SolutionView): void {
   const solutionJson = document.querySelector(".solution-json")!;
 
   const solutionExport = {
@@ -121,7 +127,7 @@ function renderSolutionJson(boardView: BoardView, solutionView: SolutionView) {
   solutionJson.textContent = json;
 }
 
-function formatDate(isoString: string) {
+function formatDate(isoString: string): string {
   return new Intl.DateTimeFormat("en-US", {
     weekday: "short",
     month: "long",
@@ -131,7 +137,7 @@ function formatDate(isoString: string) {
   }).format(new Date(isoString));
 }
 
-function initControlsToggle() {
+function initControlsToggle(): void {
   const toggle = document.getElementById("controls-toggle");
   const panel = document.getElementById("controls-panel");
 
@@ -148,7 +154,7 @@ function initControlsToggle() {
   });
 }
 
-function initClearPuzzleButton(resetPuzzle: () => void) {
+function initClearPuzzleButton(resetPuzzle: () => void): void {
   const clearButton = document.getElementById("clear-puzzle");
   if (!(clearButton instanceof HTMLButtonElement)) return;
 
@@ -161,7 +167,7 @@ function initClearPuzzleButton(resetPuzzle: () => void) {
 
   clearButton.addEventListener("click", handleClearClick);
 
-  function handleClearClick(event: MouseEvent) {
+  function handleClearClick(event: MouseEvent): void {
     const button = event.currentTarget as HTMLButtonElement;
     const isConfirming = button.classList.contains(CONFIRM_CLASS);
 
@@ -174,7 +180,7 @@ function initClearPuzzleButton(resetPuzzle: () => void) {
     enterConfirmState(button);
   }
 
-  function enterConfirmState(button: HTMLButtonElement) {
+  function enterConfirmState(button: HTMLButtonElement): void {
     if (confirmTimer !== null) {
       clearTimeout(confirmTimer);
       confirmTimer = null;
@@ -188,7 +194,7 @@ function initClearPuzzleButton(resetPuzzle: () => void) {
     }, CONFIRM_TIMEOUT_MS);
   }
 
-  function exitConfirmState(button: HTMLButtonElement) {
+  function exitConfirmState(button: HTMLButtonElement): void {
     if (confirmTimer !== null) {
       clearTimeout(confirmTimer);
       confirmTimer = null;
