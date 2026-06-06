@@ -27,7 +27,7 @@ class PuzzleRenderer {
     this.focusedInput = null;
   }
 
-  renderLetter(coord: Coord, letter: string | null) {
+  renderLetter(coord: Coord, letter: string | null): void {
     const inputElement: HTMLInputElement | null = this.inputGrid[coord.row][coord.col];
     if (!inputElement) throw new Error("Input element not found for coord");
 
@@ -35,7 +35,7 @@ class PuzzleRenderer {
   }
 
   // Makes the active input tabbable for keyboard navigation without rendering active state or applying DOM focus
-  initTabbableCursor(coord: Coord) {
+  initTabbableCursor(coord: Coord): void {
     const cell = this.cellGrid[coord.row][coord.col];
     if (cell.classList.contains(BLOCK)) return;
 
@@ -51,7 +51,7 @@ class PuzzleRenderer {
     this.focusedInput = inputElement;
   }
 
-  renderActiveCursor(coord: Coord) {
+  renderActiveCursor(coord: Coord): void {
     const cell = this.cellGrid[coord.row][coord.col];
     if (cell.classList.contains(BLOCK)) return;
     if (this.activeCursor === cell && cell.classList.contains(HIGHLIGHT_CURSOR)) return;
@@ -61,7 +61,7 @@ class PuzzleRenderer {
     this.activeCursor = cell;
   }
 
-  renderActivePlacement(placementId: number, coords: Coord[]) {
+  renderActivePlacement(placementId: number, coords: Coord[]): void {
     if (this.activePlacementId === placementId) return;
     this.clearActivePlacement();
 
@@ -77,7 +77,7 @@ class PuzzleRenderer {
     this.activePlacementId = placementId;
   }
 
-  clearRenderer() {
+  clearRenderer(): void {
     this.clearAllAnimations();
     this.clearInput();
     this.clearActiveCursor();
@@ -85,30 +85,30 @@ class PuzzleRenderer {
     this.clearActivePlacement();
   }
 
-  renderDirectionRejection(coords: Coord[]) {
+  renderDirectionRejection(coords: Coord[]): void {
     const className = DIRECTION_REJECTION;
     const fillElements = this.getFillFromCoords(coords);
     this.animateElements(fillElements, className);
   }
 
-  renderPlacementSolved(coords: Coord[]) {
+  renderPlacementSolved(coords: Coord[]): void {
     const className = ANIMATION_SUCCESS;
     const fillElements = this.getFillFromCoords(coords);
     this.animateElements(fillElements, className);
   }
 
-  renderPlacementIncorrect(coords: Coord[]) {
+  renderPlacementIncorrect(coords: Coord[]): void {
     const className = ANIMATION_ERROR;
     const fillElements = this.getFillFromCoords(coords);
     this.animateElements(fillElements, className);
   }
 
-  renderPuzzleComplete(playableCells: Coord[]) {
+  renderPuzzleComplete(playableCells: Coord[]): void {
     const fillElements = this.getFillFromCoords(playableCells);
     this.animateElements(fillElements, ANIMATION_SUCCESS);
   }
 
-  private animateElements(elements: HTMLElement[], className: string) {
+  private animateElements(elements: HTMLElement[], className: string): void {
     this.clearAnimations(elements);
 
     // Double requestAnimationFrame ensures the browser processes the class
@@ -132,7 +132,7 @@ class PuzzleRenderer {
     return fills;
   }
 
-  setFocus(coord: Coord) {
+  setFocus(coord: Coord): void {
     const inputElement = this.inputGrid[coord.row][coord.col];
     if (!inputElement) return;
 
@@ -155,7 +155,7 @@ class PuzzleRenderer {
   }
 
   // force a real focus transition so mobile browsers reopen keyboard / scroll again
-  refocus(coord: Coord) {
+  refocus(coord: Coord): void {
     const inputElement = this.inputGrid[coord.row][coord.col];
     if (!inputElement) return;
 
@@ -195,7 +195,7 @@ class PuzzleRenderer {
     this.focusedInput = null;
   }
 
-  private clearInput() {
+  private clearInput(): void {
     for (const row of this.inputGrid) {
       for (const inputElement of row) {
         if (!inputElement) continue;
@@ -204,7 +204,7 @@ class PuzzleRenderer {
     }
   }
 
-  private clearActivePlacement() {
+  private clearActivePlacement(): void {
     for (const cell of this.activePlacementCells) {
       cell.classList.remove(HIGHLIGHT_PLACEMENT);
     }
@@ -212,13 +212,13 @@ class PuzzleRenderer {
     this.activePlacementCells = [];
   }
 
-  private clearActiveCursor() {
+  private clearActiveCursor(): void {
     if (!this.activeCursor) return;
     this.activeCursor.classList.remove(HIGHLIGHT_CURSOR);
     this.activeCursor = null;
   }
 
-  private clearAllAnimations() {
+  private clearAllAnimations(): void {
     for (const row of this.fillGrid) {
       for (const fill of row) {
         if (!fill) continue;
@@ -227,11 +227,11 @@ class PuzzleRenderer {
     }
   }
 
-  private clearAnimations(elements: HTMLElement[]) {
+  private clearAnimations(elements: HTMLElement[]): void {
     elements.forEach((element) => this.clearAnimationClasses(element));
   }
 
-  private clearAnimationClasses(element: HTMLElement) {
+  private clearAnimationClasses(element: HTMLElement): void {
     element.classList.remove(ANIMATION_SUCCESS, ANIMATION_ERROR, DIRECTION_REJECTION);
   }
 }

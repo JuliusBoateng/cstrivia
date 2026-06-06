@@ -11,7 +11,7 @@ interface CursorController {
   handleShowAnswerClick(placementId: PlacementId): void;
 }
 
-function hasSetDifference<T>(a: T[], b: T[]): boolean {
+function hasDifferentItems<T>(a: T[], b: T[]): boolean {
   if (a.length !== b.length) return true;
 
   const setB = new Set(b);
@@ -53,7 +53,7 @@ class PuzzleController implements CursorController {
     this.clueView = NullClueView;
   }
 
-  public init(clueView: ClueView) {
+  public init(clueView: ClueView): void {
     this.setClueView(clueView);
     this.renderInitialState();
 
@@ -65,7 +65,7 @@ class PuzzleController implements CursorController {
     this.tableElement.addEventListener("focusin", this.handleFocusIn);
   }
 
-  resetPuzzle() {
+  resetPuzzle(): void {
     this.session.clearPuzzleSession();
     this.renderer.clearRenderer();
     this.clueView.clearClues();
@@ -253,7 +253,7 @@ class PuzzleController implements CursorController {
     this.clueView.copyClueText(placement.id);
   }
 
-  private handleDirectionShortcut() {
+  private handleDirectionShortcut(): void {
     if (!this.isActiveStateVisible) {
       this.renderActiveState();
       this.clueView.scrollActiveClue();
@@ -265,16 +265,16 @@ class PuzzleController implements CursorController {
     this.clueView.scrollActiveClue();
   }
 
-  private handleTabInput(event: KeyboardEvent) {
+  private handleTabInput(event: KeyboardEvent): void {
     const offset = event.shiftKey ? -1 : 1;
     this.movePlacement(offset);
   }
 
-  private handleEscapeInput() {
+  private handleEscapeInput(): void {
     this.clueView.focusToggle();
   }
 
-  private handleEnterInput(event: KeyboardEvent) {
+  private handleEnterInput(event: KeyboardEvent): void {
     if (this.session.isEndOfPlacement() && !event.repeat) {
       const coord = this.session.getActiveCoord();
       this.renderPlacementFeedbackForCoord(coord);
@@ -287,7 +287,7 @@ class PuzzleController implements CursorController {
     this.setActiveFocus();
   }
 
-  private handleHorizontalArrowInput(event: KeyboardEvent) {
+  private handleHorizontalArrowInput(event: KeyboardEvent): void {
     const delta = event.key === "ArrowLeft" ? -1 : 1;
     this.session.moveCursorRelative(0, delta);
     this.session.setDirection(Direction.A);
@@ -296,7 +296,7 @@ class PuzzleController implements CursorController {
     this.setActiveFocus();
   }
 
-  private handleVerticalArrowInput(event: KeyboardEvent) {
+  private handleVerticalArrowInput(event: KeyboardEvent): void {
     const delta = event.key === "ArrowUp" ? -1 : 1;
     this.session.moveCursorRelative(delta, 0);
     this.session.setDirection(Direction.D);
@@ -338,31 +338,31 @@ class PuzzleController implements CursorController {
     this.applyPastedText(normalized);
   };
 
-  private isTextInput(event: InputEvent) {
+  private isTextInput(event: InputEvent): boolean {
     return event.inputType === "insertText";
   }
 
-  private isTypingKey(event: InputEvent) {
-    return event.data && this.isAllowedCharacter(event.data);
+  private isTypingKey(event: InputEvent): boolean {
+    return event.data !== null && this.isAllowedCharacter(event.data);
   }
 
-  private isBackDelete(event: InputEvent) {
+  private isBackDelete(event: InputEvent): boolean {
     return event.inputType === "deleteContentBackward";
   }
 
-  private isForwardDelete(event: InputEvent) {
+  private isForwardDelete(event: InputEvent): boolean {
     return event.inputType === "deleteContentForward";
   }
 
-  private isDeleteKey(event: KeyboardEvent) {
+  private isDeleteKey(event: KeyboardEvent): boolean {
     return event.key === "Delete" || event.key === "Backspace";
   }
 
-  private isAllowedCharacter(value: string) {
+  private isAllowedCharacter(value: string): boolean {
     return value.length === 1 && PuzzleValidator.isLetterOrDigit(value);
   }
 
-  private isModifierKey(event: KeyboardEvent) {
+  private isModifierKey(event: KeyboardEvent): boolean {
     return event.ctrlKey || event.metaKey || event.altKey;
   }
 
@@ -378,19 +378,19 @@ class PuzzleController implements CursorController {
     return event.shiftKey && event.key.toLowerCase() === "k";
   }
 
-  private isEnterKey(event: KeyboardEvent) {
+  private isEnterKey(event: KeyboardEvent): boolean {
     return event.key === "Enter";
   }
 
-  private isHorizontalArrow(event: KeyboardEvent) {
+  private isHorizontalArrow(event: KeyboardEvent): boolean {
     return event.key === "ArrowLeft" || event.key === "ArrowRight";
   }
 
-  private isVerticalArrow(event: KeyboardEvent) {
+  private isVerticalArrow(event: KeyboardEvent): boolean {
     return event.key === "ArrowUp" || event.key === "ArrowDown";
   }
 
-  private isTabKey(event: KeyboardEvent) {
+  private isTabKey(event: KeyboardEvent): boolean {
     return event.key === "Tab";
   }
 
@@ -398,11 +398,11 @@ class PuzzleController implements CursorController {
     return event.key === "Escape";
   }
 
-  private isDirectionShortcut(event: KeyboardEvent) {
+  private isDirectionShortcut(event: KeyboardEvent): boolean {
     return event.code === "Space";
   }
 
-  private applyLetter(letter: string | null) {
+  private applyLetter(letter: string | null): void {
     const prevSolved = [...this.session.getSolvedPlacementIds()];
     this.writeLetter(letter);
 
@@ -411,7 +411,7 @@ class PuzzleController implements CursorController {
     this.applyLetterFeedback(coord, currentLetter, prevSolved);
   }
 
-  private writeLetter(letter: string | null) {
+  private writeLetter(letter: string | null): void {
     this.session.setLetter(letter);
 
     const coord = this.session.getActiveCoord();
@@ -419,21 +419,21 @@ class PuzzleController implements CursorController {
     this.renderer.renderLetter(coord, currentLetter);
   }
 
-  private applyLetterFeedback(coord: Coord, currentLetter: string | null, prevSolved: number[]) {
+  private applyLetterFeedback(coord: Coord, currentLetter: string | null, prevSolved: PlacementId[]): void {
     if (currentLetter) this.renderPlacementFeedbackForCoord(coord);
 
     const currSolved = [...this.session.getSolvedPlacementIds()];
-    if (hasSetDifference(prevSolved, currSolved)) this.clueView.renderClues(currSolved);
+    if (hasDifferentItems(prevSolved, currSolved)) this.clueView.renderClues(currSolved);
   }
 
-  private applyPastedText(normalized: string) {
+  private applyPastedText(normalized: string): void {
     const prevSolved = [...this.session.getSolvedPlacementIds()];
 
     const affectedPlacements = this.writePastedText(normalized);
     this.renderPlacementFeedback([...affectedPlacements]);
 
     const currSolved = [...this.session.getSolvedPlacementIds()];
-    if (hasSetDifference(prevSolved, currSolved)) this.clueView.renderClues(currSolved);
+    if (hasDifferentItems(prevSolved, currSolved)) this.clueView.renderClues(currSolved);
 
     this.renderActiveState();
     this.clueView.scrollActiveClue();
@@ -475,7 +475,7 @@ class PuzzleController implements CursorController {
     return letters.join("") || null;
   }
 
-  private commitChar(rawChar: string) {
+  private commitChar(rawChar: string): void {
     if (!this.isAllowedCharacter(rawChar)) return;
 
     const normalized = rawChar.toUpperCase();
@@ -492,7 +492,7 @@ class PuzzleController implements CursorController {
     this.setActiveFocus();
   }
 
-  private commitBackDelete() {
+  private commitBackDelete(): void {
     if (this.session.isCellEmpty()) {
       this.session.reverseCursor();
       this.renderActiveState();
@@ -503,22 +503,22 @@ class PuzzleController implements CursorController {
     this.applyLetter(null);
   }
 
-  private commitForwardDelete() {
+  private commitForwardDelete(): void {
     this.applyLetter(null);
   }
 
-  private setActiveFocus() {
+  private setActiveFocus(): void {
     const activeCoord: Coord = this.session.getActiveCoord();
     this.renderer.setFocus(activeCoord);
   }
 
   // force focus so mobile keyboards reopen even if the cell is already focused
-  private forceActiveFocus() {
+  private forceActiveFocus(): void {
     const activeCoord: Coord = this.session.getActiveCoord();
     this.renderer.refocus(activeCoord);
   }
 
-  private renderActiveState() {
+  private renderActiveState(): void {
     const placement = this.session.getActivePlacement();
     const placementCoords = this.session.getActivePlacementCoords();
     this.renderer.renderActivePlacement(placement.id, placementCoords);
@@ -530,12 +530,12 @@ class PuzzleController implements CursorController {
     this.isActiveStateVisible = true;
   }
 
-  private renderPlacementFeedbackForCoord(coord: Coord) {
+  private renderPlacementFeedbackForCoord(coord: Coord): void {
     const placements = this.session.getPlacements(coord);
     this.renderPlacementFeedback(placements);
   }
 
-  private renderPlacementFeedback(placements: Placement[]) {
+  private renderPlacementFeedback(placements: Placement[]): void {
     const result = this.session.getPlacementResults(placements);
 
     for (const placementId of result.solved) {
@@ -572,11 +572,11 @@ class PuzzleController implements CursorController {
     return hasChanged;
   }
 
-  private setClueView(clueView: ClueView) {
+  private setClueView(clueView: ClueView): void {
     this.clueView = clueView;
   }
 
-  private initLetters() {
+  private initLetters(): void {
     for (let row = 0; row < this.boardView.board.rows; row++) {
       for (let col = 0; col < this.boardView.board.cols; col++) {
         const coord: Coord = { row, col };
@@ -610,12 +610,12 @@ class PuzzleController implements CursorController {
   }
 
   // Prepares the active cell for keyboard navigation without visually activating or focusing the input
-  private initTabbableCursor() {
+  private initTabbableCursor(): void {
     const coord = this.session.getActiveCoord();
     this.renderer.initTabbableCursor(coord);
   }
 
-  private initClues() {
+  private initClues(): void {
     const currSolved = [...this.session.getSolvedPlacementIds()];
     this.clueView.renderClues(currSolved);
   }
