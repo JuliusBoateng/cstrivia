@@ -4,13 +4,13 @@ import { getBoardView, getClueContainer, getSolutionView, getTableElement } from
 import { BoardView } from "./models/boardView.js";
 import { SolutionView } from "./models/solutionView.js";
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
   const tableElement: HTMLTableElement = getTableElement();
   const boardView: BoardView = getBoardView();
   const solutionView: SolutionView = getSolutionView();
   const clueContainer: HTMLDivElement = getClueContainer();
 
-  if (boardView.board.id != solutionView.board_id) {
+  if (boardView.board.id !== solutionView.board_id) {
     throw Error("SolutionView does not match BoardView");
   }
 

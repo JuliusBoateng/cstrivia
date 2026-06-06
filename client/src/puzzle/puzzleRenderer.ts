@@ -125,7 +125,7 @@ class PuzzleRenderer {
     const fills: HTMLElement[] = [];
 
     for (const coord of coords) {
-      let fill = this.fillGrid[coord.row][coord.col];
+      const fill = this.fillGrid[coord.row][coord.col];
       if (fill !== null) fills.push(fill);
     }
 

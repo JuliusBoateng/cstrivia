@@ -1,4 +1,4 @@
-import { BoardView, Placement, PlacementId } from "../models/boardView.js";
+import { BoardView, PlacementId } from "../models/boardView.js";
 import { SolutionView } from "../models/solutionView.js";
 
 const NFD_NORMALIZATION = "NFD";

@@ -1,6 +1,6 @@
 // Constructor function that produces a DOM element.
 type ElementConstructor<T extends Element> = {
-  new (...args: any[]): T;
+  new (...args: unknown[]): T;
 };
 
 // Uses the constructor for both runtime instanceof checks and compile-time type inference.
