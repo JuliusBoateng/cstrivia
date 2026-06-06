@@ -1,4 +1,5 @@
-import { BoardView, Cell, Coord, Direction } from "../models/boardView.js";
+import { BoardView, Cell, Direction } from "../models/boardView.js";
+import { Coord } from "../app/coords.js";
 
 interface BoardRefs {
   cellGrid: HTMLTableCellElement[][];

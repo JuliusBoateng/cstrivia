@@ -1,6 +1,7 @@
 import { isTouchDevice } from "../app/device.js";
 import { ClueView } from "../clue/clueRenderer.js";
-import { BoardView, Coord, Direction, Placement, PlacementId } from "../models/boardView.js";
+import { Coord } from "../app/coords.js";
+import { BoardView, Direction, Placement, PlacementId } from "../models/boardView.js";
 import { PuzzleRenderer } from "./puzzleRenderer.js";
 import { PuzzleSession } from "./puzzleSession.js";
 import { PuzzleValidator } from "./puzzleValidator.js";

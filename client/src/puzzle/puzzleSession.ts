@@ -1,4 +1,5 @@
-import { Direction, Placement, BoardView, PlacementId, Coord } from "../models/boardView.js";
+import { Direction, Placement, BoardView, PlacementId } from "../models/boardView.js";
+import { Coord } from "../app/coords.js";
 import { PuzzleValidator } from "./puzzleValidator.js";
 
 type letterCount = number;

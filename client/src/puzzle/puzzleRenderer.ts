@@ -1,5 +1,5 @@
 import { BoardRefs } from "../board/boardBuilder.js";
-import { Coord } from "../models/boardView.js";
+import { Coord } from "../app/coords.js";
 
 const ANIMATION_SUCCESS = "placement-success";
 const ANIMATION_ERROR = "placement-error";

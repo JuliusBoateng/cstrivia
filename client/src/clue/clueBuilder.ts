@@ -44,6 +44,11 @@ const EVENTS = {
 
 const CAN_HOVER = window.matchMedia("(hover: hover)").matches;
 
+type TodoClues = {
+  acrossTodoClues: HTMLLIElement[];
+  downTodoClues: HTMLLIElement[];
+};
+
 interface ClueSectionElements {
   toggle: HTMLButtonElement;
   list: HTMLOListElement;
@@ -88,10 +93,7 @@ function createClues(boardView: BoardView, clueContainer: HTMLDivElement): void 
     renderTodoClues(elements.todoDown, downTodoClues);
   }
 
-  function createTodoClues(
-    placements: Placement[],
-    clueMap: Map<PlacementId, Clue>
-  ): { acrossTodoClues: HTMLLIElement[]; downTodoClues: HTMLLIElement[] } {
+  function createTodoClues(placements: Placement[], clueMap: Map<PlacementId, Clue>): TodoClues {
     const acrossTodoClues: HTMLLIElement[] = [];
     const downTodoClues: HTMLLIElement[] = [];
 

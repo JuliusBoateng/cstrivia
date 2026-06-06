@@ -3,6 +3,8 @@ import { SolutionView } from "../models/solutionView.js";
 
 const NFD_NORMALIZATION = "NFD";
 
+type LetterGrid = (string | null)[][];
+
 class PuzzleValidator {
   private boardView: BoardView;
   private solutionView: SolutionView;
@@ -14,14 +16,14 @@ class PuzzleValidator {
     this.solvedPlacements = new Set();
   }
 
-  getSolution(placement_id: number): string | undefined {
+  getSolution(placement_id: PlacementId): string | undefined {
     const solution = this.solutionView.getSolution(placement_id);
     if (!solution) return undefined;
 
     return solution.normalized_answer;
   }
 
-  checkPlacement(letterGrid: (string | null)[][], placement_id: number): boolean {
+  checkPlacement(letterGrid: LetterGrid, placement_id: PlacementId): boolean {
     const solution = this.solutionView.getSolution(placement_id);
     if (!solution) return false;
 
@@ -39,7 +41,7 @@ class PuzzleValidator {
     return false;
   }
 
-  isPuzzleComplete(letterGrid: (string | null)[][]): boolean {
+  isPuzzleComplete(letterGrid: LetterGrid): boolean {
     const placements = this.boardView.placements;
 
     for (const placement of placements) {
