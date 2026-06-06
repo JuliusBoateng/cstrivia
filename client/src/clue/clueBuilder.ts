@@ -62,6 +62,12 @@ interface CluePanelElements {
     solvedDown: ClueSectionElements;
 }
 
+/*
+  Builds the DOM for the clue card rooted at `clueContainer`.
+
+  This function populates the container with all clue sections,
+  clue entries, labels, and controls required by ClueRenderer.
+*/
 function createClues(boardView: BoardView, clueContainer: HTMLDivElement): void {
     const elements: CluePanelElements = queryCluePanelElements(clueContainer);
 

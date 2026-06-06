@@ -84,55 +84,15 @@ type ClueRendererElements = {
   solved: ClueGroupElements;
 };
 
-function queryClueRendererElements(container: HTMLDivElement): ClueRendererElements {
-  const todoToggle = queryRequired(container, SELECTORS.todoToggle, HTMLButtonElement);
-  const solvedToggle = queryRequired(container, SELECTORS.solvedToggle, HTMLButtonElement);
-
-  const todoAcrossToggle = queryRequired(container, SELECTORS.todoAcrossToggle, HTMLButtonElement);
-  const todoDownToggle = queryRequired(container, SELECTORS.todoDownToggle, HTMLButtonElement);
-
-  const solvedAcrossToggle = queryRequired(container, SELECTORS.solvedAcrossToggle, HTMLButtonElement);
-  const solvedDownToggle = queryRequired(container, SELECTORS.solvedDownToggle, HTMLButtonElement);
-
-  return {
-    todo: {
-      section: queryRequired(container, SELECTORS.todoSection, HTMLDivElement),
-      toggle: todoToggle,
-      countLabel: queryRequired(todoToggle, SELECTORS.clueCount, HTMLSpanElement),
-      across: {
-        list: queryRequired(container, SELECTORS.todoAcrossClues, HTMLOListElement),
-        toggle: todoAcrossToggle,
-        countLabel: queryRequired(todoAcrossToggle, SELECTORS.clueCount, HTMLSpanElement),
-      },
-      down: {
-        list: queryRequired(container, SELECTORS.todoDownClues, HTMLOListElement),
-        toggle: todoDownToggle,
-        countLabel: queryRequired(todoDownToggle, SELECTORS.clueCount, HTMLSpanElement),
-      },
-    },
-    solved: {
-      section: queryRequired(container, SELECTORS.solvedSection, HTMLDivElement),
-      toggle: solvedToggle,
-      countLabel: queryRequired(solvedToggle, SELECTORS.clueCount, HTMLSpanElement),
-      across: {
-        list: queryRequired(container, SELECTORS.solvedAcrossClues, HTMLOListElement),
-        toggle: solvedAcrossToggle,
-        countLabel: queryRequired(solvedAcrossToggle, SELECTORS.clueCount, HTMLSpanElement),
-      },
-      down: {
-        list: queryRequired(container, SELECTORS.solvedDownClues, HTMLOListElement),
-        toggle: solvedDownToggle,
-        countLabel: queryRequired(solvedDownToggle, SELECTORS.clueCount, HTMLSpanElement),
-      },
-    },
-  };
-}
-
 const NullCursorController: CursorController = {
   handleClueClick(_placementId: PlacementId): void {},
   handleShowAnswerClick(_placementId: PlacementId): void {}
 };
 
+/*
+  Manages clue panel rendering, state updates, focus behavior,
+  scrolling, and clue-related interactions.
+*/
 class ClueRenderer implements ClueView {
     private clueContainer: HTMLDivElement;
     private cursorController: CursorController;
@@ -547,6 +507,56 @@ class ClueRenderer implements ClueView {
   
       container.scrollTop += delta;
     }
+}
+
+/*
+  Queries and groups all DOM elements required by ClueRenderer.
+
+  The returned structure mirrors the clue panel hierarchy so renderer code can work with
+  logical groups instead of individual DOM references.
+*/
+function queryClueRendererElements(container: HTMLDivElement): ClueRendererElements {
+  const todoToggle = queryRequired(container, SELECTORS.todoToggle, HTMLButtonElement);
+  const solvedToggle = queryRequired(container, SELECTORS.solvedToggle, HTMLButtonElement);
+
+  const todoAcrossToggle = queryRequired(container, SELECTORS.todoAcrossToggle, HTMLButtonElement);
+  const todoDownToggle = queryRequired(container, SELECTORS.todoDownToggle, HTMLButtonElement);
+
+  const solvedAcrossToggle = queryRequired(container, SELECTORS.solvedAcrossToggle, HTMLButtonElement);
+  const solvedDownToggle = queryRequired(container, SELECTORS.solvedDownToggle, HTMLButtonElement);
+
+  return {
+    todo: {
+      section: queryRequired(container, SELECTORS.todoSection, HTMLDivElement),
+      toggle: todoToggle,
+      countLabel: queryRequired(todoToggle, SELECTORS.clueCount, HTMLSpanElement),
+      across: {
+        list: queryRequired(container, SELECTORS.todoAcrossClues, HTMLOListElement),
+        toggle: todoAcrossToggle,
+        countLabel: queryRequired(todoAcrossToggle, SELECTORS.clueCount, HTMLSpanElement),
+      },
+      down: {
+        list: queryRequired(container, SELECTORS.todoDownClues, HTMLOListElement),
+        toggle: todoDownToggle,
+        countLabel: queryRequired(todoDownToggle, SELECTORS.clueCount, HTMLSpanElement),
+      },
+    },
+    solved: {
+      section: queryRequired(container, SELECTORS.solvedSection, HTMLDivElement),
+      toggle: solvedToggle,
+      countLabel: queryRequired(solvedToggle, SELECTORS.clueCount, HTMLSpanElement),
+      across: {
+        list: queryRequired(container, SELECTORS.solvedAcrossClues, HTMLOListElement),
+        toggle: solvedAcrossToggle,
+        countLabel: queryRequired(solvedAcrossToggle, SELECTORS.clueCount, HTMLSpanElement),
+      },
+      down: {
+        list: queryRequired(container, SELECTORS.solvedDownClues, HTMLOListElement),
+        toggle: solvedDownToggle,
+        countLabel: queryRequired(solvedDownToggle, SELECTORS.clueCount, HTMLSpanElement),
+      },
+    },
+  };
 }
 
 export { ClueRenderer, ClueView };
