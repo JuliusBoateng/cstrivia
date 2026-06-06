@@ -111,7 +111,7 @@ def _map_to_placement_dto(placement: CluePlacement) -> PlacementDTO:
         )
 
 def _map_to_cell_dto(c: ClueCell) -> CellDTO:
-    return CellDTO(c.row_index, c.col_index, c.placement_index, c.letter)
+    return CellDTO(c.row_index, c.col_index, c.placement_index)
 
 def _map_to_placement_position(placement_id: int, placement_index: int) -> PlacementPositionDTO:
     return PlacementPositionDTO(placement_id, placement_index)

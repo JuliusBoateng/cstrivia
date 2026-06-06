@@ -1,13 +1,57 @@
-interface BoardViewDTO {
-  board: Board;
-  placements: Placement[];
-  cells: Cell[];
-  clues: Clue[];
+enum Direction {
+  A = "A",
+  D = "D",
 }
 
 type Coord = { row: number; col: number };
 type CoordKey = string;
 type PlacementId = number;
+
+type Board = {
+  id: number;
+  title: string;
+  author: string;
+  puzzle_number: number;
+  published_at: string;
+  description: string;
+  rows: number;
+  cols: number;
+  categories: string[];
+  created_at: string;
+  updated_at: string;
+};
+
+type Placement = {
+  id: PlacementId;
+  direction: Direction;
+  start_row: number;
+  start_col: number;
+  length: number;
+};
+
+type PlacementPosition = {
+  placement_id: PlacementId;
+  placement_index: number;
+};
+
+type Cell = {
+  row: number;
+  col: number;
+  placement_positions: Partial<Record<Direction, PlacementPosition>>;
+};
+
+type Clue = {
+  question: string;
+  placement_id: PlacementId;
+  direction: Direction;
+};
+
+type BoardViewDTO = {
+  board: Board;
+  placements: Placement[];
+  cells: Cell[];
+  clues: Clue[];
+};
 
 // Board models should be immutable. Backend authoritative
 class BoardView {
@@ -172,101 +216,6 @@ class BoardView {
     }
 
     return map;
-  }
-}
-
-class Board {
-  readonly id: number;
-  readonly title: string;
-  readonly author: string;
-  readonly puzzle_number: number;
-  readonly published_at: string;
-  readonly description: string;
-  readonly rows: number;
-  readonly cols: number;
-  readonly categories: string[];
-  readonly createdAt: string;
-  readonly updatedAt: string;
-
-  constructor(
-    id: number,
-    title: string,
-    author: string,
-    puzzle_number: number,
-    published_at: string,
-    description: string,
-    rows: number,
-    cols: number,
-    categories: string[],
-    createdAt: string,
-    updatedAt: string
-  ) {
-    this.id = id;
-    this.title = title;
-    this.author = author;
-    this.puzzle_number = puzzle_number;
-    this.published_at = published_at;
-    this.description = description;
-    this.rows = rows;
-    this.cols = cols;
-    this.categories = categories;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-}
-
-enum Direction {
-  A = "A",
-  D = "D",
-}
-
-class Placement {
-  readonly id: number;
-  readonly direction: Direction;
-  readonly start_row: number;
-  readonly start_col: number;
-  readonly length: number;
-
-  constructor(id: number, direction: Direction, start_row: number, start_col: number, length: number) {
-    this.id = id;
-    this.direction = direction;
-    this.start_row = start_row;
-    this.start_col = start_col;
-    this.length = length;
-  }
-}
-
-class PlacementPosition {
-  placement_id: PlacementId;
-  placement_index: number;
-
-  constructor(placement_id: PlacementId, placement_index: number) {
-    this.placement_id = placement_id;
-    this.placement_index = placement_index;
-  }
-}
-
-class Cell {
-  readonly row: number;
-  readonly col: number;
-  readonly placement_positions: Record<Direction, PlacementPosition>;
-
-  constructor(row: number, col: number, placement_positions: Record<Direction, PlacementPosition>) {
-    this.row = row;
-    this.col = col;
-    this.placement_positions = placement_positions;
-  }
-}
-
-class Clue {
-  readonly question: string;
-  readonly placement_id: PlacementId;
-  readonly direction: Direction;
-
-  constructor(question: string, placement_id: PlacementId, direction: Direction) {
-    this.question = question;
-    this.placement_id = placement_id;
-    this.direction = direction;
   }
 }
 

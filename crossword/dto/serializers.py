@@ -53,7 +53,6 @@ def _serialize_cell(c: CellDTO) -> dict:
     return {
         "row": c.row,
         "col": c.col,
-        "letter": c.letter,
         "placement_positions": {k.value: _serialize_placement_position(v)
                                 for k, v in c.placement_positions.items()
                                 if v is not None}

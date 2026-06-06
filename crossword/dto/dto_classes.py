@@ -45,7 +45,6 @@ class CellDTO(DTO):
     row: int
     col: int
     placement_index: int
-    letter: str
 
     placement_positions: dict[Direction, PlacementPositionDTO | None] = field(default_factory=lambda: {
         Direction.A: None,
