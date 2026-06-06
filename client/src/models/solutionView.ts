@@ -1,10 +1,23 @@
-import { BoardView, CoordKey, PlacementId } from "./boardView.js";
+import { PlacementId } from "./boardView.js";
+import { createCoordKey, CoordKey } from "../app/coords.js";
 
-interface SolutionViewDTO {
+type Solution = {
+  placement_id: PlacementId;
+  display_answer: string;
+  normalized_answer: string;
+};
+
+type Letter = {
+  row: number;
+  col: number;
+  letter: string;
+};
+
+type SolutionViewDTO = {
   board_id: number;
   solutions: Solution[];
   letters: Letter[];
-}
+};
 
 // Solution models should be immutable. Backend authoritative
 class SolutionView {
@@ -19,8 +32,10 @@ class SolutionView {
   private constructor(board_id: number, solutions: Solution[], letters: Letter[]) {
     this.board_id = board_id;
     this.solutions = solutions;
-    this.solutionMap = this.createSolutionMap(solutions);
     this.letters = letters;
+
+    // derived
+    this.solutionMap = this.createSolutionMap(solutions);
     this.letterMap = this.createLetterMap(letters);
   }
 
@@ -33,40 +48,16 @@ class SolutionView {
   }
 
   getLetter(row: number, col: number): Letter | undefined {
-    const key = BoardView.createCoordKey(row, col);
+    const key = createCoordKey(row, col);
     return this.letterMap.get(key);
   }
 
-  private createSolutionMap(solutions: Solution[]) {
+  private createSolutionMap(solutions: Solution[]): Map<PlacementId, Solution> {
     return new Map(solutions.map((s) => [s.placement_id, s]));
   }
 
   private createLetterMap(letters: Letter[]): Map<CoordKey, Letter> {
-    return new Map(letters.map((l) => [BoardView.createCoordKey(l.row, l.col), l]));
-  }
-}
-
-class Solution {
-  readonly placement_id: PlacementId;
-  readonly display_answer: string;
-  readonly normalized_answer: string;
-
-  constructor(placement_id: PlacementId, display_answer: string, normalized_answer: string) {
-    this.placement_id = placement_id;
-    this.display_answer = display_answer;
-    this.normalized_answer = normalized_answer;
-  }
-}
-
-class Letter {
-  readonly row: number;
-  readonly col: number;
-  readonly letter: string;
-
-  constructor(row: number, col: number, letter: string) {
-    this.row = row;
-    this.col = col;
-    this.letter = letter;
+    return new Map(letters.map((l) => [createCoordKey(l.row, l.col), l]));
   }
 }
 

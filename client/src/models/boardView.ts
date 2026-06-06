@@ -1,10 +1,10 @@
+import { Coord } from "../app/coords.js";
+
 enum Direction {
   A = "A",
   D = "D",
 }
 
-type Coord = { row: number; col: number };
-type CoordKey = string;
 type PlacementId = number;
 
 type Board = {
@@ -94,10 +94,6 @@ class BoardView {
 
   isValidCoord(coord: Coord): boolean {
     return coord.row >= 0 && coord.row < this.board.rows && coord.col >= 0 && coord.col < this.board.cols;
-  }
-
-  static createCoordKey(row: number, col: number): CoordKey {
-    return `${row},${col}`;
   }
 
   getCell(coord: Coord): Cell | null {
@@ -216,4 +212,4 @@ class BoardView {
   }
 }
 
-export { BoardView, Direction, Cell, Clue, Coord, CoordKey, Placement, PlacementId };
+export { BoardView, Direction, Cell, Clue, Placement, PlacementId };
