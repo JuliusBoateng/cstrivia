@@ -27,14 +27,14 @@ class PuzzleController implements CursorController {
   private renderer: PuzzleRenderer;
   private clueView: ClueView;
   private boardView: BoardView;
-  private tableElement: HTMLTableElement;
+  private boardElement: HTMLTableElement;
   private isActiveStateVisible: boolean = false;
 
   // Touch-only interaction state. False for exploratory selection, true after direct cell interaction
   private allowTouchDirectionToggle: boolean = false;
 
-  constructor(tableElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardView: BoardView) {
-    this.tableElement = tableElement;
+  constructor(boardElement: HTMLTableElement, session: PuzzleSession, renderer: PuzzleRenderer, boardView: BoardView) {
+    this.boardElement = boardElement;
     this.session = session;
     this.renderer = renderer;
     this.boardView = boardView;
@@ -45,12 +45,12 @@ class PuzzleController implements CursorController {
     this.setClueView(clueView);
     this.renderInitialState();
 
-    this.tableElement.addEventListener("pointerdown", this.handlePointerInput);
-    this.tableElement.addEventListener("beforeinput", this.handleBeforeInput);
-    this.tableElement.addEventListener("keydown", this.handleKeydown);
-    this.tableElement.addEventListener("copy", this.handleCopyEvent);
-    this.tableElement.addEventListener("paste", this.handlePasteEvent);
-    this.tableElement.addEventListener("focusin", this.handleFocusIn);
+    this.boardElement.addEventListener("pointerdown", this.handlePointerInput);
+    this.boardElement.addEventListener("beforeinput", this.handleBeforeInput);
+    this.boardElement.addEventListener("keydown", this.handleKeydown);
+    this.boardElement.addEventListener("copy", this.handleCopyEvent);
+    this.boardElement.addEventListener("paste", this.handlePasteEvent);
+    this.boardElement.addEventListener("focusin", this.handleFocusIn);
   }
 
   resetPuzzle(): void {

@@ -17,7 +17,7 @@ const FILL = "fill";
 const LABEL = "label";
 const LETTER = "letter";
 
-function createBoard(boardView: BoardView, tableElement: HTMLTableElement): BoardRefs {
+function createBoard(boardView: BoardView, boardElement: HTMLTableElement): BoardRefs {
   const rows = boardView.board.rows;
   const cols = boardView.board.cols;
 
@@ -25,7 +25,7 @@ function createBoard(boardView: BoardView, tableElement: HTMLTableElement): Boar
   const fillGrid = createGrid<HTMLDivElement>(rows, cols);
   const inputGrid = createGrid<HTMLInputElement | null>(rows, cols, null);
 
-  tableElement.replaceChildren(createTableBodyElement());
+  boardElement.replaceChildren(createTableBodyElement());
 
   return { cellGrid, fillGrid, inputGrid };
 

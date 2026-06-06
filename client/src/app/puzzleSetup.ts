@@ -7,13 +7,13 @@ const SOLUTION_VIEW_DTO = "solution-view-dto";
 const CLUES = "clues";
 
 function getBoardElement(): HTMLTableElement {
-  const tableElement = document.getElementById(BOARD);
+  const boardElement = document.getElementById(BOARD);
 
-  if (!(tableElement instanceof HTMLTableElement)) {
+  if (!(boardElement instanceof HTMLTableElement)) {
     throw new Error("Board is not available");
   }
 
-  return tableElement;
+  return boardElement;
 }
 
 function getClueContainer(): HTMLDivElement {

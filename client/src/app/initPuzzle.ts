@@ -17,12 +17,12 @@ function initPuzzlePage(boardView: BoardView, solutionView: SolutionView) {
 }
 
 function initPuzzleInteraction(
-  tableElement: HTMLTableElement,
+  boardElement: HTMLTableElement,
   boardView: BoardView,
   solutionView: SolutionView,
   clueContainer: HTMLDivElement
 ) {
-  const puzzleController = createPuzzleController(tableElement, boardView, solutionView);
+  const puzzleController = createPuzzleController(boardElement, boardView, solutionView);
   const clueRenderer = createClueRenderer(boardView, clueContainer);
 
   clueRenderer.init(puzzleController);
@@ -46,17 +46,17 @@ function initMobileNav(handleMobilePrev: () => void, handleMobileNext: () => voi
   mobileNextButton.addEventListener("click", handleMobileNext);
 }
 
-function createPuzzleController(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
+function createPuzzleController(boardElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
   const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);
   const puzzleSession: PuzzleSession = new PuzzleSession(boardView, puzzleValidator);
 
-  const boardRefs: BoardRefs = createBoard(boardView, tableElement);
+  const boardRefs: BoardRefs = createBoard(boardView, boardElement);
   const puzzleDynamic = document.querySelector(".puzzle-dynamic")!;
   puzzleDynamic.classList.add("is-ready");
 
   const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardRefs);
 
-  return new PuzzleController(tableElement, puzzleSession, puzzleRenderer, boardView);
+  return new PuzzleController(boardElement, puzzleSession, puzzleRenderer, boardView);
 }
 
 function renderPuzzleHeader(boardView: BoardView) {
