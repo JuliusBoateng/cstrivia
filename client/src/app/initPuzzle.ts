@@ -16,10 +16,15 @@ function initPuzzlePage(boardView: BoardView, solutionView: SolutionView) {
   initControlsToggle();
 }
 
-function initPuzzleInteraction(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView, clueContainer: HTMLDivElement) {
+function initPuzzleInteraction(
+  tableElement: HTMLTableElement,
+  boardView: BoardView,
+  solutionView: SolutionView,
+  clueContainer: HTMLDivElement
+) {
   const puzzleController = createPuzzleController(tableElement, boardView, solutionView);
   const clueRenderer = createClueRenderer(boardView, clueContainer);
-  
+
   clueRenderer.init(puzzleController);
   puzzleController.init(clueRenderer);
 
@@ -42,89 +47,88 @@ function initMobileNav(handleMobilePrev: () => void, handleMobileNext: () => voi
 }
 
 function createPuzzleController(tableElement: HTMLTableElement, boardView: BoardView, solutionView: SolutionView) {
-    const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);
-    const puzzleSession: PuzzleSession = new PuzzleSession(boardView, puzzleValidator)
+  const puzzleValidator: PuzzleValidator = new PuzzleValidator(boardView, solutionView);
+  const puzzleSession: PuzzleSession = new PuzzleSession(boardView, puzzleValidator);
 
-    const boardRefs: BoardRefs = createBoard(boardView, tableElement);
-    const puzzleDynamic = document.querySelector(".puzzle-dynamic")!;
-    puzzleDynamic.classList.add("is-ready");
+  const boardRefs: BoardRefs = createBoard(boardView, tableElement);
+  const puzzleDynamic = document.querySelector(".puzzle-dynamic")!;
+  puzzleDynamic.classList.add("is-ready");
 
-    const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardRefs)
+  const puzzleRenderer: PuzzleRenderer = new PuzzleRenderer(boardRefs);
 
-    return new PuzzleController(tableElement, puzzleSession, puzzleRenderer, boardView);
+  return new PuzzleController(tableElement, puzzleSession, puzzleRenderer, boardView);
 }
 
-
 function renderPuzzleHeader(boardView: BoardView) {
-    const title = boardView.board.title;
+  const title = boardView.board.title;
 
-    const boardTitle = document.querySelector("h1.board-title")!;
-    boardTitle.textContent = title;
+  const boardTitle = document.querySelector("h1.board-title")!;
+  boardTitle.textContent = title;
 }
 
 function renderPuzzleMetadata(boardView: BoardView) {
-    const boardDescElement = document.querySelector(".board-desc")!;
-    const desc = boardView.board.description || "";
+  const boardDescElement = document.querySelector(".board-desc")!;
+  const desc = boardView.board.description || "";
 
-    const puzzleMetadataElement = document.querySelector(".puzzle-metadata")!;
-    const authorElement = puzzleMetadataElement.querySelector(".author")!;
-    const publishedAtElement = puzzleMetadataElement.querySelector(".published-at")! as HTMLTimeElement;
-    const puzzleNumberElement = puzzleMetadataElement.querySelector(".puzzle-number")!;
-    const puzzleUrlCopyButton = puzzleMetadataElement.querySelector(".puzzle-url-copy-button")!;
+  const puzzleMetadataElement = document.querySelector(".puzzle-metadata")!;
+  const authorElement = puzzleMetadataElement.querySelector(".author")!;
+  const publishedAtElement = puzzleMetadataElement.querySelector(".published-at")! as HTMLTimeElement;
+  const puzzleNumberElement = puzzleMetadataElement.querySelector(".puzzle-number")!;
+  const puzzleUrlCopyButton = puzzleMetadataElement.querySelector(".puzzle-url-copy-button")!;
 
-    const author = boardView.board.author || "Anonymous Contributor";
-    const iso = boardView.board.published_at;
-    const formatted = formatDate(iso);
-    const puzzleNumber = boardView.board.puzzle_number;
+  const author = boardView.board.author || "Anonymous Contributor";
+  const iso = boardView.board.published_at;
+  const formatted = formatDate(iso);
+  const puzzleNumber = boardView.board.puzzle_number;
 
-    authorElement.textContent = author;
-    publishedAtElement.setAttribute("datetime", iso);
-    publishedAtElement.textContent = formatted;
-    puzzleNumberElement.textContent = `Puzzle ${puzzleNumber}`;
+  authorElement.textContent = author;
+  publishedAtElement.setAttribute("datetime", iso);
+  publishedAtElement.textContent = formatted;
+  puzzleNumberElement.textContent = `Puzzle ${puzzleNumber}`;
 
-    const button = createCopyButton();
-    attachCopyBehavior(button, getCanonicalUrl());
-    revealCopyButton(button);
-    button.classList.add("puzzle-url-copy-button");
-    puzzleUrlCopyButton.replaceWith(button);
+  const button = createCopyButton();
+  attachCopyBehavior(button, getCanonicalUrl());
+  revealCopyButton(button);
+  button.classList.add("puzzle-url-copy-button");
+  puzzleUrlCopyButton.replaceWith(button);
 
-    boardDescElement.textContent = desc;
+  boardDescElement.textContent = desc;
 }
 
 function renderSolutionJson(boardView: BoardView, solutionView: SolutionView) {
-    const solutionJson = document.querySelector(".solution-json")!;
+  const solutionJson = document.querySelector(".solution-json")!;
 
-    const solutionExport = {
-        across: {} as Record<string, string>,
-        down: {} as Record<string, string>
-    };
-    
-    const placements = boardView.getPlacements()
-    for (const placement of placements) {
-        const coord = { row: placement.start_row, col: placement.start_col };
-        const label = boardView.getLabel(coord);
-        if (label < 0) continue;
-        
-        const solution = solutionView.getSolution(placement.id);
-        if (!solution) continue;
+  const solutionExport = {
+    across: {} as Record<string, string>,
+    down: {} as Record<string, string>,
+  };
 
-        const direction = (placement.direction === Direction.A) ? "across" : "down";
-        const answer = solution.display_answer;
-        solutionExport[direction][label] = answer;
-    }
-      
-    const json = JSON.stringify(solutionExport, null, 2);
-    solutionJson.textContent = json;
+  const placements = boardView.getPlacements();
+  for (const placement of placements) {
+    const coord = { row: placement.start_row, col: placement.start_col };
+    const label = boardView.getLabel(coord);
+    if (label < 0) continue;
+
+    const solution = solutionView.getSolution(placement.id);
+    if (!solution) continue;
+
+    const direction = placement.direction === Direction.A ? "across" : "down";
+    const answer = solution.display_answer;
+    solutionExport[direction][label] = answer;
+  }
+
+  const json = JSON.stringify(solutionExport, null, 2);
+  solutionJson.textContent = json;
 }
 
 function formatDate(isoString: string) {
-    return new Intl.DateTimeFormat("en-US", {
-        weekday: "short",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-        timeZone: "UTC",
-      }).format(new Date(isoString));
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(isoString));
 }
 
 function initControlsToggle() {
@@ -201,4 +205,3 @@ function getCanonicalUrl(): string {
 }
 
 export { initPuzzlePage, initPuzzleInteraction };
-

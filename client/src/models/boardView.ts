@@ -1,280 +1,273 @@
 interface BoardViewDTO {
-    board: Board;
-    placements: Placement[];
-    cells: Cell[];
-    clues: Clue[];
+  board: Board;
+  placements: Placement[];
+  cells: Cell[];
+  clues: Clue[];
 }
 
-type Coord = {row: number, col: number}
+type Coord = { row: number; col: number };
 type CoordKey = string;
 type PlacementId = number;
 
 // Board models should be immutable. Backend authoritative
 class BoardView {
-    readonly board: Board;
-    readonly placements: Placement[];
-    readonly cells: Cell[]; // does not contain block cells
-    readonly clues: Clue[];
+  readonly board: Board;
+  readonly placements: Placement[];
+  readonly cells: Cell[]; // does not contain block cells
+  readonly clues: Clue[];
 
-    // derived
-    readonly cellGrid: (Cell | null)[][];;
-    readonly labelGrid: number[][];
-    readonly placementMap: Map<PlacementId, Placement>;
-    readonly placementCellMap: Map<PlacementId, Cell[]>;
-    readonly clueMap: Map<PlacementId, Clue>;
+  // derived
+  readonly cellGrid: (Cell | null)[][];
+  readonly labelGrid: number[][];
+  readonly placementMap: Map<PlacementId, Placement>;
+  readonly placementCellMap: Map<PlacementId, Cell[]>;
+  readonly clueMap: Map<PlacementId, Clue>;
 
-    private constructor(
-        board: Board,
-        placements: Placement[],
-        cells: Cell[],
-        clues: Clue[]
-    ) {
-        this.board = board;
+  private constructor(board: Board, placements: Placement[], cells: Cell[], clues: Clue[]) {
+    this.board = board;
 
-        // Invariant:
+    // Invariant:
+    // cells sorted by (row, col)
+    // placements sorted by (start_row, start_col, direction)
+    this.placements = this.sortPlacements(placements);
+    this.cells = this.sortCells(cells);
+    this.clues = clues;
+    this.cellGrid = this.createCellGrid();
+    this.labelGrid = this.createLabelGrid();
+    this.placementMap = this.createPlacementMap();
+    this.placementCellMap = this.createPlacementCellMap();
+    this.clueMap = this.createClueMap(clues);
+  }
+
+  static fromDTO(dto: BoardViewDTO): BoardView {
+    return new BoardView(dto.board, dto.placements, dto.cells, dto.clues);
+  }
+
+  isValidCoord(coord: Coord): boolean {
+    return coord.row >= 0 && coord.row < this.board.rows && coord.col >= 0 && coord.col < this.board.cols;
+  }
+
+  static createCoordKey(row: number, col: number): CoordKey {
+    return `${row},${col}`;
+  }
+
+  getCell(coord: Coord): Cell | null {
+    if (!this.isValidCoord(coord)) return null;
+    return this.cellGrid[coord.row][coord.col];
+  }
+
+  getCells(): Cell[] {
+    return this.cells;
+  }
+
+  isStartingCell(coord: Coord): boolean {
+    if (!this.isValidCoord(coord)) return false;
+    return this.labelGrid[coord.row][coord.col] > 0;
+  }
+
+  getLabel(coord: Coord): number {
+    if (!this.isValidCoord(coord)) return -1;
+    return this.labelGrid[coord.row][coord.col];
+  }
+
+  getCellsWithPlacementId(placement_id: PlacementId): Cell[] | undefined {
+    return this.placementCellMap.get(placement_id);
+  }
+
+  getPlacements(): Placement[] {
+    return this.placements;
+  }
+
+  getPlacement(placement_id: PlacementId): Placement | undefined {
+    return this.placementMap.get(placement_id);
+  }
+
+  getCellPlacements(coord: Coord): Placement[] {
+    const cell = this.getCell(coord);
+    if (!cell) return [];
+
+    const placements = [];
+    const positions = Object.values(cell.placement_positions);
+    for (const position of positions) {
+      const placement = this.getPlacement(position.placement_id);
+      if (placement) placements.push(placement);
+    }
+
+    return placements;
+  }
+
+  getClueMap(): Map<PlacementId, Clue> {
+    return this.clueMap;
+  }
+
+  getClue(placement_id: number): Clue | undefined {
+    return this.clueMap.get(placement_id);
+  }
+
+  private createClueMap(clues: Clue[]): Map<PlacementId, Clue> {
+    return new Map(clues.map((clue) => [clue.placement_id, clue]));
+  }
+
+  private createCellGrid() {
+    const rows = this.board.rows;
+    const cols = this.board.cols;
+
+    const cellGrid = Array.from({ length: rows }, () => Array(cols).fill(null));
+
+    for (const cell of this.cells) {
+      cellGrid[cell.row][cell.col] = cell;
+    }
+
+    return cellGrid;
+  }
+
+  private sortCells(cells: Cell[]): Cell[] {
+    const sortedCells = [...cells].sort((a, b) => a.row - b.row || a.col - b.col);
+    return sortedCells;
+  }
+
+  private sortPlacements(placements: Placement[]): Placement[] {
+    return [...placements].sort(
+      (a, b) => a.start_row - b.start_row || a.start_col - b.start_col || a.direction.localeCompare(b.direction) // Sort by direction
+    );
+  }
+
+  private createPlacementMap(): Map<PlacementId, Placement> {
+    return new Map(this.placements.map((placement) => [placement.id, placement]));
+  }
+
+  private createLabelGrid(): number[][] {
+    const rows = this.board.rows;
+    const cols = this.board.cols;
+    const labelGrid = Array.from({ length: rows }, () => Array(cols).fill(-1));
+
+    let label = 1;
+    for (const p of this.placements) {
+      const r = p.start_row;
+      const c = p.start_col;
+
+      // placements can have the same start coords across directions
+      if (labelGrid[r][c] !== -1) continue;
+
+      labelGrid[r][c] = label++;
+    }
+
+    return labelGrid;
+  }
+
+  private createPlacementCellMap(): Map<PlacementId, Cell[]> {
+    const map = new Map<number, Cell[]>();
+
+    for (const cell of this.cells) {
+      const placement_positions = Object.values(cell.placement_positions);
+
+      for (const position of placement_positions) {
         // cells sorted by (row, col)
-        // placements sorted by (start_row, start_col, direction)
-        this.placements = this.sortPlacements(placements);
-        this.cells = this.sortCells(cells);
-        this.clues = clues;
-        this.cellGrid = this.createCellGrid();
-        this.labelGrid = this.createLabelGrid();
-        this.placementMap = this.createPlacementMap();
-        this.placementCellMap = this.createPlacementCellMap();
-        this.clueMap = this.createClueMap(clues);
-    }
+        if (!map.has(position.placement_id)) {
+          map.set(position.placement_id, []);
+        }
 
-    static fromDTO(dto: BoardViewDTO): BoardView {
-        return new BoardView(
-            dto.board,
-            dto.placements,
-            dto.cells,
-            dto.clues
-        );
-    }
-
-    isValidCoord(coord: Coord): boolean {
-        return (
-          coord.row >= 0 &&
-          coord.row < this.board.rows &&
-          coord.col >= 0 &&
-          coord.col < this.board.cols
-        );
+        map.get(position.placement_id)!.push(cell);
       }
-
-    static createCoordKey(row: number, col: number): CoordKey {
-        return `${row},${col}`;
     }
 
-    getCell(coord: Coord): Cell | null {
-        if (!this.isValidCoord(coord)) return null;
-        return this.cellGrid[coord.row][coord.col];
-    }
-
-    getCells(): Cell[] {
-        return this.cells;
-    }
-
-    isStartingCell(coord: Coord): boolean {
-        if (!this.isValidCoord(coord)) return false;
-        return this.labelGrid[coord.row][coord.col] > 0;
-    }
-
-    getLabel(coord: Coord): number {
-        if (!this.isValidCoord(coord)) return -1;
-        return this.labelGrid[coord.row][coord.col]
-    }
-
-    getCellsWithPlacementId(placement_id: PlacementId): Cell[] | undefined {
-        return this.placementCellMap.get(placement_id);
-    }
-
-    getPlacements(): Placement[] {
-        return this.placements;
-    }
-
-    getPlacement(placement_id: PlacementId): Placement | undefined {
-        return this.placementMap.get(placement_id);
-    }
-
-    getCellPlacements(coord: Coord): Placement[] {
-        const cell = this.getCell(coord);
-        if (!cell) return [];
-    
-        const placements = [];
-        const positions = Object.values(cell.placement_positions);
-        for (const position of positions) {
-            const placement = this.getPlacement(position.placement_id);
-            if (placement) placements.push(placement);
-        }
-    
-        return placements;
-    }
-
-    getClueMap(): Map<PlacementId, Clue> {
-        return this.clueMap;
-    }
-
-    getClue(placement_id: number): Clue | undefined {
-        return this.clueMap.get(placement_id);
-    }
-
-    private createClueMap(clues: Clue[]): Map<PlacementId, Clue> {
-        return new Map(clues.map(clue => [clue.placement_id, clue]));
-     }
-
-    private createCellGrid() {
-        const rows = this.board.rows;
-        const cols = this.board.cols;
-
-        const cellGrid = Array.from({ length: rows }, () => Array(cols).fill(null))
-
-        for (const cell of this.cells) {
-            cellGrid[cell.row][cell.col] = cell;
-        }
-
-        return cellGrid;
-    }
-
-    private sortCells(cells: Cell[]): Cell[] {
-        const sortedCells = [...cells].sort((a, b) => a.row - b.row || a.col - b.col);
-        return sortedCells;
-    }
-
-    private sortPlacements(placements: Placement[]): Placement[] {
-        return [...placements].sort((a, b) =>
-            (a.start_row - b.start_row) ||
-            (a.start_col - b.start_col) ||
-            (a.direction.localeCompare(b.direction)) // Sort by direction
-        );
-    }
-
-    private createPlacementMap(): Map<PlacementId, Placement> {
-        return new Map(
-            this.placements.map(placement => [placement.id, placement])
-        );
-    }
-
-    private createLabelGrid(): number[][] {
-        const rows = this.board.rows;
-        const cols = this.board.cols;
-        const labelGrid = Array.from({ length: rows }, () => Array(cols).fill(-1));
-        
-        let label = 1;
-        for (const p of this.placements) {
-            const r = p.start_row;
-            const c = p.start_col;
-
-            // placements can have the same start coords across directions
-            if (labelGrid[r][c] !== -1) continue;
-
-            labelGrid[r][c] = label++;
-        }
-
-        return labelGrid;
-    }
-    
-    private createPlacementCellMap(): Map<PlacementId, Cell[]> {
-        const map = new Map<number, Cell[]>();
-    
-        for (const cell of this.cells) {
-            const placement_positions = Object.values(cell.placement_positions)
-            
-            for (const position of placement_positions) { // cells sorted by (row, col)
-                if (!map.has(position.placement_id)) {
-                    map.set(position.placement_id, []);
-                }
-                
-                map.get(position.placement_id)!.push(cell);
-            }
-        }
-    
-        return map;
-    }
+    return map;
+  }
 }
 
 class Board {
-    readonly id: number;
-    readonly title: string;
-    readonly author: string;
-    readonly puzzle_number: number;
-    readonly published_at: string;
-    readonly description: string;
-    readonly rows: number;
-    readonly cols: number;
-    readonly categories: string[];
-    readonly createdAt: string;
-    readonly updatedAt: string;
+  readonly id: number;
+  readonly title: string;
+  readonly author: string;
+  readonly puzzle_number: number;
+  readonly published_at: string;
+  readonly description: string;
+  readonly rows: number;
+  readonly cols: number;
+  readonly categories: string[];
+  readonly createdAt: string;
+  readonly updatedAt: string;
 
-    constructor(id: number, title: string, author: string, puzzle_number: number, published_at: string, description: string, rows: number, cols: number, categories: string[] , createdAt: string, updatedAt: string) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.puzzle_number = puzzle_number;
-        this.published_at = published_at;
-        this.description = description;
-        this.rows = rows;
-        this.cols = cols;
-        this.categories = categories;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+  constructor(
+    id: number,
+    title: string,
+    author: string,
+    puzzle_number: number,
+    published_at: string,
+    description: string,
+    rows: number,
+    cols: number,
+    categories: string[],
+    createdAt: string,
+    updatedAt: string
+  ) {
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.puzzle_number = puzzle_number;
+    this.published_at = published_at;
+    this.description = description;
+    this.rows = rows;
+    this.cols = cols;
+    this.categories = categories;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 }
 
 enum Direction {
-    A = "A",
-    D = "D"
+  A = "A",
+  D = "D",
 }
 
 class Placement {
-    readonly id: number;
-    readonly direction: Direction;
-    readonly start_row: number;
-    readonly start_col: number;
-    readonly length: number;
+  readonly id: number;
+  readonly direction: Direction;
+  readonly start_row: number;
+  readonly start_col: number;
+  readonly length: number;
 
-    constructor(id: number, direction: Direction, start_row: number, start_col: number, length: number) {
-        this.id = id;
-        this.direction = direction;
-        this.start_row = start_row;
-        this.start_col = start_col;
-        this.length = length;
-    }
+  constructor(id: number, direction: Direction, start_row: number, start_col: number, length: number) {
+    this.id = id;
+    this.direction = direction;
+    this.start_row = start_row;
+    this.start_col = start_col;
+    this.length = length;
+  }
 }
 
 class PlacementPosition {
-    placement_id: PlacementId;
-    placement_index: number;
+  placement_id: PlacementId;
+  placement_index: number;
 
-    constructor(placement_id: PlacementId, placement_index: number){
-        this.placement_id = placement_id;
-        this.placement_index = placement_index;
-    }
+  constructor(placement_id: PlacementId, placement_index: number) {
+    this.placement_id = placement_id;
+    this.placement_index = placement_index;
+  }
 }
 
 class Cell {
-    readonly row: number;
-    readonly col: number;
-    readonly placement_positions: Record<Direction, PlacementPosition>
+  readonly row: number;
+  readonly col: number;
+  readonly placement_positions: Record<Direction, PlacementPosition>;
 
-    constructor(row: number, col: number, placement_positions: Record<Direction, PlacementPosition>) {
-        this.row = row;
-        this.col = col;
-        this.placement_positions = placement_positions;
-    }
+  constructor(row: number, col: number, placement_positions: Record<Direction, PlacementPosition>) {
+    this.row = row;
+    this.col = col;
+    this.placement_positions = placement_positions;
+  }
 }
 
 class Clue {
-    readonly question: string;
-    readonly placement_id: PlacementId;
-    readonly direction: Direction
+  readonly question: string;
+  readonly placement_id: PlacementId;
+  readonly direction: Direction;
 
-    constructor(question: string, placement_id: PlacementId, direction: Direction) {
-        this.question = question;
-        this.placement_id = placement_id;
-        this.direction = direction;
-    }
+  constructor(question: string, placement_id: PlacementId, direction: Direction) {
+    this.question = question;
+    this.placement_id = placement_id;
+    this.direction = direction;
+  }
 }
 
 export { BoardView, Cell, Clue, Coord, CoordKey, Direction, Placement, PlacementId };
-
