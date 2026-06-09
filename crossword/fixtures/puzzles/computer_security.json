@@ -1,0 +1,114 @@
+{
+  "board": {
+    "title": "Computer Security",
+    "author": "Julius Boateng",
+    "puzzle_number": 17,
+    "published_at": "2026-06-09T07:30:40+00:00",
+    "description": "Computer security builds on foundational disciplines such as cryptography and spans domains including access control, network security, and application security. This puzzle explores fundamental concepts spanning different parts of the field.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Computer Security"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Converts data into a fixed-length digest through a one-way function; cannot be converted back",
+      "display_answer": "HASHING",
+      "direction": "A",
+      "start_row": 1,
+      "start_col": 3
+    },
+    {
+      "question": "Verifies a user's identity using credentials like passwords; HTTPS uses certificates from authorities like Let's Encrypt to verify sites",
+      "display_answer": "AUTHENTICATION",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 1
+    },
+    {
+      "question": "Credential passed to a service to prove identity or access rights; commonly used by web APIs",
+      "display_answer": "TOKEN",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 3
+    },
+    {
+      "question": "Monitors and controls incoming and outgoing network traffic",
+      "display_answer": "FIREWALL",
+      "direction": "A",
+      "start_row": 7,
+      "start_col": 3
+    },
+    {
+      "question": "Malicious software that harms or exploits computer systems; includes viruses, worms, and trojans",
+      "display_answer": "MALWARE",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 3
+    },
+    {
+      "question": "Distributed attack that floods a service with traffic, making it unavailable to users",
+      "display_answer": "DDOS",
+      "direction": "A",
+      "start_row": 12,
+      "start_col": 2
+    },
+    {
+      "question": "Converts plaintext into ciphertext; can be converted back to plaintext",
+      "display_answer": "ENCRYPTION",
+      "direction": "A",
+      "start_row": 13,
+      "start_col": 3
+    },
+    {
+      "question": "Determines what a user can access based on permissions; root users have unrestricted access in Linux",
+      "display_answer": "AUTHORIZATION",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 4
+    },
+    {
+      "question": "Verifies a user's identity using multiple authentication methods",
+      "display_answer": "MFA",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 10
+    },
+    {
+      "question": "Isolated environment, such as a virtual machine, for running untrusted programs",
+      "display_answer": "SANDBOX",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 1
+    },
+    {
+      "question": "Verifies a message's authenticity and integrity; confirms the sender's identity",
+      "display_answer": "SIGNATURE",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 12
+    },
+    {
+      "question": "Attack that inserts SQL into a query to access unauthorized data; prevented through parameterized queries",
+      "display_answer": "INJECTION",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 14
+    },
+    {
+      "question": "Protocol providing secure communications over a network; successor to SSL",
+      "display_answer": "TLS",
+      "direction": "D",
+      "start_row": 6,
+      "start_col": 10
+    },
+    {
+      "question": "Routes network traffic through an encrypted tunnel across a public network",
+      "display_answer": "VPN",
+      "direction": "D",
+      "start_row": 12,
+      "start_col": 8
+    }
+  ]
+}
