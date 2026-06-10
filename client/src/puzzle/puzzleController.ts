@@ -596,13 +596,13 @@ class PuzzleController implements CursorController {
     const direction = clue.direction === Direction.A ? "Across" : "Down";
     const arrow = clue.direction === Direction.A ? "\u2192" : "\u2193";
 
-    const captionText = this.createBoardCaption(label, direction, arrow, clue.anagram);
+    const captionText = this.createBoardCaption(label, direction, arrow, clue.anagram, placement.length);
     this.renderer.renderBoardHeader(captionText);
   }
 
-  private createBoardCaption(label: number, direction: string, arrow: string, anagram: string) {
+  private createBoardCaption(label: number, direction: string, arrow: string, anagram: string, length: number) {
     const bullet = "\u2022";
-    return `${label} ${arrow} ${direction} ${bullet} ${anagram}`;
+    return `${label} ${arrow} ${direction} ${bullet} ${anagram} (${length})`;
   }
 
   private initLetters(): void {
