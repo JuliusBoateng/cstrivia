@@ -16,6 +16,7 @@
     {
       "question": "Led the FORTRAN compiler project, helping prove compilers could generate efficient assembly; co-invented Backus–Naur Form",
       "display_answer": "BACKUS",
+      "anagram": "USACKB",
       "direction": "A",
       "start_row": 2,
       "start_col": 4
@@ -23,6 +24,7 @@
     {
       "question": "Structural correctness of code, usually checked before deeper semantic analysis",
       "display_answer": "SYNTAX",
+      "anagram": "TXSYNA",
       "direction": "A",
       "start_row": 3,
       "start_col": 5
@@ -30,6 +32,7 @@
     {
       "question": "Limited CPU storage that compilers allocate values to before spilling to memory",
       "display_answer": "REGISTER",
+      "anagram": "GSIRETER",
       "direction": "A",
       "start_row": 4,
       "start_col": 1
@@ -37,6 +40,7 @@
     {
       "question": "Build tool that combines object files into an executable by resolving symbols statically or dynamically",
       "display_answer": "LINKER",
+      "anagram": "KENRLI",
       "direction": "A",
       "start_row": 8,
       "start_col": 5
@@ -44,6 +48,7 @@
     {
       "question": "Compiler stage that converts source code into typed tokens for easier parsing, often built with state machines",
       "display_answer": "LEXER",
+      "anagram": "XEERL",
       "direction": "A",
       "start_row": 10,
       "start_col": 9
@@ -51,6 +56,7 @@
     {
       "question": "Compiler optimization that replaces constant expressions with computed values at compile time rather than runtime",
       "display_answer": "FOLDING",
+      "anagram": "GOILFND",
       "direction": "A",
       "start_row": 11,
       "start_col": 2
@@ -58,6 +64,7 @@
     {
       "question": "IBM researcher who pioneered compiler optimization such as instruction scheduling and automatic parallelization; first woman to win the Turing Award",
       "display_answer": "ALLEN",
+      "anagram": "LANEL",
       "direction": "A",
       "start_row": 12,
       "start_col": 1
@@ -65,6 +72,7 @@
     {
       "question": "Class of low-level languages that map closely to machine instructions, such as x86 or ARM",
       "display_answer": "ASSEMBLY",
+      "anagram": "MBSALEYS",
       "direction": "D",
       "start_row": 2,
       "start_col": 5
@@ -72,6 +80,7 @@
     {
       "question": "Formal description of a language that parsers rely on to validate token sequences",
       "display_answer": "GRAMMAR",
+      "anagram": "AGMMRAR",
       "direction": "D",
       "start_row": 3,
       "start_col": 1
@@ -79,6 +88,7 @@
     {
       "question": "Created the A-0 system in 1951, often considered the first compiler, and pioneered compiler technology",
       "display_answer": "HOPPER",
+      "anagram": "ORPPHE",
       "direction": "D",
       "start_row": 5,
       "start_col": 13
@@ -86,6 +96,7 @@
     {
       "question": "Consumes tokens and builds a parse tree or abstract syntax tree",
       "display_answer": "PARSER",
+      "anagram": "RERSPA",
       "direction": "D",
       "start_row": 6,
       "start_col": 10
@@ -93,6 +104,7 @@
     {
       "question": "Named entities like variables, functions, and classes; stored in ___ tables for name resolution and type checking",
       "display_answer": "SYMBOL",
+      "anagram": "BSMOYL",
       "direction": "D",
       "start_row": 7,
       "start_col": 3
@@ -100,6 +112,7 @@
     {
       "question": "Compiler optimization that replaces a function call with its body to remove call overhead and enable further optimizations",
       "display_answer": "INLINE",
+      "anagram": "LENINI",
       "direction": "D",
       "start_row": 7,
       "start_col": 7
@@ -107,6 +120,7 @@
     {
       "question": "Typed symbols produced during lexical analysis to simplify syntax analysis",
       "display_answer": "TOKEN",
+      "anagram": "ETKNO",
       "direction": "D",
       "start_row": 7,
       "start_col": 12

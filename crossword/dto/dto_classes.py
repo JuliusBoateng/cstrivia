@@ -54,6 +54,7 @@ class CellDTO(DTO):
 @dataclass
 class ClueDTO(DTO):
     question: str
+    anagram: str
     placement_id: int
     direction: Direction
 

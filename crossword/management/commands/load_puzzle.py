@@ -96,6 +96,11 @@ class Command(BaseCommand):
                 display_answer=entry["display_answer"],
             )
 
+            if "anagram" in entry:
+                if clue.anagram != entry["anagram"]:
+                    clue.anagram = entry["anagram"]
+                    clue.save()
+
             CluePlacement.objects.create(
                 board=board,
                 clue=clue,

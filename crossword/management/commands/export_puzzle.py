@@ -39,6 +39,7 @@ class Command(BaseCommand):
             clue_entries.append({
                 "question": placement.clue.question,
                 "display_answer": placement.clue.display_answer,
+                "anagram": placement.clue.anagram,
                 "direction": placement.direction,
                 "start_row": placement.start_row,
                 "start_col": placement.start_col,

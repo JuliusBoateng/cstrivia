@@ -42,6 +42,7 @@ type Cell = {
 
 type Clue = {
   question: string;
+  anagram: string;
   placement_id: PlacementId;
   direction: Direction;
 };

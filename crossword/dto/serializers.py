@@ -45,6 +45,7 @@ def _serialize_placement(p: PlacementDTO) -> dict:
 def _serialize_clue(c: ClueDTO) -> dict:
     return {
         "question": c.question,
+        "anagram": c.anagram,
         "placement_id": c.placement_id,
         "direction": c.direction.value,
     }

@@ -15,6 +15,7 @@
     {
       "question": "Heuristic pathfinding algorithm created at Stanford Research Institute in 1968 for the Shakey project; foundational to robotics and navigation systems",
       "display_answer": "ASTAR",
+      "anagram": "TRAAS",
       "direction": "A",
       "start_row": 1,
       "start_col": 3
@@ -22,6 +23,7 @@
     {
       "question": "Lossless data compression algorithm using an optimal prefix code; created by an MIT student in 1951 for a final term paper",
       "display_answer": "HUFFMAN",
+      "anagram": "MFNAFHU",
       "direction": "A",
       "start_row": 3,
       "start_col": 6
@@ -29,6 +31,7 @@
     {
       "question": "Fast Fourier Transform algorithm popularized by J. W. Cooley and John Tukey during the Cold War; later used in Soviet Union nuclear-test detection",
       "display_answer": "COOLEYTUKEY",
+      "anagram": "YLUOCEEYKOT",
       "direction": "A",
       "start_row": 5,
       "start_col": 1
@@ -36,6 +39,7 @@
     {
       "question": "Decision rule for minimizing the maximum possible loss; formulated by John von Neumann in 1928 for zero-sum game theory",
       "display_answer": "MINIMAX",
+      "anagram": "IMXMINA",
       "direction": "A",
       "start_row": 8,
       "start_col": 7
@@ -43,6 +47,7 @@
     {
       "question": "Divide-and-conquer sorting algorithm created by Tony Hoare in 1959 at the National Physical Laboratory; also known as partition-exchange sort",
       "display_answer": "QUICKSORT",
+      "anagram": "CORQTKIUS",
       "direction": "A",
       "start_row": 11,
       "start_col": 3
@@ -50,6 +55,7 @@
     {
       "question": "Dynamic-programming decoding algorithm proposed in 1967 for noisy telecommunications links; later used for hidden Markov models",
       "display_answer": "VITERBI",
+      "anagram": "RIBTEVI",
       "direction": "A",
       "start_row": 12,
       "start_col": 6
@@ -57,6 +63,7 @@
     {
       "question": "Public-key cryptography system created at MIT in 1977 by Rivest, Shamir, and Adleman; encryption relies on the difficulty of factoring large integers",
       "display_answer": "RSA",
+      "anagram": "ARS",
       "direction": "A",
       "start_row": 13,
       "start_col": 8
@@ -64,6 +71,7 @@
     {
       "question": "Randomized sampling technique named after a casino district; Stanisław Ulam developed the method at Los Alamos during the Manhattan Project",
       "display_answer": "MONTECARLO",
+      "anagram": "TELORMNAOC",
       "direction": "D",
       "start_row": 0,
       "start_col": 1
@@ -71,6 +79,7 @@
     {
       "question": "Linear programming algorithm developed by George Dantzig in 1947; influenced by his wartime planning work for the U.S. Army Air Forces during WWII",
       "display_answer": "SIMPLEX",
+      "anagram": "LXMIESP",
       "direction": "D",
       "start_row": 1,
       "start_col": 4
@@ -78,6 +87,7 @@
     {
       "question": "Lossless data compression algorithm created by Abraham Lempel and Jacob Ziv in 1977; foundational to GIF and ZIP compression",
       "display_answer": "LEMPELZIV",
+      "anagram": "LMEILEVPZ",
       "direction": "D",
       "start_row": 1,
       "start_col": 10
@@ -85,6 +95,7 @@
     {
       "question": "Distributed consensus protocols introduced by Leslie Lamport in 1989 through \"The Part-Time Parliament\" paper",
       "display_answer": "PAXOS",
+      "anagram": "XSPAO",
       "direction": "D",
       "start_row": 6,
       "start_col": 13
@@ -92,6 +103,7 @@
     {
       "question": "Dutch computer scientist who devised a foundational single-source shortest-path algorithm while sitting at a café in Amsterdam with his fiancée",
       "display_answer": "DIJKSTRA",
+      "anagram": "JSARKDIT",
       "direction": "D",
       "start_row": 7,
       "start_col": 8

@@ -3,7 +3,7 @@
     "title": "Pioneers of Computing",
     "author": "Julius Boateng",
     "puzzle_number": 3,
-    "published_at": "2026-04-07T12:00:00Z",
+    "published_at": "2026-04-07T12:00:00+00:00",
     "description": "The people in this puzzle helped shape modern computing. They did not work alone; many unsung contributors helped advance the field.",
     "rows": 15,
     "cols": 15,
@@ -13,22 +13,73 @@
   },
   "clues": [
     {
-      "question": "Invented Quicksort; developed Hoare logic for reasoning about program correctness",
-      "display_answer": "HOARE",
+      "question": "Introduced semaphores for mutual exclusion in concurrent programming; developed a classic shortest-path algorithm",
+      "display_answer": "DIJKSTRA",
+      "anagram": "JSARKDIT",
       "direction": "A",
-      "start_row": 10,
-      "start_col": 2
+      "start_row": 1,
+      "start_col": 3
+    },
+    {
+      "question": "Developed the first compiler; helped pioneer machine-independent programming languages such as COBOL",
+      "display_answer": "HOPPER",
+      "anagram": "ORPPHE",
+      "direction": "A",
+      "start_row": 2,
+      "start_col": 7
+    },
+    {
+      "question": "Designed the Analytical Engine, an early general-purpose programmable computer",
+      "display_answer": "BABBAGE",
+      "anagram": "BABBGEA",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 3
+    },
+    {
+      "question": "Pioneered the mathematical analysis of algorithms; author of \"The Art of Computer Programming\"",
+      "display_answer": "KNUTH",
+      "anagram": "TKHUN",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 6
     },
     {
       "question": "Proposed the stored-program architecture used by most modern computers; ___ architecture",
       "display_answer": "VONNEUMANN",
+      "anagram": "ONVAEUNNMN",
       "direction": "A",
       "start_row": 7,
       "start_col": 4
     },
     {
+      "question": "Invented Quicksort; developed Hoare logic for reasoning about program correctness",
+      "display_answer": "HOARE",
+      "anagram": "OEHAR",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 2
+    },
+    {
+      "question": "Proposed the relational database model in the seminal 1970 paper \"A Relational Model of Data for Large Shared Data Banks\"",
+      "display_answer": "CODD",
+      "anagram": "DODC",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 9
+    },
+    {
+      "question": "Pioneered dynamic instruction scheduling in IBM processors; later co-developed modern VLSI chip design methods",
+      "display_answer": "CONWAY",
+      "anagram": "YOCWNA",
+      "direction": "A",
+      "start_row": 11,
+      "start_col": 8
+    },
+    {
       "question": "Applied Boolean algebra to switching circuits; founded information theory in the 1948 paper \"A Mathematical Theory of Communication\"",
       "display_answer": "SHANNON",
+      "anagram": "NNNAOHS",
       "direction": "D",
       "start_row": 1,
       "start_col": 7
@@ -36,79 +87,42 @@
     {
       "question": "Mathematician who helped break the Enigma cipher; proposed the universal Turing machine model",
       "display_answer": "TURING",
+      "anagram": "TNIUGR",
       "direction": "D",
       "start_row": 3,
       "start_col": 13
     },
     {
-      "question": "Pioneered the mathematical analysis of algorithms; author of \"The Art of Computer Programming\"",
-      "display_answer": "KNUTH",
-      "direction": "A",
-      "start_row": 5,
-      "start_col": 6
-    },
-    {
-      "question": "Developed the first compiler; helped pioneer machine-independent programming languages such as COBOL",
-      "display_answer": "HOPPER",
-      "direction": "A",
-      "start_row": 2,
-      "start_col": 7
-    },
-    {
-      "question": "Introduced semaphores for mutual exclusion in concurrent programming; developed a classic shortest-path algorithm",
-      "display_answer": "DIJKSTRA",
-      "direction": "A",
-      "start_row": 1,
-      "start_col": 3
-    },
-    {
-      "question": "Designed the Analytical Engine, an early general-purpose programmable computer",
-      "display_answer": "BABBAGE",
-      "direction": "A",
-      "start_row": 3,
-      "start_col": 3
-    },
-    {
       "question": "Wrote the original Unix operating system at Bell Labs; co-developed the UTF-8 encoding",
       "display_answer": "THOMPSON",
+      "anagram": "TONHOSMP",
       "direction": "D",
       "start_row": 4,
       "start_col": 10
     },
     {
-      "question": "Proposed the relational database model in the seminal 1970 paper \"A Relational Model of Data for Large Shared Data Banks\"",
-      "display_answer": "CODD",
-      "direction": "A",
-      "start_row": 10,
-      "start_col": 9
-    },
-    {
-      "question": "Co-inventor of TCP/IP with Robert Kahn; recognized as one of the \"fathers of the internet\"",
-      "display_answer": "CERF",
-      "direction": "D",
-      "start_row": 9,
-      "start_col": 6
-    },
-    {
-      "question": "Created the C programming language; rewrote Unix in C",
-      "display_answer": "RITCHIE",
-      "direction": "D",
-      "start_row": 6,
-      "start_col": 2
-    },
-    {
       "question": "Often considered the first computer programmer; published the first algorithm for Babbage's Analytical Engine",
       "display_answer": "LOVELACE",
+      "anagram": "LVAEOECL",
       "direction": "D",
       "start_row": 5,
       "start_col": 4
     },
     {
-      "question": "Pioneered dynamic instruction scheduling in IBM processors; later co-developed modern VLSI chip design methods",
-      "display_answer": "CONWAY",
-      "direction": "A",
-      "start_row": 11,
-      "start_col": 8
+      "question": "Created the C programming language; rewrote Unix in C",
+      "display_answer": "RITCHIE",
+      "anagram": "TIIRHEC",
+      "direction": "D",
+      "start_row": 6,
+      "start_col": 2
+    },
+    {
+      "question": "Co-inventor of TCP/IP with Robert Kahn; recognized as one of the \"fathers of the internet\"",
+      "display_answer": "CERF",
+      "anagram": "CREF",
+      "direction": "D",
+      "start_row": 9,
+      "start_col": 6
     }
   ]
 }

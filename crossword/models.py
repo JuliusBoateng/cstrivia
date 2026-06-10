@@ -1,3 +1,5 @@
+from collections import Counter
+from random import Random
 from string import capwords
 from unicodedata import category, combining, normalize
 
@@ -101,6 +103,7 @@ class Clue(models.Model):
     question = models.CharField(max_length=150)
     display_answer = models.CharField(max_length=21) # Keep diacritics
     normalized_answer = models.CharField(max_length=21, editable=False) # derived field. diacritics removed
+    anagram = models.CharField(max_length=21, null=True, blank=True)
     categories = models.ManyToManyField(Category, related_name="clues", blank=True)
     
     def __str__(self):
@@ -140,13 +143,39 @@ class Clue(models.Model):
         self.display_answer = self._clean_answer(self.display_answer) 
         self.normalized_answer = self._normalize_cleaned_answer(self.display_answer)
 
+        if self.anagram:
+            self.anagram = self._clean_answer(self.anagram)
+            self.anagram = self._normalize_cleaned_answer(self.anagram)
+
+
         if len(self.display_answer) != len(self.normalized_answer):
             raise ValidationError(
                 {"display_answer": "length mismatch with normalized answer."}
             )
+        
+        if self.anagram and Counter(self.anagram) != Counter(self.normalized_answer):
+            raise ValidationError(
+                {"anagram": "char mismatch with normalized answer."}
+            )
+
+    def _create_anagram(self, s: str) -> str:
+        rng = Random(s)
+
+        chars = list(s)
+        rng.shuffle(chars)
+
+        anagram = "".join(chars)
+        if anagram == s:
+            anagram = s[::-1]
+
+        assert Counter(anagram) == Counter(s)
+        return anagram
 
     def save(self, *args, **kwargs):
         self.full_clean() # answer check
+        if not self.anagram:
+            self.anagram = self._create_anagram(self.normalized_answer)
+
         super().save(*args, **kwargs)
 
 '''

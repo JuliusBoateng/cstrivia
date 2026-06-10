@@ -15,6 +15,7 @@
     {
       "question": "Geometric point used to define a graphics primitive",
       "display_answer": "VERTEX",
+      "anagram": "RTXEVE",
       "direction": "A",
       "start_row": 1,
       "start_col": 7
@@ -22,6 +23,7 @@
     {
       "question": "Array used for graphics transformations; fundamental to linear algebra",
       "display_answer": "MATRIX",
+      "anagram": "IRATMX",
       "direction": "A",
       "start_row": 3,
       "start_col": 9
@@ -29,6 +31,7 @@
     {
       "question": "Rendering process converting primitives like points, lines, and polygons into pixels; developed in the 1960s",
       "display_answer": "RASTERIZATION",
+      "anagram": "IAARRNTEITZOS",
       "direction": "A",
       "start_row": 4,
       "start_col": 0
@@ -36,6 +39,7 @@
     {
       "question": "Specialized program computing color, lighting, and texture during rendering",
       "display_answer": "SHADER",
+      "anagram": "DARESH",
       "direction": "A",
       "start_row": 5,
       "start_col": 2
@@ -43,6 +47,7 @@
     {
       "question": "Process enabling 3D graphics to be displayed on 2D screens",
       "display_answer": "PROJECTION",
+      "anagram": "CRTPINEJOO",
       "direction": "A",
       "start_row": 7,
       "start_col": 2
@@ -50,6 +55,7 @@
     {
       "question": "Intermediate per-pixel data generated during rasterization",
       "display_answer": "FRAGMENT",
+      "anagram": "MRATGNEF",
       "direction": "A",
       "start_row": 8,
       "start_col": 5
@@ -57,6 +63,7 @@
     {
       "question": "Polygon primitive GPUs are optimized to render; foundational to 3D graphics",
       "display_answer": "TRIANGLE",
+      "anagram": "EATGRILN",
       "direction": "A",
       "start_row": 9,
       "start_col": 7
@@ -64,6 +71,7 @@
     {
       "question": "Depth buffer used to determine visible surfaces by tracking distance from the camera",
       "display_answer": "ZBUFFER",
+      "anagram": "FFUBREZ",
       "direction": "A",
       "start_row": 11,
       "start_col": 5
@@ -71,6 +79,7 @@
     {
       "question": "Rendering optimization process skipping unseen geometry",
       "display_answer": "CULLING",
+      "anagram": "INCGLLU",
       "direction": "A",
       "start_row": 12,
       "start_col": 5
@@ -78,6 +87,7 @@
     {
       "question": "Rendering process trimming geometry to the viewing region",
       "display_answer": "CLIPPING",
+      "anagram": "CINLIPGP",
       "direction": "A",
       "start_row": 13,
       "start_col": 6
@@ -85,6 +95,7 @@
     {
       "question": "Quantity storing direction and magnitude",
       "display_answer": "VECTOR",
+      "anagram": "ETCVRO",
       "direction": "D",
       "start_row": 0,
       "start_col": 11
@@ -92,6 +103,7 @@
     {
       "question": "Smallest unit of a raster image; short for \"picture element\"",
       "display_answer": "PIXEL",
+      "anagram": "ILXPE",
       "direction": "D",
       "start_row": 1,
       "start_col": 14
@@ -99,6 +111,7 @@
     {
       "question": "Vector perpendicular to a surface; essential for lighting",
       "display_answer": "NORMAL",
+      "anagram": "ANMROL",
       "direction": "D",
       "start_row": 2,
       "start_col": 0
@@ -106,6 +119,7 @@
     {
       "question": "Computer graphics pioneer behind Sketchpad and a classic clipping algorithm; recipient of the 1988 Turing Award",
       "display_answer": "SUTHERLAND",
+      "anagram": "RSUDLNHETA",
       "direction": "D",
       "start_row": 2,
       "start_col": 3
@@ -113,6 +127,7 @@
     {
       "question": "Computer graphics pioneer credited with z-buffering and texture mapping; co-founded Pixar",
       "display_answer": "CATMULL",
+      "anagram": "TLMCLAU",
       "direction": "D",
       "start_row": 7,
       "start_col": 7
@@ -120,6 +135,7 @@
     {
       "question": "Collection of vertices and faces defining a 3D object",
       "display_answer": "MESH",
+      "anagram": "ESMH",
       "direction": "D",
       "start_row": 8,
       "start_col": 14

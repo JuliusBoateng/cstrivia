@@ -117,7 +117,7 @@ def _map_to_placement_position(placement_id: int, placement_index: int) -> Place
     return PlacementPositionDTO(placement_id, placement_index)
 
 def _map_to_clue_dto(placement: CluePlacement) -> ClueDTO:
-    return ClueDTO(placement.clue.question, placement.id, Direction(placement.direction))
+    return ClueDTO(placement.clue.question, placement.clue.anagram, placement.id, Direction(placement.direction))
 
 def _map_to_solution_dto(placement: CluePlacement) -> SolutionDTO:
     return SolutionDTO(placement.id, placement.clue.display_answer, placement.clue.normalized_answer)

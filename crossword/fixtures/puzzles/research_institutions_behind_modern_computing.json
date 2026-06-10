@@ -15,6 +15,7 @@
     {
       "question": "University where the Andrew File System (AFS) was developed; pioneered robotics and artificial intelligence research",
       "display_answer": "CMU",
+      "anagram": "UMC",
       "direction": "A",
       "start_row": 3,
       "start_col": 7
@@ -22,6 +23,7 @@
     {
       "question": "Research company where Edgar F. Codd proposed the relational database model and SQL was developed",
       "display_answer": "IBM",
+      "anagram": "BIM",
       "direction": "A",
       "start_row": 4,
       "start_col": 3
@@ -29,6 +31,7 @@
     {
       "question": "AT&T research laboratory where UNIX, C, and modern information theory were developed",
       "display_answer": "BELL",
+      "anagram": "BLLE",
       "direction": "A",
       "start_row": 5,
       "start_col": 9
@@ -36,6 +39,7 @@
     {
       "question": "University where Vint Cerf helped develop TCP/IP; the Sun workstation project originated here",
       "display_answer": "STANFORD",
+      "anagram": "ROTNFSAD",
       "direction": "A",
       "start_row": 6,
       "start_col": 4
@@ -43,6 +47,7 @@
     {
       "question": "Xerox research center that developed the graphical user interface (GUI), Ethernet networking, and early personal computers",
       "display_answer": "PARC",
+      "anagram": "ACPR",
       "direction": "A",
       "start_row": 9,
       "start_col": 5
@@ -50,6 +55,7 @@
     {
       "question": "USC research institute that helped design early Internet architecture and develop Domain Name System (DNS)",
       "display_answer": "ISI",
+      "anagram": "IIS",
       "direction": "D",
       "start_row": 2,
       "start_col": 3
@@ -57,6 +63,7 @@
     {
       "question": "Research laboratory where Tim Berners-Lee created the World Wide Web and released it to the public for free",
       "display_answer": "CERN",
+      "anagram": "NERC",
       "direction": "D",
       "start_row": 3,
       "start_col": 7
@@ -64,6 +71,7 @@
     {
       "question": "University where Project MAC developed the Multics time-sharing system; RSA was invented here",
       "display_answer": "MIT",
+      "anagram": "IMT",
       "direction": "D",
       "start_row": 4,
       "start_col": 5
@@ -71,6 +79,7 @@
     {
       "question": "University whose BSD operating system popularized the TCP/IP networking stack used by many Unix systems",
       "display_answer": "BERKELEY",
+      "anagram": "EEREKYLB",
       "direction": "D",
       "start_row": 4,
       "start_col": 10
@@ -78,6 +87,7 @@
     {
       "question": "U.S. research agency that funded ARPANET and early TCP/IP research",
       "display_answer": "DARPA",
+      "anagram": "ADRAP",
       "direction": "D",
       "start_row": 5,
       "start_col": 6
@@ -85,6 +95,7 @@
     {
       "question": "Technology company that developed Java and the Network File System (NFS)",
       "display_answer": "SUN",
+      "anagram": "USN",
       "direction": "D",
       "start_row": 6,
       "start_col": 4
@@ -92,6 +103,7 @@
     {
       "question": "University of Illinois research center that created the Mosaic web browser and NCSA HTTP server",
       "display_answer": "NCSA",
+      "anagram": "NCAS",
       "direction": "D",
       "start_row": 8,
       "start_col": 8
