@@ -94,11 +94,7 @@ class Board(models.Model):
         super().save(*args, **kwargs)
 
 
-"""
-Questions/Answers for puzzles
-"""
-
-
+# Questions/Answers for puzzles
 class Clue(models.Model):
     question = models.CharField(max_length=150)
     display_answer = models.CharField(max_length=21)  # Keep diacritics
@@ -111,10 +107,7 @@ class Clue(models.Model):
     def __str__(self):
         return self.question
 
-    """
-    Filters allowed chars
-    """
-
+    # Filters allowed chars
     def _clean_answer(self, raw_answer: str) -> str:
         # keep unicode letters and standard 0-9 digits.
         # remove all spaces and punctuations.
@@ -125,10 +118,7 @@ class Clue(models.Model):
 
         return letters.upper()
 
-    """
-    Canonical answer removes diacritics
-    """
-
+    # Canonical answer removes diacritics
     def _normalize_cleaned_answer(self, cleaned_answer: str) -> str:
         # NFD decomposes chars into base + diacritic/accent.
         # Unlike NFKD, chars like ﬁ remain unchanged.
@@ -177,11 +167,7 @@ class Clue(models.Model):
         super().save(*args, **kwargs)
 
 
-"""
-Mapping between Board and Clue. Creates ClueCells.
-"""
-
-
+# Mapping between Board and Clue. Creates ClueCells.
 class CluePlacement(models.Model):
     board = models.ForeignKey(
         Board, on_delete=models.CASCADE, related_name="clue_placements"
@@ -199,7 +185,7 @@ class CluePlacement(models.Model):
     )
 
     def __str__(self):
-        return f"{self.direction} ({self.start_row}, {self.start_row})"
+        return f"{self.direction} ({self.start_row}, {self.start_col})"
 
     class Meta:
         constraints = [
@@ -333,7 +319,7 @@ class CluePlacement(models.Model):
     def _delete_previous_clue_cells(self):
         is_update = self.pk is not None
         if is_update:  # delete previous placement cells
-            self.cluecell_set.all().delete()
+            self.clue_cells.all().delete()
 
     def save(self, *args, **kwargs):
         self.full_clean()  # bound checks
@@ -354,11 +340,7 @@ class CluePlacement(models.Model):
         self.board.save(update_fields=["updated_at"])
 
 
-"""
-Created through CluePlacement. Write-only materialized projection.
-"""
-
-
+# Created through CluePlacement. Write-only materialized projection.
 class ClueCell(models.Model):
     clue_placement = models.ForeignKey(
         CluePlacement, on_delete=models.CASCADE, related_name="clue_cells"
@@ -392,7 +374,7 @@ class ClueCell(models.Model):
         raise ValueError("ClueCell is a projection and cannot be saved directly.")
 
 
-### Design Notes Section
+# Design Notes Section
 class DesignCategory(models.Model):
     name = models.CharField(max_length=32, unique=True)
 
