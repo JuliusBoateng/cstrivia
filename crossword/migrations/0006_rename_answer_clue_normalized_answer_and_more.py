@@ -5,41 +5,53 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0005_remove_cluecell_clue_cell_unique_index_per_placement_and_more'),
+        (
+            "crossword",
+            "0005_remove_cluecell_clue_cell_unique_index_per_placement_and_more",
+        ),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='clue',
-            old_name='answer',
-            new_name='normalized_answer',
+            model_name="clue",
+            old_name="answer",
+            new_name="normalized_answer",
         ),
         migrations.AddField(
-            model_name='clue',
-            name='display_answer',
-            field=models.CharField(default='display_name', max_length=21),
+            model_name="clue",
+            name="display_answer",
+            field=models.CharField(default="display_name", max_length=21),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='board',
-            name='categories',
-            field=models.ManyToManyField(related_name='boards', to='crossword.category'),
+            model_name="board",
+            name="categories",
+            field=models.ManyToManyField(
+                related_name="boards", to="crossword.category"
+            ),
         ),
         migrations.AlterField(
-            model_name='clue',
-            name='categories',
-            field=models.ManyToManyField(related_name='clues', to='crossword.category'),
+            model_name="clue",
+            name="categories",
+            field=models.ManyToManyField(related_name="clues", to="crossword.category"),
         ),
         migrations.AlterField(
-            model_name='cluecell',
-            name='clue_placement',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='clue_cells', to='crossword.clueplacement'),
+            model_name="cluecell",
+            name="clue_placement",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="clue_cells",
+                to="crossword.clueplacement",
+            ),
         ),
         migrations.AlterField(
-            model_name='clueplacement',
-            name='board',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='clue_placements', to='crossword.board'),
+            model_name="clueplacement",
+            name="board",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="clue_placements",
+                to="crossword.board",
+            ),
         ),
     ]

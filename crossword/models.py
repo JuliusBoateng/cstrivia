@@ -26,38 +26,37 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class Board(models.Model):
     MIN_ROWS, MAX_ROWS = 5, 21
     DEFAULT_ROWS = 15
 
     rows = models.PositiveIntegerField(
         default=DEFAULT_ROWS,
-        validators=[
-            MinValueValidator(MIN_ROWS),
-            MaxValueValidator(MAX_ROWS)
-            ]
-        )
-    
+        validators=[MinValueValidator(MIN_ROWS), MaxValueValidator(MAX_ROWS)],
+    )
+
     cols = models.PositiveIntegerField(
         default=DEFAULT_ROWS,
-        validators=[
-            MinValueValidator(MIN_ROWS),
-            MaxValueValidator(MAX_ROWS)
-            ]
-        )
-    
+        validators=[MinValueValidator(MIN_ROWS), MaxValueValidator(MAX_ROWS)],
+    )
+
     author = models.CharField(max_length=50, null=True, blank=True)
     title = models.CharField(max_length=50, unique=True)
-    puzzle_number = models.PositiveIntegerField(unique=True, null=True, blank=True) # user visible puzzle number
+    puzzle_number = models.PositiveIntegerField(
+        unique=True, null=True, blank=True
+    )  # user visible puzzle number
     published_at = models.DateTimeField(null=True, blank=True)
     description = models.CharField(max_length=250)
     categories = models.ManyToManyField(Category, related_name="boards")
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True, editable=False) # also updates when saving CluePlacement
-    
+    updated_at = models.DateTimeField(
+        auto_now=True, editable=False
+    )  # also updates when saving CluePlacement
+
     def get_absolute_url(self):
         return reverse("puzzle", kwargs={"puzzle_number": self.puzzle_number})
-    
+
     def __str__(self):
         return self.title
 
@@ -65,8 +64,7 @@ class Board(models.Model):
         ordering = ["puzzle_number"]
         constraints = [
             models.CheckConstraint(
-                condition=models.Q(cols=models.F("rows")),
-                name="board_symmetry"
+                condition=models.Q(cols=models.F("rows")), name="board_symmetry"
             )
         ]
 
@@ -83,80 +81,80 @@ class Board(models.Model):
             )
 
     def save(self, *args, **kwargs):
-        self.full_clean() # board check
+        self.full_clean()  # board check
 
         if self.puzzle_number is None:
             with transaction.atomic():
                 current_puzzle_number = Board.objects.aggregate(
-                    max_num=models.Max('puzzle_number', default=0)
-                    )['max_num']
-                
+                    max_num=models.Max("puzzle_number", default=0)
+                )["max_num"]
+
                 self.puzzle_number = current_puzzle_number + 1
 
         super().save(*args, **kwargs)
 
 
-'''
+"""
 Questions/Answers for puzzles
-'''
+"""
+
+
 class Clue(models.Model):
     question = models.CharField(max_length=150)
-    display_answer = models.CharField(max_length=21) # Keep diacritics
-    normalized_answer = models.CharField(max_length=21, editable=False) # derived field. diacritics removed
+    display_answer = models.CharField(max_length=21)  # Keep diacritics
+    normalized_answer = models.CharField(
+        max_length=21, editable=False
+    )  # derived field. diacritics removed
     anagram = models.CharField(max_length=21, null=True, blank=True)
     categories = models.ManyToManyField(Category, related_name="clues", blank=True)
-    
+
     def __str__(self):
         return self.question
 
-    '''
+    """
     Filters allowed chars
-    '''
+    """
+
     def _clean_answer(self, raw_answer: str) -> str:
         # keep unicode letters and standard 0-9 digits.
         # remove all spaces and punctuations.
         # preserve diacritics
         letters = "".join(
-            c for c in raw_answer
-            if category(c).startswith("L")
-            or category(c) == "Nd"
+            c for c in raw_answer if category(c).startswith("L") or category(c) == "Nd"
         )
-        
+
         return letters.upper()
-    
-    '''
+
+    """
     Canonical answer removes diacritics
-    '''
+    """
+
     def _normalize_cleaned_answer(self, cleaned_answer: str) -> str:
         # NFD decomposes chars into base + diacritic/accent.
         # Unlike NFKD, chars like ﬁ remain unchanged.
         normalized = normalize("NFD", cleaned_answer)
         stripped = "".join(
-            c for c in normalized
-            if not combining(c)
-        ) # removes diacritics
-        
+            c for c in normalized if not combining(c)
+        )  # removes diacritics
+
         return stripped.upper()
 
     def clean(self):
         self.question = self.question.strip()
-        self.display_answer = self._clean_answer(self.display_answer) 
+        self.display_answer = self._clean_answer(self.display_answer)
         self.normalized_answer = self._normalize_cleaned_answer(self.display_answer)
 
         if self.anagram:
             self.anagram = self._clean_answer(self.anagram)
             self.anagram = self._normalize_cleaned_answer(self.anagram)
 
-
         if len(self.display_answer) != len(self.normalized_answer):
             raise ValidationError(
                 {"display_answer": "length mismatch with normalized answer."}
             )
-        
+
         if self.anagram and Counter(self.anagram) != Counter(self.normalized_answer):
-            raise ValidationError(
-                {"anagram": "char mismatch with normalized answer."}
-            )
+            raise ValidationError({"anagram": "char mismatch with normalized answer."})
 
     def _create_anagram(self, s: str) -> str:
         rng = Random(s)
@@ -172,17 +170,22 @@ class Clue(models.Model):
         return anagram
 
     def save(self, *args, **kwargs):
-        self.full_clean() # answer check
+        self.full_clean()  # answer check
         if not self.anagram:
             self.anagram = self._create_anagram(self.normalized_answer)
 
         super().save(*args, **kwargs)
 
-'''
+
+"""
 Mapping between Board and Clue. Creates ClueCells.
-'''
+"""
+
+
 class CluePlacement(models.Model):
-    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="clue_placements")
+    board = models.ForeignKey(
+        Board, on_delete=models.CASCADE, related_name="clue_placements"
+    )
     clue = models.ForeignKey(Clue, on_delete=models.CASCADE)
     start_row = models.PositiveIntegerField()
     start_col = models.PositiveIntegerField()
@@ -192,7 +195,7 @@ class CluePlacement(models.Model):
         choices=[
             ("A", "Across"),
             ("D", "Down"),
-        ]
+        ],
     )
 
     def __str__(self):
@@ -202,33 +205,37 @@ class CluePlacement(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["board", "start_row", "start_col", "direction"],
-                name="clue_placement_unique_row_col_direction"),
+                name="clue_placement_unique_row_col_direction",
+            ),
             models.UniqueConstraint(
-                fields=["board", "clue"],
-                name="clue_placement_unique_board_clue"
-            )
+                fields=["board", "clue"], name="clue_placement_unique_board_clue"
+            ),
         ]
 
     def _bounds_check(self):
         if self.start_col >= self.board.cols:
             raise ValidationError(
-                {"start_col": f"col {self.start_col} exceeds board width {self.board.cols}."}
+                {
+                    "start_col": f"col {self.start_col} exceeds board width {self.board.cols}."
+                }
             )
 
         if self.start_row >= self.board.rows:
             raise ValidationError(
-                {"start_row": f"row {self.start_row} exceeds board height {self.board.rows}."}
+                {
+                    "start_row": f"row {self.start_row} exceeds board height {self.board.rows}."
+                }
             )
 
     def _across_direction_check(self):
         if self.direction == "A":
             col = self.start_col + len(self.clue.normalized_answer)
-            
+
             if col > self.board.cols:
                 raise ValidationError(
                     {"start_col": f"col {col} exceeds board width {self.board.cols}."}
                 )
-    
+
     def _down_direction_check(self):
         if self.direction == "D":
             row = self.start_row + len(self.clue.normalized_answer)
@@ -246,7 +253,7 @@ class CluePlacement(models.Model):
     def _create_cells(self):
         cells = []
         for i in range(len(self.clue.normalized_answer)):
-            if self.direction == 'A':
+            if self.direction == "A":
                 row = self.start_row
                 col = self.start_col + i
                 index = i
@@ -256,31 +263,34 @@ class CluePlacement(models.Model):
                 index = i
 
             letter = self.clue.normalized_answer[i]
-            
+
             cell = ClueCell(
                 clue_placement=self,
                 row_index=row,
                 col_index=col,
-                placement_index = index,
-                letter=letter
+                placement_index=index,
+                letter=letter,
             )
             cells.append(cell)
-        
+
         return cells
 
     def _fetch_overlapping_cells(self):
-        qs = (ClueCell.objects
-                .select_related("clue_placement")
-                .filter(clue_placement__board=self.board) # get all cells of current board
-            )
+        qs = (
+            ClueCell.objects.select_related("clue_placement").filter(
+                clue_placement__board=self.board
+            )  # get all cells of current board
+        )
 
         is_update = self.pk is not None
         if is_update:
-            qs = qs.exclude(clue_placement=self) # excludes previous clue placement cells
+            qs = qs.exclude(
+                clue_placement=self
+            )  # excludes previous clue placement cells
 
         length = len(self.clue.normalized_answer)
 
-        if self.direction == 'A':
+        if self.direction == "A":
             col_range = (self.start_col, self.start_col + length - 1)
 
             qs = qs.filter(
@@ -299,16 +309,15 @@ class CluePlacement(models.Model):
 
     def _validate_cells(self, new_cells, overlapping_cells):
         overlapping_by_coord = {
-            (c.row_index, c.col_index): c
-            for c in overlapping_cells
+            (c.row_index, c.col_index): c for c in overlapping_cells
         }
-        
+
         for cell in new_cells:
             coord = (cell.row_index, cell.col_index)
             overlapping = overlapping_by_coord.get(coord)
             if not overlapping:
                 continue
-            
+
             # Rule 1: Cannot overlap same direction
             if overlapping.clue_placement.direction == self.direction:
                 raise ValidationError(
@@ -323,31 +332,37 @@ class CluePlacement(models.Model):
 
     def _delete_previous_clue_cells(self):
         is_update = self.pk is not None
-        if is_update: # delete previous placement cells
+        if is_update:  # delete previous placement cells
             self.cluecell_set.all().delete()
 
     def save(self, *args, **kwargs):
-        self.full_clean() # bound checks
+        self.full_clean()  # bound checks
 
         new_cells = self._create_cells()
         overlapping_cells = self._fetch_overlapping_cells()
         self._validate_cells(new_cells, overlapping_cells)
-        
-        with transaction.atomic(): # transactions automatically rollback in case of error
+
+        with (
+            transaction.atomic()
+        ):  # transactions automatically rollback in case of error
             self._delete_previous_clue_cells()
-            
-            super().save(*args, **kwargs) # must save placement before creating cells
-            ClueCell.objects.bulk_create(new_cells) # create new placement cells
+
+            super().save(*args, **kwargs)  # must save placement before creating cells
+            ClueCell.objects.bulk_create(new_cells)  # create new placement cells
 
         self.board.updated_at = timezone.now()
-        self.board.save(update_fields=['updated_at'])
+        self.board.save(update_fields=["updated_at"])
 
 
-'''
+"""
 Created through CluePlacement. Write-only materialized projection.
-'''
+"""
+
+
 class ClueCell(models.Model):
-    clue_placement = models.ForeignKey(CluePlacement, on_delete=models.CASCADE, related_name="clue_cells")
+    clue_placement = models.ForeignKey(
+        CluePlacement, on_delete=models.CASCADE, related_name="clue_cells"
+    )
     row_index = models.PositiveIntegerField()
     col_index = models.PositiveIntegerField()
     placement_index = models.PositiveIntegerField()
@@ -361,21 +376,21 @@ class ClueCell(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["clue_placement", "row_index", "col_index"],
-                name='clue_cell_unique_placement_row_col'
+                name="clue_cell_unique_placement_row_col",
             ),
             models.UniqueConstraint(
                 fields=["clue_placement", "placement_index"],
-                name='clue_cell_unique_placement_placement_index'
-            )
+                name="clue_cell_unique_placement_placement_index",
+            ),
         ]
         indexes = [
-            models.Index(fields=["row_index", "col_index"],
-                         name="cluecell_row_col_idx")
+            models.Index(fields=["row_index", "col_index"], name="cluecell_row_col_idx")
         ]
 
     # CluePlacement calls bulk_create which bypasses save()
     def save(self, *args, **kwargs):
         raise ValueError("ClueCell is a projection and cannot be saved directly.")
+
 
 ### Design Notes Section
 class DesignCategory(models.Model):
@@ -396,7 +411,9 @@ class DesignCategory(models.Model):
 
 
 class DesignNote(models.Model):
-    design_number = models.PositiveIntegerField(unique=True, null=True, blank=True)  # user visible design number
+    design_number = models.PositiveIntegerField(
+        unique=True, null=True, blank=True
+    )  # user visible design number
     title = models.CharField(max_length=50, unique=True)
     author = models.CharField(max_length=50, blank=True)
     body = models.TextField()  # markdown

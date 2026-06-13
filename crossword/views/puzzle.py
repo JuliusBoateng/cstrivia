@@ -19,11 +19,9 @@ class PuzzleListView(ListView):
     context_object_name = "puzzles"
 
     def get_queryset(self):
-        return (
-            Board.objects
-            .filter(published_at__lte=timezone.now())
-            .order_by("-puzzle_number")[:PAGINATION_LIMIT]
-        )
+        return Board.objects.filter(published_at__lte=timezone.now()).order_by(
+            "-puzzle_number"
+        )[:PAGINATION_LIMIT]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,16 +40,15 @@ class PuzzleArchiveView(ListView):
     paginate_by = PAGINATION_LIMIT
 
     def get_queryset(self):
-        return (
-            Board.objects
-            .filter(published_at__lte=timezone.now())
-            .order_by("-puzzle_number")
+        return Board.objects.filter(published_at__lte=timezone.now()).order_by(
+            "-puzzle_number"
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["is_archive"] = True
         return context
+
 
 @never_cache
 def puzzle_view(request, puzzle_number: int):
@@ -63,9 +60,10 @@ def puzzle_view(request, puzzle_number: int):
         "solution_view_dto": views.serialized_solution_view,
         "design_note": views.design_note,
         "next_puzzle": views.next_puzzle,
-        "alt_header_href": back_href
+        "alt_header_href": back_href,
     }
     return render(request, "crossword/puzzle.html", data)
+
 
 def puzzle_back_href(request):
     referer = request.META.get("HTTP_REFERER", "")
@@ -76,9 +74,18 @@ def puzzle_back_href(request):
 
     return "/"
 
+
 def privacy_view(request):
     return render(request, "crossword/privacy.html")
 
+
 def custom_404(request, exception):
-    board = Board.objects.filter(published_at__lte=timezone.now()).order_by("-puzzle_number")[:PAGINATION_LIMIT]
-    return render(request,"crossword/404.html", {"puzzles": board, "is_archive": False}, status=404)
+    board = Board.objects.filter(published_at__lte=timezone.now()).order_by(
+        "-puzzle_number"
+    )[:PAGINATION_LIMIT]
+    return render(
+        request,
+        "crossword/404.html",
+        {"puzzles": board, "is_archive": False},
+        status=404,
+    )

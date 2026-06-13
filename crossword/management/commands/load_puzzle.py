@@ -9,10 +9,16 @@ from crossword.models import Board, Category, Clue, CluePlacement
 
 
 class Command(BaseCommand):
-    help = "Load or update one puzzle JSON file or all puzzle JSON files in a directory."
+    help = (
+        "Load or update one puzzle JSON file or all puzzle JSON files in a directory."
+    )
 
     def add_arguments(self, parser):
-        parser.add_argument("path", type=str, help="Path to a puzzle JSON file or directory of puzzle JSON files")
+        parser.add_argument(
+            "path",
+            type=str,
+            help="Path to a puzzle JSON file or directory of puzzle JSON files",
+        )
 
     def handle(self, *args, **options):
         input_path = Path(options["path"])
@@ -24,7 +30,8 @@ class Command(BaseCommand):
             json_files = [input_path]
         elif input_path.is_dir():
             json_files = sorted(
-                p for p in input_path.iterdir()
+                p
+                for p in input_path.iterdir()
                 if p.is_file() and p.suffix.lower() == ".json"
             )
             if not json_files:
@@ -35,7 +42,11 @@ class Command(BaseCommand):
         for json_file in json_files:
             try:
                 action, board_title = self._load_puzzle_file(json_file)
-                self.stdout.write(self.style.SUCCESS(f"{action} puzzle: {board_title} ({json_file.name})"))
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"{action} puzzle: {board_title} ({json_file.name})"
+                    )
+                )
             except Exception as exc:
                 raise CommandError(f"Failed loading {json_file}: {exc}") from exc
 
@@ -62,7 +73,11 @@ class Command(BaseCommand):
         board_by_number = Board.objects.filter(puzzle_number=puzzle_number).first()
         board_by_title = Board.objects.filter(title=title).first()
 
-        if board_by_number and board_by_title and board_by_number.pk != board_by_title.pk:
+        if (
+            board_by_number
+            and board_by_title
+            and board_by_number.pk != board_by_title.pk
+        ):
             raise CommandError(
                 f"Conflict detected: puzzle_number={puzzle_number} matches "
                 f"board id={board_by_number.pk}, but title='{title}' matches "

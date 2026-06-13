@@ -1,5 +1,4 @@
 import puz
-
 from django.core.management.base import BaseCommand, CommandError
 
 

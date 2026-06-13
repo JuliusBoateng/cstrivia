@@ -14,11 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import include, path
-from django.http import HttpResponse
-from django.contrib.sitemaps.views import sitemap
+
 from django.conf import settings
+from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
+from django.http import HttpResponse
+from django.urls import include, path
 from django.views.generic import RedirectView
 
 from crossword.views.sitemap import get_sitemap_view
@@ -27,15 +28,22 @@ from crossword.views.sitemap import get_sitemap_view
 def healthz(request):
     return HttpResponse("ok", content_type="text/plain")
 
+
 handler404 = "crossword.views.puzzle.custom_404"
 
 urlpatterns = [
     path("healthz/", healthz),
     path("sitemap.xml", sitemap, {"sitemaps": get_sitemap_view()}, name="sitemap"),
-    path('', include("crossword.urls")),
-    path("favicon.ico", RedirectView.as_view(url="/static/crossword/img/favicon-48.png", permanent=True))
+    path("", include("crossword.urls")),
+    path(
+        "favicon.ico",
+        RedirectView.as_view(
+            url="/static/crossword/img/favicon-48.png", permanent=True
+        ),
+    ),
 ]
 
 if settings.DEBUG:
     from django.contrib import admin
+
     urlpatterns.append(path("admin/", admin.site.urls))

@@ -4,15 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0015_remove_board_published'),
+        ("crossword", "0015_remove_board_published"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='board',
-            old_name='published_date',
-            new_name='published_at',
+            model_name="board",
+            old_name="published_date",
+            new_name="published_at",
         ),
     ]

@@ -4,32 +4,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0004_rename_answer_normalized_clue_answer_and_more'),
+        ("crossword", "0004_rename_answer_normalized_clue_answer_and_more"),
     ]
 
     operations = [
         migrations.RemoveConstraint(
-            model_name='cluecell',
-            name='clue_cell_unique_index_per_placement',
+            model_name="cluecell",
+            name="clue_cell_unique_index_per_placement",
         ),
         migrations.RemoveField(
-            model_name='clue',
-            name='answer_length',
+            model_name="clue",
+            name="answer_length",
         ),
         migrations.AddField(
-            model_name='cluecell',
-            name='letter',
+            model_name="cluecell",
+            name="letter",
             field=models.CharField(default=0, max_length=1),
             preserve_default=False,
         ),
         migrations.AddIndex(
-            model_name='cluecell',
-            index=models.Index(fields=['row_index', 'col_index'], name='crossword_row_ind_e8f009_idx'),
+            model_name="cluecell",
+            index=models.Index(
+                fields=["row_index", "col_index"], name="crossword_row_ind_e8f009_idx"
+            ),
         ),
         migrations.RemoveField(
-            model_name='cluecell',
-            name='answer_index',
+            model_name="cluecell",
+            name="answer_index",
         ),
     ]

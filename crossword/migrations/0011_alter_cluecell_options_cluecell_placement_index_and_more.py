@@ -4,24 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0010_rename_crossword_c_row_ind_01463c_idx_cluecell_row_col_idx'),
+        (
+            "crossword",
+            "0010_rename_crossword_c_row_ind_01463c_idx_cluecell_row_col_idx",
+        ),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='cluecell',
-            options={'ordering': ['placement_index']},
+            name="cluecell",
+            options={"ordering": ["placement_index"]},
         ),
         migrations.AddField(
-            model_name='cluecell',
-            name='placement_index',
+            model_name="cluecell",
+            name="placement_index",
             field=models.PositiveIntegerField(default=0),
             preserve_default=False,
         ),
         migrations.AddConstraint(
-            model_name='cluecell',
-            constraint=models.UniqueConstraint(fields=('clue_placement', 'placement_index'), name='clue_cell_unique_placement_placement_index'),
+            model_name="cluecell",
+            constraint=models.UniqueConstraint(
+                fields=("clue_placement", "placement_index"),
+                name="clue_cell_unique_placement_placement_index",
+            ),
         ),
     ]

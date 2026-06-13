@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+
 from crossword.models import Board
 
 
@@ -14,9 +15,7 @@ class Command(BaseCommand):
         try:
             board = Board.objects.get(puzzle_number=puzzle_id)
         except Board.DoesNotExist:
-            self.stdout.write(
-                self.style.ERROR(f"Puzzle {puzzle_id} does not exist.")
-            )
+            self.stdout.write(self.style.ERROR(f"Puzzle {puzzle_id} does not exist."))
             return
 
         confirmation = input(
@@ -32,7 +31,5 @@ class Command(BaseCommand):
         board.delete()
 
         self.stdout.write(
-            self.style.SUCCESS(
-                f"Deleted puzzle {puzzle_id} ({board.title})."
-            )
+            self.style.SUCCESS(f"Deleted puzzle {puzzle_id} ({board.title}).")
         )

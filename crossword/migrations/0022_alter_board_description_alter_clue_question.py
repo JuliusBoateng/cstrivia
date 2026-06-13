@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0021_alter_clue_question'),
+        ("crossword", "0021_alter_clue_question"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='board',
-            name='description',
+            model_name="board",
+            name="description",
             field=models.CharField(max_length=200),
         ),
         migrations.AlterField(
-            model_name='clue',
-            name='question',
+            model_name="clue",
+            name="question",
             field=models.CharField(max_length=150),
         ),
     ]

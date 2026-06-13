@@ -21,8 +21,7 @@ class Command(BaseCommand):
         design_number = options["design_number"]
 
         note = (
-            DesignNote.objects
-            .prefetch_related("categories", "boards")
+            DesignNote.objects.prefetch_related("categories", "boards")
             .filter(design_number=design_number)
             .first()
         )
@@ -41,7 +40,9 @@ class Command(BaseCommand):
                     note.published_at.isoformat() if note.published_at else None
                 ),
                 "body": note.body,
-                "categories": sorted(category.name for category in note.categories.all()),
+                "categories": sorted(
+                    category.name for category in note.categories.all()
+                ),
                 "boards": sorted(board.puzzle_number for board in note.boards.all()),
             }
         }

@@ -2,7 +2,6 @@ from itertools import chain
 
 from django.contrib.syndication.views import Feed
 from django.utils import timezone
-from django.utils.text import Truncator
 
 from ..models import Board, DesignNote
 from .design import build_design_note_description
@@ -24,9 +23,9 @@ class LatestActivityFeed(Feed):
         return response
 
     def items(self):
-        puzzles = Board.objects.filter(
-            published_at__lte=timezone.now()
-        ).order_by("-published_at")[:RSS_LIMIT]
+        puzzles = Board.objects.filter(published_at__lte=timezone.now()).order_by(
+            "-published_at"
+        )[:RSS_LIMIT]
 
         design_notes = DesignNote.objects.filter(
             published_at__lte=timezone.now()

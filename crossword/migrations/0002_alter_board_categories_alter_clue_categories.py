@@ -4,20 +4,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0001_initial'),
+        ("crossword", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='board',
-            name='categories',
-            field=models.ManyToManyField(related_name='Boards', to='crossword.category'),
+            model_name="board",
+            name="categories",
+            field=models.ManyToManyField(
+                related_name="Boards", to="crossword.category"
+            ),
         ),
         migrations.AlterField(
-            model_name='clue',
-            name='categories',
-            field=models.ManyToManyField(related_name='Clues', to='crossword.category'),
+            model_name="clue",
+            name="categories",
+            field=models.ManyToManyField(related_name="Clues", to="crossword.category"),
         ),
     ]

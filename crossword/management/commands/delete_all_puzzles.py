@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
+
 from crossword.models import Board, Clue
+
 
 class Command(BaseCommand):
     help = "Delete all puzzle data"
@@ -18,7 +20,5 @@ class Command(BaseCommand):
         board_count, _ = Board.objects.all().delete()
 
         self.stdout.write(
-            self.style.SUCCESS(
-                f"Deleted {board_count} boards and {clue_count} clues."
-            )
+            self.style.SUCCESS(f"Deleted {board_count} boards and {clue_count} clues.")
         )

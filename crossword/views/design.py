@@ -22,18 +22,23 @@ class DesignNoteListView(ListView):
 
     def get_queryset(self):
         return (
-            DesignNote.objects
-            .filter(published_at__lte=timezone.now())
+            DesignNote.objects.filter(published_at__lte=timezone.now())
             .order_by("-design_number")
             .prefetch_related("boards", "categories")
         )
+
 
 @never_cache
 def design_note_view(request, design_number: int):
     note = get_design_note(design_number)
     meta_description = build_design_note_description(note)
 
-    return render(request, "crossword/design_note.html", {"note": note, "meta_description": meta_description})
+    return render(
+        request,
+        "crossword/design_note.html",
+        {"note": note, "meta_description": meta_description},
+    )
+
 
 def build_design_note_description(note: DesignNote):
     intro = _extract_intro(note.body)
@@ -47,6 +52,7 @@ def build_design_note_description(note: DesignNote):
         "Notes on puzzle construction and design decisions."
     )
 
+
 def _extract_intro(markdown):
     for line in markdown.splitlines():
         line = line.strip()
@@ -54,14 +60,15 @@ def _extract_intro(markdown):
             return line
     return ""
 
+
 def _strip_markdown(text):
-     # converts markdown links to plain text
-    text = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', text)
+    # converts markdown links to plain text
+    text = re.sub(r"\[(.*?)\]\(.*?\)", r"\1", text)
 
     # removes basic formatting like *italic*, **bold**, and `code`
-    text = re.sub(r'[*_`]', '', text)
+    text = re.sub(r"[*_`]", "", text)
 
     # collapse whitespace
-    text = re.sub(r'\s+', ' ', text)
+    text = re.sub(r"\s+", " ", text)
 
     return text.strip()

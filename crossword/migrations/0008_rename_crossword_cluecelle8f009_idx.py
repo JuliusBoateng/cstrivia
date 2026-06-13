@@ -4,9 +4,8 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0007_board_description'),
+        ("crossword", "0007_board_description"),
     ]
 
     operations = [

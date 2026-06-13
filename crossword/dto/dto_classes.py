@@ -2,16 +2,20 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import StrEnum
 
-'''
-Purpose of DTO objects is to decouple data from the underlying Django models. Separation of concerns.
-'''
+"""
+Purpose of DTO objects is to decouple data from the underlying Django models.
+Separation of concerns.
+"""
+
 
 class Direction(StrEnum):
-    A = 'A'
-    D = 'D'
+    A = "A"
+    D = "D"
+
 
 class DTO:
     pass
+
 
 @dataclass
 class BoardDTO(DTO):
@@ -27,18 +31,21 @@ class BoardDTO(DTO):
     created_at: datetime
     updated_at: datetime
 
+
 @dataclass
 class PlacementDTO(DTO):
-    id: int # integral as other DTOs are dependent 
+    id: int  # integral as other DTOs are dependent
     direction: Direction
     start_row: int
     start_col: int
     length: int
 
+
 @dataclass
 class PlacementPositionDTO(DTO):
     placement_id: str
     placement_index: int
+
 
 @dataclass
 class CellDTO(DTO):
@@ -46,10 +53,10 @@ class CellDTO(DTO):
     col: int
     placement_index: int
 
-    placement_positions: dict[Direction, PlacementPositionDTO | None] = field(default_factory=lambda: {
-        Direction.A: None,
-        Direction.D: None
-    })
+    placement_positions: dict[Direction, PlacementPositionDTO | None] = field(
+        default_factory=lambda: {Direction.A: None, Direction.D: None}
+    )
+
 
 @dataclass
 class ClueDTO(DTO):
@@ -58,17 +65,20 @@ class ClueDTO(DTO):
     placement_id: int
     direction: Direction
 
+
 @dataclass
 class SolutionDTO(DTO):
     placement_id: int
     display_answer: str
     normalized_answer: str
 
+
 @dataclass
 class LetterDTO:
     row: int
     col: int
     letter: str
+
 
 @dataclass
 class BoardViewDTO(DTO):
@@ -77,11 +87,13 @@ class BoardViewDTO(DTO):
     cells: list[CellDTO]
     clues: list[ClueDTO]
 
+
 @dataclass
 class SolutionViewDTO(DTO):
     board_id: int
     solutions: list[SolutionDTO]
     letters: list[LetterDTO]
+
 
 @dataclass
 class BoardMetadataDTO(DTO):

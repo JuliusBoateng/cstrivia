@@ -4,30 +4,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0012_alter_board_options_board_published_and_more'),
+        ("crossword", "0012_alter_board_options_board_published_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='board',
-            options={'ordering': ['puzzle_number']},
+            name="board",
+            options={"ordering": ["puzzle_number"]},
         ),
         migrations.AlterField(
-            model_name='board',
-            name='puzzle_number',
+            model_name="board",
+            name="puzzle_number",
             field=models.PositiveIntegerField(blank=True, default=0, unique=True),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='clue',
-            name='categories',
-            field=models.ManyToManyField(blank=True, null=True, related_name='clues', to='crossword.category'),
+            model_name="clue",
+            name="categories",
+            field=models.ManyToManyField(
+                blank=True, null=True, related_name="clues", to="crossword.category"
+            ),
         ),
         migrations.AlterField(
-            model_name='clue',
-            name='normalized_answer',
+            model_name="clue",
+            name="normalized_answer",
             field=models.CharField(editable=False, max_length=21),
         ),
     ]

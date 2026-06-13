@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+
 from crossword.models import Clue
 
 
@@ -25,9 +26,7 @@ class Command(BaseCommand):
             return
 
         self.stdout.write(
-            self.style.WARNING(
-                f"{count} orphan clues will be permanently deleted."
-            )
+            self.style.WARNING(f"{count} orphan clues will be permanently deleted.")
         )
 
         confirm = input("Type 'delete' to confirm: ")

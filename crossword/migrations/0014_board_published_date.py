@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0013_alter_board_options_alter_board_puzzle_number_and_more'),
+        ("crossword", "0013_alter_board_options_alter_board_puzzle_number_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='board',
-            name='published_date',
+            model_name="board",
+            name="published_date",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

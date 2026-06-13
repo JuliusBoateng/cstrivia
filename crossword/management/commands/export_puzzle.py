@@ -22,35 +22,41 @@ class Command(BaseCommand):
         out_path = options.get("out")
 
         try:
-            board = (
-                Board.objects
-                .prefetch_related("categories", "clue_placements__clue")
-                .get(puzzle_number=puzzle_number)
-            )
+            board = Board.objects.prefetch_related(
+                "categories", "clue_placements__clue"
+            ).get(puzzle_number=puzzle_number)
         except Board.DoesNotExist:
-            raise CommandError(f"Board with puzzle_number={puzzle_number} does not exist.")
+            raise CommandError(
+                f"Board with puzzle_number={puzzle_number} does not exist."
+            )
 
         clue_entries = []
-        placements = board.clue_placements.select_related("clue").all().order_by(
-            "direction", "start_row", "start_col"
+        placements = (
+            board.clue_placements.select_related("clue")
+            .all()
+            .order_by("direction", "start_row", "start_col")
         )
 
         for placement in placements:
-            clue_entries.append({
-                "question": placement.clue.question,
-                "display_answer": placement.clue.display_answer,
-                "anagram": placement.clue.anagram,
-                "direction": placement.direction,
-                "start_row": placement.start_row,
-                "start_col": placement.start_col,
-            })
+            clue_entries.append(
+                {
+                    "question": placement.clue.question,
+                    "display_answer": placement.clue.display_answer,
+                    "anagram": placement.clue.anagram,
+                    "direction": placement.direction,
+                    "start_row": placement.start_row,
+                    "start_col": placement.start_col,
+                }
+            )
 
         payload = {
             "board": {
                 "title": board.title,
                 "author": board.author,
                 "puzzle_number": board.puzzle_number,
-                "published_at": board.published_at.isoformat() if board.published_at else None,
+                "published_at": board.published_at.isoformat()
+                if board.published_at
+                else None,
                 "description": board.description,
                 "rows": board.rows,
                 "cols": board.cols,

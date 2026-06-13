@@ -4,24 +4,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0011_alter_cluecell_options_cluecell_placement_index_and_more'),
+        ("crossword", "0011_alter_cluecell_options_cluecell_placement_index_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='board',
-            options={'ordering': (['puzzle_number'],)},
+            name="board",
+            options={"ordering": (["puzzle_number"],)},
         ),
         migrations.AddField(
-            model_name='board',
-            name='published',
+            model_name="board",
+            name="published",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='board',
-            name='puzzle_number',
+            model_name="board",
+            name="puzzle_number",
             field=models.PositiveIntegerField(null=True, unique=True),
         ),
     ]

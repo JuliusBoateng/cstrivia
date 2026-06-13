@@ -12,7 +12,9 @@ class Command(BaseCommand):
     help = "Load or update one design note JSON file or all design note JSON files in a directory."
 
     def add_arguments(self, parser):
-        parser.add_argument("path", type=str, help="Path to a design note JSON file or directory")
+        parser.add_argument(
+            "path", type=str, help="Path to a design note JSON file or directory"
+        )
 
     def handle(self, *args, **options):
         input_path = Path(options["path"])
@@ -25,7 +27,8 @@ class Command(BaseCommand):
 
         elif input_path.is_dir():
             json_files = sorted(
-                p for p in input_path.iterdir()
+                p
+                for p in input_path.iterdir()
                 if p.is_file() and p.suffix.lower() == ".json"
             )
 
@@ -39,7 +42,9 @@ class Command(BaseCommand):
             try:
                 action, title = self._load_design_note(json_file)
                 self.stdout.write(
-                    self.style.SUCCESS(f"{action} design note: {title} ({json_file.name})")
+                    self.style.SUCCESS(
+                        f"{action} design note: {title} ({json_file.name})"
+                    )
                 )
             except Exception as exc:
                 raise CommandError(f"Failed loading {json_file}: {exc}") from exc
@@ -72,9 +77,7 @@ class Command(BaseCommand):
         if published_at_raw:
             published_at = parse_datetime(published_at_raw)
             if published_at is None:
-                raise CommandError(
-                    f"Could not parse published_at: {published_at_raw}"
-                )
+                raise CommandError(f"Could not parse published_at: {published_at_raw}")
 
         note_by_number = DesignNote.objects.filter(design_number=design_number).first()
         note_by_title = DesignNote.objects.filter(title=title).first()

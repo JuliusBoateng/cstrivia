@@ -4,19 +4,18 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0003_board_created_at_board_title_board_updated_at'),
+        ("crossword", "0003_board_created_at_board_title_board_updated_at"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='clue',
-            old_name='answer_normalized',
-            new_name='answer',
+            model_name="clue",
+            old_name="answer_normalized",
+            new_name="answer",
         ),
         migrations.RemoveField(
-            model_name='clue',
-            name='answer_raw',
+            model_name="clue",
+            name="answer_raw",
         ),
     ]

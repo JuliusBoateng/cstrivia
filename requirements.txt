@@ -5,3 +5,4 @@ psycopg[binary]==3.3.3
 python-dotenv==1.2.2
 whitenoise==6.12.0
 Markdown==3.10.2
+ruff==0.15.17

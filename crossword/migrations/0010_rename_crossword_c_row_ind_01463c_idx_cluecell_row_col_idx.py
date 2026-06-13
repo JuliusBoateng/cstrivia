@@ -4,15 +4,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('crossword', '0009_rename_crossword_row_ind_e8f009_idx_crossword_c_row_ind_01463c_idx'),
+        (
+            "crossword",
+            "0009_rename_crossword_row_ind_e8f009_idx_crossword_c_row_ind_01463c_idx",
+        ),
     ]
 
     operations = [
         migrations.RenameIndex(
-            model_name='cluecell',
-            new_name='cluecell_row_col_idx',
-            old_name='crossword_c_row_ind_01463c_idx',
+            model_name="cluecell",
+            new_name="cluecell_row_col_idx",
+            old_name="crossword_c_row_ind_01463c_idx",
         ),
     ]
