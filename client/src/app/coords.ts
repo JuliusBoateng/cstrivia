@@ -5,4 +5,4 @@ function createCoordKey(row: number, col: number): CoordKey {
   return `${row},${col}`;
 }
 
-export { createCoordKey, Coord, CoordKey };
+export { Coord, CoordKey, createCoordKey };

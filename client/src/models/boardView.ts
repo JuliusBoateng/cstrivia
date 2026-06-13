@@ -214,4 +214,4 @@ class BoardView {
   }
 }
 
-export { BoardView, BoardViewDTO, Direction, Cell, Clue, Placement, PlacementId };
+export { BoardView, BoardViewDTO, Cell, Clue, Direction, Placement, PlacementId };

@@ -1,5 +1,5 @@
-import { initPuzzlePage, initPuzzleInteraction } from "./app/initPuzzle.js";
-import { getBoardView, getClueContainer, getSolutionView, getBoardElement } from "./app/puzzleSetup.js";
+import { initPuzzleInteraction, initPuzzlePage } from "./app/initPuzzle.js";
+import { getBoardElement, getBoardView, getClueContainer, getSolutionView } from "./app/puzzleSetup.js";
 
 import { BoardView } from "./models/boardView.js";
 import { SolutionView } from "./models/solutionView.js";

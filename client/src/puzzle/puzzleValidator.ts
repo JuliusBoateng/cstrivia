@@ -60,4 +60,4 @@ class PuzzleValidator {
   }
 }
 
-export { PuzzleValidator, LetterGrid };
+export { LetterGrid, PuzzleValidator };

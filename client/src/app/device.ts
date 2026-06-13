@@ -9,4 +9,4 @@ function isMobileLayout(): boolean {
   return window.matchMedia("(max-width: 900px)").matches;
 }
 
-export { isTouchDevice, isMobileLayout };
+export { isMobileLayout, isTouchDevice };

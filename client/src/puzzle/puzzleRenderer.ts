@@ -1,5 +1,5 @@
-import { BoardRefs, CellGrid, FillGrid, InputGrid } from "../board/boardBuilder.js";
 import { Coord } from "../app/coords.js";
+import { BoardRefs, CellGrid, FillGrid, InputGrid } from "../board/boardBuilder.js";
 
 const ANIMATION_SUCCESS = "placement-success";
 const ANIMATION_ERROR = "placement-error";
@@ -112,7 +112,7 @@ class PuzzleRenderer {
     this.animateElements(fillElements, ANIMATION_SUCCESS);
   }
 
-  renderBoardHeader(captionText: string) {
+  renderBoardHeader(captionText: string): void {
     this.boardHeaderText.textContent = captionText;
     this.boardHeaderText.title = captionText;
   }
@@ -123,8 +123,8 @@ class PuzzleRenderer {
     // Double requestAnimationFrame ensures the browser processes the class
     // removal in a separate frame before re-adding it. Otherwise the DOM
     // changes may be batched together and the animation will not restart.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+    requestAnimationFrame((): void => {
+      requestAnimationFrame((): void => {
         elements.forEach((element) => element.classList.add(className));
       });
     });
@@ -259,7 +259,7 @@ class PuzzleRenderer {
     return boardHeaderText;
   }
 
-  private clearBoardHeader() {
+  private clearBoardHeader(): void {
     this.boardHeaderText.textContent = BOARD_HEADER_DEFAULT;
     this.boardHeaderText.title = BOARD_HEADER_DEFAULT;
   }

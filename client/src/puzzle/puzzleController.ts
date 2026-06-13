@@ -1,9 +1,9 @@
+import { Coord } from "../app/coords.js";
 import { isTouchDevice } from "../app/device.js";
 import { ClueView } from "../clue/clueRenderer.js";
-import { Coord } from "../app/coords.js";
 import { BoardView, Direction, Placement, PlacementId } from "../models/boardView.js";
 import { PuzzleRenderer } from "./puzzleRenderer.js";
-import { PuzzleSession } from "./puzzleSession.js";
+import { PlacementUpdate, PuzzleSession } from "./puzzleSession.js";
 import { PuzzleValidator } from "./puzzleValidator.js";
 
 const BLOCK = "block";
@@ -64,8 +64,8 @@ class PuzzleController implements CursorController {
   handleShowAnswerClick(placementId: PlacementId): void {
     this.session.moveCursorToPlacement(placementId);
 
-    const updatedCoords = this.session.applyPlacementSolution(placementId);
-    for (const coord of updatedCoords) {
+    const placementUpdate: PlacementUpdate = this.session.applyPlacementUpdate(placementId);
+    for (const coord of placementUpdate.updatedCoords) {
       const letter = this.session.getLetterAt(coord);
       this.renderer.renderLetter(coord, letter);
     }
@@ -102,13 +102,13 @@ class PuzzleController implements CursorController {
   }
 
   // reveals active state when keyboard focus enters the board
-  private handleFocusIn = () => {
+  private handleFocusIn = (): void => {
     if (this.isActiveStateVisible) return;
     this.renderActiveState();
     this.clueView.scrollActiveClue();
   };
 
-  private handlePointerInput = (event: PointerEvent) => {
+  private handlePointerInput = (event: PointerEvent): void => {
     if (!event.isPrimary) return; // ignore multi-touch / secondary stylus
     if (event.button !== 0) return; // ignore right/middle clicks
 
@@ -156,7 +156,7 @@ class PuzzleController implements CursorController {
     return isTouchDevice() && !this.allowTouchDirectionToggle;
   }
 
-  private handleBeforeInput = (event: InputEvent) => {
+  private handleBeforeInput = (event: InputEvent): void => {
     if (this.isTextInput(event)) {
       event.preventDefault();
       if (this.isTypingKey(event)) {
@@ -174,7 +174,7 @@ class PuzzleController implements CursorController {
     }
   };
 
-  private handleKeydown = (event: KeyboardEvent) => {
+  private handleKeydown = (event: KeyboardEvent): void => {
     if (this.isModifierKey(event)) {
       return;
     }
@@ -293,7 +293,7 @@ class PuzzleController implements CursorController {
     this.setActiveFocus();
   }
 
-  private handleCopyEvent = (event: ClipboardEvent) => {
+  private handleCopyEvent = (event: ClipboardEvent): void => {
     const letter = this.session.getLetter();
     if (!event.clipboardData || !letter) return;
 
@@ -313,7 +313,7 @@ class PuzzleController implements CursorController {
     }
   }
 
-  private handlePasteEvent = (event: ClipboardEvent) => {
+  private handlePasteEvent = (event: ClipboardEvent): void => {
     event.preventDefault();
     if (!event.clipboardData) return;
 
@@ -565,7 +565,7 @@ class PuzzleController implements CursorController {
     this.clueView = clueView;
   }
 
-  private renderBoardHeader() {
+  private renderBoardHeader(): void {
     if (this.session.isPuzzleComplete()) {
       this.renderPuzzleCompleteHeader();
       return;
@@ -574,12 +574,12 @@ class PuzzleController implements CursorController {
     this.renderStandardHeader();
   }
 
-  private renderPuzzleCompleteHeader() {
+  private renderPuzzleCompleteHeader(): void {
     const captionText = "Puzzle complete!";
     this.renderer.renderBoardHeader(captionText);
   }
 
-  private renderStandardHeader() {
+  private renderStandardHeader(): void {
     const placement = this.session.getActivePlacement();
     if (!placement) return;
 
@@ -600,7 +600,7 @@ class PuzzleController implements CursorController {
     this.renderer.renderBoardHeader(captionText);
   }
 
-  private createBoardCaption(label: number, direction: string, arrow: string, anagram: string, length: number) {
+  private createBoardCaption(label: number, direction: string, arrow: string, anagram: string, length: number): string {
     const bullet = "\u2022";
     return `${label} ${arrow} ${direction} ${bullet} ${anagram} (${length})`;
   }

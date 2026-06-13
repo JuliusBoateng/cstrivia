@@ -181,7 +181,7 @@ class ClueRenderer implements ClueView {
     }
   }
 
-  private handleContainerKeydown = (event: KeyboardEvent) => {
+  private handleContainerKeydown = (event: KeyboardEvent): void => {
     if (!this.isActionKey(event)) return;
 
     event.preventDefault();
@@ -192,7 +192,7 @@ class ClueRenderer implements ClueView {
       Preserves board input focus when pressing a clue.
       Without this, focus falls to <body>, interrupting input focus.
     */
-  private handleContainerPointerDown = (event: PointerEvent) => {
+  private handleContainerPointerDown = (event: PointerEvent): void => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
 
@@ -202,7 +202,7 @@ class ClueRenderer implements ClueView {
     event.preventDefault();
   };
 
-  private handleContainerClick = (event: MouseEvent) => {
+  private handleContainerClick = (event: MouseEvent): void => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
 
@@ -262,7 +262,7 @@ class ClueRenderer implements ClueView {
     this.cursorController.handleClueClick(placementId);
   }
 
-  private handleCopyReveal = (event: Event) => {
+  private handleCopyReveal = (event: Event): void => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
 
@@ -274,7 +274,7 @@ class ClueRenderer implements ClueView {
     this.revealCurrentCopyButton(copyButton);
   };
 
-  private handleShowClueAnswer = (event: Event) => {
+  private handleShowClueAnswer = (event: Event): void => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
 
@@ -287,7 +287,7 @@ class ClueRenderer implements ClueView {
     this.cursorController.handleShowAnswerClick(placementId);
   };
 
-  private handleHoverLeave = () => {
+  private handleHoverLeave = (): void => {
     if (this.activeClue) this.revealCurrentCopyButton(this.activeClue.copyButton);
     else if (this.visibleCopyButton) this.hideCurrentCopyButton(this.visibleCopyButton);
   };

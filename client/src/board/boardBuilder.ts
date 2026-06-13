@@ -1,5 +1,5 @@
-import { BoardView, Cell, Direction } from "../models/boardView.js";
 import { Coord } from "../app/coords.js";
+import { BoardView, Cell, Direction } from "../models/boardView.js";
 
 type CellGrid = HTMLTableCellElement[][];
 type FillGrid = HTMLDivElement[][];
@@ -133,4 +133,4 @@ function createGrid<T>(rows: number, cols: number, initialValue?: T): T[][] {
   return Array.from({ length: rows }, () => Array.from({ length: cols }, () => initialValue as T));
 }
 
-export { BoardRefs, CellGrid, FillGrid, InputGrid, createBoard };
+export { BoardRefs, CellGrid, createBoard, FillGrid, InputGrid };

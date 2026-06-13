@@ -1,12 +1,12 @@
 import { BoardRefs, createBoard } from "../board/boardBuilder.js";
+import { createClueRenderer } from "../clue/createClueRenderer.js";
 import { BoardView, Direction } from "../models/boardView.js";
 import { SolutionView } from "../models/solutionView.js";
 import { PuzzleController } from "../puzzle/puzzleController.js";
 import { PuzzleRenderer } from "../puzzle/puzzleRenderer.js";
 import { PuzzleSession } from "../puzzle/puzzleSession.js";
 import { PuzzleValidator } from "../puzzle/puzzleValidator.js";
-import { createClueRenderer } from "../clue/createClueRenderer.js";
-import { createCopyButton, attachCopyBehavior, revealCopyButton } from "./copyButton.js";
+import { attachCopyBehavior, createCopyButton, revealCopyButton } from "./copyButton.js";
 import { queryRequired } from "./query.js";
 
 function initPuzzlePage(boardView: BoardView, solutionView: SolutionView): void {

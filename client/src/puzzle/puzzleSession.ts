@@ -1,6 +1,6 @@
-import { Direction, Placement, BoardView, PlacementId } from "../models/boardView.js";
 import { Coord } from "../app/coords.js";
-import { PuzzleValidator, LetterGrid } from "./puzzleValidator.js";
+import { BoardView, Direction, Placement, PlacementId } from "../models/boardView.js";
+import { LetterGrid, PuzzleValidator } from "./puzzleValidator.js";
 
 type PlacementCheckResult = {
   solved: PlacementId[];
@@ -13,6 +13,16 @@ type PersistedPuzzleSession = {
   version: 1;
   puzzleNumber: number;
   letterGrid: LetterGrid;
+};
+
+type PlacementUpdate = {
+  affectedPlacements: Placement[];
+  updatedCoords: Coord[];
+};
+
+type PlacementSolution = {
+  placement: Placement;
+  solution: string;
 };
 
 class PuzzleSession {
@@ -44,20 +54,20 @@ class PuzzleSession {
     this.initSessionState();
   }
 
-  applyPlacementSolution(placementId: PlacementId): Coord[] {
-    const { placement, solution } = this.getPlacementSolution(placementId);
-    const { affectedPlacements, updatedCoords } = this.writePlacementSolution(placement, solution);
+  applyPlacementUpdate(placementId: PlacementId): PlacementUpdate {
+    const placementSolution: PlacementSolution = this.getPlacementSolution(placementId);
+    const placementUpdate: PlacementUpdate = this.writePlacementSolution(
+      placementSolution.placement,
+      placementSolution.solution
+    );
 
-    this.updateSolvedPlacements(affectedPlacements);
+    this.updateSolvedPlacements(placementUpdate.affectedPlacements);
     this.saveSessionState();
 
-    return updatedCoords;
+    return placementUpdate;
   }
 
-  private writePlacementSolution(
-    placement: Placement,
-    solution: string
-  ): { affectedPlacements: Placement[]; updatedCoords: Coord[] } {
+  private writePlacementSolution(placement: Placement, solution: string): PlacementUpdate {
     const placementSet = new Set<Placement>();
     const updatedCoords: Coord[] = this.getPlacementCoords(placement);
 
@@ -303,7 +313,7 @@ class PuzzleSession {
     return this.boardView.getCell(coord) === null;
   }
 
-  private getPlacementSolution(placementId: PlacementId): { placement: Placement; solution: string } {
+  private getPlacementSolution(placementId: PlacementId): PlacementSolution {
     const placement = this.boardView.getPlacement(placementId);
     if (!placement) throw new Error("Unable to retrieve placement");
 
@@ -519,4 +529,4 @@ class PuzzleSession {
   }
 }
 
-export { PuzzleSession };
+export { PlacementUpdate, PuzzleSession };

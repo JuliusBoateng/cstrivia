@@ -1,5 +1,5 @@
+import { CoordKey, createCoordKey } from "../app/coords.js";
 import { PlacementId } from "./boardView.js";
-import { createCoordKey, CoordKey } from "../app/coords.js";
 
 type Solution = {
   placement_id: PlacementId;

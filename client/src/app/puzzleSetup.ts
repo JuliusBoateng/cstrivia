@@ -46,4 +46,4 @@ function getJsonContent<T>(id: string): T {
   return JSON.parse(element.textContent) as T;
 }
 
-export { getBoardElement, getBoardView, getSolutionView, getClueContainer };
+export { getBoardElement, getBoardView, getClueContainer, getSolutionView };
