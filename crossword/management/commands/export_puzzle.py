@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
         try:
             board = Board.objects.prefetch_related(
-                "categories", "clue_placements__clue"
+                "categories",
             ).get(puzzle_number=puzzle_number)
         except Board.DoesNotExist:
             raise CommandError(
@@ -32,9 +32,9 @@ class Command(BaseCommand):
 
         clue_entries = []
         placements = (
-            board.clue_placements.select_related("clue")
+            board.placements.select_related("clue")
             .all()
-            .order_by("direction", "start_row", "start_col")
+            .order_by("start_row", "start_col", "direction")
         )
 
         for placement in placements:
