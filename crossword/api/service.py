@@ -11,7 +11,7 @@ from ..dto.mappers import (
     map_to_solution_view_dto,
 )
 from ..dto.serializers import serialize_board_view, serialize_solution_view
-from ..models import Board, CluePlacement, DesignNote
+from ..models import Board, DesignNote, Placement
 
 
 class PuzzleView(NamedTuple):
@@ -51,10 +51,8 @@ def _fetch_board(puzzle_number: int) -> Board:
         "categories",
         "design_notes",
         Prefetch(
-            "clue_placements",
-            queryset=CluePlacement.objects.select_related("clue").prefetch_related(
-                "clue_cells"
-            ),
+            "placements",
+            queryset=Placement.objects.select_related("clue").prefetch_related("cells"),
         ),
     ).filter(published_at__lte=timezone.now())
 

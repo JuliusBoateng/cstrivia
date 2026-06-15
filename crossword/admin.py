@@ -11,8 +11,8 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
-class CluePlacementInline(admin.TabularInline):
-    model = models.CluePlacement
+class PlacementInline(admin.TabularInline):
+    model = models.Placement
     extra = 0
     autocomplete_fields = ("clue",)
 
@@ -30,7 +30,7 @@ class BoardAdmin(admin.ModelAdmin):
     list_filter = ("published_at", "categories")
     filter_horizontal = ("categories",)
     ordering = ("puzzle_number",)
-    inlines = [CluePlacementInline]
+    inlines = [PlacementInline]
 
 
 @admin.register(models.Clue)
@@ -50,8 +50,8 @@ class ClueAdmin(admin.ModelAdmin):
     ordering = ("display_answer",)
 
 
-@admin.register(models.CluePlacement)
-class CluePlacementAdmin(admin.ModelAdmin):
+@admin.register(models.Placement)
+class PlacementAdmin(admin.ModelAdmin):
     list_display = (
         "board",
         "clue",

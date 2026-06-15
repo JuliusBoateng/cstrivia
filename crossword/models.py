@@ -52,7 +52,7 @@ class Board(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(
         auto_now=True, editable=False
-    )  # also updates when saving CluePlacement
+    )  # also updates when saving Placements
 
     def get_absolute_url(self):
         return reverse("puzzle", kwargs={"puzzle_number": self.puzzle_number})
@@ -167,10 +167,10 @@ class Clue(models.Model):
         super().save(*args, **kwargs)
 
 
-# Mapping between Board and Clue. Creates ClueCells.
-class CluePlacement(models.Model):
+# Mapping between Board and Clue. Creates Cells.
+class Placement(models.Model):
     board = models.ForeignKey(
-        Board, on_delete=models.CASCADE, related_name="clue_placements"
+        Board, on_delete=models.CASCADE, related_name="placements"
     )
     clue = models.ForeignKey(Clue, on_delete=models.CASCADE)
     start_row = models.PositiveIntegerField()
@@ -191,10 +191,10 @@ class CluePlacement(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["board", "start_row", "start_col", "direction"],
-                name="clue_placement_unique_row_col_direction",
+                name="placement_unique_row_col_direction",
             ),
             models.UniqueConstraint(
-                fields=["board", "clue"], name="clue_placement_unique_board_clue"
+                fields=["board", "clue"], name="placement_unique_board_clue"
             ),
         ]
 
@@ -250,8 +250,8 @@ class CluePlacement(models.Model):
 
             letter = self.clue.normalized_answer[i]
 
-            cell = ClueCell(
-                clue_placement=self,
+            cell = Cell(
+                placement=self,
                 row_index=row,
                 col_index=col,
                 placement_index=index,
@@ -263,15 +263,15 @@ class CluePlacement(models.Model):
 
     def _fetch_overlapping_cells(self):
         qs = (
-            ClueCell.objects.select_related("clue_placement").filter(
-                clue_placement__board=self.board
+            Cell.objects.select_related("placement").filter(
+                placement__board=self.board
             )  # get all cells of current board
         )
 
         is_update = self.pk is not None
         if is_update:
             qs = qs.exclude(
-                clue_placement=self
+                placement=self
             )  # excludes previous clue placement cells
 
         length = len(self.clue.normalized_answer)
@@ -305,7 +305,7 @@ class CluePlacement(models.Model):
                 continue
 
             # Rule 1: Cannot overlap same direction
-            if overlapping.clue_placement.direction == self.direction:
+            if overlapping.placement.direction == self.direction:
                 raise ValidationError(
                     f"Overlapping clues cannot share direction: '{self.direction}'."
                 )
@@ -316,10 +316,10 @@ class CluePlacement(models.Model):
                     f"letter conflict at coord ({cell.row_index},{cell.col_index}); '{cell.letter}' != '{overlapping.letter}'."
                 )
 
-    def _delete_previous_clue_cells(self):
+    def _delete_previous_cells(self):
         is_update = self.pk is not None
         if is_update:  # delete previous placement cells
-            self.clue_cells.all().delete()
+            self.cells.all().delete()
 
     def save(self, *args, **kwargs):
         self.full_clean()  # bound checks
@@ -331,19 +331,19 @@ class CluePlacement(models.Model):
         with (
             transaction.atomic()
         ):  # transactions automatically rollback in case of error
-            self._delete_previous_clue_cells()
+            self._delete_previous_cells()
 
             super().save(*args, **kwargs)  # must save placement before creating cells
-            ClueCell.objects.bulk_create(new_cells)  # create new placement cells
+            Cell.objects.bulk_create(new_cells)  # create new placement cells
 
         self.board.updated_at = timezone.now()
         self.board.save(update_fields=["updated_at"])
 
 
-# Created through CluePlacement. Write-only materialized projection.
-class ClueCell(models.Model):
-    clue_placement = models.ForeignKey(
-        CluePlacement, on_delete=models.CASCADE, related_name="clue_cells"
+# Created through Placements. Write-only materialized projection.
+class Cell(models.Model):
+    placement = models.ForeignKey(
+        Placement, on_delete=models.CASCADE, related_name="cells"
     )
     row_index = models.PositiveIntegerField()
     col_index = models.PositiveIntegerField()
@@ -357,21 +357,21 @@ class ClueCell(models.Model):
         ordering = ["placement_index"]
         constraints = [
             models.UniqueConstraint(
-                fields=["clue_placement", "row_index", "col_index"],
-                name="clue_cell_unique_placement_row_col",
+                fields=["placement", "row_index", "col_index"],
+                name="cell_unique_placement_row_col",
             ),
             models.UniqueConstraint(
-                fields=["clue_placement", "placement_index"],
-                name="clue_cell_unique_placement_placement_index",
+                fields=["placement", "placement_index"],
+                name="cell_unique_placement_placement_index",
             ),
         ]
         indexes = [
-            models.Index(fields=["row_index", "col_index"], name="cluecell_row_col_idx")
+            models.Index(fields=["row_index", "col_index"], name="cell_row_col_idx")
         ]
 
-    # CluePlacement calls bulk_create which bypasses save()
+    # Placement calls bulk_create which bypasses save()
     def save(self, *args, **kwargs):
-        raise ValueError("ClueCell is a projection and cannot be saved directly.")
+        raise ValueError("Cell is a projection and cannot be saved directly.")
 
 
 # Design Notes Section

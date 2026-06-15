@@ -4,7 +4,7 @@ from crossword.models import Clue
 
 
 class Command(BaseCommand):
-    help = "Delete clues not referenced by any clue placement."
+    help = "Delete clues not referenced by any placement."
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -14,7 +14,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        qs = Clue.objects.filter(clueplacement__isnull=True)
+        qs = Clue.objects.filter(placement__isnull=True)
         count = qs.count()
 
         if options["dry_run"]:

@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils.dateparse import parse_datetime
 
-from crossword.models import Board, Category, Clue, CluePlacement
+from crossword.models import Board, Category, Clue, Placement
 
 
 class Command(BaseCommand):
@@ -103,7 +103,7 @@ class Command(BaseCommand):
 
         board.categories.set(categories)
 
-        board.clue_placements.all().delete()
+        board.placements.all().delete()
 
         for entry in clue_data:
             clue, _ = Clue.objects.get_or_create(
@@ -116,7 +116,7 @@ class Command(BaseCommand):
                     clue.anagram = entry["anagram"]
                     clue.save()
 
-            CluePlacement.objects.create(
+            Placement.objects.create(
                 board=board,
                 clue=clue,
                 start_row=entry["start_row"],
