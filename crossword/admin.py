@@ -13,8 +13,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class PlacementInline(admin.TabularInline):
     model = models.Placement
-    extra = 0
-    autocomplete_fields = ("clue",)
+    extra = 1
+    fields = ("clue", "start_row", "start_col", "direction")
+    ordering = ("start_row", "start_col", "direction")
 
 
 @admin.register(models.Board)
@@ -36,18 +37,20 @@ class BoardAdmin(admin.ModelAdmin):
 @admin.register(models.Clue)
 class ClueAdmin(admin.ModelAdmin):
     list_display = (
-        "display_answer",
+        "board",
         "question",
         "normalized_answer",
+        "display_answer",
     )
+    list_filter = ("board",)
+
     search_fields = (
+        "board__title",
         "question",
-        "display_answer",
         "normalized_answer",
+        "display_answer",
     )
-    list_filter = ("categories",)
-    filter_horizontal = ("categories",)
-    ordering = ("display_answer",)
+    ordering = ("board", "display_answer")
 
 
 @admin.register(models.Placement)
@@ -55,12 +58,13 @@ class PlacementAdmin(admin.ModelAdmin):
     list_display = (
         "board",
         "clue",
-        "direction",
         "start_row",
         "start_col",
+        "direction",
     )
     list_filter = ("direction", "board")
-    search_fields = ("clue__question", "clue__display_answer", "board__title")
+    search_fields = ("board__title", "clue__question", "clue__display_answer")
+    ordering = ("board", "start_row", "start_col", "direction")
 
 
 @admin.register(models.DesignCategory)

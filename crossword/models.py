@@ -107,10 +107,9 @@ class Clue(models.Model):
         max_length=21, editable=False
     )  # derived field. diacritics removed
     anagram = models.CharField(max_length=21, null=True, blank=True)
-    categories = models.ManyToManyField(Category, related_name="clues", blank=True)
 
     def __str__(self):
-        return self.question
+        return self.normalized_answer
 
     # Filters allowed chars
     def _clean_answer(self, raw_answer: str) -> str:
