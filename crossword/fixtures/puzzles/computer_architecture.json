@@ -15,7 +15,7 @@
     {
       "question": "CPU design technique that increases throughput by overlapping stages of instruction execution; does not improve latency of individual instructions",
       "display_answer": "PIPELINE",
-      "anagram": "PILEPINE",
+      "anagram": "IPEPENIL",
       "direction": "A",
       "start_row": 1,
       "start_col": 2
@@ -31,7 +31,7 @@
     {
       "question": "Processing unit responsible for executing instructions; composed of an arithmetic logic unit, control unit, and registers",
       "display_answer": "CPU",
-      "anagram": "UPC",
+      "anagram": "PUC",
       "direction": "A",
       "start_row": 4,
       "start_col": 5
@@ -111,7 +111,7 @@
     {
       "question": "Family of instruction set architectures known for power efficiency; commonly used in mobile devices and associated with RISC design",
       "display_answer": "ARM",
-      "anagram": "MRA",
+      "anagram": "RMA",
       "direction": "D",
       "start_row": 7,
       "start_col": 6
@@ -127,7 +127,7 @@
     {
       "question": "Shared communication system that transfers data, instructions, and control signals between hardware components",
       "display_answer": "BUSES",
-      "anagram": "SBUES",
+      "anagram": "SUBES",
       "direction": "D",
       "start_row": 8,
       "start_col": 4

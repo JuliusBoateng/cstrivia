@@ -58,7 +58,7 @@ class Board(models.Model):
         return reverse("puzzle", kwargs={"puzzle_number": self.puzzle_number})
 
     def __str__(self):
-        return self.title
+        return f"Puzzle {self.puzzle_number}: {self.title}"
 
     class Meta:
         ordering = ["puzzle_number"]
@@ -193,7 +193,7 @@ class Placement(models.Model):
     )
 
     def __str__(self):
-        return f"{self.direction} ({self.start_row}, {self.start_col})"
+        return f"({self.start_row}, {self.start_col}) {self.direction}"
 
     class Meta:
         constraints = [
@@ -357,7 +357,7 @@ class Cell(models.Model):
     letter = models.CharField(max_length=1)
 
     def __str__(self):
-        return self.letter
+        return f"({self.row_index}, {self.col_index}) {self.letter}"
 
     class Meta:
         ordering = ["placement_index"]
@@ -424,6 +424,9 @@ class DesignNote(models.Model):
 
     class Meta:
         ordering = ["design_number"]
+
+    def __str__(self):
+        return f"Design {self.design_number}: {self.title}"
 
     def get_absolute_url(self):
         return reverse("design_note", kwargs={"design_number": self.design_number})
