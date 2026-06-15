@@ -96,6 +96,11 @@ class Board(models.Model):
 
 # Questions/Answers for puzzles
 class Clue(models.Model):
+    board = models.ForeignKey(
+        Board,
+        on_delete=models.CASCADE,
+        related_name="clues",
+    )
     question = models.CharField(max_length=150)
     display_answer = models.CharField(max_length=21)  # Keep diacritics
     normalized_answer = models.CharField(
@@ -167,12 +172,16 @@ class Clue(models.Model):
         super().save(*args, **kwargs)
 
 
-# Mapping between Board and Clue. Creates Cells.
+# Places a clue on a board and materializes its cells.
 class Placement(models.Model):
     board = models.ForeignKey(
         Board, on_delete=models.CASCADE, related_name="placements"
     )
-    clue = models.ForeignKey(Clue, on_delete=models.CASCADE)
+    clue = models.OneToOneField(
+        Clue,
+        on_delete=models.CASCADE,
+        related_name="placement",
+    )
     start_row = models.PositiveIntegerField()
     start_col = models.PositiveIntegerField()
 
@@ -192,10 +201,7 @@ class Placement(models.Model):
             models.UniqueConstraint(
                 fields=["board", "start_row", "start_col", "direction"],
                 name="placement_unique_row_col_direction",
-            ),
-            models.UniqueConstraint(
-                fields=["board", "clue"], name="placement_unique_board_clue"
-            ),
+            )
         ]
 
     def _bounds_check(self):
@@ -232,6 +238,9 @@ class Placement(models.Model):
                 )
 
     def clean(self):
+        if self.board_id != self.clue.board_id:
+            raise ValidationError({"clue": "Placement.board must match Clue.board."})
+
         self._bounds_check()
         self._across_direction_check()
         self._down_direction_check()
@@ -270,9 +279,7 @@ class Placement(models.Model):
 
         is_update = self.pk is not None
         if is_update:
-            qs = qs.exclude(
-                placement=self
-            )  # excludes previous clue placement cells
+            qs = qs.exclude(placement=self)  # excludes previous clue placement cells
 
         length = len(self.clue.normalized_answer)
 

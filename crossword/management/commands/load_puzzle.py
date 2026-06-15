@@ -84,6 +84,7 @@ class Command(BaseCommand):
                 f"board id={board_by_title.pk}."
             )
 
+        is_update = bool(board_by_number or board_by_title)
         board = board_by_number or board_by_title or Board()
 
         board.title = title
@@ -95,26 +96,24 @@ class Command(BaseCommand):
         board.cols = board_data["cols"]
         board.save()
 
-        categories = []
+        board_categories = []
         for raw_name in board_data.get("categories", []):
             name = raw_name.strip()
             category, _ = Category.objects.get_or_create(name=name)
-            categories.append(category)
+            board_categories.append(category)
 
-        board.categories.set(categories)
+        board.categories.set(board_categories)
 
-        board.placements.all().delete()
+        # Fixtures are canonical, so rebuild board-owned puzzle content.
+        board.clues.all().delete()
 
         for entry in clue_data:
-            clue, _ = Clue.objects.get_or_create(
+            clue = Clue.objects.create(
+                board=board,
                 question=entry["question"],
                 display_answer=entry["display_answer"],
+                anagram=entry.get("anagram"),
             )
-
-            if "anagram" in entry:
-                if clue.anagram != entry["anagram"]:
-                    clue.anagram = entry["anagram"]
-                    clue.save()
 
             Placement.objects.create(
                 board=board,
@@ -124,5 +123,5 @@ class Command(BaseCommand):
                 direction=entry["direction"],
             )
 
-        action = "Updated" if board_by_number or board_by_title else "Created"
+        action = "Updated" if is_update else "Created"
         return action, board.title
