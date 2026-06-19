@@ -13,12 +13,11 @@
     line-height: 1;
 	margin-bottom: .5rem;
     white-space: nowrap;
-    text-wrap: pretty;
 }
 
 h1 .logo {
     width: 32px;
-    transform: translateY(2px);
+    transform: translate(2px, 2px);
 }
 
 .hero p.subheadline {
