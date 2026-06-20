@@ -67,6 +67,7 @@ if not DEBUG:
         "img-src": [CSP.SELF, "data:"],
         "font-src": [CSP.SELF],
         "connect-src": [CSP.SELF],
+        "media-src": [CSP.SELF, "https://media.cstrivia.com"],
         "object-src": [CSP.NONE],
         "base-uri": [CSP.SELF],
         "frame-ancestors": [CSP.NONE],
