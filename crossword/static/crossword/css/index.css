@@ -17,14 +17,14 @@
 
 h1 .logo {
     width: 32px;
-    transform: translate(2px, 2px);
+    transform: translateY(2px);
 }
 
 .hero p.subheadline {
 	font-size: clamp(1.1rem, 1.4vw, 1.2rem);
 	color: #52525b;
 	margin-bottom: 1rem;
-	text-wrap: pretty;
+    white-space: nowrap;
 }
 
 .subheadline .underline {

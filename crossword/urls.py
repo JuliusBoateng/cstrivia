@@ -3,7 +3,13 @@ from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
 from .views.design import DesignNoteListView, design_note_view
-from .views.puzzle import PuzzleArchiveView, PuzzleListView, privacy_view, puzzle_view
+from .views.puzzle import (
+    PuzzleArchiveView,
+    PuzzleListView,
+    about_view,
+    privacy_view,
+    puzzle_view,
+)
 from .views.rss import LatestActivityFeed
 
 urlpatterns = [
@@ -22,4 +28,5 @@ urlpatterns = [
         ),
         name="robots_txt",
     ),
+    path("about/", about_view)
 ]

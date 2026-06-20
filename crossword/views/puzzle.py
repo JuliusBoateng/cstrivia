@@ -80,6 +80,9 @@ def privacy_view(request):
     return render(request, "crossword/privacy.html")
 
 
+def about_view(request):
+    return render(request, "crossword/about.html")
+
 def custom_404(request, exception):
     board = Board.objects.filter(published_at__lte=timezone.now()).order_by(
         "-puzzle_number"
