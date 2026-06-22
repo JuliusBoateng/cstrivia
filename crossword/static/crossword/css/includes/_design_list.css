@@ -18,12 +18,12 @@
   
 .design-row {
     display: flex;
-    gap: 0.5rem;
-    align-items: baseline;
+    min-width: 20rem;
 
     text-decoration: none;
     color: inherit;
-    padding: 0.5rem 0 0.5rem 1rem;
+    padding: 0.3rem 0 0.3rem 1rem;
+    line-height: 1.4;
 }
 
 .design-row:hover {
@@ -31,9 +31,8 @@
     border-radius: 8px;
 }
   
-.design-number,
-.design-date {
-    flex-shrink: 0;
+.design-number {
+    flex: 0 0 5rem;
     white-space: nowrap;
     color: #7c8594;
 }
@@ -46,6 +45,9 @@
 }
 
 .design-date {
-    margin-left: auto;
     font-size: 0.9em;
+    flex: 0 0 6rem;
+    text-align: right;
+    white-space: nowrap;
+    color: #7c8594;
 }
