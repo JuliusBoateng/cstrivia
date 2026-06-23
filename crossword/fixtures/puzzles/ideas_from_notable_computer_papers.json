@@ -1,0 +1,138 @@
+{
+  "board": {
+    "title": "Ideas from Notable Computer Papers",
+    "author": "Julius Boateng",
+    "puzzle_number": 19,
+    "published_at": "2026-06-23T11:18:41+00:00",
+    "description": "Many ideas that began as research papers and shaped computer science are now accepted as common knowledge. This puzzle covers notable research papers that proposed ideas so foundational they are now taken for granted.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "People",
+      "Research Institutions",
+      "Research Papers"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Protocol for achieving consensus through majority agreement in distributed systems; published by Lamport in his 1998 paper The Part-Time Parliament",
+      "display_answer": "PAXOS",
+      "anagram": "XSPAO",
+      "direction": "D",
+      "start_row": 0,
+      "start_col": 11
+    },
+    {
+      "question": "Processor architecture emphasizing simple instructions; introduced in Patterson and Sequin's 1981 paper ___ I: A Reduced Instruction Set VLSI Computer",
+      "display_answer": "RISC",
+      "anagram": "SRCI",
+      "direction": "D",
+      "start_row": 0,
+      "start_col": 12
+    },
+    {
+      "question": "Neural network architecture introduced in Google's landmark 2017 paper Attention Is All You Need; foundation of modern large language models",
+      "display_answer": "TRANSFORMER",
+      "anagram": "RMREFTRNSOA",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 3
+    },
+    {
+      "question": "Public-key asymmetric encryption algorithm; introduced by Rivest, Shamir, and Adleman in 1978",
+      "display_answer": "RSA",
+      "anagram": "RAS",
+      "direction": "A",
+      "start_row": 2,
+      "start_col": 3
+    },
+    {
+      "question": "Probabilistic data structure that tests if an element is in a set; from Bloom's 1970 paper Space/Time Trade-offs in Hash Coding with Allowable Errors",
+      "display_answer": "BLOOMFILTER",
+      "anagram": "ITREMOLLBFO",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 10
+    },
+    {
+      "question": "Logical clock for ordering events in distributed systems; from Lamport's 1978 paper Time, Clocks, and the Ordering of Events in a Distributed System",
+      "display_answer": "LAMPORTCLOCK",
+      "anagram": "OPCTARMLLOKC",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 2
+    },
+    {
+      "question": "Divide-and-conquer sorting algorithm that partitions an array around a pivot; very fast in practice; introduced in Tony Hoare's 1961 eponymous paper",
+      "display_answer": "QUICKSORT",
+      "anagram": "CORQTKIUS",
+      "direction": "D",
+      "start_row": 4,
+      "start_col": 1
+    },
+    {
+      "question": "Key exchange method for establishing a shared secret over a public channel; from Diffie and Hellman's 1976 paper New Directions in Cryptography",
+      "display_answer": "DIFFIEHELLMAN",
+      "anagram": "FAEFELNIIHLDM",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 0
+    },
+    {
+      "question": "___ model; concurrency paradigm where actors (primitives) communicate through messages; introduced by Hewitt, Bishop, and Steiger in their 1973 paper",
+      "display_answer": "ACTOR",
+      "anagram": "CTAOR",
+      "direction": "A",
+      "start_row": 7,
+      "start_col": 0
+    },
+    {
+      "question": "Web page ranking algorithm used by Google search; introduced by Page and Brin's 1998 paper The Anatomy of a Large-Scale Hypertextual Web Search Engine",
+      "display_answer": "PAGERANK",
+      "anagram": "NRAAKGPE",
+      "direction": "D",
+      "start_row": 7,
+      "start_col": 13
+    },
+    {
+      "question": "___ model; foundational to SQL databases; introduced by Codd in his 1970 paper A Relational Model of Data for Large Shared Data Banks",
+      "display_answer": "RELATIONAL",
+      "anagram": "OLLNRTAAEI",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 5
+    },
+    {
+      "question": "___ Generals Problem; highlights difficulty of achieving consensus despite faulty participants; introduced in Lamport, Shostak, and Pease's 1982 paper",
+      "display_answer": "BYZANTINE",
+      "anagram": "NBIZEANYT",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 5
+    },
+    {
+      "question": "Balanced search tree supporting log operations; authored by Bayer and McCreight in 1970 paper Organization and Maintenance of Large Ordered Indices",
+      "display_answer": "BTREE",
+      "anagram": "EETBR",
+      "direction": "D",
+      "start_row": 10,
+      "start_col": 5
+    },
+    {
+      "question": "Protocol for achieving consensus through an elected leader; from Ongaro and Ousterhout's 2014 paper In Search of an Understandable Consensus Algorithm",
+      "display_answer": "RAFT",
+      "anagram": "ARFT",
+      "direction": "A",
+      "start_row": 12,
+      "start_col": 5
+    },
+    {
+      "question": "Wired computer networking standard; introduced by Metcalfe and Boggs in their 1976 paper ___: Distributed Packet Switching for Local Computer Networks",
+      "display_answer": "ETHERNET",
+      "anagram": "EEHTENRT",
+      "direction": "A",
+      "start_row": 14,
+      "start_col": 2
+    }
+  ]
+}
