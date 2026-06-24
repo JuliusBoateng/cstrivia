@@ -815,6 +815,13 @@ p.board-desc {
     --board-size: clamp(var(--board-min), 90vw, var(--board-max));
   }
 
+  .board-title {
+    max-width: 24ch;
+    margin-inline: auto;
+    text-align: center;
+    text-wrap: balance;
+  }
+
   .toolbar-wrapper {
     align-items: center;
   }
