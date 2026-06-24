@@ -1,69 +1,53 @@
 {% extends "crossword/includes/_base.html" %}
 {% load static %}
-
 {% block canonical %}
     <link rel="canonical" href="https://cstrivia.com/about/">
 {% endblock %}
-
 {% block title %}
     About | CS Trivia
 {% endblock %}
-
 {% block meta_description %}
-  <meta
-    name="description"
-    content="Learn why CS Trivia exists, why each puzzle focuses on a specific topic, and why puzzles include design notes."
-  >
+    <meta name="description"
+          content="Learn why CS Trivia exists, why each puzzle focuses on a specific topic, and why puzzles include design notes.">
 {% endblock %}
-
 <!-- Open Graph (LinkedIn, Facebook, etc.) -->
 {% block og_title %}
-  About | CS Trivia
+    About | CS Trivia
 {% endblock %}
-
 {% block og_description %}
     Learn why CS Trivia exists, why each puzzle focuses on a specific topic, and why puzzles include design notes.
 {% endblock %}
-
 {% block og_url %}
-  https://cstrivia.com/about/
+    https://cstrivia.com/about/
 {% endblock %}
-
- <!-- Twitter (also used by some platforms) -->
+<!-- Twitter (also used by some platforms) -->
 {% block twitter_title %}
-  About | CS Trivia
+    About | CS Trivia
 {% endblock %}
-
 {% block twitter_description %}
     Learn why CS Trivia exists, why each puzzle focuses on a specific topic, and why puzzles include design notes.
 {% endblock %}
-
 {% block styles %}
-  <link rel="stylesheet" href="{% static 'crossword/css/includes/_layout.css' %}">
-  <link rel="stylesheet" href="{% static 'crossword/css/about.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'crossword/css/includes/_layout.css' %}">
+    <link rel="stylesheet" href="{% static 'crossword/css/about.css' %}">
 {% endblock %}
 {% block content %}
     <article class="about-page">
         <h1>About</h1>
-
         <h2>Why computer science crosswords?</h2>
         <p>I like computer science as a subject. There aren't many recreational ways to explore the concepts, history, and people that shaped the field. I chose crosswords as the format because they provide a visual and interactive way to engage with these ideas.</p>
-
         <h2>Why are the puzzles constructed this way?</h2>
         <p>I wanted each puzzle to be self-contained because computer science knowledge in one area doesn't necessarily translate to another. For example, someone knowledgeable about computer graphics is not necessarily knowledgeable about compilers. Each puzzle focuses on a specific topic, which limits the knowledge required to solve it. Since every answer relates to the theme, the clues can be more explanatory and detailed.</p>
         <p>The tradeoff is that themed answers are limited, resulting in grids with sparse intersections and no filler. To compensate for this, I added anagrams to make solving easier and less dependent on pure recall.</p>
-        
         <h2>Why write design notes?</h2>
         <p>Design notes explain why I chose certain topics and clues. I enjoy hearing the reasoning behind creative decisions, and I think it's interesting to offer that same behind-the-scenes perspective to solvers.</p>
-    
         <h2>Short edit</h2>
-        <video
-            controls
-            preload="metadata"
-            poster="{% static 'crossword/img/board.webp' %}">
-            <source
-                src="https://media.cstrivia.com/videos/cstrivia_edit.mp4"
-                type="video/mp4">
+        <video controls
+               preload="metadata"
+               poster="{% static 'crossword/img/board.webp' %}">
+            <source src="https://media.cstrivia.com/videos/cstrivia_edit.mp4"
+                    type="video/mp4">
         </video>
     </article>
 {% endblock %}

@@ -1,23 +1,18 @@
 <section class="puzzle-list">
     <h2>Puzzles</h2>
-  
     <ul>
-      {% for puzzle in puzzles %}
-        <li>
-          <a href="{% url 'puzzle' puzzle.puzzle_number %}" class="puzzle-row">
-            <span class="puzzle-number">Puzzle {{ puzzle.puzzle_number }}:</span>
-            <span class="puzzle-title">{{ puzzle.title }}</span>
-            <span class="puzzle-date">
-              {{ puzzle.published_at|date:"M j, Y" }}
-            </span>
-          </a>
-        </li>
-      {% endfor %}
+        {% for puzzle in puzzles %}
+            <li>
+                <a href="{% url 'puzzle' puzzle.puzzle_number %}" class="puzzle-row">
+                    <span class="puzzle-number">Puzzle {{ puzzle.puzzle_number }}:</span>
+                    <span class="puzzle-title">{{ puzzle.title }}</span>
+                    <span class="puzzle-date">{{ puzzle.published_at|date:"M j, Y" }}</span>
+                </a>
+            </li>
+        {% endfor %}
     </ul>
-
     {% if not is_archive %}
-      <a href="{% url 'archive' %}" class="archive-link">Archive &rarr;</a>
+        <a href="{% url 'archive' %}" class="archive-link">Archive &rarr;</a>
     {% endif %}
-    
     {% include "crossword/includes/_pagination.html" %}
 </section>

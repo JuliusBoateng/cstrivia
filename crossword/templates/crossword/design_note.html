@@ -1,46 +1,35 @@
 {% extends "crossword/includes/_base.html" %}
 {% load markdown_filters %}
 {% load static %}
-
 {% block canonical %}
-  <link rel="canonical" href="https://cstrivia.com/design/{{ note.design_number }}/">
+    <link rel="canonical"
+          href="https://cstrivia.com/design/{{ note.design_number }}/">
 {% endblock %}
-
 {% block title %}
-  Design Note {{ note.design_number }}: {{ note.title|escape }} | CS Trivia
+    Design Note {{ note.design_number }}: {{ note.title|escape }} | CS Trivia
 {% endblock %}
-
 {% block meta_description %}
-  <meta
-    name="description"
-    content="{{ meta_description|escape }}"
-  >
+    <meta name="description" content="{{ meta_description|escape }}">
 {% endblock %}
-
 <!-- Open Graph (LinkedIn, Facebook, etc.) -->
 {% block og_title %}
-  Design Note {{ note.design_number }}: {{ note.title|escape }} | CS Trivia
+    Design Note {{ note.design_number }}: {{ note.title|escape }} | CS Trivia
 {% endblock %}
-
 {% block og_description %}
-  {{ meta_description|escape }}
+    {{ meta_description|escape }}
 {% endblock %}
-
 {% block og_url %}
-  https://cstrivia.com/design/{{ note.design_number }}/
+    https://cstrivia.com/design/{{ note.design_number }}/
 {% endblock %}
-
- <!-- Twitter (also used by some platforms) -->
+<!-- Twitter (also used by some platforms) -->
 {% block twitter_title %}
-  Design Note {{ note.design_number }}: {{ note.title|escape }} | CS Trivia
+    Design Note {{ note.design_number }}: {{ note.title|escape }} | CS Trivia
 {% endblock %}
-
 {% block twitter_description %}
-  {{ meta_description|escape }}
+    {{ meta_description|escape }}
 {% endblock %}
-
 {% block head_extra %}
-  <script type="application/ld+json">
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "CreativeWork",
@@ -54,47 +43,36 @@
       "datePublished": "{{ note.published_at|date:'Y-m-d' }}",
       "url": "https://cstrivia.com/design/{{ note.design_number }}/"
     }
-  </script>
+    </script>
 {% endblock %}
-
 {% block styles %}
-  <link rel="stylesheet" href="{% static 'crossword/css/includes/_layout.css' %}">
-  <link rel="stylesheet" href="{% static 'crossword/css/design.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'crossword/css/includes/_layout.css' %}">
+    <link rel="stylesheet" href="{% static 'crossword/css/design.css' %}">
 {% endblock %}
-
 {% block content %}
-  <article class="design-note">
-    <header class="design-note-header">
-      <h1>Design {{ note.design_number }}: {{ note.title|escape }}</h1>
-
-      {% if note.published_at %}
-        <p class="design-note-date">
-          {{ note.published_at|date:"l, F j, Y" }}
-        </p>
-      {% endif %}
-
-      {% if note.author %}
-        <p class="design-note-author">By {{ note.author|escape }}</p>
-      {% endif %}
-    </header>
-
-    <div class="design-note-body">
-      {{ note.body|render_markdown }}
-    </div>
-
-    {% if note.boards.exists %}
-      <section class="design-note-related">
-        <h2>Related Puzzles</h2>
-        <ul>
-          {% for board in note.boards.all %}
-            <li>
-              <a href="{{ board.get_absolute_url }}">
-                Puzzle {{ board.puzzle_number }}: {{ board.title|escape }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      </section>
-    {% endif %}
-  </article>
+    <article class="design-note">
+        <header class="design-note-header">
+            <h1>Design {{ note.design_number }}: {{ note.title|escape }}</h1>
+            {% if note.published_at %}
+                <p class="design-note-date">{{ note.published_at|date:"l, F j, Y" }}</p>
+            {% endif %}
+            {% if note.author %}
+                <p class="design-note-author">By {{ note.author|escape }}</p>
+            {% endif %}
+        </header>
+        <div class="design-note-body">{{ note.body|render_markdown }}</div>
+        {% if note.boards.exists %}
+            <section class="design-note-related">
+                <h2>Related Puzzles</h2>
+                <ul>
+                    {% for board in note.boards.all %}
+                        <li>
+                            <a href="{{ board.get_absolute_url }}">Puzzle {{ board.puzzle_number }}: {{ board.title|escape }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
+    </article>
 {% endblock %}

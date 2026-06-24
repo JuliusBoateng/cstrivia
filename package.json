@@ -7,7 +7,7 @@
     "typecheck": "tsc --noEmit",
     "watch": "esbuild client/src/main.ts --bundle --sourcemap --outfile=crossword/static/crossword/dist/main.js --watch",
     "build": "esbuild client/src/main.ts --bundle --minify --outfile=crossword/static/crossword/dist/main.js",
-    "format": "prettier --write \"client/src/**/*.ts\"",
+    "format": "prettier --write \"client/src/**/*.ts\" && djlint crossword/templates --reformat && prettier --write crossword/static",
     "lint": "eslint \"client/src/**/*.ts\""
   },
   "repository": {

@@ -6,3 +6,4 @@ python-dotenv==1.2.2
 whitenoise==6.12.0
 Markdown==3.10.2
 ruff==0.15.17
+djlint==1.39.4

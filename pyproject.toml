@@ -5,3 +5,8 @@ target-version = "py313"
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 ignore = ["E501"]
+
+[tool.djlint]
+profile = "django"
+indent = 4
+max_line_length = 120

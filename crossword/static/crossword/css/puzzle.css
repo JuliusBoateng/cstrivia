@@ -5,139 +5,139 @@
 }
 
 :root {
-    /* Board sizing */
-    --board-min: 400px;
-    --board-max: 720px;
-    --board-size: clamp(var(--board-min), 50vw, var(--board-max));
-  
-    /* Clue sizing */
-    --clue-min-width: 400px;
-    --clue-max-width: 440px;
-    --clue-min-height: 320px;
-    --clue-max-height: 760px;
+  /* Board sizing */
+  --board-min: 400px;
+  --board-max: 720px;
+  --board-size: clamp(var(--board-min), 50vw, var(--board-max));
 
-    /* Site sizing */
-    --site-max-width: 1440px;
-    --clue-text: 55ch;
+  /* Clue sizing */
+  --clue-min-width: 400px;
+  --clue-max-width: 440px;
+  --clue-min-height: 320px;
+  --clue-max-height: 760px;
 
-    /* Reserve space so panel doesn't collapse before puzzle initializes */
-    --puzzle-dynamic-loading-min-height: 1200px;
+  /* Site sizing */
+  --site-max-width: 1440px;
+  --clue-text: 55ch;
 
-    /* Influences board header and clue-wrapper */
-    --board-header-lines: 1;
-    --board-header-line-height: 1.3;
-    --board-header-reserved-height: 1.3em;
-  }
+  /* Reserve space so panel doesn't collapse before puzzle initializes */
+  --puzzle-dynamic-loading-min-height: 1200px;
+
+  /* Influences board header and clue-wrapper */
+  --board-header-lines: 1;
+  --board-header-line-height: 1.3;
+  --board-header-reserved-height: 1.3em;
+}
 
 html {
-    font-family: system-ui, "Segoe UI", Roboto, sans-serif;
-    overflow-y: scroll;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  overflow-y: scroll;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    min-height: 100vh;
-    min-height: 100dvh;
-    background: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: whitesmoke;
 }
 
 main {
-    max-width: var(--site-max-width);
-    margin: 0 auto;
-    padding: 0 1rem;
-    flex: 1;
+  max-width: var(--site-max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+  flex: 1;
 }
 
 [hidden] {
-    display: none !important;
+  display: none !important;
 }
 
 .puzzle-dynamic {
-    visibility: hidden;
-    min-height: var(--puzzle-dynamic-loading-min-height);
+  visibility: hidden;
+  min-height: var(--puzzle-dynamic-loading-min-height);
 }
 
 .puzzle-dynamic.is-ready {
-    /* Reserve space so panel doesn't collapse before puzzle initializes */
-    visibility: visible;
-    min-height: auto;
+  /* Reserve space so panel doesn't collapse before puzzle initializes */
+  visibility: visible;
+  min-height: auto;
 }
 
 .puzzle-region {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  flex-direction: column;
 }
 
 .toolbar-wrapper {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .puzzle-toolbar {
-    display: inline-flex;
-    align-items: center;
-    letter-spacing: 0em;
-    color: #6b7280;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0em;
+  color: #6b7280;
 
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
 
 .toolbar-separator {
-    margin: 0 0.4rem;
-    color: #9ca3af;
-    pointer-events: none;
+  margin: 0 0.4rem;
+  color: #9ca3af;
+  pointer-events: none;
 }
 
 .puzzle-toolbar button {
-    background: none;
-    border: none;
-    padding: 0.3rem 0.2rem;
-    font: inherit;
-    cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.3rem 0.2rem;
+  font: inherit;
+  cursor: pointer;
 }
 
 .puzzle-toolbar button:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .puzzle-toolbar .controls-toggle::before {
-    content: "\25B6";
-    margin-right: 0.1rem;
+  content: "\25B6";
+  margin-right: 0.1rem;
 }
-  
+
 .puzzle-toolbar .controls-toggle[aria-expanded="true"]::before {
-    content: "\25BC";
+  content: "\25BC";
 }
 
 .puzzle-toolbar .controls-toggle {
-    color: #374151;
+  color: #374151;
 }
 
 .puzzle-toolbar .resource-toggle::before {
-    content: "\25B6";
-    margin-right: 0.1rem;
+  content: "\25B6";
+  margin-right: 0.1rem;
 }
-  
+
 .puzzle-toolbar .resource-toggle[aria-expanded="true"]::before {
-    content: "\25BC";
+  content: "\25BC";
 }
 
 .puzzle-toolbar .resource-toggle {
-    color: #374151;
+  color: #374151;
 }
 
 .puzzle-toolbar .clear-puzzle {
-    color: #6b7280;
+  color: #6b7280;
 }
 
 .puzzle-toolbar .clear-puzzle.confirming {
-    color: #374151
+  color: #374151;
 }
 
 .controls-mobile {
@@ -145,722 +145,736 @@ main {
 }
 
 .controls-panel {
-    width: 100%;
-    margin-bottom: 0.5rem;
-    font-size: clamp(0.9rem, 1vw, 1rem);
-    line-height: 1.4;
-    color: #4b5563;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  font-size: clamp(0.9rem, 1vw, 1rem);
+  line-height: 1.4;
+  color: #4b5563;
 }
 
 .controls-desktop {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
 }
 
 .controls-desktop section {
-    min-width: 0;
+  min-width: 0;
 }
 
 .controls-desktop h3 {
-    margin: 0 0 2px 0;
-    font-size: 1rem;
-    font-weight: 600;
+  margin: 0 0 2px 0;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .controls-desktop ul {
-    margin: 0;
-    padding-left: 1.25rem;
+  margin: 0;
+  padding-left: 1.25rem;
 }
 
 .controls-desktop li + li {
-    margin-top: 0.3rem;
+  margin-top: 0.3rem;
 }
 
 .controls-mobile ul {
-    margin: 0;
+  margin: 0;
 }
 
 .controls-mobile li + li {
-    margin-top: 0.3rem;
+  margin-top: 0.3rem;
 }
 
 .resource-panel {
-    width: 100%;
-    margin-bottom: 0.5rem;
-    font-size: clamp(0.9rem, 1vw, 1rem);
-    line-height: 1.4;
-    color: #4b5563;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  font-size: clamp(0.9rem, 1vw, 1rem);
+  line-height: 1.4;
+  color: #4b5563;
 }
 
 .resource-panel ul {
-    margin: 0;
-    padding-left: 1rem;
+  margin: 0;
+  padding-left: 1rem;
 }
 
 .resource-panel li + li {
-    margin-top: 0.3rem;
+  margin-top: 0.3rem;
 }
 
 .board-title {
-    text-align: center;
-    font-size: clamp(1.4rem, 2.2vw, 2rem);
-    margin-top: 0;
-    margin-bottom: clamp(0.5rem, 0.8vw, 0.9rem);
-    font-weight: 600;
+  text-align: center;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  margin-top: 0;
+  margin-bottom: clamp(0.5rem, 0.8vw, 0.9rem);
+  font-weight: 600;
 }
 
 .puzzle-panel {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .board-layout {
-    width: var(--board-size);
-    max-width: 100%;
-    min-width: var(--board-min);
-    flex: 0 0 auto;
-    order: 1;
+  width: var(--board-size);
+  max-width: 100%;
+  min-width: var(--board-min);
+  flex: 0 0 auto;
+  order: 1;
 }
 
 .board-card {
-    width: 100%;
-    border-radius: 20px;
-    background-color: #18181b;
-    box-shadow:
-        0 1px 2px rgba(0,0,0,0.04),
-        0 8px 24px rgba(0,0,0,0.06);
-    overflow: hidden;
+  width: 100%;
+  border-radius: 20px;
+  background-color: #18181b;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
 }
 
 .board {
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-    touch-action: manipulation;
-    contain: layout paint;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  touch-action: manipulation;
+  contain: layout paint;
 }
 
 .board-header {
-    min-height: var(--board-header-reserved-height);
-    width: min(100%, var(--clue-text));
-    margin: 0 0 .2rem 0;
-    margin-inline: auto;
-    text-align: center;
+  min-height: var(--board-header-reserved-height);
+  width: min(100%, var(--clue-text));
+  margin: 0 0 0.2rem 0;
+  margin-inline: auto;
+  text-align: center;
 
-    font-size: clamp(0.9rem, 0.85rem + 0.4vw, 1.05rem);
-    font-weight: 600;
-    line-height: var(--board-header-line-height);
-    letter-spacing: 0.02em;
+  font-size: clamp(0.9rem, 0.85rem + 0.4vw, 1.05rem);
+  font-weight: 600;
+  line-height: var(--board-header-line-height);
+  letter-spacing: 0.02em;
 
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .board-header-text {
-    display: -webkit-box;
-    line-clamp: 1;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+  display: -webkit-box;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .cell {
-    border: 2px solid #18181b;
-    background: white;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-    transition: background-color 120ms ease, box-shadow 120ms ease;
+  border: 2px solid #18181b;
+  background: white;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
 }
 
 .cell.block {
-    background: #18181b;
-    border-color: #18181b;
-    box-shadow: inset 0 0 0 clamp(2px, 0.5vw, 4px) #111;
+  background: #18181b;
+  border-color: #18181b;
+  box-shadow: inset 0 0 0 clamp(2px, 0.5vw, 4px) #111;
 }
 
 .cell.highlight-placement {
-    background: #AEB9DB;
+  background: #aeb9db;
 }
 
 .cell.highlight-cursor {
-    background: #848FBE;
+  background: #848fbe;
 }
 
 .cell .fill {
-    position: relative;
-    width: 100%;
-    font-size: clamp(12px, 1vw, 20px);
-    aspect-ratio: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  width: 100%;
+  font-size: clamp(12px, 1vw, 20px);
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .fill .label {
-    position: absolute;
-    /* Scale clue number offset from 0px at min board size to 2px at max board size. */
-    top: clamp(0px, calc((var(--board-size) - 400px) / 160), 2px);
-    left: clamp(0px, calc((var(--board-size) - 400px) / 160), 2px);
-    pointer-events: none;
+  position: absolute;
+  /* Scale clue number offset from 0px at min board size to 2px at max board size. */
+  top: clamp(0px, calc((var(--board-size) - 400px) / 160), 2px);
+  left: clamp(0px, calc((var(--board-size) - 400px) / 160), 2px);
+  pointer-events: none;
 
-    font-size: clamp(14px, calc(var(--board-size) * 0.025), 16px);
-    line-height: 1;
-    color: #374151;
-    font-weight: 600;
+  font-size: clamp(14px, calc(var(--board-size) * 0.025), 16px);
+  line-height: 1;
+  color: #374151;
+  font-weight: 600;
 }
 
 .fill .letter {
-    width: 100%;
-    height: 100%;
-    border: none;
-    padding: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0;
 
-    text-align: center;
-    font-size: clamp(16px, 0.9rem + 0.45vw, 22px);
-    font-weight: 600;
-    line-height: 1;
-    text-transform: uppercase;
+  text-align: center;
+  font-size: clamp(16px, 0.9rem + 0.45vw, 22px);
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
 
-    background: transparent;
-    caret-color: transparent;
+  background: transparent;
+  caret-color: transparent;
 
-    appearance: none;
-    
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: transparent;
+  appearance: none;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .fill .letter:focus {
-    outline: none;
+  outline: none;
 }
 
 .fill .letter::selection {
-    background: transparent;
+  background: transparent;
 }
 
 .mobile-nav {
-    display: none;
-    order: 3;
+  display: none;
+  order: 3;
 }
 
 .clue-wrapper {
-    margin-top: var(--board-header-reserved-height);
-    background: #f3f3f3;
-    border-radius: 20px;
-    border: 1px solid rgba(0,0,0,0.04);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
-    order: 2;
+  margin-top: var(--board-header-reserved-height);
+  background: #f3f3f3;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+  order: 2;
 
-    flex-shrink: 0;
-    width: min(45vw, var(--clue-max-width));
-    min-width: var(--clue-min-width);
-    height: min(clamp(60vh, calc(24vh + 32vw), 80vh), var(--clue-max-height));
-    min-height: var(--clue-min-height);
+  flex-shrink: 0;
+  width: min(45vw, var(--clue-max-width));
+  min-width: var(--clue-min-width);
+  height: min(clamp(60vh, calc(24vh + 32vw), 80vh), var(--clue-max-height));
+  min-height: var(--clue-min-height);
 }
 
 .clue-card {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: auto;
-    scrollbar-gutter: stable;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: auto;
+  scrollbar-gutter: stable;
 
-    touch-action: pan-y;
+  touch-action: pan-y;
 
-    padding: 14px 10px;
-    line-height: 1.4;
+  padding: 14px 10px;
+  line-height: 1.4;
 }
 
 .todo-wrapper {
-    order: 1;
+  order: 1;
 }
 
 .solved-wrapper {
-    order: 2;
+  order: 2;
 }
 
 .clue-card :is(h2, h3) {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .clue-card.show-empty .clue-empty {
-    display: block;
+  display: block;
 }
 
 .clue-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    background: none;
-    border: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
 
-    user-select: none;
-    -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-select: none;
 
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .clue-toggle .clue-label.clue-across::before,
 .clue-toggle .clue-label.clue-down::before {
-    display: inline-block;
-    width: 1ch;
-    margin-right: .5rem;
+  display: inline-block;
+  width: 1ch;
+  margin-right: 0.5rem;
 }
 
 .clue-toggle .clue-label.clue-across::before {
-    content: "\2192";
+  content: "\2192";
 }
 
 .clue-toggle .clue-label.clue-down::before {
-    content: "\2193";
+  content: "\2193";
 }
 
 .clue-count {
-    color: #555;
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
+  color: #555;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 
 .clue-list:not([hidden]) {
-    list-style: none;
-    padding: 0;
-    margin: 0.5rem 0 0 0;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
 }
 
 .clue-card h2 + .clue-section-body {
-    margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 /* remove empty clue-list */
 .clue-list:empty {
-    display: none;
+  display: none;
 }
 
 /* vertical spacing between clues */
 .clue + .clue {
-    margin-top: .3rem;
+  margin-top: 0.3rem;
 }
-  
+
 .clue {
-    margin: 0;
-    padding: 2px 4px;
-    border-radius: 4px;
-    list-style: none;
+  margin: 0;
+  padding: 2px 4px;
+  border-radius: 4px;
+  list-style: none;
 
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 
-    display: grid;
-    grid-template-columns: 2ch minmax(0,1fr) 20px;
-    gap: 0;
-    width: 100%;
-    align-items: start;
+  display: grid;
+  grid-template-columns: 2ch minmax(0, 1fr) 20px;
+  gap: 0;
+  width: 100%;
+  align-items: start;
 
-    cursor: pointer;
-    transition: background-color 120ms ease;
+  cursor: pointer;
+  transition: background-color 120ms ease;
 }
 
 .clue:hover {
-    background: #e0e4f1;
+  background: #e0e4f1;
 }
 
 .clue:active {
-    background: #b6bddc;
+  background: #b6bddc;
 }
 
 .clue.active {
-    background: #c9d0e6;
+  background: #c9d0e6;
 }
 
 .clue-label {
-    text-align: right;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .clue-content {
-    min-width: 0;
-    margin-left: 0.5rem;
+  min-width: 0;
+  margin-left: 0.5rem;
 }
 
 .clue-text {
-    max-width: var(--clue-text);
-    overflow-wrap: break-word;
-    text-wrap: pretty;
+  max-width: var(--clue-text);
+  overflow-wrap: break-word;
+  text-wrap: pretty;
 }
 
 .clue-meta {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .clue-show-answer {
-    visibility: hidden;
-    pointer-events: none;
-    color: #6b7280;
-    font-size: 0.9em;
-    touch-action: manipulation;
+  visibility: hidden;
+  pointer-events: none;
+  color: #6b7280;
+  font-size: 0.9em;
+  touch-action: manipulation;
 }
 
 .clue-show-answer::before {
-    content: "\A";
-    white-space: pre;
+  content: "\A";
+  white-space: pre;
 }
 
 /* Hover that changes interaction causes double click on mobile */
 @media (hover: hover) {
-    .clue:hover .clue-show-answer {
-        visibility: visible;
-        pointer-events: auto;
-        cursor: pointer;
-    }
-}
-
-.clue.active .clue-show-answer {
+  .clue:hover .clue-show-answer {
     visibility: visible;
     pointer-events: auto;
     cursor: pointer;
+  }
+}
+
+.clue.active .clue-show-answer {
+  visibility: visible;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .clue-show-answer:hover {
-    color: #374151;
+  color: #374151;
 }
 
 /* prepend non-breakable space */
 .clue-length-label::before {
-    content: "\00A0";
+  content: "\00A0";
 }
 
 .clue-length-label {
-    color: #6b7280;
-    font-size: 0.90em;
+  color: #6b7280;
+  font-size: 0.9em;
 }
 
 .clue-copy {
-    appearance: none;
-    -webkit-appearance: none;
+  appearance: none;
+  -webkit-appearance: none;
 
-    background: none;
-    border: none;
-    padding: 0;
+  background: none;
+  border: none;
+  padding: 0;
 
-    width: 16px;
-    height: 16px;
+  width: 16px;
+  height: 16px;
 
-    position: relative;
-    cursor: pointer;
+  position: relative;
+  cursor: pointer;
 
-    touch-action: manipulation;
+  touch-action: manipulation;
 }
 
 .clue-copy::before {
-    content: "";
-    position: absolute;
-    inset: -8px;
+  content: "";
+  position: absolute;
+  inset: -8px;
 }
 
 .copy-icon,
 .check-icon {
-    width: 16px;
-    height: 16px;
-    display: block;
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .check-icon {
-    transform: scale(1.3);
+  transform: scale(1.3);
 }
 
 .clue-copy .check-icon {
-    display: none;
+  display: none;
 }
 
 .clue-copy.copied .check-icon {
-    display: block;
+  display: block;
 }
 
 .clue-copy.copied .copy-icon {
-    display: none;
+  display: none;
 }
 
 .clue-empty {
-    display: none;
-    text-align: center;
-    padding: 24px 12px;
-    color: #777;
-    order: 3;
+  display: none;
+  text-align: center;
+  padding: 24px 12px;
+  color: #777;
+  order: 3;
 }
 
 /* Hide clue-count from UX when expanded */
 .section-toggle[aria-expanded="true"] .clue-count {
-    display: none;
+  display: none;
 }
 
 .post-puzzle {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 .puzzle-metadata {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin-bottom: .4rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 0.4rem;
 }
 
 /* remove empty items */
 .puzzle-metadata .meta-line > :empty {
-    display: none;
+  display: none;
 }
 
 /* add separator between remaining items */
 .puzzle-metadata .meta-line > :not(button) + :not(button)::before {
-    content: "\00A0\2022\00A0";
+  content: "\00A0\2022\00A0";
 }
 
 .puzzle-metadata p {
-    margin: 0;
+  margin: 0;
 }
 
 .puzzle-url-copy-button {
-    margin-left: .4rem;
-    opacity: 0.55;
-    transform: translateY(2px);
+  margin-left: 0.4rem;
+  opacity: 0.55;
+  transform: translateY(2px);
 }
 
 .puzzle-url-copy-button:hover {
-    opacity: 0.9;
+  opacity: 0.9;
 }
 
 p.board-desc {
-    margin: 0;
+  margin: 0;
 }
 
 .board-desc {
-    max-width: 60ch;
-    line-height: 1.6;
-    color: #4b5563;
-    overflow-wrap: break-word;
-    text-wrap: pretty;
+  max-width: 60ch;
+  line-height: 1.6;
+  color: #4b5563;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
 }
 
 .puzzle-link-section {
-    margin: 1.5rem 0 0;
+  margin: 1.5rem 0 0;
 }
 
 .puzzle-link-section p {
-    margin: 0;
+  margin: 0;
 }
 
 .next-puzzle-link {
-    word-break: break-word;
+  word-break: break-word;
 }
 
 .next-puzzle-link a {
-    color: black;
-    font-weight: 600;
-    text-decoration: none;
+  color: black;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .next-puzzle-link + .design-note-link {
-    margin-top: 0.4rem;
+  margin-top: 0.4rem;
 }
 
 .design-note-link {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .design-note-link a {
-    color: #4b5563;
-    font-weight: 500;
-    text-decoration: none;
+  color: #4b5563;
+  font-weight: 500;
+  text-decoration: none;
 }
-  
+
 .design-note-link a:hover {
-    color: #1f2937;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
+  color: #1f2937;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .solution-panel {
-    width: clamp(320px, 28vw, 460px);
-    max-width: 100%;
-    margin-top: 0.5rem;
+  width: clamp(320px, 28vw, 460px);
+  max-width: 100%;
+  margin-top: 0.5rem;
 }
-  
+
 .solution-toggle {
-    cursor: pointer;
-    font-weight: 600;
-    padding: 4px 0;
-    border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 4px 0;
+  border-radius: 8px;
 }
 
 .solution-toggle:hover {
-    background: #f2f2f2;
+  background: #f2f2f2;
 }
 
 .solution-json {
-    background: #1e1e1e;
-    color: #ce9178;
-    padding: 1rem;
-    margin-top: 0.5rem;
-    border-radius: 8px;
-    overflow-x: auto;
-    font-family: ui-monospace, monospace;
-    font-size: 0.85rem;
-    line-height: 1.4;
-    border: 1px solid #2d2d2d;;
+  background: #1e1e1e;
+  color: #ce9178;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  border: 1px solid #2d2d2d;
 }
 
 @keyframes success-pulse {
-    0% {
-        background-color: var(--cell-bg);
-        transform: translateY(0);
-    }
-    30% {
-        background-color: #dbe3ff;
-        transform: translateY(-1px);
-    }
-    70% {
-        background-color: #dbe3ff;
-        transform: translateY(-1px);
-    }
-    100% {
-        background-color: var(--cell-bg);
-        transform: translateY(0);
-    }
+  0% {
+    background-color: var(--cell-bg);
+    transform: translateY(0);
+  }
+  30% {
+    background-color: #dbe3ff;
+    transform: translateY(-1px);
+  }
+  70% {
+    background-color: #dbe3ff;
+    transform: translateY(-1px);
+  }
+  100% {
+    background-color: var(--cell-bg);
+    transform: translateY(0);
+  }
 }
 .placement-success {
-    transform-origin: center;
-    animation: success-pulse 300ms ease-out;
+  transform-origin: center;
+  animation: success-pulse 300ms ease-out;
 }
 
 @keyframes error-shake {
-    0%   { transform: translateX(0); }
-    20%  { transform: translateX(-3px); }
-    40%  { transform: translateX(3px); }
-    60%  { transform: translateX(-3px); }
-    80%  { transform: translateX(2px); }
-    100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 .placement-error {
-    transform-origin: center;
-    animation: error-shake 240ms ease-out;
+  transform-origin: center;
+  animation: error-shake 240ms ease-out;
 }
 
 @keyframes direction-reject {
-    0% {
-        background-color: transparent;
-    }
-    30% {
-        background-color: rgba(132, 143, 190, 0.7);
-    }
-    70% {
-        background-color: rgba(132, 143, 190, 0.7);
-    }
-    100% {
-        background-color: transparent;
-    }
+  0% {
+    background-color: transparent;
+  }
+  30% {
+    background-color: rgba(132, 143, 190, 0.7);
+  }
+  70% {
+    background-color: rgba(132, 143, 190, 0.7);
+  }
+  100% {
+    background-color: transparent;
+  }
 }
 
 .direction-reject {
-    animation: direction-reject 200ms ease-out;
+  animation: direction-reject 200ms ease-out;
 }
 
 /* Large desktop */
 @media (min-width: 1800px) {
-    :root {
-      --board-max: 780px;
-      --clue-max-height: 800px;
-    }
+  :root {
+    --board-max: 780px;
+    --clue-max-height: 800px;
+  }
 }
 
 /* Tablet / Mobile */
 @media (max-width: 900px) {
-    :root {
-        --clue-max-width: 600px;
-        --puzzle-dynamic-loading-min-height: 1800px;
-        --board-size: clamp(var(--board-min), 90vw, var(--board-max));
-    }
+  :root {
+    --clue-max-width: 600px;
+    --puzzle-dynamic-loading-min-height: 1800px;
+    --board-size: clamp(var(--board-min), 90vw, var(--board-max));
+  }
 
-    .toolbar-wrapper {
-        align-items: center;
-    }
+  .toolbar-wrapper {
+    align-items: center;
+  }
 
-    .resource-panel ul {
-        padding-left: revert;
-    }
+  .resource-panel ul {
+    padding-left: revert;
+  }
 
-    .puzzle-panel {
-      flex-direction: column;
-      align-items: center;
-    }
+  .puzzle-panel {
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .clue-wrapper {
-        margin-top: 0;
-        width: min(90vw, var(--clue-max-width));
-        height: 50vh;
-        order: 1;
-    }
+  .clue-wrapper {
+    margin-top: 0;
+    width: min(90vw, var(--clue-max-width));
+    height: 50vh;
+    order: 1;
+  }
 
-    .board-layout {
-        order: 2;
-    }
+  .board-layout {
+    order: 2;
+  }
 
-    .mobile-nav {
-        display: flex;
-        gap: 12px;
-    }
+  .mobile-nav {
+    display: flex;
+    gap: 12px;
+  }
 
-    .mobile-nav button {
-        appearance: none;
-        border: 0;
-        background: transparent;
-        color: inherit;
-        font: inherit;
-        font-size: clamp(1.2rem, 1rem + 0.6vw, 1.4rem);
+  .mobile-nav button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: clamp(1.2rem, 1rem + 0.6vw, 1.4rem);
 
-        padding: 4px 6px;
-        cursor: pointer;
-        touch-action: manipulation;
-    }
+    padding: 4px 6px;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
 
-    .mobile-nav button:active {
-        opacity: 0.6;
-    }
+  .mobile-nav button:active {
+    opacity: 0.6;
+  }
 
-    .solved-wrapper {
-        order: 1;
-    }
+  .solved-wrapper {
+    order: 1;
+  }
 
-    .todo-wrapper {
-        order: 2;
-    }
+  .todo-wrapper {
+    order: 2;
+  }
 
-    .instructions-desktop,
-    .controls-desktop {
-      display: none;
-    }
+  .instructions-desktop,
+  .controls-desktop {
+    display: none;
+  }
 
-    .controls-mobile {
-      display: block;
-    }
+  .controls-mobile {
+    display: block;
+  }
 }

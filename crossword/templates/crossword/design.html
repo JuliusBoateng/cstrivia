@@ -1,59 +1,47 @@
 {% extends "crossword/includes/_base.html" %}
 {% load static %}
-
 {% block canonical %}
-  {% if page_obj.number == 1 %}
-    <link rel="canonical" href="https://cstrivia.com/design/">
-  {% else %}
-    <link rel="canonical" href="https://cstrivia.com/design/?page={{ page_obj.number }}">
-  {% endif %}
+    {% if page_obj.number == 1 %}
+        <link rel="canonical" href="https://cstrivia.com/design/">
+    {% else %}
+        <link rel="canonical"
+              href="https://cstrivia.com/design/?page={{ page_obj.number }}">
+    {% endif %}
 {% endblock %}
-
 {% block title %}
     Design Notes | CS Trivia
 {% endblock %}
-
 {% block meta_description %}
-  <meta
-    name="description"
-    content="Notes on puzzle construction and design decisions."
-  >
+    <meta name="description"
+          content="Notes on puzzle construction and design decisions.">
 {% endblock %}
-
 <!-- Open Graph (LinkedIn, Facebook, etc.) -->
 {% block og_title %}
-  Design Notes | CS Trivia
+    Design Notes | CS Trivia
 {% endblock %}
-
 {% block og_description %}
-  Notes on puzzle construction and design decisions.
-{% endblock %}
-
-{% block og_url %}
-  https://cstrivia.com/design/
-{% endblock %}
-
- <!-- Twitter (also used by some platforms) -->
-{% block twitter_title %}
-  Design Notes | CS Trivia
-{% endblock %}
-
-{% block twitter_description %}
-  Notes on puzzle construction and design decisions.
-{% endblock %}
-
-{% block styles %}
-  <link rel="stylesheet" href="{% static 'crossword/css/includes/_layout.css' %}">
-  <link rel="stylesheet" href="{% static 'crossword/css/includes/_design_list.css' %}">
-  <link rel="stylesheet" href="{% static 'crossword/css/includes/_pagination.css' %}">
-{% endblock %}
-
-{% block content %}
-  <h1>Design Notes</h1>
-
-  <p>
     Notes on puzzle construction and design decisions.
-  </p>
-
-  {% include "crossword/includes/_design_list.html" %}
+{% endblock %}
+{% block og_url %}
+    https://cstrivia.com/design/
+{% endblock %}
+<!-- Twitter (also used by some platforms) -->
+{% block twitter_title %}
+    Design Notes | CS Trivia
+{% endblock %}
+{% block twitter_description %}
+    Notes on puzzle construction and design decisions.
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="{% static 'crossword/css/includes/_layout.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'crossword/css/includes/_design_list.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'crossword/css/includes/_pagination.css' %}">
+{% endblock %}
+{% block content %}
+    <h1>Design Notes</h1>
+    <p>Notes on puzzle construction and design decisions.</p>
+    {% include "crossword/includes/_design_list.html" %}
 {% endblock %}

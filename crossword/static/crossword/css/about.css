@@ -1,12 +1,12 @@
 .about-page {
-    line-height: 1.6;
-    max-width: 65ch;
+  line-height: 1.6;
+  max-width: 65ch;
 }
 
 .about-page video {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  display: block;
 }

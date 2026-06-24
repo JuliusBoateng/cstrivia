@@ -1,59 +1,59 @@
 .design-note {
-    max-width: 65ch;
+  max-width: 65ch;
 }
 
 .design-note-header {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .design-note-date,
 .design-note-author {
-    margin: 0;
-    color: #7c8594;
+  margin: 0;
+  color: #7c8594;
 }
 
 .design-note-body {
-    line-height: 1.6;
+  line-height: 1.6;
 }
 
 .design-note-body a {
-    color: #4b5563;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
+  color: #4b5563;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .design-note-body a:hover {
-    color: #1f2937;
+  color: #1f2937;
 }
 
 .design-note-related {
-    margin: 2rem 0 1rem 0;
-    border-top: 1px solid #e5e7eb;
+  margin: 2rem 0 1rem 0;
+  border-top: 1px solid #e5e7eb;
 }
 
 .design-note-related ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .design-note-related a {
-    color: #4b5563;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
+  color: #4b5563;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .design-note-related a:hover {
-    color: #1f2937;
+  color: #1f2937;
 }
 
 .design-note img {
-    display: block;
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    margin: 1rem 0;
-    border-radius: 8px;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 8px;
 }
