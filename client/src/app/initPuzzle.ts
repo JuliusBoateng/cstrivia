@@ -153,8 +153,8 @@ function initControlsToggle(): void {
 }
 
 function initResourceToggle(): void {
-  const toggle = queryRequired(document, "#resource-toggle", HTMLButtonElement);
-  const panel = queryRequired(document, "#resource-panel", HTMLDivElement);
+  const toggle = queryRequired(document, "#tip-toggle", HTMLButtonElement);
+  const panel = queryRequired(document, "#tip-panel", HTMLDivElement);
 
   toggle.addEventListener("click", () => {
     const expanded = toggle.ariaExpanded === "true";

@@ -119,16 +119,16 @@ main {
   color: #374151;
 }
 
-.puzzle-toolbar .resource-toggle::before {
+.puzzle-toolbar .tip-toggle::before {
   content: "\25B6";
   margin-right: 0.1rem;
 }
 
-.puzzle-toolbar .resource-toggle[aria-expanded="true"]::before {
+.puzzle-toolbar .tip-toggle[aria-expanded="true"]::before {
   content: "\25BC";
 }
 
-.puzzle-toolbar .resource-toggle {
+.puzzle-toolbar .tip-toggle {
   color: #374151;
 }
 
@@ -185,7 +185,7 @@ main {
   margin-top: 0.3rem;
 }
 
-.resource-panel {
+.tip-panel {
   width: 100%;
   margin-bottom: 0.5rem;
   font-size: clamp(0.9rem, 1vw, 1rem);
@@ -193,12 +193,12 @@ main {
   color: #4b5563;
 }
 
-.resource-panel ul {
+.tip-panel ul {
   margin: 0;
   padding-left: 1rem;
 }
 
-.resource-panel li + li {
+.tip-panel li + li {
   margin-top: 0.3rem;
 }
 
@@ -819,7 +819,7 @@ p.board-desc {
     align-items: center;
   }
 
-  .resource-panel ul {
+  .tip-panel ul {
     padding-left: revert;
   }
 
