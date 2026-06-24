@@ -7,9 +7,7 @@
     "description": "Computer graphics began in the 1950s, expanded rapidly in hardware during the 70s, then became mainstream in the 80s through PCs, video games, and CGI films. The field relies heavily on linear algebra and geometry to render images efficiently.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Computer Graphics"
-    ]
+    "categories": ["Computer Graphics"]
   },
   "clues": [
     {

@@ -5,11 +5,7 @@
     "author": "Julius Boateng",
     "published_at": "2026-05-13T00:09:33+00:00",
     "body": "## Theme\r\n\r\nI think the historical context behind important algorithms is really interesting. It's a topic that I feel is often only discussed in passing. These algorithms were developed by real people influenced by the events around them.\r\n\r\n## Grid\r\n\r\nThe grid contained fills like Cooley-Tukey, Monte Carlo, Lempel-Ziv, and Quicksort that defined the structure of the grid. Out of these, Cooley-Tukey and Lempel-Ziv felt particularly unfriendly as fills, so I included the inventors' names to make them less obtuse.\r\n\r\nAdmittedly, I was hesitant to include them because they were difficult to fill and not broadly known compared to something like Quicksort. However, I thought they were interesting enough that I was fine including them, even though they made construction slightly more difficult.\r\n\r\n## Clues\r\n\r\nFocusing on the historical context of clues was a change from previous puzzles. In earlier puzzles, I included context, but for this puzzle it was central to the theme.\r\n\r\nI added the historical elements that I felt were the most fun as trivia: Dijkstra inventing shortest-path in a café, Cooley-Tukey being used in Soviet Union nuclear-test detection, and Simplex being influenced by wartime planning work for the U.S. Army Air Forces.\r\n\r\n## Tradeoffs\r\n\r\nI think this may be my most difficult puzzle in terms of familiarity and recallability. The answers are not overly recognizable, and some require more specialized knowledge. I moved forward despite knowing this because I thought the historical context was interesting.\r\n\r\nI thought about including clues like Traveling Salesman, N-Queens, and Ford-Fulkerson. However, the first two were problems instead of algorithms, so they didn't completely fit the theme.\r\n\r\nI didn't include Ford-Fulkerson because it would have been a difficult fill. It's 13 characters long and somewhat difficult to spell. It doesn't feel great to exclude it since its history is tied to Cold War research.\r\n\r\n## Notes\r\n\r\nI want to continue making puzzles similar to this with a stronger focus on historical context. I do think this was more ambitious compared to some of my previous puzzles.\r\n\r\nHowever, I also need to balance that with accessibility since topics like these can feel esoteric to someone who hasn't read about the history behind certain algorithms.",
-    "categories": [
-      "Puzzle Design"
-    ],
-    "boards": [
-      12
-    ]
+    "categories": ["Puzzle Design"],
+    "boards": [12]
   }
 }

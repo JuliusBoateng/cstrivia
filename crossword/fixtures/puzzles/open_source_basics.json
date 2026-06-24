@@ -7,9 +7,7 @@
     "description": "The tools we use today come from decades of open source work. We stand on the shoulders of giants.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Open Source"
-    ]
+    "categories": ["Open Source"]
   },
   "clues": [
     {

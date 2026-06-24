@@ -7,9 +7,7 @@
     "description": "Algorithms are often discussed as tools for solving specific problems, but there is rich human history behind their creation. This puzzle explores the context behind several important algorithms.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Algorithms"
-    ]
+    "categories": ["Algorithms"]
   },
   "clues": [
     {

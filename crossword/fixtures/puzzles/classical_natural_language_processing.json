@@ -7,9 +7,7 @@
     "description": "Natural language processing exists at the intersection of linguistics and computer science. The early foundations took shape in the 1940s and accelerated in the 1990s as research shifted from rule-based systems toward statistical language modeling.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Natural Language Processing"
-    ]
+    "categories": ["Natural Language Processing"]
   },
   "clues": [
     {

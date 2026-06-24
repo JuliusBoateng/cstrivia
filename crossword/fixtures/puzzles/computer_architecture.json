@@ -7,9 +7,7 @@
     "description": "This computer architecture puzzle explores the hardware, architectures, and design principles that shape modern processors. Processors have improved in performance since the Intel 4004, the first commercial microprocessor, was released in 1971.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Computer Architecture"
-    ]
+    "categories": ["Computer Architecture"]
   },
   "clues": [
     {

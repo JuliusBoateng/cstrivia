@@ -7,9 +7,7 @@
     "description": "The people in this puzzle helped shape modern computing. They did not work alone; many unsung contributors helped advance the field.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "People"
-    ]
+    "categories": ["People"]
   },
   "clues": [
     {

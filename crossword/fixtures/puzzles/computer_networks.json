@@ -7,10 +7,7 @@
     "description": "Networks underpin how computers communicate with each other. Infrastructure like submarine cables, content delivery networks, and Internet exchange points allow us to video call across the world, stream media, and exchange information in real time.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Computer Networks",
-      "Internet"
-    ]
+    "categories": ["Computer Networks", "Internet"]
   },
   "clues": [
     {

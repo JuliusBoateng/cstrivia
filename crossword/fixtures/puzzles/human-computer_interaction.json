@@ -7,9 +7,7 @@
     "description": "Human-Computer Interaction was popularized by the 1983 book \"The Psychology of Human-Computer Interaction.\" HCI is now an established field at the intersection of CS, behavioral science, and design. This puzzle explores key HCI concepts and people.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Human-computer Interaction"
-    ]
+    "categories": ["Human-computer Interaction"]
   },
   "clues": [
     {

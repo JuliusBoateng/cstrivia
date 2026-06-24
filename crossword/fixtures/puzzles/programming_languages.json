@@ -7,9 +7,7 @@
     "description": "Programming languages aren't reducible to syntax. They reflect different paradigms, ecosystems, and design philosophies. \"A language that doesn't affect the way you think about programming is not worth knowing.\" — Alan Perlis",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Programming Languages"
-    ]
+    "categories": ["Programming Languages"]
   },
   "clues": [
     {

@@ -7,10 +7,7 @@
     "description": "From early relational models to large-scale distributed systems, many foundational ideas about storing data remain the same.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Databases",
-      "Distributed Systems"
-    ]
+    "categories": ["Databases", "Distributed Systems"]
   },
   "clues": [
     {

@@ -7,7 +7,11 @@
     "typecheck": "tsc --noEmit",
     "watch": "esbuild client/src/main.ts --bundle --sourcemap --outfile=crossword/static/crossword/dist/main.js --watch",
     "build": "esbuild client/src/main.ts --bundle --minify --outfile=crossword/static/crossword/dist/main.js",
-    "format": "prettier --write \"client/src/**/*.ts\" && djlint crossword/templates --reformat && prettier --write crossword/static",
+    "format:ts": "prettier --write \"client/src/**/*.ts\"",
+    "format:css": "prettier --write \"crossword/static/crossword/css/**/*.css\"",
+    "format:fixtures": "prettier --write \"crossword/fixtures/**/*.json\"",
+    "format:templates": "djlint crossword/templates --reformat",
+    "format": "npm run format:ts && npm run format:css && npm run format:fixtures && npm run format:templates",
     "lint": "eslint \"client/src/**/*.ts\""
   },
   "repository": {

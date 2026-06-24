@@ -7,11 +7,7 @@
     "description": "Many ideas that began as research papers and shaped computer science are now accepted as common knowledge. This puzzle covers notable research papers that proposed ideas so foundational they are now taken for granted.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "People",
-      "Research Institutions",
-      "Research Papers"
-    ]
+    "categories": ["People", "Research Institutions", "Research Papers"]
   },
   "clues": [
     {

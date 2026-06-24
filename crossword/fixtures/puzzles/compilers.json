@@ -7,10 +7,7 @@
     "description": "In the 1940s, programmers wrote assembly. FORTRAN arrived in 1957 as an early high-level compiled language. Since then, compilers use techniques like static single assignment and register allocation to produce more efficient machine code.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Compilers",
-      "Programming Languages"
-    ]
+    "categories": ["Compilers", "Programming Languages"]
   },
   "clues": [
     {
