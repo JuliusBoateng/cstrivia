@@ -35,7 +35,8 @@ crossword/static/crossword/dist/*.map
 *.tsbuildinfo
 
 # Editor / OS
-.vscode/
+.vscode/*
+!.vscode/settings.json
 .DS_Store
 
 # Misc
