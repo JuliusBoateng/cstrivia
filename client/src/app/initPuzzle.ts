@@ -15,6 +15,7 @@ function initPuzzlePage(boardView: BoardView, solutionView: SolutionView): void 
   renderSolutionJson(boardView, solutionView);
 
   initControlsToggle();
+  initResourceToggle();
 }
 
 function initPuzzleInteraction(
@@ -141,6 +142,19 @@ function formatDate(isoString: string): string {
 function initControlsToggle(): void {
   const toggle = queryRequired(document, "#controls-toggle", HTMLButtonElement);
   const panel = queryRequired(document, "#controls-panel", HTMLDivElement);
+
+  toggle.addEventListener("click", () => {
+    const expanded = toggle.ariaExpanded === "true";
+    const next = !expanded;
+
+    toggle.ariaExpanded = String(next);
+    panel.hidden = !next;
+  });
+}
+
+function initResourceToggle(): void {
+  const toggle = queryRequired(document, "#resource-toggle", HTMLButtonElement);
+  const panel = queryRequired(document, "#resource-panel", HTMLDivElement);
 
   toggle.addEventListener("click", () => {
     const expanded = toggle.ariaExpanded === "true";

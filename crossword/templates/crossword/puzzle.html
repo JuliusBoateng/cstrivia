@@ -75,6 +75,10 @@
               Controls
             </button>
             <span class="toolbar-separator" aria-hidden="true">|</span>
+            <button type="button" id="resource-toggle" class="resource-toggle" aria-expanded="false" aria-controls="resource-panel">
+                Resources
+            </button>
+            <span class="toolbar-separator" aria-hidden="true">|</span>
             <button id="clear-puzzle" type="button" class="clear-puzzle">Clear</button>
           </div>
 
@@ -87,7 +91,6 @@
                   <li><strong>Tab</strong> / <strong>Shift+Tab</strong> to jump clues</li>
                   <li>Double-click cell / <strong>Spacebar</strong> to switch direction</li>
                   <li><strong>Esc</strong> to exit board focus</li>
-                  <li>Header displays an anagram</li>
                 </ul>
               </section>
             
@@ -108,10 +111,17 @@
                   <li>Tap cells to type &bull; Tap again to switch</li>
                   <li><strong>Spacebar</strong> to switch direction</li>
                   <li>Tap section labels to collapse</li>
-                  <li>Header displays an anagram</li>
                 </ul>
               </section>
             </div>
+          </div>
+
+          <div id="resource-panel" class="resource-panel" role="region" aria-labelledby="resource-toggle" hidden>
+            <ul>
+                <li>Answers may be unfamiliar</li>
+                <li>Feel free to search things up</li>
+                <li>The header contains an <strong>anagram</strong> of the solution</li>
+            </ul>
           </div>
         </div>
 
