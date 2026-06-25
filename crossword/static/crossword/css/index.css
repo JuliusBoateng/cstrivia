@@ -15,9 +15,13 @@
   white-space: nowrap;
 }
 
-h1 .logo {
+.title-line {
+  display: inline-flex;
+  align-items: center;
+}
+
+.title-line .logo {
   width: 32px;
-  transform: translateY(2px);
 }
 
 .hero p.subheadline {
