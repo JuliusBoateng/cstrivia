@@ -1,0 +1,142 @@
+{
+  "board": {
+    "title": "Computer Vision",
+    "author": "Julius Boateng",
+    "puzzle_number": 20,
+    "published_at": "2026-07-03T07:40:39+00:00",
+    "description": "Computer vision emerged in the 1960s as a subfield of artificial intelligence. The field draws heavily on mathematics, physics, and signal processing. Today, it powers applications such as medical imaging, satellite imagery, and robotics.",
+    "rows": 15,
+    "cols": 15,
+    "categories": ["Computer Vision"]
+  },
+  "clues": [
+    {
+      "question": "Image processing operation that slides filters across an image for edge detection, blurring, or texture extraction",
+      "display_answer": "CONVOLUTION",
+      "anagram": "OITNOLNVCUO",
+      "direction": "A",
+      "start_row": 0,
+      "start_col": 1
+    },
+    {
+      "question": "Technique for estimating the apparent motion between consecutive images caused by object or camera movement",
+      "display_answer": "OPTICALFLOW",
+      "anagram": "WAITFOLOLCP",
+      "direction": "D",
+      "start_row": 0,
+      "start_col": 2
+    },
+    {
+      "question": "Transformation that maps 3D points onto a 2D image",
+      "display_answer": "PROJECTION",
+      "anagram": "CRTPINEJOO",
+      "direction": "A",
+      "start_row": 1,
+      "start_col": 2
+    },
+    {
+      "question": "Technique for estimating depth using two viewpoints from slightly different angles, similar to human binocular vision",
+      "display_answer": "STEREOVISION",
+      "anagram": "VOIETOIRSSEN",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 13
+    },
+    {
+      "question": "Task of partitioning an image into regions by assigning a class label to each pixel",
+      "display_answer": "SEGMENTATION",
+      "anagram": "GTEINMNASOTE",
+      "direction": "D",
+      "start_row": 1,
+      "start_col": 14
+    },
+    {
+      "question": "Task of identifying and following objects across consecutive images",
+      "display_answer": "TRACKING",
+      "anagram": "KNTGARIC",
+      "direction": "A",
+      "start_row": 2,
+      "start_col": 2
+    },
+    {
+      "question": "Camera model that projects a 3D scene onto a 2D image through a single opening",
+      "display_answer": "PINHOLE",
+      "anagram": "IEPLHON",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 1
+    },
+    {
+      "question": "Technique for estimating a camera’s parameters from known reference points such as a checkerboard for accurate geometric measurements",
+      "display_answer": "CALIBRATION",
+      "anagram": "CLIANAOITBR",
+      "direction": "D",
+      "start_row": 3,
+      "start_col": 12
+    },
+    {
+      "question": "Foundational edge detection algorithm for identifying object boundaries while suppressing noise; introduced by John Canny in 1986",
+      "display_answer": "CANNYEDGE",
+      "anagram": "NYNDGAEEC",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 1
+    },
+    {
+      "question": "Task of categorizing an entire image by assigning it a class label",
+      "display_answer": "CLASSIFICATION",
+      "anagram": "ICAICFSLINOSAT",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 1
+    },
+    {
+      "question": "Method for detecting geometric shapes such as lines and curves by accumulating votes across a parameter space; introduced by Paul V. C. Hough in 1962",
+      "display_answer": "HOUGH",
+      "anagram": "OHHUG",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 4
+    },
+    {
+      "question": "Transformation for mapping one view of a plane to another, such as stitching panoramic images",
+      "display_answer": "HOMOGRAPHY",
+      "anagram": "YOHAGPMRHO",
+      "direction": "A",
+      "start_row": 9,
+      "start_col": 1
+    },
+    {
+      "question": "Method for estimating transformations between images by finding consensus among randomly sampled matching points",
+      "display_answer": "RANSAC",
+      "anagram": "ARSANC",
+      "direction": "D",
+      "start_row": 9,
+      "start_col": 6
+    },
+    {
+      "question": "Method for detecting and describing scale-invariant and rotation-invariant features in images",
+      "display_answer": "SIFT",
+      "anagram": "ISFT",
+      "direction": "D",
+      "start_row": 11,
+      "start_col": 7
+    },
+    {
+      "question": "Neural network architecture for image classification, detection, and segmentation; helped popularize deep learning for computer vision",
+      "display_answer": "CNN",
+      "anagram": "NCN",
+      "direction": "D",
+      "start_row": 12,
+      "start_col": 10
+    },
+    {
+      "question": "Task of locating objects within an image and assigning each a class label",
+      "display_answer": "DETECTION",
+      "anagram": "NEITTDCOE",
+      "direction": "A",
+      "start_row": 14,
+      "start_col": 2
+    }
+  ]
+}
