@@ -35,6 +35,11 @@
   text-decoration: underline;
 }
 
+.subheadline-emphasis {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .hero-meta {
   display: flex;
   flex-direction: column;

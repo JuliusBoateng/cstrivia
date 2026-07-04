@@ -1,16 +1,19 @@
 .pagination {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-
   margin-top: 0.5rem;
 
-  color: #7c8594;
+  color: #27272a;
   font-size: 0.95rem;
+}
+
+.pagination-info {
+  color: #7c8594;
 }
 
 .pagination a {
   color: inherit;
+  font-weight: 500;
   text-decoration: none;
 }
 

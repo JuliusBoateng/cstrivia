@@ -2,14 +2,17 @@
     <div class="pagination">
         {% if page_obj.has_previous %}
             {% if page_obj.previous_page_number == 1 %}
-                <a href="{{ request.path }}">Prev</a>
+                <a href="{{ request.path }}">&larr; Prev</a>
+                &nbsp;&middot;&nbsp;
             {% else %}
-                <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+                <a href="?page={{ page_obj.previous_page_number }}">&larr; Prev</a>
+                &nbsp;&middot;&nbsp;
             {% endif %}
         {% endif %}
-        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        <span class="pagination-info">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            &nbsp;&middot;&nbsp;
+            <a href="?page={{ page_obj.next_page_number }}">Next &rarr;</a>
         {% endif %}
     </div>
 {% endif %}
