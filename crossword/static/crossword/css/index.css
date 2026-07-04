@@ -31,11 +31,8 @@
   white-space: nowrap;
 }
 
-.subheadline .underline {
-  text-decoration: underline;
-}
-
-.subheadline-emphasis {
+.subheadline-link {
+  color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
 }

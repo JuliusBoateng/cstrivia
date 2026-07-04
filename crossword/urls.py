@@ -28,5 +28,5 @@ urlpatterns = [
         ),
         name="robots_txt",
     ),
-    path("about/", about_view)
+    path("about/", about_view, name="about")
 ]
