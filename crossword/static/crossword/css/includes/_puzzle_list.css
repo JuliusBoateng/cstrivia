@@ -18,7 +18,6 @@
 
 .puzzle-row {
   display: flex;
-  min-width: 20rem;
 
   text-decoration: none;
   color: inherit;

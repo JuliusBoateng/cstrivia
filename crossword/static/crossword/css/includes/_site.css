@@ -6,32 +6,34 @@
 .site-header nav {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.2rem;
   max-width: var(--site-max-width);
   margin: 0 auto;
   font-size: 0.95rem;
 
   color: #4b5563;
-  white-space: nowrap;
+  flex-wrap: wrap;
 }
 
 .site-header a {
   color: inherit;
   text-decoration: none;
   font-weight: 500;
-  padding: 0.4rem 0.5rem;
+  padding: 0.2rem 0.4rem;
+  white-space: nowrap;
 }
 
 .site-header .nav-logo {
   height: 16px;
   width: 16px;
-  margin-right: 0.25rem;
-  vertical-align: -2px;
 }
 
 .site-header .site-name {
   font-weight: 600;
   color: #111827;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .site-header a:hover {
@@ -95,8 +97,8 @@
   margin-bottom: 0;
 }
 
-.site-footer p.footer-links {
-  white-space: nowrap;
+.site-footer .footer-links {
+  margin-bottom: 4px;
 }
 
 /* ---------- Privacy Page ---------- */
