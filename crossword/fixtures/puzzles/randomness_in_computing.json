@@ -1,0 +1,134 @@
+{
+  "board": {
+    "title": "Randomness in Computing",
+    "author": "Julius Boateng",
+    "puzzle_number": 21,
+    "published_at": "2026-07-08T04:09:32+00:00",
+    "description": "Randomness is often added to deterministic algorithms to improve performance, reduce memory usage, or make impractical computations practical. In practice, these benefits outweigh tradeoffs such as approximate results or variable running times.",
+    "rows": 15,
+    "cols": 15,
+    "categories": ["Algorithms", "Data Structures"]
+  },
+  "clues": [
+    {
+      "question": "Approximates the number of distinct elements in a stream; hashes elements and uses the number of leading zeros to estimate the number of unique values",
+      "display_answer": "HYPERLOGLOG",
+      "anagram": "OHYGERLPLGO",
+      "direction": "D",
+      "start_row": 0,
+      "start_col": 14
+    },
+    {
+      "question": "___ Sketch; probabilistic data structure for estimating the frequency of items in a stream without storing exact key-value counts",
+      "display_answer": "COUNTMIN",
+      "anagram": "CONUNTMI",
+      "direction": "A",
+      "start_row": 2,
+      "start_col": 4
+    },
+    {
+      "question": "___ primality test; determines if a number is prime by randomly selecting integers that may prove it composite; named after G. Miller and M. Rabin",
+      "display_answer": "MILLERRABIN",
+      "anagram": "NRARMLBIEIL",
+      "direction": "D",
+      "start_row": 2,
+      "start_col": 9
+    },
+    {
+      "question": "___ sampling; selects a uniform random sample of k elements from a stream of unknown length; uses only O(k) memory",
+      "display_answer": "RESERVOIR",
+      "anagram": "REIRVOSRE",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 2
+    },
+    {
+      "question": "Probabilistic data structure consisting of an ordered linked list with randomly placed shortcuts; allows O(log) search, deletion, and insertion",
+      "display_answer": "SKIPLIST",
+      "anagram": "LSITKSIP",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 5
+    },
+    {
+      "question": "Selection algorithm for finding the kth smallest element; uses random pivots for expected O(n) time; related to Quicksort",
+      "display_answer": "QUICKSELECT",
+      "anagram": "UCTESLECKIQ",
+      "direction": "A",
+      "start_row": 5,
+      "start_col": 2
+    },
+    {
+      "question": "Divide-and-conquer sorting algorithm widely used in practice due to low constant factors; random pivots reduce chance of worst-case O(n²) performance",
+      "display_answer": "QUICKSORT",
+      "anagram": "CORQTKIUS",
+      "direction": "D",
+      "start_row": 5,
+      "start_col": 2
+    },
+    {
+      "question": "___ algorithm; category of randomized algorithms with guaranteed correctness but variable running time; for example, randomized Quicksort",
+      "display_answer": "LASVEGAS",
+      "anagram": "SVSAELAG",
+      "direction": "D",
+      "start_row": 6,
+      "start_col": 1
+    },
+    {
+      "question": "___ method; category of randomized algorithms using repeated random sampling to produce approximate results; used when exact results are impractical",
+      "display_answer": "MONTECARLO",
+      "anagram": "TELORMNAOC",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 5
+    },
+    {
+      "question": "Deterministic pseudorandom number generator that computes each value from the previous one; abbreviation for linear congruential generator",
+      "display_answer": "LCG",
+      "anagram": "LGC",
+      "direction": "D",
+      "start_row": 6,
+      "start_col": 13
+    },
+    {
+      "question": "Probabilistic data structure for estimating quantiles from streams; groups values into clusters; commonly used to estimate p90, p95, and p99 values",
+      "display_answer": "TDIGEST",
+      "anagram": "EDGITTS",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 4
+    },
+    {
+      "question": "___ filter; probabilistic data structure for testing whether an element may be in a set; can produce false positives but not false negatives",
+      "display_answer": "BLOOM",
+      "anagram": "BOMLO",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 7
+    },
+    {
+      "question": "___ primality test; probabilistic algorithm for determining whether a number is prime; randomly selects integers to test Fermat’s little theorem",
+      "display_answer": "FERMAT",
+      "anagram": "RMFEAT",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 11
+    },
+    {
+      "question": "___ algorithm; finds a minimum cut in an undirected graph by repeatedly contracting random edges until two vertices remain; introduced by David Karger",
+      "display_answer": "KARGER",
+      "anagram": "RKEARG",
+      "direction": "A",
+      "start_row": 12,
+      "start_col": 0
+    },
+    {
+      "question": "Probabilistic algorithm for estimating the similarity of large sets; compares signatures composed of minimum hash values",
+      "display_answer": "MINHASH",
+      "anagram": "SHAHMIN",
+      "direction": "A",
+      "start_row": 12,
+      "start_col": 7
+    }
+  ]
+}
