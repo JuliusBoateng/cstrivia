@@ -7,7 +7,7 @@ workers = int(os.environ.get("WEB_CONCURRENCY", "2"))
 
 accesslog = "-"
 errorlog = "-"
-loglevel = "debug"
+loglevel = "info"
 capture_output = True
 
 preload_app = False

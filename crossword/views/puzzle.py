@@ -62,7 +62,6 @@ def puzzle_view(request, puzzle_number: int):
         "next_puzzle": views.next_puzzle,
         "alt_header_href": back_href,
     }
-    print(data)
     return render(request, "crossword/puzzle.html", data)
 
 
