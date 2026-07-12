@@ -35,11 +35,11 @@
 {% block header %}
 {% endblock %}
 {% block content %}
-    <section class="hero">
-        <h1>
+    <section>
+        <h1 class="headline">
             Computer Science
             <br>
-            <span class="title-line">
+            <span class="headline-wordmark">
                 Crosswords
                 <img src="{% static 'crossword/img/favicon-48.png' %}" class="logo" alt="">
             </span>
@@ -47,27 +47,20 @@
         <p class="subheadline">
             Puzzles for people who enjoy
             <br>
-            computer science <a href="{% url 'about' %}#why-computer-science-crosswords" class="subheadline-link">as a subject</a>
+            computer science <a href="{% url 'about' %}#why-computer-science-crosswords"
+    class="subheadline-link">as a subject</a>
         </p>
-        <div class="hero-meta">
-            <p id="release-cadence">New puzzles <span>Tuesday 12:00 UTC</span></p>
-        </div>
-        {% if latest_puzzle %}
-            <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}"
-               class="cta"
-               aria-label="Solve latest puzzle">Solve latest puzzle &rarr;</a>
-            <a href="{% url 'puzzle' latest_puzzle.puzzle_number %}"
-               aria-label="Solve latest puzzle"
-               class="hero-link">
-                <img src="{% static 'crossword/img/board.webp' %}"
-                     alt="Solve latest puzzle"
-                     class="hero-screenshot"
-                     width="800"
-                     height="801"
-                     fetchpriority="high">
-            </a>
-        {% endif %}
+        <figure class="hero-figure">
+            <img src="{% static 'crossword/img/board.webp' %}"
+                 alt=""
+                 class="hero-screenshot"
+                 width="800"
+                 height="801"
+                 fetchpriority="high">
+            <figcaption class="hero-caption">Puzzle 1: Open Source Basics</figcaption>
+        </figure>
     </section>
+    <p class="release-cadence">New puzzles <span>Tuesday 12:00 UTC</span></p>
     {% include "crossword/includes/_puzzle_list.html" %}
     <p class="design-note">
         <a class="design-note-link" href="{% url 'design' %}">Design Notes &rarr;</a>

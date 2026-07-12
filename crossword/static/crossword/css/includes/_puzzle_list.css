@@ -1,5 +1,5 @@
 .puzzle-list {
-  padding: 1.5rem 0 1rem 0;
+  padding-bottom: 1rem;
   border-bottom: 1px solid #e5e7eb;
   max-width: 50ch;
 }
@@ -33,7 +33,7 @@
 .puzzle-number {
   flex: 0 0 5rem;
   white-space: nowrap;
-  color: #7c8594;
+  color: #6b7280;
 }
 
 .puzzle-title {
@@ -48,7 +48,7 @@
   flex: 0 0 6rem;
   text-align: right;
   white-space: nowrap;
-  color: #7c8594;
+  color: #6b7280;
 }
 
 .archive-link {

@@ -1,33 +1,23 @@
-.hero {
-  text-align: left;
-}
-
-.hero p {
-  margin: 0;
-  padding: 0;
-}
-
-.hero h1 {
+.headline {
   font-size: clamp(1.9rem, 3.1vw, 2.3rem);
   font-weight: 600;
-  line-height: 1;
   margin-bottom: 0.5rem;
   white-space: nowrap;
 }
 
-.title-line {
+.headline-wordmark {
   display: inline-flex;
   align-items: center;
 }
 
-.title-line .logo {
+.headline-wordmark .logo {
   width: 32px;
 }
 
-.hero p.subheadline {
+.subheadline {
   font-size: clamp(1.1rem, 1.4vw, 1.2rem);
   color: #52525b;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 0;
   white-space: nowrap;
 }
 
@@ -37,75 +27,35 @@
   text-underline-offset: 2px;
 }
 
-.hero-meta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  font-size: 1.05rem;
-}
-
-.hero-meta #release-cadence {
-  color: #3f3f46;
-  font-weight: 500;
-}
-
-#release-cadence span {
-  white-space: nowrap;
-}
-
-.cta {
-  display: inline-block;
-  margin: 0.4rem 0 0.2rem 0;
-
-  padding: 0.55rem 1rem;
-  border-radius: 8px;
-
-  background: #18181b;
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-  white-space: nowrap;
-
-  transition:
-    background 120ms ease,
-    transform 120ms ease;
-}
-
-.cta:hover {
-  transform: scale(1.03);
-}
-
-.cta:focus-visible {
-  outline: 2px solid #6a6d8f;
-}
-
-/* Link wraps screenshot. Reason link has clamp and screenshot has 100% width*/
-.hero-link {
+.hero-figure {
+  margin: 0;
   max-width: 100%;
-  display: block;
   width: 400px;
-}
-
-.hero-link:hover .hero-screenshot {
-  transform: scale(1.03);
-}
-
-.hero-link:focus-visible {
-  outline: none;
-}
-
-.hero-link:focus-visible .hero-screenshot {
-  outline: 2px solid #6a6d8f;
 }
 
 .hero-screenshot {
   display: block;
   width: 100%;
   height: auto;
+
   border: 1px solid #d1d5db;
   border-radius: 20px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-  transition: transform 0.15s ease;
+}
+
+.hero-caption {
+  margin-top: 0.5rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+.release-cadence {
+  font-size: 1.05rem;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.release-cadence span {
+  white-space: nowrap;
 }
 
 .design-note {

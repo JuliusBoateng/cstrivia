@@ -26,9 +26,6 @@ class PuzzleListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["is_archive"] = False
-
-        puzzles = context.get("puzzles")  # this is your page object
-        context["latest_puzzle"] = puzzles[0] if puzzles else None
         return context
 
 
@@ -81,6 +78,7 @@ def privacy_view(request):
 
 def about_view(request):
     return render(request, "crossword/about.html")
+
 
 def custom_404(request, exception):
     board = Board.objects.filter(published_at__lte=timezone.now()).order_by(
