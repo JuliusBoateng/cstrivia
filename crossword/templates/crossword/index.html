@@ -51,13 +51,17 @@
     class="subheadline-link">as a subject</a>
         </p>
         <figure class="hero-figure">
-            <img src="{% static 'crossword/img/board.webp' %}"
-                 alt=""
-                 class="hero-screenshot"
-                 width="800"
-                 height="801"
-                 fetchpriority="high">
-            <figcaption class="hero-caption">Puzzle 1: Open Source Basics</figcaption>
+            <a class="hero-link" href="{% url 'puzzle' 1 %}">
+                <img src="{% static 'crossword/img/board.webp' %}"
+                     alt=""
+                     class="hero-screenshot"
+                     width="800"
+                     height="801"
+                     fetchpriority="high">
+            </a>
+            <figcaption class="hero-caption">
+                <a class="hero-link" href="{% url 'puzzle' 1 %}">Puzzle 1: Open Source Basics</a>
+            </figcaption>
         </figure>
     </section>
     <p class="release-cadence">New puzzles <span>Tuesday 12:00 UTC</span></p>
