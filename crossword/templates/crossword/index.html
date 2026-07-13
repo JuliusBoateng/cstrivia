@@ -64,10 +64,17 @@
             </figcaption>
         </figure>
     </section>
-    <p class="release-cadence">New puzzles <span>Tuesday 12:00 UTC</span></p>
-    {% include "crossword/includes/_puzzle_list.html" %}
-    <div class="starting-puzzles">{% include "crossword/includes/_starting_puzzle_list.html" %}</div>
-    <section class="additional-content">
+    <section class="puzzle-section">
+        <h2>Puzzles</h2>
+        <p class="release-cadence">New puzzles <span>Tuesday 12:00 UTC</span></p>
+        {% include "crossword/includes/_puzzle_list.html" %}
+        <a href="{% url 'archive' %}" class="archive-link">Archive &rarr;</a>
+    </section>
+    <section class="starting-puzzle-section">
+        <h2>Where to Start</h2>
+        {% include "crossword/includes/_starting_puzzle_list.html" %}
+    </section>
+    <section class="related-content">
         <h2>Related Content</h2>
         <p class="design-note">
             <a class="design-note-link" href="{% url 'design' %}">Design Notes &rarr;</a>

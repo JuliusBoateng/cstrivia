@@ -54,22 +54,51 @@
   text-decoration: none;
 }
 
+.puzzle-section {
+  margin-top: 1.5rem;
+}
+
+.puzzle-section h2 {
+  font-size: 1.5rem;
+  margin: 0 0 1rem;
+}
+
 .release-cadence {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin: 1.5rem 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #52525b;
+  margin: 0 0 0.75rem;
 }
 
 .release-cadence span {
   white-space: nowrap;
 }
 
-.starting-puzzles {
+.archive-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+
+  font-weight: 500;
+  color: #27272a;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.archive-link:hover {
+  text-decoration: underline;
+}
+
+.starting-puzzle-section {
   margin-top: 1rem;
 }
 
+.starting-puzzle-section h2 {
+  font-size: 1.5rem;
+  margin: 0 0 0.75rem;
+}
+
 .design-note {
-  margin: 1rem 0 0;
+  margin: 0 0 0.5rem;
   white-space: nowrap;
 }
 
@@ -86,7 +115,7 @@
 }
 
 .exhibit {
-  margin: 0.5rem 0 0;
+  margin: 0;
   white-space: nowrap;
 }
 
@@ -102,9 +131,11 @@
   text-underline-offset: 2px;
 }
 
-.additional-content h2 {
-  margin: 0;
-  font-size: 1.5rem;
-  margin-bottom: 0.75rem;
+.related-content {
   margin-top: 1rem;
+}
+
+.related-content h2 {
+  font-size: 1.5rem;
+  margin: 0 0 1rem;
 }

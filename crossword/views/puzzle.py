@@ -25,7 +25,6 @@ class PuzzleListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["is_archive"] = False
 
         starting_puzzle_numbers = [1, 3, 6, 16, 17]
         context["starting_puzzles"] = Board.objects.filter(
@@ -47,11 +46,6 @@ class PuzzleArchiveView(ListView):
         return Board.objects.filter(published_at__lte=timezone.now()).order_by(
             "-puzzle_number"
         )
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["is_archive"] = True
-        return context
 
 
 @never_cache
@@ -94,6 +88,6 @@ def custom_404(request, exception):
     return render(
         request,
         "crossword/404.html",
-        {"puzzles": board, "is_archive": False},
+        {"puzzles": board},
         status=404,
     )
