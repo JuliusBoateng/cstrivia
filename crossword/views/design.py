@@ -1,14 +1,13 @@
-import re
 
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.utils.text import Truncator
 from django.views.decorators.cache import never_cache
 from django.views.generic import ListView
 
 from ..api.service import get_design_note
 from ..models import DesignNote
+from .markdown_utils import markdown_intro
 
 PAGINATION_LIMIT = 10
 
@@ -41,34 +40,12 @@ def design_note_view(request, design_number: int):
 
 
 def build_design_note_description(note: DesignNote):
-    intro = _extract_intro(note.body)
-    intro = " ".join(_strip_markdown(intro).split())
+    intro = markdown_intro(note.body)
 
     if intro:
-        return Truncator(intro).words(50)
+        return intro
 
     return (
         f"Design Note {note.design_number}: {note.title}. "
         "Notes on puzzle construction and design decisions."
     )
-
-
-def _extract_intro(markdown):
-    for line in markdown.splitlines():
-        line = line.strip()
-        if line and not line.startswith("#"):
-            return line
-    return ""
-
-
-def _strip_markdown(text):
-    # converts markdown links to plain text
-    text = re.sub(r"\[(.*?)\]\(.*?\)", r"\1", text)
-
-    # removes basic formatting like *italic*, **bold**, and `code`
-    text = re.sub(r"[*_`]", "", text)
-
-    # collapse whitespace
-    text = re.sub(r"\s+", " ", text)
-
-    return text.strip()

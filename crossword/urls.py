@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
 from .views.design import DesignNoteListView, design_note_view
-from .views.exhibit import ExhibitListView
+from .views.exhibit import ExhibitListView, exhibit_view
 from .views.puzzle import (
     PuzzleArchiveView,
     PuzzleListView,
@@ -21,7 +21,8 @@ urlpatterns = [
     path("rss.xml", LatestActivityFeed(), name="rss"),
     path("rss/", RedirectView.as_view(url="/rss.xml", permanent=True)),
     path("design/", DesignNoteListView.as_view(), name="design"),
-    path("exhibit/", ExhibitListView.as_view(), name="exhibit"),
+    path("exhibit/", ExhibitListView.as_view(), name="exhibit_list"),
+    path("exhibit/<int:exhibit_number>/", exhibit_view, name="exhibit"),
     path("design/<int:design_number>/", design_note_view, name="design_note"),
     path(
         "robots.txt",

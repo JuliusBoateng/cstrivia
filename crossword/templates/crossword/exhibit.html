@@ -1,0 +1,66 @@
+{% extends "crossword/includes/_base.html" %}
+{% load markdown_filters %}
+{% load static %}
+{% block canonical %}
+    <link rel="canonical"
+          href="https://cstrivia.com/exhibit/{{ exhibit.exhibit_number }}/">
+{% endblock %}
+{% block title %}
+    Exhibit {{ exhibit.exhibit_number }}: {{ exhibit.title|escape }} | CS Trivia
+{% endblock %}
+{% block meta_description %}
+    <meta name="description" content="{{ meta_description|escape }}">
+{% endblock %}
+<!-- Open Graph (LinkedIn, Facebook, etc.) -->
+{% block og_title %}
+    Exhibit {{ exhibit.exhibit_number }}: {{ exhibit.title|escape }} | CS Trivia
+{% endblock %}
+{% block og_description %}
+    {{ meta_description|escape }}
+{% endblock %}
+{% block og_url %}
+    https://cstrivia.com/exhibit/{{ exhibit.exhibit_number }}/
+{% endblock %}
+<!-- Twitter (also used by some platforms) -->
+{% block twitter_title %}
+    Exhibit {{ exhibit.exhibit_number }}: {{ exhibit.title|escape }} | CS Trivia
+{% endblock %}
+{% block twitter_description %}
+    {{ meta_description|escape }}
+{% endblock %}
+{% block head_extra %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": "{{ exhibit.title|escapejs }}",
+      {% if exhibit.author %}
+      "author": {
+        "@type": "Person",
+        "name": "{{ exhibit.author|escapejs }}"
+      },
+      {% endif %}
+      "datePublished": "{{ exhibit.published_at|date:'Y-m-d' }}",
+      "url": "https://cstrivia.com/exhibit/{{ exhibit.exhibit_number }}/"
+    }
+    </script>
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="{% static 'crossword/css/includes/_layout.css' %}">
+    <link rel="stylesheet" href="{% static 'crossword/css/exhibit.css' %}">
+{% endblock %}
+{% block content %}
+    <article class="exhibit">
+        <header class="exhibit-header">
+            <h1>Exhibit {{ exhibit.exhibit_number }}: {{ exhibit.title|escape }}</h1>
+            {% if exhibit.published_at %}
+                <p class="exhibit-date">{{ exhibit.published_at|date:"l, F j, Y" }}</p>
+            {% endif %}
+            {% if exhibit.author %}
+                <p class="exhibit-author">By {{ exhibit.author|escape }}</p>
+            {% endif %}
+        </header>
+        <div class="exhibit-body">{{ exhibit.body|render_markdown }}</div>
+    </article>
+{% endblock %}

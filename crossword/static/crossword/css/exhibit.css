@@ -1,0 +1,38 @@
+.exhibit {
+  max-width: 65ch;
+}
+
+.exhibit-header {
+  margin-bottom: 1.5rem;
+}
+
+.exhibit-date,
+.exhibit-author {
+  margin: 0;
+  color: #6b7280;
+}
+
+.exhibit-body {
+  line-height: 1.6;
+}
+
+.exhibit-body a {
+  color: #4b5563;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.exhibit-body a:hover {
+  color: #1f2937;
+}
+
+.exhibit img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 2rem 0;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}

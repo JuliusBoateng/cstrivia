@@ -11,7 +11,7 @@ from ..dto.mappers import (
     map_to_solution_view_dto,
 )
 from ..dto.serializers import serialize_board_view, serialize_solution_view
-from ..models import Board, DesignNote, Placement
+from ..models import Board, DesignNote, Exhibit, Placement
 
 
 class PuzzleView(NamedTuple):
@@ -74,5 +74,13 @@ def get_design_note(design_number: int) -> DesignNote:
     return get_object_or_404(
         DesignNote.objects.prefetch_related("boards", "categories"),
         design_number=design_number,
+        published_at__lte=timezone.now(),
+    )
+
+
+def get_exhibit(exhibit_number: int) -> Exhibit:
+    return get_object_or_404(
+        Exhibit.objects.prefetch_related("categories"),
+        exhibit_number=exhibit_number,
         published_at__lte=timezone.now(),
     )
