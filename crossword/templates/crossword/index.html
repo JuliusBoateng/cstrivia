@@ -67,10 +67,13 @@
     <p class="release-cadence">New puzzles <span>Tuesday 12:00 UTC</span></p>
     {% include "crossword/includes/_puzzle_list.html" %}
     <div class="starting-puzzles">{% include "crossword/includes/_starting_puzzle_list.html" %}</div>
-    <p class="design-note">
-        <a class="design-note-link" href="{% url 'design' %}">Design Notes &rarr;</a>
-    </p>
-    <p class="exhibit">
-        <a class="exhibit-link" href="{% url 'exhibit' %}">Exhibits &rarr;</a>
-    </p>
+    <section class="additional-content">
+        <h2>Related Content</h2>
+        <p class="design-note">
+            <a class="design-note-link" href="{% url 'design' %}">Design Notes &rarr;</a>
+        </p>
+        <p class="exhibit">
+            <a class="exhibit-link" href="{% url 'exhibit' %}">Exhibits &rarr;</a>
+        </p>
+    </section>
 {% endblock %}

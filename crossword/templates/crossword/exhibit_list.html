@@ -1,0 +1,47 @@
+{% extends "crossword/includes/_base.html" %}
+{% load static %}
+{% block canonical %}
+    {% if page_obj.number == 1 %}
+        <link rel="canonical" href="https://cstrivia.com/exhibit/">
+    {% else %}
+        <link rel="canonical"
+              href="https://cstrivia.com/exhibit/?page={{ page_obj.number }}">
+    {% endif %}
+{% endblock %}
+{% block title %}
+    Exhibits | CS Trivia
+{% endblock %}
+{% block meta_description %}
+    <meta name="description"
+          content="Images of interesting computer science artifacts.">
+{% endblock %}
+<!-- Open Graph (LinkedIn, Facebook, etc.) -->
+{% block og_title %}
+    Exhibits | CS Trivia
+{% endblock %}
+{% block og_description %}
+    Images of interesting computer science artifacts.
+{% endblock %}
+{% block og_url %}
+    https://cstrivia.com/exhibit/
+{% endblock %}
+<!-- Twitter (also used by some platforms) -->
+{% block twitter_title %}
+    Exhibits | CS Trivia
+{% endblock %}
+{% block twitter_description %}
+    Images of interesting computer science artifacts.
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="{% static 'crossword/css/includes/_layout.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'crossword/css/includes/_exhibit_list.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'crossword/css/includes/_pagination.css' %}">
+{% endblock %}
+{% block content %}
+    <h1>CS Exhibits</h1>
+    <p>Images of interesting computer science artifacts.</p>
+    {% include "crossword/includes/_exhibit_list.html" %}
+{% endblock %}

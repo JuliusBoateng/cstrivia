@@ -1,0 +1,52 @@
+.exhibit-list {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  max-width: 50ch;
+}
+
+.exhibit-list h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.exhibit-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.exhibit-row {
+  display: flex;
+
+  text-decoration: none;
+  color: inherit;
+  padding: 0.3rem 0 0.3rem 1rem;
+  line-height: 1.4;
+}
+
+.exhibit-row:hover {
+  background: #f2f2f2;
+  border-radius: 8px;
+}
+
+.exhibit-number {
+  flex: 0 0 5rem;
+  white-space: nowrap;
+  color: #6b7280;
+}
+
+.exhibit-title {
+  flex: 1;
+  font-weight: 500;
+  min-width: 0;
+  text-wrap: pretty;
+}
+
+.exhibit-date {
+  font-size: 0.9em;
+  flex: 0 0 6rem;
+  text-align: right;
+  white-space: nowrap;
+  color: #6b7280;
+}

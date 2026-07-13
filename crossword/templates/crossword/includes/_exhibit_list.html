@@ -1,0 +1,15 @@
+<section class="exhibit-list">
+    <h2>Exhibits</h2>
+    <ul>
+        {% for exhibit in exhibits %}
+            <li>
+                <a href="{% url 'exhibit' exhibit.exhibit_number %}" class="exhibit-row">
+                    <span class="exhibit-number">Exhibit {{ exhibit.exhibit_number }}:</span>
+                    <span class="exhibit-title">{{ exhibit.title }}</span>
+                    <span class="exhibit-date">{{ exhibit.published_at|date:"M j, Y" }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    {% include "crossword/includes/_pagination.html" %}
+</section>

@@ -101,3 +101,10 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
+
+.additional-content h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  margin-top: 1rem;
+}

@@ -16,7 +16,7 @@ PAGINATION_LIMIT = 10
 @method_decorator(never_cache, name="dispatch")
 class DesignNoteListView(ListView):
     model = DesignNote
-    template_name = "crossword/design.html"
+    template_name = "crossword/design_list.html"
     context_object_name = "notes"
     paginate_by = PAGINATION_LIMIT
 

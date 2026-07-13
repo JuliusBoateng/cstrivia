@@ -11,7 +11,7 @@ PAGINATION_LIMIT = 10
 @method_decorator(never_cache, name="dispatch")
 class ExhibitListView(ListView):
     model = Exhibit
-    template_name = "crossword/exhibit.html"
+    template_name = "crossword/exhibit_list.html"
     context_object_name = "exhibits"
     paginate_by = PAGINATION_LIMIT
 
