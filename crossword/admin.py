@@ -86,3 +86,17 @@ class DesignNoteAdmin(admin.ModelAdmin):
     list_filter = ("published_at", "categories", "boards")
     filter_horizontal = ("boards", "categories")
     ordering = ("design_number",)
+
+@admin.register(models.Exhibit)
+class ExhibitAdmin(admin.ModelAdmin):
+    list_display = (
+        "exhibit_number",
+        "title",
+        "author",
+        "published_at",
+        "updated_at",
+    )
+    search_fields = ("title", "body", "author",)
+    list_filter = ("published_at", "categories",)
+    filter_horizontal = ("categories",)
+    ordering = ("exhibit_number",)

@@ -84,3 +84,20 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
+
+.exhibit {
+  margin: 0.5rem 0 0;
+  white-space: nowrap;
+}
+
+.exhibit-link {
+  font-weight: 500;
+  color: #27272a;
+  text-decoration: none;
+}
+
+.exhibit-link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}

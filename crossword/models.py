@@ -10,6 +10,41 @@ from django.urls import reverse
 from django.utils import timezone
 
 
+class ContentSeries(models.TextChoices):
+    PUZZLE = "puzzle", "Puzzle"
+    DESIGN_NOTE = "design_note", "Design Note"
+    EXHIBIT = "exhibit", "Exhibit"
+
+
+class ContentSequence(models.Model):
+    key = models.CharField(
+        max_length=32,
+        choices=ContentSeries.choices,
+        unique=True,
+    )
+    current_value = models.PositiveIntegerField(default=0)
+
+    @classmethod
+    def allocate_number(cls, key: ContentSeries) -> int:
+        with transaction.atomic():
+            sequence = cls.objects.select_for_update().get(key=key)
+            sequence.current_value += 1
+            sequence.save(update_fields=["current_value"])
+            return sequence.current_value
+
+    @classmethod
+    def ensure_at_least(cls, key: ContentSeries, value: int) -> None:
+        with transaction.atomic():
+            sequence = cls.objects.select_for_update().get(key=key)
+
+            if sequence.current_value < value:
+                sequence.current_value = value
+                sequence.save(update_fields=["current_value"])
+
+    def __str__(self):
+        return f"{self.get_key_display()}: {self.current_value}"
+
+
 class Category(models.Model):
     name = models.CharField(max_length=32, unique=True)
 
@@ -84,12 +119,13 @@ class Board(models.Model):
         self.full_clean()  # board check
 
         if self.puzzle_number is None:
-            with transaction.atomic():
-                current_puzzle_number = Board.objects.aggregate(
-                    max_num=models.Max("puzzle_number", default=0)
-                )["max_num"]
+            self.puzzle_number = ContentSequence.allocate_number(ContentSeries.PUZZLE)
 
-                self.puzzle_number = current_puzzle_number + 1
+        else:
+            ContentSequence.ensure_at_least(
+                ContentSeries.PUZZLE,
+                self.puzzle_number,
+            )
 
         super().save(*args, **kwargs)
 
@@ -334,9 +370,8 @@ class Placement(models.Model):
         overlapping_cells = self._fetch_overlapping_cells()
         self._validate_cells(new_cells, overlapping_cells)
 
-        with (
-            transaction.atomic()
-        ):  # transactions automatically rollback in case of error
+        # transactions automatically rollback in case of error
+        with transaction.atomic():
             self._delete_previous_cells()
 
             super().save(*args, **kwargs)  # must save placement before creating cells
@@ -380,6 +415,27 @@ class Cell(models.Model):
         raise ValueError("Cell is a projection and cannot be saved directly.")
 
 
+class MarkdownContent(models.Model):
+    title = models.CharField(max_length=50, unique=True)
+    author = models.CharField(max_length=50, blank=True)
+    body = models.TextField()  # markdown
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    published_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
+
+    class Meta:
+        abstract = True
+
+    def clean(self):
+        super().clean()
+        self.title = self.title.strip()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+
 # Design Notes Section
 class DesignCategory(models.Model):
     name = models.CharField(max_length=32, unique=True)
@@ -398,17 +454,12 @@ class DesignCategory(models.Model):
         return self.name
 
 
-class DesignNote(models.Model):
+class DesignNote(MarkdownContent):
     design_number = models.PositiveIntegerField(
-        unique=True, null=True, blank=True
-    )  # user visible design number
-    title = models.CharField(max_length=50, unique=True)
-    author = models.CharField(max_length=50, blank=True)
-    body = models.TextField()  # markdown
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    published_at = models.DateTimeField(null=True, blank=True)
-    updated_at = models.DateTimeField(auto_now=True, editable=False)
+        unique=True,
+        null=True,
+        blank=True,
+    )  # user visible number
 
     boards = models.ManyToManyField(
         Board,
@@ -429,20 +480,59 @@ class DesignNote(models.Model):
         return f"Design {self.design_number}: {self.title}"
 
     def get_absolute_url(self):
-        return reverse("design_note", kwargs={"design_number": self.design_number})
-
-    def clean(self):
-        self.title = self.title.strip()
+        return reverse(
+            "design_note",
+            kwargs={"design_number": self.design_number},
+        )
 
     def save(self, *args, **kwargs):
-        self.full_clean()
-
         if self.design_number is None:
-            with transaction.atomic():
-                current_design_number = DesignNote.objects.aggregate(
-                    max_num=models.Max("design_number", default=0)
-                )["max_num"]
+            self.design_number = ContentSequence.allocate_number(
+                ContentSeries.DESIGN_NOTE
+            )
 
-                self.design_number = current_design_number + 1
+        else:
+            ContentSequence.ensure_at_least(
+                ContentSeries.DESIGN_NOTE,
+                self.design_number,
+            )
+
+        super().save(*args, **kwargs)
+
+
+class Exhibit(MarkdownContent):
+    exhibit_number = models.PositiveIntegerField(
+        unique=True,
+        null=True,
+        blank=True,
+    )  # user visible number
+
+    categories = models.ManyToManyField(
+        Category,
+        blank=True,
+        related_name="exhibits",
+    )
+
+    class Meta:
+        ordering = ["exhibit_number"]
+
+    def __str__(self):
+        return f"Exhibit {self.exhibit_number}: {self.title}"
+
+    def get_absolute_url(self):
+        return reverse(
+            "exhibit",
+            kwargs={"exhibit_number": self.exhibit_number},
+        )
+
+    def save(self, *args, **kwargs):
+        if self.exhibit_number is None:
+            self.exhibit_number = ContentSequence.allocate_number(ContentSeries.EXHIBIT)
+
+        else:
+            ContentSequence.ensure_at_least(
+                ContentSeries.EXHIBIT,
+                self.exhibit_number,
+            )
 
         super().save(*args, **kwargs)
