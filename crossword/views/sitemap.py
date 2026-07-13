@@ -2,7 +2,7 @@ from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from django.utils import timezone
 
-from ..models import Board, DesignNote
+from ..models import Board, DesignNote, Exhibit
 
 
 class PuzzleSitemap(Sitemap):
@@ -27,22 +27,33 @@ class DesignNoteSitemap(Sitemap):
         return obj.published_at
 
 
+class ExhibitSitemap(Sitemap):
+    changefreq = "monthly"
+    priority = 0.6
+
+    def items(self):
+        return Exhibit.objects.filter(published_at__lte=timezone.now())
+
+    def lastmod(self, obj):
+        return obj.published_at
+
+
 class StaticSitemap(Sitemap):
     def items(self):
-        return ["index", "archive", "design"]
+        return ["index", "archive", "design", "exhibit_list"]
 
     def location(self, item):
         return reverse(item)
 
     def priority(self, item):
-        if (item == "index") or (item == "archive"):
+        if item in ("index", "archive"):
             return 0.8
 
-        if item == "design":
+        if item in ("design", "exhibit_list"):
             return 0.6
 
     def changefreq(self, item):
-        if (item == "index") or (item == "archive") or (item == "design"):
+        if item in ("index", "archive", "design", "exhibit_list"):
             return "weekly"
 
 
@@ -51,4 +62,5 @@ def get_sitemap_view():
         "static": StaticSitemap,
         "puzzles": PuzzleSitemap,
         "design_notes": DesignNoteSitemap,
+        "exhibits": ExhibitSitemap,
     }
