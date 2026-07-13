@@ -55,12 +55,17 @@
 }
 
 .release-cadence {
-  color: #6b7280;
+  font-size: 1.05rem;
+  font-weight: 600;
   margin: 1.5rem 0 1rem 0;
 }
 
 .release-cadence span {
   white-space: nowrap;
+}
+
+.starting-puzzles {
+  margin-top: 1rem;
 }
 
 .design-note {

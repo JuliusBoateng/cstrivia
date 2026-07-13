@@ -26,6 +26,13 @@ class PuzzleListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["is_archive"] = False
+
+        starting_puzzle_numbers = [1, 3, 6, 16, 17]
+        context["starting_puzzles"] = Board.objects.filter(
+            puzzle_number__in=starting_puzzle_numbers,
+            published_at__lte=timezone.now(),
+        ).order_by("puzzle_number")
+
         return context
 
 

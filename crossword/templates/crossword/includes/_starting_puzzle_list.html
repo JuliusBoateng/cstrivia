@@ -1,0 +1,13 @@
+<section class="puzzle-list">
+    <h2>Where to Start</h2>
+    <ul>
+        {% for puzzle in starting_puzzles %}
+            <li>
+                <a href="{% url 'puzzle' puzzle.puzzle_number %}" class="puzzle-row">
+                    <span class="puzzle-number">Puzzle {{ puzzle.puzzle_number }}:</span>
+                    <span class="puzzle-title">{{ puzzle.title }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</section>
