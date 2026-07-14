@@ -1,0 +1,136 @@
+{
+  "board": {
+    "title": "Web Fundamentals",
+    "author": "Julius Boateng",
+    "puzzle_number": 22,
+    "published_at": "2026-07-14T22:24:09+00:00",
+    "description": "Since CERN made the Web freely available in 1993, it has transformed how people share information. This puzzle explores the fundamental technologies and concepts behind the modern Web.",
+    "rows": 15,
+    "cols": 15,
+    "categories": [
+      "Internet"
+    ]
+  },
+  "clues": [
+    {
+      "question": "Invented the World Wide Web at CERN to improve information sharing among researchers; 2016 ACM Turing Award winner",
+      "display_answer": "BERNERSLEE",
+      "anagram": "ELEERBESNR",
+      "direction": "D",
+      "start_row": 0,
+      "start_col": 7
+    },
+    {
+      "question": "Markup language used to define the content and structure of web documents; parsed by web browsers into the Document Object Model (DOM)",
+      "display_answer": "HTML",
+      "anagram": "THLM",
+      "direction": "D",
+      "start_row": 0,
+      "start_col": 12
+    },
+    {
+      "question": "System of linked documents interconnected through hyperlinks; foundational concept behind the World Wide Web",
+      "display_answer": "HYPERTEXT",
+      "anagram": "RYEHPTETX",
+      "direction": "A",
+      "start_row": 1,
+      "start_col": 4
+    },
+    {
+      "question": "Identifier that specifies the location of a resource on the Web",
+      "display_answer": "URL",
+      "anagram": "LUR",
+      "direction": "A",
+      "start_row": 2,
+      "start_col": 6
+    },
+    {
+      "question": "Time required for data to travel across a network; increases with physical distance and network hops",
+      "display_answer": "LATENCY",
+      "anagram": "LNETCAY",
+      "direction": "A",
+      "start_row": 3,
+      "start_col": 3
+    },
+    {
+      "question": "Computer or software that provides resources or services in response to client requests; designed to handle large numbers of concurrent requests",
+      "display_answer": "SERVER",
+      "anagram": "REERSV",
+      "direction": "A",
+      "start_row": 4,
+      "start_col": 6
+    },
+    {
+      "question": "Maximum data transfer capacity of a network connection; high-resolution images and videos typically consume more of it",
+      "display_answer": "BANDWIDTH",
+      "anagram": "AWTIHDBDN",
+      "direction": "D",
+      "start_row": 5,
+      "start_col": 4
+    },
+    {
+      "question": "Client-side scripting language introduced in 1995 to make static web pages more interactive; prototyped in 10 days by Brendan Eich at Netscape",
+      "display_answer": "JAVASCRIPT",
+      "anagram": "VRJPASAITC",
+      "direction": "A",
+      "start_row": 6,
+      "start_col": 3
+    },
+    {
+      "question": "Period of interaction between a client and server spanning multiple HTTP requests, during which state is maintained",
+      "display_answer": "SESSION",
+      "anagram": "INSESOS",
+      "direction": "D",
+      "start_row": 7,
+      "start_col": 13
+    },
+    {
+      "question": "Software that fetches, renders, and browses web pages; includes a dedicated JavaScript engine",
+      "display_answer": "BROWSER",
+      "anagram": "EBSWORR",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 1
+    },
+    {
+      "question": "Protocol providing persistent, bidirectional communication over a single TCP connection; proposed by Ian Hickson for HTML5 in 2008",
+      "display_answer": "WEBSOCKET",
+      "anagram": "STEOKEBWC",
+      "direction": "A",
+      "start_row": 8,
+      "start_col": 6
+    },
+    {
+      "question": "Device or application that requests resources or services from a server; classified as thin or thick based on how much processing is performed locally",
+      "display_answer": "CLIENT",
+      "anagram": "LNTCEI",
+      "direction": "D",
+      "start_row": 8,
+      "start_col": 11
+    },
+    {
+      "question": "Data sent by a site and stored by the browser; automatically sent with future HTTP requests to the same site",
+      "display_answer": "COOKIE",
+      "anagram": "OEKCIO",
+      "direction": "A",
+      "start_row": 10,
+      "start_col": 0
+    },
+    {
+      "question": "Temporary storage for previously retrieved web resources; used by browsers to reduce repeated network requests",
+      "display_answer": "CACHE",
+      "anagram": "CEAHC",
+      "direction": "A",
+      "start_row": 11,
+      "start_col": 7
+    },
+    {
+      "question": "Protocol that encrypts communication between browsers and servers using TLS; services like Let’s Encrypt made certificates freely available",
+      "display_answer": "HTTPS",
+      "anagram": "TSPHT",
+      "direction": "A",
+      "start_row": 12,
+      "start_col": 3
+    }
+  ]
+}
