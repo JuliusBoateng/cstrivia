@@ -1,3 +1,7 @@
+main {
+  padding-top: 2rem;
+}
+
 .headline {
   font-size: clamp(1.9rem, 3.1vw, 2.3rem);
   font-weight: 600;

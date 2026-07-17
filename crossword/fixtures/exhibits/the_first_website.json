@@ -5,8 +5,6 @@
     "author": "Julius Boateng",
     "published_at": "2026-07-13T12:23:33+00:00",
     "body": "![Cern first website](https://media.cstrivia.com/exhibits/first-website-1991.png)\r\n\r\nWhile working at CERN, Tim Berners-Lee designed the World Wide Web to help researchers share information across different computers and institutions. His 1989 proposal, *Information Management: A Proposal*, described the problem of losing information and proposed a distributed hypertext system to address it.\r\n\r\nAs part of the project, he created the first web server, web browser/editor, and website. This website, first published in December 1990, introduced the Web and explained how to access it and create new pages.\r\n\r\nIn 1993, CERN released the software into the public domain, allowing anyone to use it freely.\r\n\r\n## Sources\r\n- [The first website](http://info.cern.ch/hypertext/WWW/TheProject.html)\r\n- [Tim Berners-Lee, *Information Management: A Proposal* (1989)](https://repository.cern/records/6kxvc-v6203/preview/dd-89-001.pdf)",
-    "categories": [
-      "Internet"
-    ]
+    "categories": ["Internet"]
   }
 }

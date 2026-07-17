@@ -7,9 +7,7 @@
     "description": "Since CERN made the Web freely available in 1993, it has transformed how people share information. This puzzle explores the fundamental technologies and concepts behind the modern Web.",
     "rows": 15,
     "cols": 15,
-    "categories": [
-      "Internet"
-    ]
+    "categories": ["Internet"]
   },
   "clues": [
     {
