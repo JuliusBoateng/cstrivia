@@ -1,4 +1,3 @@
-
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -29,13 +28,40 @@ class DesignNoteListView(ListView):
 
 @never_cache
 def design_note_view(request, design_number: int):
-    note = get_design_note(design_number)
+    note: DesignNote = get_design_note(design_number)
     meta_description = build_design_note_description(note)
 
     return render(
         request,
         "crossword/design_note.html",
-        {"note": note, "meta_description": meta_description},
+        {
+            "note": note,
+            "meta_description": meta_description,
+            "next_design_note": _fetch_next_design_note(design_number),
+            "prev_design_note": _fetch_prev_design_note(design_number),
+        },
+    )
+
+
+def _fetch_next_design_note(design_number: int):
+    return (
+        DesignNote.objects.filter(
+            design_number__gt=design_number,
+            published_at__lte=timezone.now(),
+        )
+        .order_by("design_number")
+        .first()
+    )
+
+
+def _fetch_prev_design_note(design_number: int):
+    return (
+        DesignNote.objects.filter(
+            design_number__lt=design_number,
+            published_at__lte=timezone.now(),
+        )
+        .order_by("-design_number")
+        .first()
     )
 
 

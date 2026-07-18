@@ -685,9 +685,11 @@ p.board-desc {
 }
 
 .all-puzzle-link {
-  color: black;
-  font-weight: 600;
+  margin-top: 0.5rem;
+  color: #4b5563;
+  font-weight: 500;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .design-note-link {

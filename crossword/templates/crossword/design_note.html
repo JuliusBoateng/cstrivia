@@ -64,13 +64,29 @@
         <div class="design-note-body">{{ note.body|render_markdown }}</div>
         {% if note.boards.exists %}
             <section class="design-note-related">
-                <h2>Related Puzzles</h2>
+                <h2>Related Content</h2>
                 <ul>
                     {% for board in note.boards.all %}
                         <li>
                             <a href="{{ board.get_absolute_url }}">Puzzle {{ board.puzzle_number }}: {{ board.title|escape }}</a>
                         </li>
                     {% endfor %}
+                    {% if next_design_note %}
+                        <li>
+                            Next:
+                            <a href="{{ next_design_note.get_absolute_url }}">
+                                Design Note {{ next_design_note.design_number }}: {{ next_design_note.title }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if prev_design_note %}
+                        <li>
+                            Prev:
+                            <a href="{{ prev_design_note.get_absolute_url }}">
+                                Design Note {{ prev_design_note.design_number }}: {{ prev_design_note.title }}
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </section>
         {% endif %}
