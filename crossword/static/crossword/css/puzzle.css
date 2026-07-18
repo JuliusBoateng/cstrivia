@@ -31,7 +31,6 @@
 
 html {
   font-family: system-ui, "Segoe UI", Roboto, sans-serif;
-  background: #18181b;
   overflow-y: scroll;
 }
 
@@ -678,7 +677,7 @@ p.board-desc {
   text-underline-offset: 2px;
 }
 
-.next-puzzle-link {
+.seq-puzzle-link {
   word-break: break-word;
   color: black;
   font-weight: 600;

@@ -228,8 +228,13 @@
                 </section>
                 <section class="puzzle-link-section">
                     {% if next_puzzle %}
-                        <a class="next-puzzle-link" href="{{ next_puzzle.get_absolute_url }}">
+                        <a class="seq-puzzle-link" href="{{ next_puzzle.get_absolute_url }}">
                             Puzzle {{ next_puzzle.puzzle_number }}: {{ next_puzzle.title }} &rarr;
+                        </a>
+                    {% endif %}
+                    {% if prev_puzzle %}
+                        <a class="seq-puzzle-link" href="{{ prev_puzzle.get_absolute_url }}">
+                            &larr; Puzzle {{ prev_puzzle.puzzle_number }}: {{ prev_puzzle.title }}
                         </a>
                     {% endif %}
                     <a class="all-puzzle-link" href="{% url 'archive' %}">All Puzzles &rarr;</a>

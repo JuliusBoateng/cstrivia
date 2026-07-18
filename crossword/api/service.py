@@ -20,11 +20,13 @@ class PuzzleView(NamedTuple):
     serialized_solution_view: dict
     design_note: DesignNote
     next_puzzle: Board
+    prev_puzzle: Board
 
 
 def get_puzzle_view(puzzle_number: int) -> PuzzleView:
     board: Board = _fetch_board(puzzle_number)
     next_puzzle: Board = _fetch_next_board(puzzle_number)
+    prev_puzzle: Board = _fetch_prev_board(puzzle_number)
 
     board_view = map_to_board_view_dto(board)
     serialized_board_view = serialize_board_view(board_view)
@@ -43,6 +45,7 @@ def get_puzzle_view(puzzle_number: int) -> PuzzleView:
         serialized_solution_view,
         design_note,
         next_puzzle,
+        prev_puzzle,
     )
 
 
@@ -66,6 +69,17 @@ def _fetch_next_board(puzzle_number: int):
             published_at__lte=timezone.now(),
         )
         .order_by("puzzle_number")
+        .first()
+    )
+
+
+def _fetch_prev_board(puzzle_number: int):
+    return (
+        Board.objects.filter(
+            puzzle_number__lt=puzzle_number,
+            published_at__lte=timezone.now(),
+        )
+        .order_by("-puzzle_number")
         .first()
     )
 
