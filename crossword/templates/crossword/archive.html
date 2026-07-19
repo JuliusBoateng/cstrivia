@@ -21,9 +21,11 @@
           href="{% static 'crossword/css/includes/_puzzle_list.css' %}">
     <link rel="stylesheet"
           href="{% static 'crossword/css/includes/_pagination.css' %}">
+    <link rel="stylesheet" href="{% static 'crossword/css/archive.css' %}">
 {% endblock %}
 {% block content %}
     <h1>Archive</h1>
     <p>Browse all published puzzles.</p>
     {% include "crossword/includes/_puzzle_list.html" %}
+    {% include "crossword/includes/_pagination.html" %}
 {% endblock %}

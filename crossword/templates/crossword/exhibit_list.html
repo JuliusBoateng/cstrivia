@@ -39,9 +39,11 @@
           href="{% static 'crossword/css/includes/_exhibit_list.css' %}">
     <link rel="stylesheet"
           href="{% static 'crossword/css/includes/_pagination.css' %}">
+    <link rel="stylesheet" href="{% static 'crossword/css/archive.css' %}">
 {% endblock %}
 {% block content %}
     <h1>Exhibits</h1>
     <p>Images of interesting computer science artifacts.</p>
     {% include "crossword/includes/_exhibit_list.html" %}
+    {% include "crossword/includes/_pagination.html" %}
 {% endblock %}

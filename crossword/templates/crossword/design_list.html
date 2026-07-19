@@ -39,9 +39,11 @@
           href="{% static 'crossword/css/includes/_design_list.css' %}">
     <link rel="stylesheet"
           href="{% static 'crossword/css/includes/_pagination.css' %}">
+    <link rel="stylesheet" href="{% static 'crossword/css/archive.css' %}">
 {% endblock %}
 {% block content %}
     <h1>Design Notes</h1>
     <p>Notes on puzzle construction and design decisions.</p>
     {% include "crossword/includes/_design_list.html" %}
+    {% include "crossword/includes/_pagination.html" %}
 {% endblock %}

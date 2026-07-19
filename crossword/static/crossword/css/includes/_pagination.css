@@ -1,14 +1,22 @@
 .pagination {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  margin-top: 1rem;
-
   color: #27272a;
   font-size: 0.95rem;
 }
 
+.pagination-prev {
+  justify-self: start;
+}
+
 .pagination-info {
+  justify-self: center;
   color: #6b7280;
+}
+
+.pagination-next {
+  justify-self: end;
 }
 
 .pagination a {

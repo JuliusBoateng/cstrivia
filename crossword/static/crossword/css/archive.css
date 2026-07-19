@@ -1,0 +1,10 @@
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+.pagination {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  max-width: 50ch;
+}
