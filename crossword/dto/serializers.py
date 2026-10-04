@@ -40,8 +40,6 @@ def _serialize_board(b: BoardDTO) -> dict:
         "puzzle_number": b.puzzle_number,
         "published_at": b.published_at.isoformat() if b.published_at else None,
         "description": b.description,
-        "rows": b.rows,
-        "cols": b.cols,
         "categories": b.categories,
         "created_at": b.created_at.isoformat(),
         "updated_at": b.updated_at.isoformat(),

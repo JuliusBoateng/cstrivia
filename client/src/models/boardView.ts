@@ -1,5 +1,7 @@
 import { Coord } from "../app/coords.js";
 
+const BOARD_SIZE: number = 15;
+
 enum Direction {
   A = "A",
   D = "D",
@@ -14,8 +16,6 @@ type Board = {
   puzzle_number: number;
   published_at: string;
   description: string;
-  rows: number;
-  cols: number;
   categories: string[];
   created_at: string;
   updated_at: string;
@@ -94,7 +94,7 @@ class BoardView {
   }
 
   isValidCoord(coord: Coord): boolean {
-    return coord.row >= 0 && coord.row < this.board.rows && coord.col >= 0 && coord.col < this.board.cols;
+    return coord.row >= 0 && coord.row < BOARD_SIZE && coord.col >= 0 && coord.col < BOARD_SIZE;
   }
 
   getCell(coord: Coord): Cell | null {
@@ -144,10 +144,9 @@ class BoardView {
   }
 
   private createCellGrid(): (Cell | null)[][] {
-    const rows = this.board.rows;
-    const cols = this.board.cols;
-
-    const cellGrid: (Cell | null)[][] = Array.from({ length: rows }, () => Array<Cell | null>(cols).fill(null));
+    const cellGrid: (Cell | null)[][] = Array.from({ length: BOARD_SIZE }, () =>
+      Array<Cell | null>(BOARD_SIZE).fill(null)
+    );
 
     for (const cell of this.cells) {
       cellGrid[cell.row][cell.col] = cell;
@@ -173,9 +172,7 @@ class BoardView {
 
   // Depends on placements being sorted by (start_row, start_col, direction)
   private createLabelGrid(): number[][] {
-    const rows = this.board.rows;
-    const cols = this.board.cols;
-    const labelGrid = Array.from({ length: rows }, () => Array(cols).fill(EMPTY_LABEL));
+    const labelGrid = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(EMPTY_LABEL));
 
     let label = STARTING_LABEL;
     for (const p of this.placements) {
@@ -214,4 +211,4 @@ class BoardView {
   }
 }
 
-export { BoardView, BoardViewDTO, Cell, Clue, Direction, Placement, PlacementId };
+export { BoardView, BoardViewDTO, Cell, Clue, Direction, Placement, PlacementId, BOARD_SIZE };

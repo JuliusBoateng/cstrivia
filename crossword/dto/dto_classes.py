@@ -25,8 +25,6 @@ class BoardDTO(DTO):
     puzzle_number: int
     published_at: datetime
     description: str
-    rows: int
-    cols: int
     categories: list
     created_at: datetime
     updated_at: datetime

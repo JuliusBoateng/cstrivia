@@ -1,7 +1,7 @@
 import { Coord } from "../app/coords.js";
 import { isTouchDevice } from "../app/device.js";
 import { ClueView } from "../clue/clueRenderer.js";
-import { BoardView, Direction, Placement, PlacementId } from "../models/boardView.js";
+import { BoardView, Direction, Placement, PlacementId, BOARD_SIZE } from "../models/boardView.js";
 import { PuzzleRenderer } from "./puzzleRenderer.js";
 import { PlacementUpdate, PuzzleSession } from "./puzzleSession.js";
 import { PuzzleValidator } from "./puzzleValidator.js";
@@ -606,8 +606,8 @@ class PuzzleController implements CursorController {
   }
 
   private initLetters(): void {
-    for (let row = 0; row < this.boardView.board.rows; row++) {
-      for (let col = 0; col < this.boardView.board.cols; col++) {
+    for (let row = 0; row < BOARD_SIZE; row++) {
+      for (let col = 0; col < BOARD_SIZE; col++) {
         const coord: Coord = { row, col };
         if (this.session.isBlock(coord)) continue;
 

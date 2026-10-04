@@ -63,18 +63,7 @@ class Category(models.Model):
 
 
 class Board(models.Model):
-    MIN_ROWS, MAX_ROWS = 5, 21
-    DEFAULT_ROWS = 15
-
-    rows = models.PositiveIntegerField(
-        default=DEFAULT_ROWS,
-        validators=[MinValueValidator(MIN_ROWS), MaxValueValidator(MAX_ROWS)],
-    )
-
-    cols = models.PositiveIntegerField(
-        default=DEFAULT_ROWS,
-        validators=[MinValueValidator(MIN_ROWS), MaxValueValidator(MAX_ROWS)],
-    )
+    SIZE = 15
 
     author = models.CharField(max_length=50, null=True, blank=True)
     title = models.CharField(max_length=50, unique=True)
@@ -97,11 +86,6 @@ class Board(models.Model):
 
     class Meta:
         ordering = ["puzzle_number"]
-        constraints = [
-            models.CheckConstraint(
-                condition=models.Q(cols=models.F("rows")), name="board_symmetry"
-            )
-        ]
 
     def clean(self):
         self.title = self.title.strip()
@@ -109,11 +93,6 @@ class Board(models.Model):
 
         if self.author:
             self.author = self.author.strip()
-
-        if self.rows != self.cols:
-            raise ValidationError(
-                {"rows": f"rows {self.rows} and cols {self.cols} must match."}
-            )
 
     def save(self, *args, **kwargs):
         self.full_clean()  # board check
@@ -267,17 +246,17 @@ class Placement(models.Model):
         ]
 
     def _bounds_check(self):
-        if self.start_col >= self.board.cols:
+        if self.start_col >= self.board.SIZE:
             raise ValidationError(
                 {
-                    "start_col": f"col {self.start_col} exceeds board width {self.board.cols}."
+                    "start_col": f"col {self.start_col} exceeds board width {self.board.SIZE}."
                 }
             )
 
-        if self.start_row >= self.board.rows:
+        if self.start_row >= self.board.SIZE:
             raise ValidationError(
                 {
-                    "start_row": f"row {self.start_row} exceeds board height {self.board.rows}."
+                    "start_row": f"row {self.start_row} exceeds board height {self.board.SIZE}."
                 }
             )
 
@@ -285,18 +264,18 @@ class Placement(models.Model):
         if self.direction == "A":
             col = self.start_col + len(self.clue.normalized_answer)
 
-            if col > self.board.cols:
+            if col > self.board.SIZE:
                 raise ValidationError(
-                    {"start_col": f"col {col} exceeds board width {self.board.cols}."}
+                    {"start_col": f"col {col} exceeds board width {self.board.SIZE}."}
                 )
 
     def _down_direction_check(self):
         if self.direction == "D":
             row = self.start_row + len(self.clue.normalized_answer)
 
-            if row > self.board.rows:
+            if row > self.board.SIZE:
                 raise ValidationError(
-                    {"start_row": f"row {row} exceeds board height {self.board.rows}."}
+                    {"start_row": f"row {row} exceeds board height {self.board.SIZE}."}
                 )
 
     def clean(self):

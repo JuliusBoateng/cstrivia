@@ -1,5 +1,5 @@
 import { Coord } from "../app/coords.js";
-import { BoardView, Cell, Direction } from "../models/boardView.js";
+import { BoardView, Cell, Direction, BOARD_SIZE } from "../models/boardView.js";
 
 type CellGrid = HTMLTableCellElement[][];
 type FillGrid = HTMLDivElement[][];
@@ -18,12 +18,9 @@ const LABEL = "label";
 const LETTER = "letter";
 
 function createBoard(boardView: BoardView, boardElement: HTMLTableElement): BoardRefs {
-  const rows = boardView.board.rows;
-  const cols = boardView.board.cols;
-
-  const cellGrid = createGrid<HTMLTableCellElement>(rows, cols);
-  const fillGrid = createGrid<HTMLDivElement>(rows, cols);
-  const inputGrid = createGrid<HTMLInputElement | null>(rows, cols, null);
+  const cellGrid = createGrid<HTMLTableCellElement>(BOARD_SIZE);
+  const fillGrid = createGrid<HTMLDivElement>(BOARD_SIZE);
+  const inputGrid = createGrid<HTMLInputElement | null>(BOARD_SIZE, null);
 
   boardElement.replaceChildren(createTableBodyElement());
 
@@ -32,7 +29,7 @@ function createBoard(boardView: BoardView, boardElement: HTMLTableElement): Boar
   function createTableBodyElement(): HTMLTableSectionElement {
     const tbodyElement = document.createElement("tbody");
 
-    for (let row = 0; row < rows; row++) {
+    for (let row = 0; row < BOARD_SIZE; row++) {
       tbodyElement.appendChild(createTableRowElement(row));
     }
 
@@ -43,7 +40,7 @@ function createBoard(boardView: BoardView, boardElement: HTMLTableElement): Boar
     const rowElement = document.createElement("tr");
     rowElement.dataset.row = row.toString();
 
-    for (let col = 0; col < cols; col++) {
+    for (let col = 0; col < BOARD_SIZE; col++) {
       const coord = { row, col };
       const cellElement = createTableCellElement(coord);
 
@@ -127,10 +124,10 @@ function createBoard(boardView: BoardView, boardElement: HTMLTableElement): Boar
   }
 }
 
-function createGrid<T>(rows: number, cols: number, initialValue?: T): T[][] {
+function createGrid<T>(size: number, initialValue?: T): T[][] {
   // Construction-time placeholders.
   // Callers are responsible for filling required entries before use.
-  return Array.from({ length: rows }, () => Array.from({ length: cols }, () => initialValue as T));
+  return Array.from({ length: size }, () => Array.from({ length: size }, () => initialValue as T));
 }
 
 export { BoardRefs, CellGrid, createBoard, FillGrid, InputGrid };

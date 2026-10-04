@@ -1,5 +1,5 @@
 import { Coord } from "../app/coords.js";
-import { BoardView, Direction, Placement, PlacementId } from "../models/boardView.js";
+import { BoardView, Direction, Placement, PlacementId, BOARD_SIZE } from "../models/boardView.js";
 import { LetterGrid, PuzzleValidator } from "./puzzleValidator.js";
 
 type PlacementCheckResult = {
@@ -27,8 +27,6 @@ type PlacementSolution = {
 
 class PuzzleSession {
   private activeCoord!: Coord;
-  private rows: number;
-  private cols: number;
   private activePlacement!: Placement;
   private activePlacementIndex!: number;
   private filledLetterCount!: Map<PlacementId, number>;
@@ -39,8 +37,6 @@ class PuzzleSession {
 
   constructor(boardView: BoardView, puzzleValidator: PuzzleValidator) {
     this.boardView = boardView;
-    this.rows = this.boardView.board.rows;
-    this.cols = this.boardView.board.cols;
 
     this.puzzleValidator = puzzleValidator;
 
@@ -465,14 +461,14 @@ class PuzzleSession {
     const validPuzzleNumber = candidate.puzzleNumber === this.boardView.board.puzzle_number;
 
     const grid = candidate.letterGrid;
-    const validGridRows = Array.isArray(grid) && grid.length === this.rows;
+    const validGridRows = Array.isArray(grid) && grid.length === BOARD_SIZE;
 
     const validGridCells =
       validGridRows &&
       grid.every(
         (row) =>
           Array.isArray(row) &&
-          row.length === this.cols &&
+          row.length === BOARD_SIZE &&
           row.every((cell) => cell === null || typeof cell === "string")
       );
 
@@ -496,7 +492,9 @@ class PuzzleSession {
   }
 
   private createLetterGrid(): LetterGrid {
-    const letterGrid: LetterGrid = Array.from({ length: this.rows }, () => Array<string | null>(this.cols).fill(null));
+    const letterGrid: LetterGrid = Array.from({ length: BOARD_SIZE }, () =>
+      Array<string | null>(BOARD_SIZE).fill(null)
+    );
     return letterGrid;
   }
 
@@ -514,8 +512,8 @@ class PuzzleSession {
   private rebuildFilledLetterCount(): void {
     this.filledLetterCount = this.createFilledLetterCount();
 
-    for (let row = 0; row < this.rows; row++) {
-      for (let col = 0; col < this.cols; col++) {
+    for (let row = 0; row < BOARD_SIZE; row++) {
+      for (let col = 0; col < BOARD_SIZE; col++) {
         if (this.letterGrid[row][col] === null) continue;
 
         this.adjustFilledLetterCount({ row, col }, 1);
