@@ -168,6 +168,37 @@ class Clue(models.Model):
         )  # removes diacritics
 
         return stripped.upper()
+    
+    # Prevent answer changes that would invalidate existing placement cells
+    def _existing_placement_check(self):
+        if not self.pk:
+            return
+
+        if not Placement.objects.filter(clue=self).exists():
+            return
+
+        previous = Clue.objects.get(pk=self.pk)
+
+        if previous.normalized_answer != self.normalized_answer:
+            raise ValidationError(
+                {
+                    "display_answer": (
+                        "Cannot change the answer while the clue has an existing placement."
+                    )
+                }
+            )
+
+    def _answer_length_check(self):
+        if len(self.display_answer) != len(self.normalized_answer):
+            raise ValidationError(
+                {"display_answer": "Display answer and normalized answer must have the same length."}
+            )
+
+    def _anagram_check(self):
+        if self.anagram and Counter(self.anagram) != Counter(self.normalized_answer):
+            raise ValidationError(
+                {"anagram": "Anagram and normalized answer must contain the same characters."}
+            )
 
     def clean(self):
         self.question = self.question.strip()
@@ -178,13 +209,9 @@ class Clue(models.Model):
             self.anagram = self._clean_answer(self.anagram)
             self.anagram = self._normalize_cleaned_answer(self.anagram)
 
-        if len(self.display_answer) != len(self.normalized_answer):
-            raise ValidationError(
-                {"display_answer": "length mismatch with normalized answer."}
-            )
-
-        if self.anagram and Counter(self.anagram) != Counter(self.normalized_answer):
-            raise ValidationError({"anagram": "char mismatch with normalized answer."})
+        self._answer_length_check()
+        self._anagram_check()
+        self._existing_placement_check()
 
     def _create_anagram(self, s: str) -> str:
         rng = Random(s)
