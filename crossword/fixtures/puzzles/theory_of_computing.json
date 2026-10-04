@@ -5,8 +5,6 @@
     "puzzle_number": 8,
     "published_at": "2026-04-25T03:26:17+00:00",
     "description": "This puzzle explores abstract ideas about the limits of computation. Theory rarely appears directly in practical software work, though it often shows up indirectly, making these ideas interesting to explore at a high level with the heavy math removed",
-    "rows": 15,
-    "cols": 15,
     "categories": ["Theory Of Computing"]
   },
   "clues": [

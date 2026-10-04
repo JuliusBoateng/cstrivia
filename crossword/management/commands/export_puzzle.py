@@ -58,8 +58,6 @@ class Command(BaseCommand):
                 if board.published_at
                 else None,
                 "description": board.description,
-                "rows": board.rows,
-                "cols": board.cols,
                 "categories": [category.name for category in board.categories.all()],
             },
             "clues": clue_entries,

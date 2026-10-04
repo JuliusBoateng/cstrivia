@@ -92,8 +92,6 @@ class Command(BaseCommand):
         board.puzzle_number = puzzle_number
         board.published_at = parsed_published_at
         board.description = board_data["description"]
-        board.rows = board_data["rows"]
-        board.cols = board_data["cols"]
         board.save()
 
         board_categories = []

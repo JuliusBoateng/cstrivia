@@ -5,8 +5,6 @@
     "puzzle_number": 20,
     "published_at": "2026-07-03T07:40:39+00:00",
     "description": "Computer vision emerged in the 1960s as a subfield of artificial intelligence. The field draws heavily on mathematics, physics, and signal processing. Today, it powers applications such as medical imaging, satellite imagery, and robotics.",
-    "rows": 15,
-    "cols": 15,
     "categories": ["Computer Vision"]
   },
   "clues": [

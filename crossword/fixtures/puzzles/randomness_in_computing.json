@@ -5,8 +5,6 @@
     "puzzle_number": 21,
     "published_at": "2026-07-08T04:09:32+00:00",
     "description": "Randomness is often added to deterministic algorithms to improve performance, reduce memory usage, or make impractical computations practical. In practice, these benefits outweigh tradeoffs such as approximate results or variable running times.",
-    "rows": 15,
-    "cols": 15,
     "categories": ["Algorithms", "Data Structures"]
   },
   "clues": [

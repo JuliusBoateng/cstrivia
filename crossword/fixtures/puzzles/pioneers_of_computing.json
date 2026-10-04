@@ -5,8 +5,6 @@
     "puzzle_number": 3,
     "published_at": "2026-04-07T12:00:00+00:00",
     "description": "The people in this puzzle helped shape modern computing. They did not work alone; many unsung contributors helped advance the field.",
-    "rows": 15,
-    "cols": 15,
     "categories": ["People"]
   },
   "clues": [

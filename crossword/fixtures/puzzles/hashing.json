@@ -5,8 +5,6 @@
     "puzzle_number": 23,
     "published_at": "2026-07-28T10:20:58+00:00",
     "description": "Hashes are used everywhere in computer science. They are used for efficient data structures, data integrity checks, and cryptographic security. This puzzle explores common hashing techniques and applications.",
-    "rows": 15,
-    "cols": 15,
     "categories": ["Algorithms"]
   },
   "clues": [
